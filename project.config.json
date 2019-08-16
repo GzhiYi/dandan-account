@@ -2,11 +2,13 @@
 	"miniprogramRoot": "miniprogram/",
 	"cloudfunctionRoot": "cloudfunctions/",
 	"setting": {
-		"urlCheck": true,
+		"urlCheck": false,
 		"es6": true,
 		"postcss": true,
 		"minified": true,
-		"newFeature": true
+		"newFeature": true,
+		"autoAudits": false,
+		"checkInvalidKey": true
 	},
 	"appid": "wxda00e9b7cd5f39b1",
 	"projectname": "dandan-account",

@@ -1,0 +1,26 @@
+.tab {
+  position: fixed;
+  bottom: 30rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+.tab-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  border: 12rpx solid #ccc;
+  margin: 0 20rpx;
+  height: fit-content;
+  transition: .5s all;
+}
+.icon {
+  width: 80rpx;
+  height: 80rpx;
+}
+.icon-middle {
+  width: 100rpx;
+  height: 100rpx;
+}

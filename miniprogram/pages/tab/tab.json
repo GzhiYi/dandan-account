@@ -2,6 +2,7 @@
   "usingComponents": {
     "list": "../components/list/list",
     "index": "../components/index/index",
-    "chart": "../components/chart/chart"
+    "chart": "../components/chart/chart",
+    "nav": "../components/nav/nav"
   }
 }

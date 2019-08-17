@@ -8,6 +8,7 @@ Page({
       active,
       scale: active
     })
+    wx.vibrateShort()
     const self = this
     setTimeout(() => {
       self.setData({

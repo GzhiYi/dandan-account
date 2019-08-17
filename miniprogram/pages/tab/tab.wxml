@@ -1,3 +1,4 @@
+<nav class="nav-instance" my-class="{{theme}}-set-bg" my-icon-class="{{theme}}-set-icon-bg" showIcons="{{['home']}}"></nav>
 <view wx:if="{{active === 'list'}}">
   <list />
 </view>

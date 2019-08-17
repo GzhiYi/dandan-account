@@ -1,0 +1,7 @@
+<view class="banner">
+
+</view>
+<view class="tab">
+  <view class="tab-item">收入</view>
+  <view class="tab-item">支出</view>
+</view>

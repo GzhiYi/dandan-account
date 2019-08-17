@@ -12,7 +12,7 @@
     class="tab-item"
     bindtap="goTo"
     data-active="list"
-    style="{{scale === 'list' ? 'transform-origin: 0 0;transform: scale(.8, .8)' : ''}}"
+    style="{{scale === 'list' ? 'transform: scale(.8, .8)' : ''}}"
   >
     <cover-image class="icon" src="../../images/calendar{{active === 'list' ? '' : '-dark'}}.png"></cover-image>
   </cover-view>
@@ -20,7 +20,7 @@
     class="tab-item middle"
     bindtap="goTo"
     data-active="index"
-    style="{{scale === 'index' ? 'transform-origin: 0 0;transform: scale(.8, .8)' : ''}}"
+    style="{{scale === 'index' ? 'transform: scale(.8, .8)' : ''}}"
   >
     <cover-image class="icon-middle" src="../../images/quill.png"></cover-image>
   </cover-view>
@@ -28,7 +28,7 @@
     class="tab-item"
     bindtap="goTo"
     data-active="chart"
-    style="{{scale === 'chart' ? 'transform-origin: 0 0;transform: scale(.8, .8)' : ''}}"
+    style="{{scale === 'chart' ? 'transform: scale(.8, .8)' : ''}}"
   >
     <cover-image class="icon" src="../../images/pie-chart{{active === 'chart' ? '' : '-dark'}}.png"></cover-image>
   </cover-view>

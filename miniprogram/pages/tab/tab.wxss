@@ -11,10 +11,11 @@
   justify-content: center;
   align-items: center;
   border-radius: 50%;
-  border: 12rpx solid #ccc;
-  margin: 0 20rpx;
+  border: 12rpx solid rgba(204, 204, 204, 0.8);
+  margin: 0 40rpx;
   height: fit-content;
   transition: .5s all;
+  background-color: rgba(255, 255, 255, 0.8);
 }
 .icon {
   width: 80rpx;

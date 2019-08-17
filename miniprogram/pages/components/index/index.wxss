@@ -1,1 +1,31 @@
-/* pages/components/index/index.wxss */
+.banner {
+  width: 100%;
+  height: 300rpx;
+  background: #ccc;
+}
+.tab {
+  display: flex;
+  background-color: #ccd;
+  justify-content: space-around;
+  padding: 15rpx;
+}
+.section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16rpx;
+  border-bottom: 1px solid #ccc;
+}
+.section input {
+  padding: 20rpx 0;
+  text-align: right;
+}
+.input-field {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+.default-text {
+  position: absolute;
+  right: 0;
+}

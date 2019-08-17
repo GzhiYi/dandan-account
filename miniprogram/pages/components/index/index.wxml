@@ -5,3 +5,22 @@
   <view class="tab-item">收入</view>
   <view class="tab-item">支出</view>
 </view>
+<form bindsubmit="formSubmit">
+  <view class="section">
+    <view class="label">金额</view>
+    <view class="input-field">
+      <input
+        name="input"
+        type="digit"
+        focus
+        value="{{sum}}"
+        bindinput="bindInput"
+        maxlength="{{9}}"
+      />
+      <text class="default-text" wx:if="{{sum === ''}}">0.00</text>
+    </view>
+  </view>
+  <view class="btn-area">
+    <button form-type="submit">确认</button>
+  </view>
+</form>

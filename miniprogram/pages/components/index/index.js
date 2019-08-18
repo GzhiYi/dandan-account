@@ -11,7 +11,11 @@ Component({
    * 组件的初始数据
    */
   data: {
-    sum: ''
+    sum: '',
+    note: '',
+    active_tab: '支出',
+    active_category: '吃',
+    active_date: '今天'
   },
 
   /**
@@ -22,7 +26,13 @@ Component({
       console.log(event)
       const { value } = event.detail
       this.setData({
-        sum: value
+        [`${event.currentTarget.dataset.name}`]: value
+      })
+    },
+    changeTab(event) {
+      const { dataset } = event.currentTarget
+      this.setData({
+        [`active_${dataset.key}`]: dataset.value
       })
     }
   }

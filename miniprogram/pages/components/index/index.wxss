@@ -9,6 +9,10 @@
   justify-content: space-around;
   padding: 15rpx;
 }
+.tab-item {
+  width: 50%;
+  text-align: center;
+}
 .section {
   display: flex;
   align-items: center;
@@ -19,6 +23,7 @@
 .section input {
   padding: 20rpx 0;
   text-align: right;
+  width: 100%;
 }
 .input-field {
   display: flex;
@@ -28,4 +33,28 @@
 .default-text {
   position: absolute;
   right: 0;
+}
+.cate {
+  margin: 10rpx;
+  padding: 5rpx 10rpx;
+  background-color: #ccc;
+  text-align: center;
+  border-radius: 10rpx;
+}
+.active {
+  color: orange;
+}
+.active-tab {
+  color: orange;
+}
+.date-item {
+  margin: 10rpx;
+  padding: 5rpx 10rpx;
+  background-color: #ccc;
+  text-align: center;
+  border-radius: 10rpx;
+}
+.btn-area button {
+  background: orange;
+  margin-top: 20rpx;
 }

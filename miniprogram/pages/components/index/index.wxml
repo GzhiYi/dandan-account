@@ -2,22 +2,103 @@
 
 </view>
 <view class="tab">
-  <view class="tab-item">收入</view>
-  <view class="tab-item">支出</view>
+  <view
+    bindtap="changeTab"
+    data-key="tab"
+    data-value="支出"
+    class="tab-item {{active_tab === '支出' ? 'active-tab' : ''}}"
+  >支出</view>
+  <view
+    bindtap="changeTab"
+    data-key="tab"
+    data-value="收入"
+    class="tab-item {{active_tab === '收入' ? 'active-tab' : ''}}"
+  >收入</view>
 </view>
 <form bindsubmit="formSubmit">
   <view class="section">
     <view class="label">金额</view>
     <view class="input-field">
       <input
-        name="input"
+        name="sum"
         type="digit"
         focus
         value="{{sum}}"
         bindinput="bindInput"
-        maxlength="{{9}}"
+        maxlength="{{10}}"
+        data-name="sum"
       />
       <text class="default-text" wx:if="{{sum === ''}}">0.00</text>
+    </view>
+  </view>
+  <view class="section">
+    <view class="label">分类</view>
+    <view class="input-field">
+      <view
+        bindtap="changeTab"
+        data-key="category"
+        data-value="吃"
+        class="cate {{active_category === '吃' ? 'active' : ''}}"
+      >吃</view>
+      <view
+        bindtap="changeTab"
+        data-key="category"
+        data-value="喝"
+        class="cate {{active_category === '喝' ? 'active' : ''}}"
+      >喝</view>
+      <view
+        bindtap="changeTab"
+        data-key="category"
+        data-value="玩"
+        class="cate {{active_category === '玩' ? 'active' : ''}}"
+      >玩</view>
+      <view
+        bindtap="changeTab"
+        data-key="category"
+        data-value="乐"
+        class="cate {{active_category === '乐' ? 'active' : ''}}"
+      >乐</view>
+      <view class="cate">...</view>
+    </view>
+  </view>
+  <view class="section">
+    <view class="label">日期</view>
+    <view class="input-field">
+      <view
+        class="date-item"
+        bindtap="changeTab"
+        data-key="date"
+        data-value="前天"
+        class="cate {{active_date === '前天' ? 'active' : ''}}"
+      >前天</view>
+      <view
+        class="date-item"
+        bindtap="changeTab"
+        data-key="date"
+        data-value="昨天"
+        class="cate {{active_date === '昨天' ? 'active' : ''}}"
+      >昨天</view>
+      <view
+        class="date-item"
+        bindtap="changeTab"
+        data-key="date"
+        data-value="今天"
+        class="cate {{active_date === '今天' ? 'active' : ''}}"
+      >今天</view>
+    </view>
+  </view>
+  <view class="section">
+    <view class="label">备注</view>
+    <view class="input-field" style="width: 80%;">
+      <input
+        name="note"
+        focus
+        value="{{note}}"
+        bindinput="bindNoteInput"
+        maxlength="{{100}}"
+        data-name="note"
+        placeholder="简要备注说明"
+      />
     </view>
   </view>
   <view class="btn-area">

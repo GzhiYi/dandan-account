@@ -1,6 +1,5 @@
 // 云函数入口文件
 const cloud = require('wx-server-sdk')
-const COMM = require('../../comm/comm.js');
 
 cloud.init()
 
@@ -12,62 +11,81 @@ exports.main = async (event, context) => {
   const wxContext = cloud.getWXContext();
   // 取参
   const { id, money, categoryId, noteDate, description, flow } = event;
-  // 增加一条记录
-  if (event.mode === 'add') {
-    db.collection('DANDAN_NOTE').add({
-      data: { 
-        money,
-        categoryId,
-        noteDate,
-        description,
-        flow, // 金钱流向
-        createTime: db.serverDate(),
-        updateTime: db.serverDate(),
-        openId: wxContext.OPENID,
+
+  try {
+    // 增加一条记录
+    if (event.mode === 'add') {
+      const res = await db.collection('DANDAN_NOTE').add({
+        data: {
+          money,
+          categoryId,
+          noteDate,
+          description,
+          flow, // 金钱流向
+          createTime: db.serverDate(),
+          updateTime: db.serverDate(),
+          openId: wxContext.OPENID,
+          isDel: false,
+        }
+      });
+      return {
+        code: 1,
+        data: res,
+        message: "操作成功",
+      };
+    }
+
+    if (event.mode === 'deleteById') {
+      const res = await db.collection('DANDAN_NOTE').doc(id).update({
+        data: {
+          isDel: true,
+        }
+      });
+      return {
+        code: 1,
+        data: res,
+        message: "操作成功",
+      };
+    }
+
+    if (event.mode === 'updateById') {
+      const res = await db.collection('DANDAN_NOTE').doc(id).update({
+        data: {
+          money,
+          categoryId,
+          noteDate,
+          description,
+          updateTime: db.serverDate(),
+        }
+      });
+      return {
+        code: 1,
+        data: res,
+        message: "操作成功",
+      };
+    }
+
+    if (event.mode === 'getNoteById') {
+      const res = await db.collection('DANDAN_NOTE')
+      .where({
+        _id: id,
         isDel: false,
-      },
-      success: (res) => {
-        console.log(res);
-        return ({
-          code: COMM.SUCCESS_CODE,
-          data: res,
-          message: COMM.SUCCESS_MESSAGE,
-        })
-      },
-      fail: (error) => {
-        console.error(error);
-        return ({
-          code: COMM.ERROR_CODE,
-          data: '',
-          message: COMM.ERROR_CODE,
-        })
-      }
-    });
-  }
+      }).get();
+      console.log(res);
+      return {
+        code: 1,
+        data: res,
+        message: "操作成功",
+      };
+    }
 
-  if (event.mode === 'deleteById') {
-    db.collection('DANDAN_NOTE').doc(id).update({
-      data: {
-        isDel: true,
-      },
-      success: (res) => {
-        console.log(res);
-        return ({
-          code: COMM.SUCCESS_CODE,
-          data: res,
-          message: COMM.SUCCESS_MESSAGE,
-        })
-      },
-      fail: (error) => {
-        console.error(error);
-        return ({
-          code: COMM.ERROR_CODE,
-          data: '',
-          message: COMM.ERROR_CODE,
-        })
-      }
-    })
+  } catch (e) {
+    console.error(e);
+    return {
+      code: -1,
+      data: '',
+      message: '操作失败',
+    }
   }
-
 
 }

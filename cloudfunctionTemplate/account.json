@@ -14,7 +14,25 @@
     "name": "删除记录",
     "value": {
       "mode": "deleteById",
-      "id": "3c4c6d855d5ac0f6042dc98233de328d"
+      "id": "5d262bd45d5c07a8050a02712b3053d9"
+    }
+  },
+  {
+    "name": "修改记录模板",
+    "value": {
+      "mode": "updateById",
+      "id": "5d262bd45d5c07a8050a02712b3053d9",
+      "money": "10101",
+      "categoryId": "_oh_update",
+      "noteDate": "2020-2-14",
+      "description": "不小心被修改了"
+    }
+  },
+  {
+    "name": "获取一条指定记录",
+    "value": {
+      "mode": "getNoteById",
+      "id": "3c4c6d855d5c0b07050a1a5a0b18e0fa"
     }
   }
 ]

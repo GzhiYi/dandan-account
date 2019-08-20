@@ -1,0 +1,20 @@
+[
+  {
+    "name": "添加记录",
+    "value": {
+      "mode": "add",
+      "money": "100",
+      "categoryId": "_just_for_test",
+      "noteDate": "2019-8-19",
+      "description": "测试添加一条记录",
+      "flow": "0"
+    }
+  },
+  {
+    "name": "删除记录",
+    "value": {
+      "mode": "deleteById",
+      "id": "3c4c6d855d5ac0f6042dc98233de328d"
+    }
+  }
+]

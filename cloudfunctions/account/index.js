@@ -17,11 +17,11 @@ exports.main = async (event, context) => {
     if (event.mode === 'add') {
       const res = await db.collection('DANDAN_NOTE').add({
         data: {
-          money,
+          money: roundFun(money, 2),
           categoryId,
           noteDate: new Date(noteDate),
           description,
-          flow, // 金钱流向
+          flow: Number(flow), // 金钱流向
           createTime: db.serverDate(),
           updateTime: db.serverDate(),
           openId: wxContext.OPENID,
@@ -51,7 +51,7 @@ exports.main = async (event, context) => {
     if (event.mode === 'updateById') {
       const res = await db.collection('DANDAN_NOTE').doc(id).update({
         data: {
-          money,
+          money: roundFun(money, 2),
           categoryId,
           noteDate: new Date(noteDate),
           description,
@@ -88,4 +88,8 @@ exports.main = async (event, context) => {
     }
   }
 
+}
+
+roundFun = (value, n) => {
+  return Math.round(value * Math.pow(10, n)) / Math.pow(10, n);
 }

@@ -19,7 +19,7 @@ exports.main = async (event, context) => {
         data: {
           money,
           categoryId,
-          noteDate,
+          noteDate: new Date(noteDate),
           description,
           flow, // 金钱流向
           createTime: db.serverDate(),
@@ -53,7 +53,7 @@ exports.main = async (event, context) => {
         data: {
           money,
           categoryId,
-          noteDate,
+          noteDate: new Date(noteDate),
           description,
           updateTime: db.serverDate(),
         }

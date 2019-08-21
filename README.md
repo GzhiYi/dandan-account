@@ -46,5 +46,17 @@
 | id|id|是|
 ||||
 
+</details>
+
+<details>
+<summary>获取分类列表</summary>
+
+### 获取分类列表（函数名：getCategory）
+
+| key| 说明    | 是否必填  |
+| --------   | -----   | ---- |
+| flow|金钱的流向, 0-支出, 1-收入|是|
+||||
 
 </details>
+

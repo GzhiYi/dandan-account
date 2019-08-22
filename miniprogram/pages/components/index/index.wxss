@@ -55,6 +55,5 @@
   border-radius: 10rpx;
 }
 .btn-area button {
-  background: orange;
   margin-top: 20rpx;
 }

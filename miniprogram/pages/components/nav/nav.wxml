@@ -2,7 +2,7 @@
   <view style="height:{{statusBarHeight}}px;"></view>
   <view class='content'>
     <view class='nav-icon-view-back' bindtap='back' wx:if="{{showBackIcon}}">
-      <image class='nav-icon' src='../../../images/left-arrow.png'></image>
+      后退
     </view>
     <view class='nav-icon-view my-icon-class has-font' wx:if="{{showHomeIcons}}" bindtap='newGroup'>
       <image style='margin-right: 10rpx;' class='nav-icon' src='../../../images/plus.png'></image>

@@ -8,9 +8,9 @@
 <view wx:if="{{active === 'chart'}}">
   <chart />
 </view>
-<cover-view class="tab">
+<cover-view class="tab-top">
   <cover-view
-    class="tab-item"
+    class="tab-item-top"
     bindtap="goTo"
     data-active="list"
     style="{{scale === 'list' ? 'transform: scale(.8, .8)' : ''}}"
@@ -18,7 +18,7 @@
     <cover-image class="icon" src="../../images/calendar{{active === 'list' ? '' : '-dark'}}.png"></cover-image>
   </cover-view>
   <cover-view
-    class="tab-item middle"
+    class="tab-item-top middle"
     bindtap="goTo"
     data-active="index"
     style="{{scale === 'index' ? 'transform: scale(.8, .8)' : ''}}"
@@ -26,7 +26,7 @@
     <cover-image class="icon-middle" src="../../images/quill.png"></cover-image>
   </cover-view>
   <cover-view
-    class="tab-item"
+    class="tab-item-top"
     bindtap="goTo"
     data-active="chart"
     style="{{scale === 'chart' ? 'transform: scale(.8, .8)' : ''}}"

@@ -12,7 +12,7 @@
 	},
 	"appid": "wxda00e9b7cd5f39b1",
 	"projectname": "dandan-account",
-	"libVersion": "2.4.0",
+	"libVersion": "2.6.5",
 	"simulatorType": "wechat",
 	"simulatorPluginLibVersion": {},
 	"cloudfunctionTemplateRoot": "cloudfunctionTemplate",

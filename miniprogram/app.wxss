@@ -6,14 +6,34 @@
   box-sizing: border-box;
 } 
 
-button {
-  background: initial;
-}
-
 button:focus{
   outline: 0;
 }
 
 button::after{
   border: none;
+}
+.shadow {
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, .075);
+}
+.primary {
+  background-color: #1da1f2;
+}
+.success {
+  background-color: #4fd69c;
+}
+.danger {
+  background-color: #f75676;
+}
+.warn {
+  background-color: #ffdd57;
+}
+.sky {
+  background-color: #54c7ec;
+}
+.purple {
+  background-color: #5e72e4;
+}
+.dark {
+  color: #343a40;
 }

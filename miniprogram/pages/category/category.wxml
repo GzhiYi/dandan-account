@@ -1,0 +1,11 @@
+<nav class="nav-instance" my-class="{{theme}}-set-bg" my-icon-class="{{theme}}-set-icon-bg" showIcons="{{['back']}}"></nav>
+<view class="category">
+  <view class="item" wx:for="{{categoryList}}" wx:key="{{item._id}}">
+    <text class="parent-name dark">{{item.categoryName}}</text>
+    <view class="child-category">
+      <view class="child shadow dark" wx:for="{{item.children}}" wx:for-item="child" wx:key="{{child._id}}">
+        {{child.categoryName}}
+      </view>
+    </view>
+  </view>
+</view>

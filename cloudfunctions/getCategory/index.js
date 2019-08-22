@@ -10,7 +10,7 @@ const _ = db.command;
 exports.main = async (event, context) => {
   const wxContext = cloud.getWXContext();
   const { flow, } = event;
-
+  console.log(flow, 'flow')
   try {
     // 先获取系统的分类, 或者某个用户创建的分类
     const res = await db.collection("DANDAN_NOTE_CATEGORY")

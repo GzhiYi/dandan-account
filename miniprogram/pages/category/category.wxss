@@ -1,0 +1,14 @@
+.parent-name {
+  font-weight: bold;
+  font-size: 40rpx;
+}
+.child-category {
+  display: flex;
+  flex-wrap: wrap;
+}
+.child-category .child {
+  margin: 10rpx 16rpx;
+  font-size: 34rpx;
+  padding: 5rpx 20rpx;
+  border-radius: 6rpx;
+}

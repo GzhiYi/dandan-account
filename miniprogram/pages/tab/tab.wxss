@@ -1,4 +1,4 @@
-.tab {
+.tab-top {
   position: fixed;
   bottom: 30rpx;
   display: flex;
@@ -6,7 +6,7 @@
   align-items: center;
   width: 100%;
 }
-.tab-item {
+.tab-item-top {
   display: flex;
   justify-content: center;
   align-items: center;

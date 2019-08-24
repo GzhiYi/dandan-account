@@ -18,7 +18,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 16rpx;
-  border-bottom: 1px solid #ccc;
+  border-bottom: solid 1rpx rgba(0,0,0,.1);
 }
 .section input {
   padding: 20rpx 0;
@@ -29,6 +29,8 @@
   display: flex;
   align-items: center;
   position: relative;
+  flex-direction: column;
+  justify-content: center;
 }
 .default-text {
   position: absolute;
@@ -36,10 +38,13 @@
 }
 .cate {
   margin: 10rpx;
-  padding: 5rpx 10rpx;
-  background-color: #ccc;
+  padding: 8rpx 16rpx;
+  background-color: #4fd69c;
   text-align: center;
   border-radius: 10rpx;
+  color: #fff;
+  font-size: 25rpx;
+  font-weight: bold;
 }
 .active {
   color: orange;
@@ -56,4 +61,16 @@
 }
 .btn-area button {
   margin-top: 20rpx;
+}
+.input-sum, .default-text {
+  font-size: 46rpx;
+}
+.select-field {
+  display: flex;
+}
+.select-date {
+  width: 100%;
+  text-align: right;
+  margin-right: 17rpx;
+  font-size: 24rpx;
 }

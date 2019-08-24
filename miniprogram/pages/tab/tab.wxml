@@ -1,11 +1,11 @@
 <nav class="nav-instance" my-class="{{theme}}-set-bg" my-icon-class="{{theme}}-set-icon-bg" showIcons="{{['home']}}"></nav>
-<view style="{{active === 'list' ? '' : 'display: none;'}}">
-  <list />
+<view hidden="{{active !== 'list'}}">
+  <list id="list"/>
 </view>
-<view style="{{active === 'index' ? '' : 'display: none;'}}">
+<view hidden="{{active !== 'index'}}">
   <index />
 </view>
-<view style="{{active === 'chart' ? '' : 'display: none;'}}">
+<view hidden="{{active !== 'chart'}}">
   <chart />
 </view>
 <cover-view class="tab-top">

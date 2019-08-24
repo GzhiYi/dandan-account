@@ -1,6 +1,8 @@
 Page({
   data: {
-    active: 'index'
+    active: 'list'
+  },
+  onLoad() {
   },
   goTo(event) {
     const { active } = event.currentTarget.dataset

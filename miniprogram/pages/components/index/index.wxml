@@ -27,11 +27,11 @@
         bindinput="bindInput"
         maxlength="{{10}}"
         data-name="sum"
-        style="color: {{ active_tab === 0 ? '#4fd69c;' : '#f75676;'}}"
+        style="color: {{ active_tab === 1 ? '#4fd69c;' : '#f75676;'}}"
       />
       <text
         class="default-text"
-        style="color: {{ active_tab === 0 ? '#4fd69c;' : '#f75676;'}}"
+        style="color: {{ active_tab === 1 ? '#4fd69c;' : '#f75676;'}}"
         wx:if="{{sum === ''}}"
       >0.00</text>
     </view>
@@ -49,6 +49,7 @@
       <view class="select-field">
         <view
           class="date-item"
+          style="background-color: {{ active_tab === 1 ? '#4fd69c;' : '#f75676;'}}"
           bindtap="changeTab"
           data-key="date"
           data-value="前天"
@@ -56,6 +57,7 @@
         >前天</view>
         <view
           class="date-item"
+          style="background-color: {{ active_tab === 1 ? '#4fd69c;' : '#f75676;'}}"
           bindtap="changeTab"
           data-key="date"
           data-value="昨天"
@@ -63,6 +65,7 @@
         >昨天</view>
         <view
           class="date-item"
+          style="background-color: {{ active_tab === 1 ? '#4fd69c;' : '#f75676;'}}"
           bindtap="changeTab"
           data-key="date"
           data-value="今天"

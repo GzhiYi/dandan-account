@@ -11,7 +11,7 @@ Component({
    * 组件的初始数据
    */
   data: {
-
+    billList: []
   },
 
   /**
@@ -22,7 +22,18 @@ Component({
   },
   methods: {
     getBillList() {
-      
+      const self = this
+      wx.cloud.callFunction({
+        name: 'getAccountList',
+        data: {},
+        success(res) {
+          if (res.result.code === 1) {
+            self.setData({
+              billList: res.result.data.data.reverse()
+            })
+          }
+        }
+      })
     }
   }
 })

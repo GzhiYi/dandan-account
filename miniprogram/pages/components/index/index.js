@@ -27,7 +27,6 @@ Component({
    */
   methods: {
     bindInput(event) {
-      console.log(event)
       const { value } = event.detail
       this.setData({
         [`${event.currentTarget.dataset.name}`]: value
@@ -88,7 +87,6 @@ Component({
           flow: active_tab
         },
         success(res) {
-          console.log('res', res)
           if (res.result.code === 1) {
             wx.showToast({
               title: '成功新增一笔账单',

@@ -39,7 +39,6 @@
 .cate {
   margin: 10rpx;
   padding: 8rpx 16rpx;
-  background-color: #4fd69c;
   text-align: center;
   border-radius: 10rpx;
   color: #fff;
@@ -59,8 +58,22 @@
   text-align: center;
   border-radius: 10rpx;
 }
+.btn-area {
+  text-align: center;
+}
 .btn-area button {
-  margin-top: 20rpx;
+  border: 1px solid transparent;
+  border-radius: 9rpx;
+  font-size: 28rpx;
+  padding: 20rpx 40rpx;
+  display: inline-block;
+  position: relative;
+  font-weight: 600;
+  letter-spacing: 14rpx;
+  text-decoration: none;
+  line-height: normal;
+  width: 90%;
+  margin: 40rpx 0;
 }
 .input-sum, .default-text {
   font-size: 46rpx;

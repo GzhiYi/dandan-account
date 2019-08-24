@@ -1,11 +1,11 @@
 <nav class="nav-instance" my-class="{{theme}}-set-bg" my-icon-class="{{theme}}-set-icon-bg" showIcons="{{['home']}}"></nav>
-<view wx:if="{{active === 'list'}}">
+<view style="{{active === 'list' ? '' : 'display: none;'}}">
   <list />
 </view>
-<view wx:if="{{active === 'index'}}">
+<view style="{{active === 'index' ? '' : 'display: none;'}}">
   <index />
 </view>
-<view wx:if="{{active === 'chart'}}">
+<view style="{{active === 'chart' ? '' : 'display: none;'}}">
   <chart />
 </view>
 <cover-view class="tab-top">

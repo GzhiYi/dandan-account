@@ -20,15 +20,20 @@
     <view class="label">金额</view>
     <view class="input-field">
       <input
+        class="input-sum"
         name="sum"
         type="digit"
-        focus
         value="{{sum}}"
         bindinput="bindInput"
         maxlength="{{10}}"
         data-name="sum"
+        style="color: {{ active_tab === 0 ? '#4fd69c;' : '#f75676;'}}"
       />
-      <text class="default-text" wx:if="{{sum === ''}}">0.00</text>
+      <text
+        class="default-text"
+        style="color: {{ active_tab === 0 ? '#4fd69c;' : '#f75676;'}}"
+        wx:if="{{sum === ''}}"
+      >0.00</text>
     </view>
   </view>
   <view class="section">
@@ -40,36 +45,37 @@
   <view class="section">
     <view class="label">日期</view>
     <view class="input-field">
-      <view
-        class="date-item"
-        bindtap="changeTab"
-        data-key="date"
-        data-value="前天"
-        class="cate {{active_date === '前天' ? 'active' : ''}}"
-      >前天</view>
-      <view
-        class="date-item"
-        bindtap="changeTab"
-        data-key="date"
-        data-value="昨天"
-        class="cate {{active_date === '昨天' ? 'active' : ''}}"
-      >昨天</view>
-      <view
-        class="date-item"
-        bindtap="changeTab"
-        data-key="date"
-        data-value="今天"
-        class="cate {{active_date === '今天' ? 'active' : ''}}"
-      >今天</view>
+      <view class="select-date">{{active_date_time}}</view>
+      <view class="select-field">
+        <view
+          class="date-item"
+          bindtap="changeTab"
+          data-key="date"
+          data-value="前天"
+          class="cate {{active_date === '前天' ? 'active' : ''}}"
+        >前天</view>
+        <view
+          class="date-item"
+          bindtap="changeTab"
+          data-key="date"
+          data-value="昨天"
+          class="cate {{active_date === '昨天' ? 'active' : ''}}"
+        >昨天</view>
+        <view
+          class="date-item"
+          bindtap="changeTab"
+          data-key="date"
+          data-value="今天"
+          class="cate {{active_date === '今天' ? 'active' : ''}}"
+        >今天</view>
+      </view>
     </view>
-    {{active_date_time}}
   </view>
   <view class="section">
     <view class="label">备注</view>
     <view class="input-field" style="width: 80%;">
       <input
         name="note"
-        focus
         value="{{note}}"
         bindinput="bindInput"
         maxlength="{{100}}"

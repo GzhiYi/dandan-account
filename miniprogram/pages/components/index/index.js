@@ -7,13 +7,6 @@ Component({
   options: {
     styleIsolation: 'shared'
   },
-  properties: {
-
-  },
-
-  /**
-   * 组件的初始数据
-   */
   data: {
     sum: '',
     note: '',
@@ -70,6 +63,20 @@ Component({
         active_date_time,
         active_tab
       } = this.data
+      if (!/^0{1}([.]\d{1,2})?$|^[1-9]\d*([.]{1}[0-9]{1,2})?$/.test(Number(sum)) || isNaN(Number(sum))) {
+        wx.showToast({
+          title: '金额输入不正确',
+          icon: 'none'
+        })
+        return false
+      }
+      if (Number(sum) === 0) {
+        wx.showToast({
+          title: '金额不能为0呀！',
+          icon: 'none'
+        })
+        return false
+      }
       wx.cloud.callFunction({
         name: 'account',
         data: {

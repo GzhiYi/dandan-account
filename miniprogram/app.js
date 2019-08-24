@@ -1,4 +1,8 @@
 //app.js
+const Flow = {
+  pay: 0,
+  income: 1
+}
 App({
   onLaunch: function () {
     
@@ -17,11 +21,34 @@ App({
         this.globalData.screenWidth = res.screenWidth
       }
     })
+    // 分类应当全局优先获取
+    this.getCategory()
   },
   globalData: {
     statusBarHeight: 0,
     navBarHeight: 0,
     screenWidth: 0,
+    categoryList: {}
+  },
+  getCategory() {
+    console.log('go fetch category')
+    const self = this
+    let categoryList = {}
+    wx.cloud.callFunction({
+      name: 'getCategory',
+      data: {},
+      success(res) {
+        console.log("1", res)
+        if (res.result.code === 1) {
+          const list = res.result.data
+          console.log(list)
+          // 分离出支出和收入的分类列表
+          categoryList['pay'] = list.filter(item => item.flow === Flow.pay)
+          categoryList['income'] = list.filter(item => item.flow === Flow.income)
+          self.globalData.categoryList = categoryList
+        }
+      }
+    })
   },
   showLoading(target) {
     const nav = target.selectComponent('.nav-instance')

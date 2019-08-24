@@ -1,1 +1,22 @@
-/* pages/components/list/list.wxss */
+.bill-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: solid 1rpx rgba(0,0,0,.1);
+  margin: 0 20rpx;
+  padding: 10rpx;
+}
+.date {
+  color: #ccc;
+  font-size: 25rpx;
+}
+.type {
+  margin-bottom: 13rpx;
+}
+.money {
+  font-size: 42rpx;
+}
+.description {
+  font-size: 27rpx;
+  margin: 10rpx 0;
+}

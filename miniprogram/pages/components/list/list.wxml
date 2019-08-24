@@ -1,2 +1,12 @@
-<!--pages/components/list/list.wxml-->
-<text>pages/components/list/list.wxml</text>
+<view class="bill-list">
+  <view class="bill-item" wx:for="{{billList}}" wx:key="{{item._id}}">
+    <view class="type-date">
+      <view class="type">{{item.categoryId}}</view>
+      <view class="description">{{item.description}}</view>
+      <view class="date">{{item.noteDate}}</view>
+    </view>
+    <view class="money" style="color: {{ item.flow === 1 ? '#4fd69c;' : '#f75676;'}}">
+      {{item.flow === 0 ? '-' : '+'}}{{item.money}}
+    </view>
+  </view>
+</view>

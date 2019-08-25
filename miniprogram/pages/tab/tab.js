@@ -30,5 +30,10 @@ Page({
   onReFetchBillList() {
     const list = this.selectComponent('#list')
     list.getBillList()
+  },
+  onShareAppMessage() {
+    return {
+      title: '测试'
+    }
   }
 })

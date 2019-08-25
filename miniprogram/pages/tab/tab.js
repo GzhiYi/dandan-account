@@ -31,6 +31,12 @@ Page({
     const list = this.selectComponent('#list')
     list.getBillList()
   },
+  onSwitchTab(data) {
+    console.log(data)
+    this.setData({
+      active: data.detail
+    })
+  },
   onShareAppMessage() {
     return {
       title: '测试'

@@ -36,6 +36,9 @@ Component({
           }
         }
       })
+    },
+    switchTab() {
+      this.triggerEvent('switchTab', 'index')
     }
   }
 })

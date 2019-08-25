@@ -27,3 +27,11 @@
   font-size: 27rpx;
   margin: 13rpx 0 0;
 }
+.note-tips {
+  background: linear-gradient(40deg,#ff6ec4,#5e72e4);
+  margin: 120rpx 40rpx;
+  padding: 26rpx;
+  color: #fff;
+  text-align: center;
+  border-radius: 14rpx;
+}

@@ -17,7 +17,8 @@ Component({
     active_category: '吃',
     active_date: '今天',
     categoryList: [],
-    active_date_time: ''
+    active_date_time: '',
+    loadingCreate: false
   },
   ready() {
     const now = new Date()
@@ -90,6 +91,9 @@ Component({
         })
         return false
       }
+      self.setData({
+        loadingCreate: true
+      })
       wx.cloud.callFunction({
         name: 'account',
         data: {
@@ -114,6 +118,11 @@ Component({
             })
             self.triggerEvent('reFetchBillList')
           }
+        },
+        complete() {
+          self.setData({
+            loadingCreate: false
+          })
         }
       })
     }

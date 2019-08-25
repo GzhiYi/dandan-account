@@ -96,6 +96,7 @@
     </view>
   </view>
   <view class="btn-area">
-    <button bindtap="submitForm" class="warn">确认</button>
+    <button bindtap="submitForm" class="warn" wx:if="{{!loadingCreate}}">确认</button>
+    <button class="warn" style="opacity: .5;" wx:else>创建中...</button>
   </view>
 </form>

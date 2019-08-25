@@ -54,6 +54,12 @@ Component({
         this.setData({
           active_date_time: dayMap[`${dataset.value}`]
         })
+      } else {
+        // 收入或者支出的tab
+        getApp().globalData.selectedCategory = ''
+        this.setData({
+          selectedCategory: ''
+        })
       }
     },
     goToCategory() {
@@ -114,7 +120,8 @@ Component({
             self.setData({
               sum: '',
               note: '',
-              selectedCategory: ''
+              selectedCategory: '',
+              active_date: '今天'
             })
             self.triggerEvent('reFetchBillList')
           }

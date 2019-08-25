@@ -4,6 +4,12 @@
   color: #fff;
   padding: 10rpx;
   display: inline-block;
+  width: 97%;
+}
+.add-icon {
+  font-size: 30rpx;
+  float: right;
+  margin-right: 10rpx;
 }
 .category {
   padding: 30rpx 0;

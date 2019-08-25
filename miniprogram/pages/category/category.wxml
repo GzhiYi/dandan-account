@@ -1,7 +1,10 @@
 <nav class="nav-instance" my-class="{{theme}}-set-bg" my-icon-class="{{theme}}-set-icon-bg" showIcons="{{['back']}}"></nav>
 <view class="category">
   <view class="item" wx:for="{{categoryList}}" wx:key="{{item._id}}">
-    <text class="parent-name dark">{{item.categoryName}}</text>
+    <view class="parent-name">
+      {{item.categoryName}}
+      <text class="add-icon">+</text>
+    </view>
     <view class="child-category">
       <view
         bindtap="selectCategory"

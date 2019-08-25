@@ -1,14 +1,34 @@
 .parent-name {
   font-weight: bold;
-  font-size: 40rpx;
+  font-size: 27rpx;
+  color: #fff;
+  padding: 10rpx;
+  display: inline-block;
+}
+.category {
+  padding: 30rpx 0;
 }
 .child-category {
   display: flex;
   flex-wrap: wrap;
+  padding: 12rpx 0;
+  background: #fff;
 }
 .child-category .child {
   margin: 10rpx 16rpx;
-  font-size: 34rpx;
-  padding: 5rpx 20rpx;
+  font-size: 26rpx;
+  padding: 8rpx 20rpx;
   border-radius: 6rpx;
+  background-color: #f7f8f9;
+  color: rgba(0,0,0,.6);
+  text-align: center;
+}
+.child-selected {
+  color: #fff !important;
+}
+.item {
+  background-color: #1da1f2;
+  margin: 24rpx 24rpx 30rpx 24rpx;
+  border-radius: 8rpx;
+  border: 1px solid rgba(255,255,255,.95);
 }

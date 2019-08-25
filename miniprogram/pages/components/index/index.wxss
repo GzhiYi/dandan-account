@@ -37,16 +37,16 @@
   right: 0;
 }
 .cate {
-  margin: 10rpx;
-  padding: 8rpx 16rpx;
+  margin: 10rpx 16rpx;
+  font-size: 26rpx;
+  padding: 8rpx 20rpx;
+  border-radius: 6rpx;
+  background-color: #f7f8f9;
+  color: rgba(0,0,0,.6);
   text-align: center;
-  border-radius: 10rpx;
-  color: #fff;
-  font-size: 25rpx;
-  font-weight: bold;
 }
 .active {
-  color: orange;
+  color: #fff;
 }
 .active-tab {
   color: orange;

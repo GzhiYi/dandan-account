@@ -7,6 +7,9 @@ Component({
   options: {
     styleIsolation: 'shared'
   },
+  properties: {
+    selectedCategory: String
+  },
   data: {
     sum: '',
     note: '',
@@ -63,7 +66,8 @@ Component({
         sum,
         note,
         active_date_time,
-        active_tab
+        active_tab,
+        selectedCategory
       } = this.data
       if (!/^0{1}([.]\d{1,2})?$|^[1-9]\d*([.]{1}[0-9]{1,2})?$/.test(Number(sum)) || isNaN(Number(sum))) {
         wx.showToast({
@@ -79,12 +83,19 @@ Component({
         })
         return false
       }
+      if (!selectedCategory) {
+        wx.showToast({
+          title: '未选择分类！',
+          icon: 'none'
+        })
+        return false
+      }
       wx.cloud.callFunction({
         name: 'account',
         data: {
           mode: 'add',
           money: sum,
-          categoryId: 'others',
+          categoryId: selectedCategory,
           noteDate: active_date_time,
           description: note,
           flow: active_tab
@@ -95,9 +106,11 @@ Component({
               title: '成功新增一笔账单',
               icon: 'none'
             })
+            getApp().globalData.selectedCategory = ''
             self.setData({
               sum: '',
-              note: ''
+              note: '',
+              selectedCategory: ''
             })
             self.triggerEvent('reFetchBillList')
           }

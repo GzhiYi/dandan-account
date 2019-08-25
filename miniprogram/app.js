@@ -28,7 +28,8 @@ App({
     statusBarHeight: 0,
     navBarHeight: 0,
     screenWidth: 0,
-    categoryList: {}
+    categoryList: {},
+    selectedCategory: ''
   },
   getCategory() {
     console.log('go fetch category')

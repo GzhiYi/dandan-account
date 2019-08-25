@@ -6,7 +6,8 @@ Page({
    */
   data: {
     billType: 0,
-    categoryList: []
+    categoryList: [],
+    category: ''
   },
 
   /**
@@ -23,5 +24,15 @@ Page({
     this.setData({
       categoryList: getApp().globalData.categoryList[`${flow === '0' ? 'pay' : 'income'}`]
     })
+  },
+  selectCategory(event) {
+    console.log(event)
+    const { category } = event.currentTarget.dataset
+    this.setData({
+      category
+    })
+    console.log(this.data.category)
+    getApp().globalData.selectedCategory = category
+    wx.navigateBack()
   },
 })

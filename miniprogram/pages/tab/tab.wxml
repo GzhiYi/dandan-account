@@ -3,7 +3,11 @@
   <list id="list" class="list"/>
 </view>
 <view hidden="{{active !== 'index'}}">
-  <index bind:reFetchBillList="onReFetchBillList" id="index"/>
+  <index
+    bind:reFetchBillList="onReFetchBillList"
+    id="index"
+    selectedCategory="{{selectedCategory}}"
+  />
 </view>
 <view hidden="{{active !== 'chart'}}">
   <chart id="chart"/>

@@ -1,0 +1,6 @@
+<view class="dialog-bg" wx:if="{{visible}}" bindtap='closeDialog'>
+  
+</view>
+<view class='dialog' wx:if="{{visible}}">
+  <slot name='content'></slot>
+</view>

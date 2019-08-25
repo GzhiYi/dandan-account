@@ -1,0 +1,19 @@
+.dialog {
+  margin:0 10px 30px;
+  position:fixed;
+  bottom:0rpx;
+  left:0;
+  right:0;
+  border-radius: 18rpx;
+  padding: 15rpx;
+  background:#fff;
+  z-index:99;
+}
+.dialog-bg {
+  background:rgba(0, 0, 0, 0.705);
+  height:100%;
+  width:100%;
+  position:fixed;
+  top:0;
+  z-index: 98;
+}

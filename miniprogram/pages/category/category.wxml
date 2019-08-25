@@ -3,7 +3,7 @@
   <view class="item" wx:for="{{categoryList}}" wx:key="{{item._id}}">
     <view class="parent-name">
       {{item.categoryName}}
-      <text class="add-icon">+</text>
+      <text class="add-icon" bindtap="showDialog" data-target="{{item}}">+</text>
     </view>
     <view class="child-category">
       <view
@@ -19,3 +19,14 @@
     </view>
   </view>
 </view>
+<dialog visible="{{showAddDialog}}">
+  <view slot="content">
+    <view class="d-header">
+      添加 {{addCategory.categoryName}} 子分类
+      <view class="divide"></view>
+    </view>
+    <input value="{{addCategoryName}}" data-name="addCategoryName" bindinput="bindInput" placeholder="输入子分类名" class="fill-cate"></input>
+    <view class='list-item-btn' style="color: #4fd69c;" bindtap="confirmAddCategory">确认</view>
+    <view class='list-item-btn' bindtap="closeDialog" style="border-bottom: none;">取消</view>
+  </view>
+</dialog>

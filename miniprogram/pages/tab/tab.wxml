@@ -1,6 +1,6 @@
 <nav class="nav-instance" my-class="{{theme}}-set-bg" my-icon-class="{{theme}}-set-icon-bg" showIcons="{{['home']}}"></nav>
 <view hidden="{{active !== 'list'}}">
-  <list id="list" class="list"/>
+  <list id="list" class="list" bind:switchTab="onSwitchTab"/>
 </view>
 <view hidden="{{active !== 'index'}}">
   <index

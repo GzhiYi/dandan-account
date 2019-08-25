@@ -21,9 +21,9 @@ exports.main = async (event, context) => {
             flow: Number(flow),
             type: Number(type),
             parentId,
-            isSelectable: isSelectable === 'true',
+            isSelectable,
             createTime: db.serverDate(),
-            openId: type === "0" ? "SYSTEM" : wxContext.OPENID,
+            openId: type == "0" ? "SYSTEM" : wxContext.OPENID,
             isDel: false
           }
         });

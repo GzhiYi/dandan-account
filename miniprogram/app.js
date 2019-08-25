@@ -47,6 +47,9 @@ App({
           categoryList['pay'] = list.filter(item => item.flow === Flow.pay)
           categoryList['income'] = list.filter(item => item.flow === Flow.income)
           self.globalData.categoryList = categoryList
+          if (self.loadCategoryCallBack) {
+            self.loadCategoryCallBack(list)
+          }
         }
       }
     })

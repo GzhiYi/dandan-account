@@ -4,6 +4,16 @@
   color: #fff;
   padding: 10rpx;
   display: inline-block;
+  width: 97%;
+}
+.add-icon {
+  font-size: 30rpx;
+  float: right;
+  margin-right: 10rpx;
+  display: inline-block;
+  width: 50rpx;
+  text-align: right;
+
 }
 .category {
   padding: 30rpx 0;
@@ -15,6 +25,10 @@
   background: #fff;
 }
 .child-category .child {
+  display: flex;
+  align-items: center;
+}
+.child .name {
   margin: 10rpx 16rpx;
   font-size: 26rpx;
   padding: 8rpx 20rpx;
@@ -22,6 +36,8 @@
   background-color: #f7f8f9;
   color: rgba(0,0,0,.6);
   text-align: center;
+  display: flex;
+  align-items: center;
 }
 .child-selected {
   color: #fff !important;
@@ -31,4 +47,45 @@
   margin: 24rpx 24rpx 30rpx 24rpx;
   border-radius: 8rpx;
   border: 1px solid rgba(255,255,255,.95);
+}
+.list-item-btn {
+  padding: 24rpx;
+  text-align: center;
+  border-bottom: solid 1rpx rgba(0,0,0,.1);
+}
+.fill-cate {
+  border-bottom: solid 1rpx rgba(0,0,0,.1);
+  padding: 24rpx;
+  text-align: center;
+  margin: 30rpx 0;
+}
+.d-header {
+  font-size: 37rpx;
+  text-align: center;
+}
+.divide {
+  width: 43%;
+  height: 7rpx;
+  background-color: orange;
+  margin: 0 auto;
+  position: relative;
+  top: -13rpx;
+  z-index: -1;
+}
+.delete {
+  font-size: 26rpx;
+  padding: 6rpx;
+  border-radius: 0 6rpx 6rpx 0;
+  color: rgba(0,0,0,.6);
+  text-align: center;
+  display: flex;
+  align-items: center;
+  margin-left: -15rpx;
+  background-color: #f7f8f9;
+}
+.delete-icon {
+  border-left: 1rpx solid #ccd;
+  padding: 0 8rpx;
+  margin-left: 15rpx;
+  margin-right: -12rpx;
 }

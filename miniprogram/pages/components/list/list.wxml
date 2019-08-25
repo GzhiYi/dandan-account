@@ -11,4 +11,7 @@
       <view class="date">{{item.noteDate}}</view>
     </view>
   </view>
+  <view wx:if="{{billList.length === 0}}" class="note-tips" bindtap="switchTab">
+    快去记第一笔帐吧！
+  </view>
 </view>

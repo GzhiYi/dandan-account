@@ -4,21 +4,5 @@
     <view class='nav-icon-view-back' bindtap='back' wx:if="{{showBackIcon}}">
       后退
     </view>
-    <view class='nav-icon-view my-icon-class has-font' wx:if="{{showHomeIcons}}" bindtap='newGroup'>
-      <image style='margin-right: 10rpx;' class='nav-icon' src='../../../images/plus.png'></image>
-      {{isEscape ? '群组' : '账单'}}
-    </view>
-    <view class="nav-icon-view  my-icon-class {{showTheme ? 'has-font' : ''}}" wx:if="{{showHomeIcons}}" bindtap='goTo' data-page="personal">
-      <image class='nav-icon' style="width:38rpx;height:38rpx;{{showTheme ? 'margin-right: 10rpx;' : ''}}" src='../../../images/user.png'></image>
-      {{showTheme ? '主题' : ''}}
-    </view>
-    <view class='nav-icon-view  my-icon-class' wx-if="{{showLoadingIcon}}">
-      <image
-        class='nav-icon'
-        style="width:37rpx;height:37rpx;"
-        src='../../../images/refresh.png'
-        class='loading-icon'
-      ></image>
-    </view>
   </view>
 </view>

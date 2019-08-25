@@ -38,7 +38,15 @@
   </view>
   <view class="section">
     <view class="label">分类</view>
-    <view class="input-field">
+    <view class="input-field" style="flex-direction: row;">
+      <view
+        class="cate"
+        style="background-color: {{active_tab === 1 ? '#4fd69c;' : '#f75676;'}}"
+        wx:if="{{selectedCategory}}"
+        bindtap="goToCategory"
+      >
+      {{selectedCategory}}
+      </view>
       <view class="cate" bindtap="goToCategory">...</view>
     </view>
   </view>
@@ -49,27 +57,27 @@
       <view class="select-field">
         <view
           class="date-item"
-          style="background-color: {{ active_tab === 1 ? '#4fd69c;' : '#f75676;'}}"
           bindtap="changeTab"
           data-key="date"
           data-value="前天"
           class="cate {{active_date === '前天' ? 'active' : ''}}"
+          style="background-color: {{active_date === '前天' ? active_tab === 1 ? '#4fd69c;' : '#f75676;' : ''}}"
         >前天</view>
         <view
           class="date-item"
-          style="background-color: {{ active_tab === 1 ? '#4fd69c;' : '#f75676;'}}"
           bindtap="changeTab"
           data-key="date"
           data-value="昨天"
           class="cate {{active_date === '昨天' ? 'active' : ''}}"
+          style="background-color: {{active_date === '昨天' ? active_tab === 1 ? '#4fd69c;' : '#f75676;' : ''}}"
         >昨天</view>
         <view
           class="date-item"
-          style="background-color: {{ active_tab === 1 ? '#4fd69c;' : '#f75676;'}}"
           bindtap="changeTab"
           data-key="date"
           data-value="今天"
           class="cate {{active_date === '今天' ? 'active' : ''}}"
+          style="background-color: {{active_date === '今天' ? active_tab === 1 ? '#4fd69c;' : '#f75676;' : ''}}"
         >今天</view>
       </view>
     </view>
@@ -88,6 +96,7 @@
     </view>
   </view>
   <view class="btn-area">
-    <button bindtap="submitForm" class="warn">确认</button>
+    <button bindtap="submitForm" class="warn" wx:if="{{!loadingCreate}}">确认</button>
+    <button class="warn" style="opacity: .5;" wx:else>创建中...</button>
   </view>
 </form>

@@ -1,6 +1,6 @@
 .tab-top {
   position: fixed;
-  bottom: 30rpx;
+  bottom: 52rpx;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -11,17 +11,17 @@
   justify-content: center;
   align-items: center;
   border-radius: 50%;
-  border: 12rpx solid rgba(204, 204, 204, 0.8);
-  margin: 0 40rpx;
+  border: 10rpx solid rgba(204, 204, 204, 0.8);
+  margin: 0 24rpx;
   height: fit-content;
   transition: .5s all;
   background-color: rgba(255, 255, 255, 0.8);
 }
 .icon {
-  width: 80rpx;
-  height: 80rpx;
+  width: 70rpx;
+  height: 70rpx;
 }
 .icon-middle {
-  width: 100rpx;
-  height: 100rpx;
+  width: 90rpx;
+  height: 90rpx;
 }

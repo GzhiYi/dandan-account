@@ -5,13 +5,20 @@
 }
 .tab {
   display: flex;
-  background-color: #ccd;
   justify-content: space-around;
-  padding: 15rpx;
+  padding: 15rpx 0 0;
+  color: #6c757d;
+  margin: 0 20rpx;
 }
 .tab-item {
   width: 50%;
   text-align: center;
+  padding: 0 0 15rpx;
+  border-bottom: 4rpx solid #f5f5f5;
+}
+.active-tab {
+  color: #ffdd57;
+  border-bottom: 4rpx solid #ffdd57;
 }
 .section {
   display: flex;
@@ -37,19 +44,16 @@
   right: 0;
 }
 .cate {
-  margin: 10rpx;
-  padding: 8rpx 16rpx;
+  margin: 10rpx 16rpx;
+  font-size: 26rpx;
+  padding: 8rpx 20rpx;
+  border-radius: 6rpx;
+  background-color: #f7f8f9;
+  color: rgba(0,0,0,.6);
   text-align: center;
-  border-radius: 10rpx;
-  color: #fff;
-  font-size: 25rpx;
-  font-weight: bold;
 }
 .active {
-  color: orange;
-}
-.active-tab {
-  color: orange;
+  color: #fff;
 }
 .date-item {
   margin: 10rpx;

@@ -28,7 +28,8 @@ App({
     statusBarHeight: 0,
     navBarHeight: 0,
     screenWidth: 0,
-    categoryList: {}
+    categoryList: {},
+    selectedCategory: ''
   },
   getCategory() {
     console.log('go fetch category')
@@ -57,9 +58,5 @@ App({
   hideLoading(target) {
     const nav = target.selectComponent('.nav-instance')
     nav.hideLoading()
-  },
-  reFetchBillList(target) {
-    const list = target.selectComponent('#list')
-    list.getBillList()
   }
 })

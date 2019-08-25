@@ -71,7 +71,18 @@ exports.main = async (event, context) => {
         _id: id,
         isDel: false,
       }).get();
-      console.log(res);
+      if (res.data.length > 0) {
+        const tempCategory = await db.collection("DANDAN_NOTE_CATEGORY").doc(res.data[0].categoryId).field({
+          categoryIcon: true,
+          categoryName: true,
+          _id: true
+        }).get();
+        // 貌似没有记录的话, 就直接被catch掉了
+        if (tempCategory.data != null) {
+          res.data[0].category = tempCategory.data;
+        }
+      }
+      
       return {
         code: 1,
         data: res,

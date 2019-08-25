@@ -22,6 +22,9 @@ Component({
       active_date_time: `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`
     })
   },
+  attached() {
+    console.log('in attached', this.selectComponent('#list'))
+  },
   /**
    * 组件的方法列表
    */
@@ -64,7 +67,7 @@ Component({
       } = this.data
       if (!/^0{1}([.]\d{1,2})?$|^[1-9]\d*([.]{1}[0-9]{1,2})?$/.test(Number(sum)) || isNaN(Number(sum))) {
         wx.showToast({
-          title: '金额输入不正确',
+          title: '金额输入不正确，最多两位小数',
           icon: 'none'
         })
         return false
@@ -96,6 +99,7 @@ Component({
               sum: '',
               note: ''
             })
+            self.triggerEvent('reFetchBillList')
           }
         }
       })

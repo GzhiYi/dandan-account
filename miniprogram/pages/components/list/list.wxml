@@ -3,10 +3,12 @@
     <view class="type-date">
       <view class="type">{{item.categoryId}}</view>
       <view class="description">{{item.description}}</view>
-      <view class="date">{{item.noteDate}}</view>
     </view>
-    <view class="money" style="color: {{ item.flow === 1 ? '#4fd69c;' : '#f75676;'}}">
-      {{item.flow === 0 ? '-' : '+'}}{{item.money}}
+    <view class="money-date">
+      <view class="money" style="color: {{ item.flow === 1 ? '#4fd69c;' : '#f75676;'}}">
+        {{item.flow === 0 ? '-' : '+'}}{{item.money}}
+      </view>
+      <view class="date">{{item.noteDate}}</view>
     </view>
   </view>
 </view>

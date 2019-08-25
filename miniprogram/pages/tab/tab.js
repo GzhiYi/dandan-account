@@ -17,5 +17,9 @@ Page({
         scale: null
       })
     }, 200)
+  },
+  onReFetchBillList() {
+    const list = this.selectComponent('#list')
+    list.getBillList()
   }
 })

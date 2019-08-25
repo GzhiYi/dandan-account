@@ -1,12 +1,12 @@
 <nav class="nav-instance" my-class="{{theme}}-set-bg" my-icon-class="{{theme}}-set-icon-bg" showIcons="{{['home']}}"></nav>
 <view hidden="{{active !== 'list'}}">
-  <list id="list"/>
+  <list id="list" class="list"/>
 </view>
 <view hidden="{{active !== 'index'}}">
-  <index />
+  <index bind:reFetchBillList="onReFetchBillList" id="index"/>
 </view>
 <view hidden="{{active !== 'chart'}}">
-  <chart />
+  <chart id="chart"/>
 </view>
 <cover-view class="tab-top">
   <cover-view

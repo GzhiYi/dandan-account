@@ -22,6 +22,7 @@ Component({
   },
   methods: {
     getBillList() {
+      console.log('call this')
       const self = this
       wx.cloud.callFunction({
         name: 'getAccountList',
@@ -31,6 +32,7 @@ Component({
             self.setData({
               billList: res.result.data.data.reverse()
             })
+            console.log(self.data.billList)
           }
         }
       })

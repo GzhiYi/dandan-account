@@ -12,9 +12,16 @@
 }
 .type {
   margin-bottom: 13rpx;
+  background: #5e72e4;
+  color: #fff;
+  border-radius: 7rpx;
+  font-size: 22rpx;
+  padding: 5rpx 10rpx;
+  width: fit-content;
 }
 .money {
   font-size: 42rpx;
+  text-align: right;
 }
 .description {
   font-size: 27rpx;

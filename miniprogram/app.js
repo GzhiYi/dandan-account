@@ -57,9 +57,5 @@ App({
   hideLoading(target) {
     const nav = target.selectComponent('.nav-instance')
     nav.hideLoading()
-  },
-  reFetchBillList(target) {
-    const list = target.selectComponent('#list')
-    list.getBillList()
   }
 })

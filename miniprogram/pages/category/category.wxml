@@ -8,13 +8,22 @@
     <view class="child-category">
       <view
         bindtap="selectCategory"
-        data-category="{{child._id}}"
+        data-category="{{child.categoryName}}"
         class="child"
         wx:for="{{item.children}}"
         wx:for-item="child"
         wx:key="{{child._id}}"
       >
-        {{child.categoryName}}
+        <view class="name">{{child.categoryName}}
+          <image
+            class="delete-icon"
+            wx:if="{{child.openId !== 'SYSTEM'}}"
+            src="../../images/backspace-arrow.png"
+            style="width: 28rpx;height: 28rpx;"
+            catchtap="deleteCategory"
+            data-category="{{child}}"
+          ></image>
+        </view>
       </view>
     </view>
   </view>
@@ -26,7 +35,9 @@
       <view class="divide"></view>
     </view>
     <input value="{{addCategoryName}}" data-name="addCategoryName" bindinput="bindInput" placeholder="输入子分类名" class="fill-cate"></input>
-    <view class='list-item-btn' style="color: #4fd69c;" bindtap="confirmAddCategory">确认</view>
+    
+    <view class='list-item-btn' style="color: #4fd69c;" bindtap="confirmAddCategory" wx:if="{{!loadingAdd}}">确认</view>
+    <view class='list-item-btn' style="color: #4fd69c;" wx:else>添加中...</view>
     <view class='list-item-btn' bindtap="closeDialog" style="border-bottom: none;">取消</view>
   </view>
 </dialog>

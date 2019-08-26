@@ -84,6 +84,14 @@
           class="cate {{active_date === '今天' ? 'active' : ''}}"
           style="background-color: {{active_date === '今天' ? active_tab === 1 ? '#4fd69c;' : '#f75676;' : ''}}"
         >今天</view>
+        <picker
+          mode="date"
+          value="{{active_date_time}}"
+          start="1995-09-12"
+          bindchange="bindDateChange"
+        >
+          <view class="cate">...</view>
+        </picker>
       </view>
     </view>
   </view>

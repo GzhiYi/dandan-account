@@ -1,4 +1,5 @@
 // pages/components/index/index.js
+import { parseTime } from '../../../date.js'
 const Flow = {
   pay: 0,
   income: 1
@@ -21,17 +22,19 @@ Component({
     active_date_time: '',
     currentActiveDateTime: '',
     loadingCreate: false,
-    isEdit: false
+    isEdit: false,
+    pickDate: ''
   },
   ready() {
     const now = new Date()
+    const date = parseTime(now, '{y}-{m}-{d}')
     this.setData({
-      active_date_time: `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`,
-      currentActiveDateTime: `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`
+      active_date_time: date,
+      currentActiveDateTime: date,
+      pickDate: date
     })
   },
   attached() {
-    console.log('in attached', this.selectComponent('#list'))
   },
   /**
    * 组件的方法列表
@@ -43,20 +46,33 @@ Component({
         [`${event.currentTarget.dataset.name}`]: value
       })
     },
+    converDate(date, isDate = true) {
+      const yesterday = new Date().setDate(new Date().getDate() - 1)
+      const yeyesterday = new Date().setDate(new Date().getDate() - 2)
+      let dayMap = {}
+      if (isDate) {
+        dayMap = {
+          '今天': parseTime(new Date(), '{y}-{m}-{d}'),
+          '昨天': parseTime(yesterday, '{y}-{m}-{d}'),
+          '前天': parseTime(yeyesterday, '{y}-{m}-{d}'),
+        }
+      } else {
+        dayMap = {
+          [`${parseTime(new Date(), '{y}-{m}-{d}')}`]: '今天',
+          [`${parseTime(yesterday, '{y}-{m}-{d}')}`]: '昨天',
+          [`${parseTime(yeyesterday, '{y}-{m}-{d}')}`]: '前天',
+        }
+      }
+      return dayMap[date] || ''
+    },
     changeTab(event) {
       const { dataset } = event.currentTarget
       this.setData({
         [`active_${dataset.key}`]: dataset.value
       })
-      if (/date/.test(dataset.key)) {
-        const now = new Date()
-        const dayMap = {
-          '今天': `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`,
-          '昨天': `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate() - 1}`,
-          '前天': `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate() - 2}`,
-        }
+      if (/date/.test(dataset.key)) {        
         this.setData({
-          active_date_time: dayMap[`${dataset.value}`]
+          active_date_time: this.converDate(dataset.value)
         })
       } else {
         // 收入或者支出的tab
@@ -137,18 +153,12 @@ Component({
     },
     dectiveEdit() {
       const { editBill } = this.data
-      const now = new Date()
-      const dayMap = {
-        [`${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`]: '今天',
-        [`${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate() - 1}`]: '昨天',
-        [`${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate() - 2}`]: '前天',
-      }
       this.setData({
         sum: editBill.money,
         note: editBill.description,
         active_tab: editBill.flow,
         selectedCategory: editBill.categoryId,
-        active_date: dayMap[`${editBill.noteDate}`],
+        active_date: this.converDate(editBill.noteDate, false),
         active_date_time: editBill.noteDate,
         isEdit: true
       })
@@ -165,6 +175,12 @@ Component({
         loadingCreate: false,
         isEdit: false,
         selectedCategory: ''
+      })
+    },
+    bindDateChange(event) {
+      this.setData({
+        active_date_time: event.detail.value,
+        active_date: this.converDate(event.detail.value, false)
       })
     }
   }

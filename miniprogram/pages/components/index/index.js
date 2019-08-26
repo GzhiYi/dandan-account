@@ -8,7 +8,8 @@ Component({
     styleIsolation: 'shared'
   },
   properties: {
-    selectedCategory: String
+    selectedCategory: String,
+    editBill: Object
   },
   data: {
     sum: '',
@@ -18,12 +19,15 @@ Component({
     active_date: '今天',
     categoryList: [],
     active_date_time: '',
-    loadingCreate: false
+    currentActiveDateTime: '',
+    loadingCreate: false,
+    isEdit: false
   },
   ready() {
     const now = new Date()
     this.setData({
-      active_date_time: `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`
+      active_date_time: `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`,
+      currentActiveDateTime: `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`
     })
   },
   attached() {
@@ -74,7 +78,9 @@ Component({
         note,
         active_date_time,
         active_tab,
-        selectedCategory
+        selectedCategory,
+        isEdit,
+        editBill
       } = this.data
       if (!/^0{1}([.]\d{1,2})?$|^[1-9]\d*([.]{1}[0-9]{1,2})?$/.test(Number(sum)) || isNaN(Number(sum))) {
         wx.showToast({
@@ -103,26 +109,22 @@ Component({
       wx.cloud.callFunction({
         name: 'account',
         data: {
-          mode: 'add',
+          mode: isEdit ? 'updateById' : 'add',
           money: sum,
           categoryId: selectedCategory,
           noteDate: active_date_time,
           description: note,
-          flow: active_tab
+          flow: active_tab,
+          id: isEdit ? editBill._id : ''
         },
         success(res) {
           if (res.result.code === 1) {
             wx.showToast({
-              title: '成功新增一笔账单',
+              title: isEdit ? '修改成功' : '成功新增一笔账单',
               icon: 'none'
             })
             getApp().globalData.selectedCategory = ''
-            self.setData({
-              sum: '',
-              note: '',
-              selectedCategory: '',
-              active_date: '今天'
-            })
+            self.resetStatus()
             self.triggerEvent('reFetchBillList')
           }
         },
@@ -131,6 +133,38 @@ Component({
             loadingCreate: false
           })
         }
+      })
+    },
+    dectiveEdit() {
+      const { editBill } = this.data
+      const now = new Date()
+      const dayMap = {
+        [`${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`]: '今天',
+        [`${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate() - 1}`]: '昨天',
+        [`${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate() - 2}`]: '前天',
+      }
+      this.setData({
+        sum: editBill.money,
+        note: editBill.description,
+        active_tab: editBill.flow,
+        selectedCategory: editBill.categoryId,
+        active_date: dayMap[`${editBill.noteDate}`],
+        active_date_time: editBill.noteDate,
+        isEdit: true
+      })
+    },
+    resetStatus() {
+      this.setData({
+        sum: '',
+        note: '',
+        active_tab: 0,
+        active_category: '吃',
+        active_date: '今天',
+        categoryList: [],
+        active_date_time: this.data.currentActiveDateTime,
+        loadingCreate: false,
+        isEdit: false,
+        selectedCategory: ''
       })
     }
   }

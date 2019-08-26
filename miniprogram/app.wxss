@@ -37,3 +37,18 @@ button::after{
 .dark {
   color: #343a40;
 }
+.d-header {
+  font-size: 37rpx;
+  text-align: center;
+}
+.divide {
+  width: 43%;
+  height: 3rpx;
+  background-color: orange;
+  margin: 20rpx auto;
+}
+.list-item-btn {
+  padding: 24rpx;
+  text-align: center;
+  border-bottom: solid 1rpx rgba(0,0,0,.1);
+}

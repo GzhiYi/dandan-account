@@ -1,18 +1,26 @@
 <nav class="nav-instance" my-class="{{theme}}-set-bg" my-icon-class="{{theme}}-set-icon-bg" showIcons="{{['home']}}"></nav>
 <view hidden="{{active !== 'list'}}">
-  <list id="list" class="list" bind:switchTab="onSwitchTab"/>
+  <list
+    id="list"
+    class="list"
+    bind:switchTab="onSwitchTab"
+    bind:reFetchBillList="onReFetchBillList"
+    bind:editBill="onEditBill"
+    bind:hideTab="onHideTab"
+  />
 </view>
 <view hidden="{{active !== 'index'}}">
   <index
     bind:reFetchBillList="onReFetchBillList"
     id="index"
     selectedCategory="{{selectedCategory}}"
+    editBill="{{editBill}}"
   />
 </view>
 <view hidden="{{active !== 'chart'}}">
   <chart id="chart"/>
 </view>
-<cover-view class="tab-top">
+<cover-view class="tab-top" hidden="{{hideTab}}">
   <cover-view
     class="tab-item-top"
     bindtap="goTo"

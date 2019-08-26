@@ -16,6 +16,11 @@
   >收入</view>
 </view>
 <form bindsubmit="formSubmit">
+  <view
+    wx:if="{{isEdit}}"
+    class="edit-tip"
+    bindtap="resetStatus"
+  >正处于编辑状态，点此处取消</view>
   <view class="section">
     <view class="label">金额</view>
     <view class="input-field">
@@ -96,7 +101,7 @@
     </view>
   </view>
   <view class="btn-area">
-    <button bindtap="submitForm" class="warn" wx:if="{{!loadingCreate}}">确认</button>
-    <button class="warn" style="opacity: .5;" wx:else>创建中...</button>
+    <button bindtap="submitForm" class="warn" wx:if="{{!loadingCreate}}">{{isEdit ? '编辑' : '确认'}}</button>
+    <button class="warn" style="opacity: .5;" wx:else>{{isEdit ? '编辑' : '创建'}}中...</button>
   </view>
 </form>

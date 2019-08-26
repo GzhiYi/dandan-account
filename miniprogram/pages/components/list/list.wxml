@@ -23,10 +23,10 @@
     快去记第一笔帐吧！
   </view>
 </view>
-<dialog visible="{{showMenuDialog}}">
+<dialog visible="{{showMenuDialog}}" bind:closeDialog="closeDialog">
   <view slot="content">
     <view class="d-header">
-     {{editItem.categoryId}}
+     {{editItem.description || editItem.categoryId}}
       <view class="divide"></view>
     </view>
     <view class='list-item-btn' style="color: #4fd69c;" bindtap="editBill">编辑</view>

@@ -1,7 +1,10 @@
 Page({
   data: {
     active: 'index',
-    selectedCategory: ''
+    selectedCategory: '',
+    editBill: {},
+    isEdit: false,
+    hideTab: false
   },
   onLoad() {
   },
@@ -31,10 +34,24 @@ Page({
     const list = this.selectComponent('#list')
     list.getBillList()
   },
+  onEditBill(event) {
+    this.setData({
+      editBill: event.detail,
+      active: 'index',
+      isEdit: true
+    })
+    const index = this.selectComponent('#index')
+    index.dectiveEdit()
+  },
   onSwitchTab(data) {
     console.log(data)
     this.setData({
       active: data.detail
+    })
+  },
+  onHideTab(event) {
+    this.setData({
+      hideTab: event.detail
     })
   },
   onShareAppMessage() {

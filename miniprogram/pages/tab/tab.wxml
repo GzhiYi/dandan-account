@@ -5,6 +5,8 @@
     class="list"
     bind:switchTab="onSwitchTab"
     bind:reFetchBillList="onReFetchBillList"
+    bind:editBill="onEditBill"
+    bind:hideTab="onHideTab"
   />
 </view>
 <view hidden="{{active !== 'index'}}">
@@ -12,12 +14,13 @@
     bind:reFetchBillList="onReFetchBillList"
     id="index"
     selectedCategory="{{selectedCategory}}"
+    editBill="{{editBill}}"
   />
 </view>
 <view hidden="{{active !== 'chart'}}">
   <chart id="chart"/>
 </view>
-<cover-view class="tab-top">
+<cover-view class="tab-top" hidden="{{hideTab}}">
   <cover-view
     class="tab-item-top"
     bindtap="goTo"

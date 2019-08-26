@@ -48,12 +48,23 @@ Component({
         editItem: bill,
         showMenuDialog: true
       })
+      self.triggerEvent('hideTab', true)
     },
     closeDialog() {
       this.setData({
         showMenuDialog: false,
         showConfirmDelete: false
       })
+      this.triggerEvent('hideTab', false)
+    },
+    editBill() {
+      const self = this
+      const { editItem } = self.data
+      self.setData({
+        showMenuDialog: false
+      })
+      this.triggerEvent('hideTab', false)
+      self.triggerEvent('editBill', editItem)
     },
     deleteBill() {
       const self = this
@@ -64,6 +75,7 @@ Component({
         })
       } else {
         self.closeDialog()
+        wx.vibrateShort()
         wx.cloud.callFunction({
           name: 'account',
           data: {

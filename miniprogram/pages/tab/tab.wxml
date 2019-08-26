@@ -1,4 +1,7 @@
-<nav class="nav-instance" my-class="{{theme}}-set-bg" my-icon-class="{{theme}}-set-icon-bg" showIcons="{{['home']}}"></nav>
+<nav
+  style="{{active === 'index' ? 'display: none;' : ''}}"
+  class="nav-instance"
+></nav>
 <view hidden="{{active !== 'list'}}">
   <list
     id="list"

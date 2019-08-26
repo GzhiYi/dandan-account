@@ -23,6 +23,7 @@
   flex-wrap: wrap;
   padding: 12rpx 0;
   background: #fff;
+  border-radius: 0 0 6rpx 6rpx;
 }
 .child-category .child {
   display: flex;
@@ -46,7 +47,7 @@
   background-color: #1da1f2;
   margin: 24rpx 24rpx 30rpx 24rpx;
   border-radius: 8rpx;
-  border: 1px solid rgba(255,255,255,.95);
+  border: 1px solid rgba(255,255,255,.78);
 }
 .fill-cate {
   border-bottom: solid 1rpx rgba(0,0,0,.1);

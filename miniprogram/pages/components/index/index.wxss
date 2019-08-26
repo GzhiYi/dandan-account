@@ -1,14 +1,17 @@
 .banner {
   width: 100%;
-  height: 300rpx;
-  background: #ccc;
+  height: 434rpx;
+  background: linear-gradient(40deg,#ff6ec4,#5e72e4);
 }
 .tab {
   display: flex;
   justify-content: space-around;
   padding: 15rpx 0 0;
   color: #6c757d;
-  margin: 0 20rpx;
+  border-radius: 14rpx 14rpx 0 0;
+  margin-top: -40rpx;
+  background: #fff;
+  margin: -40rpx 20rpx 20rpx;
 }
 .tab-item {
   width: 50%;

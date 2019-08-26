@@ -19,7 +19,7 @@ exports.main = async (event, context) => {
         data: {
           money: roundFun(money, 2),
           categoryId,
-          noteDate: new Date(noteDate),
+          noteDate: noteDate,
           description,
           flow: Number(flow), // 金钱流向
           createTime: db.serverDate(),

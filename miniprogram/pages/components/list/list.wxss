@@ -35,3 +35,7 @@
   text-align: center;
   border-radius: 14rpx;
 }
+.money-date {
+  display: flex;
+  align-items: center;
+}

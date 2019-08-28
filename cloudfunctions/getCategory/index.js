@@ -3,14 +3,18 @@ const cloud = require('wx-server-sdk')
 
 cloud.init()
 
-const db = cloud.database();
-const _ = db.command;
-
 // 云函数入口函数
 exports.main = async (event, context) => {
   const wxContext = cloud.getWXContext();
-  const { flow, } = event;
-  console.log(flow, 'flow')
+  cloud.updateConfig({
+    env: wxContext.ENV
+  })
+  // 初始化数据库
+  const db = cloud.database({
+    env: wxContext.ENV
+  });
+  const _ = db.command;
+  const { flow } = event;
   try {
     // 先获取系统的分类, 或者某个用户创建的分类
     let query = {

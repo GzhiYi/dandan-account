@@ -3,11 +3,16 @@ const cloud = require('wx-server-sdk')
 
 cloud.init()
 
-const db = cloud.database();
-
 // 云函数入口函数
 exports.main = async (event, context) => {
   const wxContext = cloud.getWXContext();
+  cloud.updateConfig({
+    env: wxContext.ENV
+  })
+  // 初始化数据库
+  const db = cloud.database({
+    env: wxContext.ENV
+  });
   const { id, categoryName, categoryIcon, description, flow,
     type, parentId, isSelectable, } = event;
   try {

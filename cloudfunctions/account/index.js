@@ -3,15 +3,20 @@ const cloud = require('wx-server-sdk')
 
 cloud.init()
 
-// 初始化数据库
-const db = cloud.database();
+
 
 // 云函数入口函数
 exports.main = async (event, context) => {
   const wxContext = cloud.getWXContext();
   // 取参
   const { id, money, categoryId, noteDate, description, flow } = event;
-
+  cloud.updateConfig({
+    env: wxContext.ENV
+  })
+  // 初始化数据库
+  const db = cloud.database({
+    env: wxContext.ENV
+  });
   try {
     // 增加一条记录
     if (event.mode === 'add') {

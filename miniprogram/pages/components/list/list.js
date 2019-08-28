@@ -30,7 +30,7 @@ Component({
         name: 'getAccountList',
         data: {},
         success(res) {
-          if (res.result.code === 1) {
+          if (res.result && res.result.code === 1) {
             self.setData({
               billList: res.result.data.data.reverse()
             })

@@ -3,9 +3,6 @@ const cloud = require('wx-server-sdk')
 
 cloud.init()
 
-const db = cloud.database();
-const _ = db.command;
-
 const DEFAULT_LIMIT = 10;
 const DEFAULT_PAGE = 1;
 const MAX_LIMIT = 50;
@@ -14,6 +11,14 @@ const MAX_LIMIT = 50;
 // 云函数入口函数
 exports.main = async (event, context) => {
   const wxContext = cloud.getWXContext();
+  cloud.updateConfig({
+    env: wxContext.ENV
+  })
+  // 初始化数据库
+  const db = cloud.database({
+    env: wxContext.ENV
+  });
+  const _ = db.command;
   // page: 当前页数
   // limit: 当前页面加载的个数
   let { page, limit } = event;
@@ -85,6 +90,16 @@ exports.main = async (event, context) => {
         },
         message: '获取记录成功',
       }
+    }
+    const res = await db.collection("DANDAN_NOTE")
+    .where({
+      isDel: false,
+      openId: _.eq(wxContext.OPENID),
+    }).get()
+    return {
+      code: 1,
+      data: res,
+      message: '获取记录成功'
     }
 
     // 按时间查找

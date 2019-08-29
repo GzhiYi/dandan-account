@@ -68,7 +68,9 @@ Page({
   },
   onShareAppMessage() {
     return {
-      title: '测试'
+      title: '猪猪邀你测试下',
+      path: '/pages/tab/tab',
+      imageUrl: 'https://images.vrm.cn/2019/08/29/pig.png'
     }
   }
 })

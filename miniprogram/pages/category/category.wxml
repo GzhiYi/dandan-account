@@ -8,7 +8,7 @@
     <view class="child-category">
       <view
         bindtap="selectCategory"
-        data-category="{{child.categoryName}}"
+        data-category="{{child}}"
         class="child"
         wx:for="{{item.children}}"
         wx:for-item="child"

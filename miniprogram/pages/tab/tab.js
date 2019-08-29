@@ -1,7 +1,7 @@
 Page({
   data: {
     active: 'index',
-    selectedCategory: '',
+    selectedCategory: null,
     editBill: {},
     isEdit: false,
     hideTab: false

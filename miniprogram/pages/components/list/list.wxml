@@ -1,7 +1,7 @@
 <view class="bill-list">
   <view class="bill-item" wx:for="{{billList}}" wx:key="{{item._id}}">
     <view class="type-date">
-      <view class="type">{{item.categoryId}}</view>
+      <view class="type">{{item.category.categoryName}}</view>
       <view class="description" wx:if="{{item.description}}">{{item.description}}</view>
     </view>
     <view class="money-date">
@@ -26,7 +26,7 @@
 <dialog visible="{{showMenuDialog}}" bind:closeDialog="closeDialog">
   <view slot="content">
     <view class="d-header">
-     {{editItem.description || editItem.categoryId}}
+     {{editItem.description || editItem.category.categoryName}}
       <view class="divide"></view>
     </view>
     <view class='list-item-btn' style="color: #4fd69c;" bindtap="editBill">编辑</view>

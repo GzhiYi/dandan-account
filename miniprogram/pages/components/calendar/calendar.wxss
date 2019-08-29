@@ -1,0 +1,74 @@
+.calendar {
+  width: 80%;
+  background-color: #fff;
+  padding: 40rpx 20rpx;
+  margin: 0 auto;
+  border-radius: 24rpx;
+}
+.controller {
+  display: flex;
+}
+.control-item {
+  font-size: 26rpx;
+  padding: 0 14px;
+}
+.date-display {
+  font-size: 28rpx;
+  padding-left: 22rpx;
+}
+.date {
+  display: flex;
+  justify-content: space-between;
+  margin: 0 0 20rpx;
+}
+.divide {
+  width: 91%;
+  height: 4rpx;
+  background-color: #eceef0;
+  margin: 28rpx auto;
+}
+.week {
+  display: flex;
+  justify-content: center;
+}
+.days {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
+
+}
+.day {
+  width: 40rpx;
+  height: 40rpx;
+  text-align: center;
+  padding: 4px 4px;
+  margin: 6rpx 12rpx;
+  font-size: 27rpx;
+  line-height: 40rpx;
+}
+.pre-month, .next-month {
+  opacity: .4;
+}
+.weeken {
+  color: #f75676;
+}
+.icon {
+  width: 32rpx;
+  height: 32rpx;
+  margin-top: 10rpx;
+}
+
+.today {
+  border-bottom: 3rpx solid #0075ff;
+  margin: 6rpx 12rpx 3rpx;
+}
+.selected-date, .range-pick {
+  color: #fff;
+  background-color: #0075ff;
+  border-radius: 50%;
+  border: none;
+}
+.inrange {
+  background-color: #e6f2ff;
+}

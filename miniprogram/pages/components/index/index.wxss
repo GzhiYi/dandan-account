@@ -27,7 +27,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16rpx;
+  padding: 16rpx 30rpx;
   border-bottom: solid 1rpx rgba(0,0,0,.1);
 }
 .section input {

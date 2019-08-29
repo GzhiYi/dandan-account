@@ -1,0 +1,53 @@
+<wxs module="rangeStyle">
+var handle = function(day, dateRange) {
+  if (dateRange.indexOf(day.date) !== -1) return 'range-pick';
+};
+
+module.exports.handle = handle;
+</wxs>
+
+<view class="calendar">
+  <view class="header">
+    <view class="date">
+      <picker
+        mode="date"
+        fields="month"
+        value="{{pickDate}}"
+        bindchange="bindPickDateChange"
+      >
+        <text class="date-display">{{pickDateDisplay}}</text>
+      </picker>
+      <view class="controller">
+        <view class="control-item" bindtap="control" data-mode="pre">
+          <image src="https://images.vrm.cn/2019/08/29/left-arrow.png" class="icon"></image>
+        </view>
+        <view class="control-item" bindtap="control" data-mode="reset">
+          <image src="https://images.vrm.cn/2019/08/29/rotate.png" class="icon"></image>
+        </view>
+        <view class="control-item" bindtap="control" data-mode="next">
+          <image src="https://images.vrm.cn/2019/08/29/right-arrow.png" class="icon"></image>
+        </view>
+      </view>
+    </view>
+    <view class="divide"></view>
+  </view>
+  <view class="days">
+    <view class="day">一</view>
+    <view class="day">二</view>
+    <view class="day">三</view>
+    <view class="day">四</view>
+    <view class="day">五</view>
+    <view class="day weeken">六</view>
+    <view class="day weeken">日</view>
+    <view
+      class="day {{item.position}} {{item.week === 6 || item.week === 7 ? 'weeken' : ''}} {{selectedDate === item.date ? 'selected-date' : ''}} {{today === item.date && showToday ? 'today' : ''}} {{item.inRange ? 'inrange' : ''}} {{rangeStyle.handle(item, dateRange)}}"
+      wx:for="{{allDays}}"
+      wx:key="{{item}}"
+      bindtap="onPickDay"
+      data-day="{{item}}"
+    >
+      {{item.dateNumber}}
+    </view>
+  </view>
+</view>
+<view style="text-align: center;margin: 40rpx 0;">{{selectedDate}}</view>

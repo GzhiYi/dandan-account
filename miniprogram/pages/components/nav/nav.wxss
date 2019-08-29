@@ -1,3 +1,6 @@
+.list-page {
+  background-color: #f8fafb;
+}
 .content {
   position: relative;
   /* width: 100%; */

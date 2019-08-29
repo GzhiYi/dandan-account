@@ -1,38 +1,44 @@
-<view class="bill-list">
-  <view class="bill-item" wx:for="{{billList}}" wx:key="{{item._id}}">
-    <view class="type-date">
-      <view class="type">{{item.category.categoryName}}</view>
-      <view class="description" wx:if="{{item.description}}">{{item.description}}</view>
-    </view>
-    <view class="money-date">
-      <view>
-        <view class="money" style="color: {{ item.flow === 1 ? '#4fd69c;' : '#f75676;'}}">
-          {{item.flow === 0 ? '-' : '+'}}{{item.money}}
-        </view>
-        <view class="date">{{item.noteDate}}</view>
+<view class="list-page">
+  <view class="cal-calendar">
+    <view style="height: {{statusBarHeight * 2}}rpx;background-color: #fff;"></view>
+    <calendar></calendar>
+  </view>
+  <scroll-view scroll-y="{{true}}" style="height: {{screenHeight - calendarHeight - statusBarHeight}}px;" class="bill-list">
+    <view class="bill-item" wx:for="{{billList}}" wx:key="{{item._id}}"  bindtap="showMenu" data-bill="{{item}}">
+      <view class="type-date">
+        <view class="type">{{item.category.categoryName}}</view>
+        <view class="description" wx:if="{{item.description}}">{{item.description}}</view>
       </view>
-      <image
-        src="../../../images/menu.png"
-        style="width: 32rpx;height: 32rpx;padding: 13rpx 0 13rpx 13rpx;"
-        bindtap="showMenu"
-        data-bill="{{item}}"
-      ></image>
+      <view class="money-date">
+        <view>
+          <view class="money" style="color: {{ item.flow === 1 ? '#4fd69c;' : '#f75676;'}}">
+            {{item.flow === 0 ? '-' : '+'}}{{item.money}}
+          </view>
+          <view class="date">{{item.noteDate}}</view>
+        </view>
+        <!-- <image
+          src="../../../images/menu.png"
+          style="width: 32rpx;height: 32rpx;padding: 13rpx 0 13rpx 13rpx;"
+          bindtap="showMenu"
+          data-bill="{{item}}"
+        ></image> -->
+      </view>
     </view>
-  </view>
-  <view wx:if="{{billList.length === 0}}" class="note-tips" bindtap="switchTab">
-    快去记第一笔帐吧！
-  </view>
+    <view wx:if="{{billList && billList.length === 0}}" class="note-tips" bindtap="switchTab">
+      快去记第一笔帐吧！
+    </view>
+  </scroll-view>
+  <dialog visible="{{showMenuDialog}}" bind:closeDialog="closeDialog">
+    <view slot="content">
+      <view class="d-header">
+      {{editItem.description || editItem.category.categoryName}}
+        <view class="divide"></view>
+      </view>
+      <view class='list-item-btn' style="color: #4fd69c;" bindtap="editBill">编辑</view>
+      <view class='list-item-btn' style="color: #f75676;" bindtap="deleteBill">
+      {{showConfirmDelete ? '再次点击确认删除' : '删除'}}
+      </view>
+      <view class='list-item-btn' bindtap="closeDialog" style="border-bottom: none;">取消</view>
+    </view>
+  </dialog>
 </view>
-<dialog visible="{{showMenuDialog}}" bind:closeDialog="closeDialog">
-  <view slot="content">
-    <view class="d-header">
-     {{editItem.description || editItem.category.categoryName}}
-      <view class="divide"></view>
-    </view>
-    <view class='list-item-btn' style="color: #4fd69c;" bindtap="editBill">编辑</view>
-    <view class='list-item-btn' style="color: #f75676;" bindtap="deleteBill">
-    {{showConfirmDelete ? '再次点击确认删除' : '删除'}}
-    </view>
-    <view class='list-item-btn' bindtap="closeDialog" style="border-bottom: none;">取消</view>
-  </view>
-</dialog>

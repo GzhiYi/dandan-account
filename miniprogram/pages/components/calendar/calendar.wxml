@@ -50,4 +50,3 @@ module.exports.handle = handle;
     </view>
   </view>
 </view>
-<view style="text-align: center;margin: 40rpx 0;">{{selectedDate}}</view>

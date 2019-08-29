@@ -27,8 +27,10 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16rpx 30rpx;
+  padding: 16rpx 20rpx;
   border-bottom: solid 1rpx rgba(0,0,0,.1);
+  margin: 0 20rpx;
+  background-color: #fff;
 }
 .section input {
   padding: 20rpx 0;

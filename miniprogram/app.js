@@ -18,9 +18,11 @@ App({
     // 获取手机信息以配置顶栏
     wx.getSystemInfo({
       success: res => {
+        console.log('res', res)
         this.globalData.statusBarHeight = res.statusBarHeight
         this.globalData.navBarHeight = 44 + res.statusBarHeight
         this.globalData.screenWidth = res.screenWidth
+        this.globalData.screenHeight = res.screenHeight
       }
     })
     // 分类应当全局优先获取
@@ -30,6 +32,7 @@ App({
     statusBarHeight: 0,
     navBarHeight: 0,
     screenWidth: 0,
+    screenHeight: 0,
     categoryList: {},
     selectedCategory: ''
   },

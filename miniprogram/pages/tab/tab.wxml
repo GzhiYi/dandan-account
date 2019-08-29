@@ -1,5 +1,5 @@
 <nav
-  style="{{active === 'index' ? 'display: none;' : ''}}"
+  style="{{active === 'index' || active === 'list' ? 'display: none;' : ''}}"
   class="nav-instance"
 ></nav>
 <view hidden="{{active !== 'list'}}">

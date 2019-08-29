@@ -11,26 +11,43 @@ Component({
    * 组件的初始数据
    */
   data: {
-    billList: [],
+    billList: null,
     showMenuDialog: false,
     editItem: {},
-    showConfirmDelete: false
+    showConfirmDelete: false,
+    screenHeight: getApp().globalData.screenHeight,
+    statusBarHeight: getApp().globalData.statusBarHeight,
+    calendarHeight: 0
   },
 
   /**
    * 组件的方法列表
    */
   ready() {
-    this.getBillList()
+    const self = this
+    self.getBillList()
+    console.log('gogo', this.data.statusBarHeight)
+    const query = wx.createSelectorQuery().in(this)
+    query.select('.cal-calendar').boundingClientRect(function (rect) {
+      console.log('*****', rect)
+      self.setData({
+        calendarHeight: rect.height
+      })
+    }).exec()
+  },
+  attached() {
+    
   },
   methods: {
-    getBillList() {
+    getBillList(page = 1) {
       const self = this
       wx.cloud.callFunction({
         name: 'getAccountList',
-        data: {},
+        data: {
+          page,
+          limit: 20
+        },
         success(res) {
-          console.log('??', res)
           if (res.result && res.result.code === 1) {
             self.setData({
               billList: res.result.data.page.data

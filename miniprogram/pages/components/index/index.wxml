@@ -94,7 +94,7 @@
       </view>
     </view>
   </view>
-  <view class="section">
+  <view class="section" style="border-bottom: none;">
     <view class="label">备注</view>
     <view class="input-field" style="width: 80%;">
       <input

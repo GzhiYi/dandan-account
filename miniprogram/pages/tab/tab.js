@@ -1,6 +1,6 @@
 Page({
   data: {
-    active: 'index',
+    active: 'list',
     selectedCategory: null,
     editBill: {},
     isEdit: false,

@@ -12,5 +12,15 @@
       "page": "1",
       "limit": "3"
     }
+  },
+  {
+    "name": "按照时间 查询",
+    "value": {
+      "mode": "getAccountListByTime",
+      "page": "1",
+      "limit": "5",
+      "startDate": "2019-8-29",
+      "endDate": "2019-8-30"
+    }
   }
 ]

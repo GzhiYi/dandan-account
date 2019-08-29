@@ -12,16 +12,16 @@ const MAX_LIMIT = 50;
 exports.main = async (event, context) => {
   const wxContext = cloud.getWXContext();
   cloud.updateConfig({
-    env: wxContext.ENV
+    env: process.env.ENV === 'release' ? 'release-wifo3' : wxContext.ENV
   })
   // 初始化数据库
   const db = cloud.database({
-    env: wxContext.ENV
+    env: process.env.ENV === 'release' ? 'release-wifo3' : wxContext.ENV
   });
   const _ = db.command;
   // page: 当前页数
   // limit: 当前页面加载的个数
-  let { page, limit } = event;
+  let { page, limit, startDate, endDate } = event;
   page = Number.parseInt(page);
   limit = Number.parseInt(limit);
   if (!Number.isInteger(page)) {
@@ -46,67 +46,54 @@ exports.main = async (event, context) => {
     // 计算偏移量
     let offset = (page - 1) * limit;
 
+    const basicWhere = {
+      isDel: false,
+      openId: _.eq(wxContext.OPENID),
+    }
+
     // 主页, 基本列表查询
     if (event.mode === 'normal') {
-      // 计算总数
-      const totalCount = await db.collection("DANDAN_NOTE")
-        .where({
-          isDel: false,
-          openId: _.eq(wxContext.OPENID),
-        }).count();
-      // 总数为0, 直接返回
-      if (totalCount.total <= 0) {
-        return {
-          code: 1,
-          data: {
-            page: [],
-            count: totalCount.total,
-          },
-          message: '获取记录成功',
-        }
-      }
+    } else if (event.mode === 'getAccountListByTime') {
+      basicWhere.noteDate = _.gte(new Date(startDate)).and(_.lte(new Date(endDate)))
+    }
+    // 计算总数
+    const totalCount = await db.collection("DANDAN_NOTE")
+      .where(basicWhere).count();
 
-      // 开始查询
-      const res = await db.collection("DANDAN_NOTE")
-        .where({
-          isDel: false,
-          openId: _.eq(wxContext.OPENID),
-        })
-        .skip(offset)
-        .limit(limit)
-        .orderBy("createTime", "desc")
-        .get();
-
-      // 遍历结果, 获取对应的菜单
-      for (let note of res.data) {
-        await getCategory(note);
-      }
-
+    // 总数为0, 直接返回
+    if (totalCount.total <= 0) {
       return {
         code: 1,
         data: {
-          page: res,
+          page: [],
           count: totalCount.total,
         },
         message: '获取记录成功',
       }
     }
+
+    // 开始查询
     const res = await db.collection("DANDAN_NOTE")
-    .where({
-      isDel: false,
-      openId: _.eq(wxContext.OPENID),
-    }).get()
+      .where(basicWhere)
+      .skip(offset)
+      .limit(limit)
+      .orderBy("createTime", "desc")
+      .get();
+
+    // 遍历结果, 获取对应的菜单
+    for (let note of res.data) {
+      await getCategory(note, db);
+    }
+
+    console.log(res);
     return {
       code: 1,
-      data: res,
-      message: '获取记录成功'
+      data: {
+        page: res,
+        count: totalCount.total,
+      },
+      message: '获取记录成功',
     }
-
-    // 按时间查找
-    if (event.mode == 'getAccountListByTime') {
-      // ...
-    }
-
   } catch (e) {
     console.error(e);
     return {
@@ -121,15 +108,49 @@ exports.main = async (event, context) => {
 
 }
 
-async function getCategory(note) {
+async function getCategory(note, db) {
+
+  note.noteDate = parseTime(note.noteDate, "{y}-{m}-{d}")
+
   const tempCategory = await db.collection("DANDAN_NOTE_CATEGORY").doc(note.categoryId).field({
     categoryIcon: true,
     categoryName: true,
     _id: true
   }).get();
-  console.log(tempCategory);
   // 貌似没有记录的话, 就直接被catch掉了
   if (tempCategory.data != null) {
     note.category = tempCategory.data;
   }
+}
+
+function parseTime(time, cFormat) {
+  if (arguments.length === 0) {
+    return null
+  }
+  const format = cFormat || '{y}-{m}-{d} {h}:{i}:{s}'
+  let date
+  if (typeof time === 'object') {
+    date = time
+  } else {
+    if (('' + time).length === 10) time = parseInt(time) * 1000
+    date = new Date(time)
+  }
+  const formatObj = {
+    y: date.getFullYear(),
+    m: date.getMonth() + 1,
+    d: date.getDate(),
+    h: date.getHours(),
+    i: date.getMinutes(),
+    s: date.getSeconds(),
+    a: date.getDay()
+  }
+  const timeStr = format.replace(/{(y|m|d|h|i|s|a)+}/g, (result, key) => {
+    let value = formatObj[key]
+    if (key === 'a') return ['一', '二', '三', '四', '五', '六', '日'][value - 1]
+    if (result.length > 0 && value < 10) {
+      value = '0' + value
+    }
+    return value || 0
+  })
+  return timeStr
 }

@@ -4,8 +4,8 @@
     "value": {
       "mode": "add",
       "money": "100",
-      "categoryId": "_just_for_test",
-      "noteDate": "2019-8-19",
+      "categoryId": "others_sub",
+      "noteDate": "2019-8-28",
       "description": "测试添加一条记录",
       "flow": "0"
     }

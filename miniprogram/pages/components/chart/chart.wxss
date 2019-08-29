@@ -1,1 +1,6 @@
-/* pages/components/chart/chart.wxss */
+.chart {
+  height: 500rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

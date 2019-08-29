@@ -10,6 +10,7 @@
     bind:reFetchBillList="onReFetchBillList"
     bind:editBill="onEditBill"
     bind:hideTab="onHideTab"
+    tab="{{active}}"
   />
 </view>
 <view hidden="{{active !== 'index'}}">
@@ -23,12 +24,12 @@
 <view hidden="{{active !== 'chart'}}">
   <chart id="chart"/>
 </view>
-<cover-view class="tab-top" hidden="{{hideTab}}">
-  <cover-view
-    class="tab-item-top"
+<cover-view
+    class="tab-item-top left"
     bindtap="goTo"
     data-active="list"
     style="{{scale === 'list' ? 'transform: scale(.8, .8)' : ''}}"
+    hidden="{{hideTab}}"
   >
     <cover-image class="icon" src="../../images/calendar{{active === 'list' ? '' : '-dark'}}.png"></cover-image>
   </cover-view>
@@ -37,15 +38,16 @@
     bindtap="goTo"
     data-active="index"
     style="{{scale === 'index' ? 'transform: scale(.8, .8)' : ''}}"
+    hidden="{{hideTab}}"
   >
     <cover-image class="icon-middle" src="../../images/quill.png"></cover-image>
   </cover-view>
   <cover-view
-    class="tab-item-top"
+    class="tab-item-top right"
     bindtap="goTo"
     data-active="chart"
     style="{{scale === 'chart' ? 'transform: scale(.8, .8)' : ''}}"
+    hidden="{{hideTab}}"
   >
     <cover-image class="icon" src="../../images/pie-chart{{active === 'chart' ? '' : '-dark'}}.png"></cover-image>
   </cover-view>
-</cover-view>

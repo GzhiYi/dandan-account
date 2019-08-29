@@ -20,12 +20,6 @@
   justify-content: space-between;
   margin: 0 0 20rpx;
 }
-.divide {
-  width: 91%;
-  height: 4rpx;
-  background-color: #eceef0;
-  margin: 28rpx auto;
-}
 .week {
   display: flex;
   justify-content: center;
@@ -38,13 +32,13 @@
 
 }
 .day {
-  width: 60rpx;
-  height: 60rpx;
+  width: 40rpx;
+  height: 40rpx;
   text-align: center;
   padding: 4px 4px;
-  margin: 0rpx 12rpx;
+  margin: 0rpx 22rpx 2rpx;
   font-size: 27rpx;
-  line-height: 60rpx;
+  line-height: 40rpx;
 }
 .pre-month, .next-month {
   opacity: .4;
@@ -60,7 +54,7 @@
 
 .today {
   border-bottom: 3rpx solid #0075ff;
-  margin: -3rpx 12rpx 3rpx;
+  margin: 0rpx 22rpx -1rpx;
 }
 .selected-date, .range-pick {
   color: #fff;
@@ -70,4 +64,10 @@
 }
 .inrange {
   background-color: #e6f2ff;
+}
+.show-daterange {
+  height: 38rpx;
+  font-size: 24rpx;
+  line-height: 38rpx;
+  margin: 15rpx 0 -10rpx 40rpx;
 }

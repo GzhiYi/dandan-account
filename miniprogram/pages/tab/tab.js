@@ -1,12 +1,14 @@
+import { parseTime } from '../../date.js'
 Page({
   data: {
-    active: 'list',
+    active: 'index',
     selectedCategory: null,
     editBill: {},
     isEdit: false,
     hideTab: false
   },
   onLoad() {
+    this.calCalendarHeight()
   },
   onShow() {
     const { selectedCategory } = getApp().globalData
@@ -16,6 +18,15 @@ Page({
       })
     }
   }, 
+  calCalendarHeight() {
+    const query = wx.createSelectorQuery().in(this)
+    query.select('.cal-calendar').boundingClientRect(function (rect) {
+      // self.setData({
+      //   calendarHeight: rect.height
+      // })
+      console.log('rect', rect)
+    }).exec()
+  },
   goTo(event) {
     const { active } = event.currentTarget.dataset
     this.setData({
@@ -32,7 +43,8 @@ Page({
   },
   onReFetchBillList() {
     const list = this.selectComponent('#list')
-    list.getBillList()
+    const now = new Date()
+    list.getBillList(parseTime(now, '{y}-{m}-{d}'), parseTime(now, '{y}-{m}-{d}'), 'index')
   },
   onEditBill(event) {
     this.setData({

@@ -29,7 +29,6 @@ module.exports.handle = handle;
         </view>
       </view>
     </view>
-    <view class="divide"></view>
   </view>
   <view class="days">
     <view class="day">一</view>
@@ -48,5 +47,8 @@ module.exports.handle = handle;
     >
       {{item.dateNumber}}
     </view>
+  </view>
+  <view class="show-daterange">
+    <text wx:if="{{mode === 'range' && dateRange.length  === 2}}">{{dateRange[0]}} ~ {{dateRange[1]}}</text>
   </view>
 </view>

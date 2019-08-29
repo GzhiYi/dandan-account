@@ -10,7 +10,7 @@ page {
   justify-content: space-between;
   align-items: center;
   margin: 20rpx 30rpx;
-  padding: 30rpx;
+  padding: 20rpx 30rpx;
   background-color: #fff;
   border-radius: 14rpx;
 }

@@ -1,15 +1,12 @@
 // pages/components/list/list.js
+import { parseTime } from '../../../date.js'
 Component({
   options: {
     styleIsolation: 'shared'
   },
   properties: {
-
+    tab: String
   },
-
-  /**
-   * 组件的初始数据
-   */
   data: {
     billList: null,
     showMenuDialog: false,
@@ -17,42 +14,55 @@ Component({
     showConfirmDelete: false,
     screenHeight: getApp().globalData.screenHeight,
     statusBarHeight: getApp().globalData.statusBarHeight,
-    calendarHeight: 0
+    calendarHeight: 0,
+    dateRange: null,
+    today: ''
   },
-
-  /**
-   * 组件的方法列表
-   */
+  observers: {
+    'tab': function(tab) {
+      
+    }
+  },
   ready() {
     const self = this
-    self.getBillList()
-    console.log('gogo', this.data.statusBarHeight)
-    const query = wx.createSelectorQuery().in(this)
-    query.select('.cal-calendar').boundingClientRect(function (rect) {
-      console.log('*****', rect)
-      self.setData({
-        calendarHeight: rect.height
-      })
-    }).exec()
-  },
-  attached() {
-    
+    const now = new Date()
+    self.getBillList(parseTime(now, '{y}-{m}-{d}'), parseTime(now, '{y}-{m}-{d}'), 'index')
+    self.setData({
+      today: parseTime(now, '{y}-{m}-{d}')
+    })
   },
   methods: {
-    getBillList(page = 1) {
+    getBillList(startDate, endDate, fetchFrom, page = 1) {
+
       const self = this
+      if (fetchFrom !== 'index') {
+        wx.showLoading({
+          title: '加载中...',
+        })
+      }
+      let data = {
+        mode: 'getAccountListByTime',
+        page,
+        limit: 100,
+        startDate,
+        endDate
+      }
+      if (self.data.dateRange) {
+        data.startDate = self.data.dateRange[0]
+        data.endDate = self.data.dateRange[1]
+      }
       wx.cloud.callFunction({
         name: 'getAccountList',
-        data: {
-          page,
-          limit: 20
-        },
+        data,
         success(res) {
           if (res.result && res.result.code === 1) {
             self.setData({
-              billList: res.result.data.page.data
+              billList: res.result.data.page.data || []
             })
           }
+        },
+        complete() {
+          wx.hideLoading()
         }
       })
     },
@@ -91,6 +101,7 @@ Component({
         self.setData({
           showConfirmDelete: !self.data.showConfirmDelete
         })
+        wx.vibrateShort()
       } else {
         self.closeDialog()
         wx.vibrateShort()
@@ -119,6 +130,20 @@ Component({
           }
         })
       }
+    },
+    onRangePick(event) {
+      this.setData({
+        dateRange: event.detail
+      })
+      this.getBillList(event.detail[0], event.detail[1], 'list')
+    },
+    onControl() {
+      const now = new Date()
+      const self= this
+      self.setData({
+        dateRange: null
+      })
+      self.getBillList(parseTime(now, '{y}-{m}-{d}'), parseTime(now, '{y}-{m}-{d}'), 'list')
     }
   }
 })

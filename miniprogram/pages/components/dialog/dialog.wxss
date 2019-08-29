@@ -1,5 +1,5 @@
 .dialog {
-  margin:0 10px 30px;
+  margin:0 16px 30px;
   position:fixed;
   bottom:0rpx;
   left:0;

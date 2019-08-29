@@ -55,9 +55,18 @@ Component({
         name: 'getAccountList',
         data,
         success(res) {
+          console.log('billRes', res)
           if (res.result && res.result.code === 1) {
             self.setData({
               billList: res.result.data.page.data || []
+            })
+          } else {
+            wx.showToast({
+              title: '获取账单失败，稍后再试',
+              icon: 'none'
+            })
+            self.setData({
+              billList: []
             })
           }
         },
@@ -142,8 +151,9 @@ Component({
       const self= this
       self.setData({
         dateRange: null
+      }, function () {
+        self.getBillList(parseTime(now, '{y}-{m}-{d}'), parseTime(now, '{y}-{m}-{d}'), 'list')
       })
-      self.getBillList(parseTime(now, '{y}-{m}-{d}'), parseTime(now, '{y}-{m}-{d}'), 'list')
     }
   }
 })

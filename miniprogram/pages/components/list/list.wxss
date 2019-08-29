@@ -1,10 +1,18 @@
+page {
+  background-color: #f8fafb;
+}
+.list-page {
+  background-color: #f8fafb;
+  height: 100%;
+}
 .bill-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: solid 1rpx rgba(0,0,0,.1);
-  margin: 0 20rpx;
-  padding: 10rpx;
+  margin: 20rpx 30rpx;
+  padding: 20rpx 30rpx;
+  background-color: #fff;
+  border-radius: 14rpx;
 }
 .date {
   color: #ccc;

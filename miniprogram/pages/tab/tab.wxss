@@ -1,12 +1,9 @@
-.tab-top {
+tab-item-left {
   position: fixed;
-  bottom: 52rpx;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
 }
 .tab-item-top {
+  position: fixed;
+  bottom: 52rpx;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -24,4 +21,24 @@
 .icon-middle {
   width: 90rpx;
   height: 90rpx;
+}
+.left {
+  width: 70rpx;
+  height: 70rpx;
+  left: 155rpx;
+  bottom: 62rpx;
+}
+.right {
+  width: 70rpx;
+  height: 70rpx;
+  right: 155rpx;
+  bottom: 62rpx;
+}
+.middle {
+  width: 90rpx;
+  height: 90rpx;
+  left: 0;
+  right: 0;
+  margin: auto;
+  bottom: 52rpx;
 }

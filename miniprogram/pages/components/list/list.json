@@ -1,6 +1,7 @@
 {
   "component": true,
   "usingComponents": {
-    "dialog": "../dialog/dialog"
+    "dialog": "../dialog/dialog",
+    "calendar": "../calendar/calendar"
   }
 }

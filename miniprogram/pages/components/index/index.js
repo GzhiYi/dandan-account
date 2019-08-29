@@ -33,6 +33,7 @@ Component({
       currentActiveDateTime: date,
       pickDate: date
     })
+    console.log('editBill', this.data.editBill)
   },
   attached() {
   },
@@ -98,6 +99,7 @@ Component({
         isEdit,
         editBill
       } = this.data
+      console.log('eidtBill', editBill)
       if (!/^0{1}([.]\d{1,2})?$|^[1-9]\d*([.]{1}[0-9]{1,2})?$/.test(Number(sum)) || isNaN(Number(sum))) {
         wx.showToast({
           title: '金额输入不正确，最多两位小数',
@@ -157,7 +159,7 @@ Component({
         sum: editBill.money,
         note: editBill.description,
         active_tab: editBill.flow,
-        selectedCategory: editBill.categoryId,
+        selectedCategory: editBill.category,
         active_date: this.converDate(editBill.noteDate, false),
         active_date_time: editBill.noteDate,
         isEdit: true

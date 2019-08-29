@@ -1,4 +1,5 @@
 <view class="banner">
+  <image src="https://images.vrm.cn/2019/08/29/pig.png" style="width: 150rpx;height: 150rpx;"></image>
 </view>
 <view class="tab">
   <view
@@ -19,7 +20,7 @@
     wx:if="{{isEdit}}"
     class="edit-tip"
     bindtap="resetStatus"
-  >正处于编辑状态，点此处取消</view>
+  >编辑账单，点此处取消</view>
   <view class="section">
     <view class="label">金额</view>
     <view class="input-field">
@@ -51,7 +52,7 @@
       >
       {{selectedCategory.categoryName}}
       </view>
-      <view class="cate" bindtap="goToCategory">...</view>
+      <view class="cate" bindtap="goToCategory" style="margin-right: 0;">...</view>
     </view>
   </view>
   <view class="section">
@@ -89,12 +90,12 @@
           start="1995-09-12"
           bindchange="bindDateChange"
         >
-          <view class="cate">...</view>
+          <view class="cate" style="margin-right: 0;">...</view>
         </picker>
       </view>
     </view>
   </view>
-  <view class="section">
+  <view class="section" style="border-bottom: none;">
     <view class="label">备注</view>
     <view class="input-field" style="width: 80%;">
       <input

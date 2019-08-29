@@ -49,7 +49,7 @@
         wx:if="{{selectedCategory}}"
         bindtap="goToCategory"
       >
-      {{selectedCategory}}
+      {{selectedCategory.categoryName}}
       </view>
       <view class="cate" bindtap="goToCategory">...</view>
     </view>

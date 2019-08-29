@@ -9,7 +9,7 @@ Component({
     styleIsolation: 'shared'
   },
   properties: {
-    selectedCategory: String,
+    selectedCategory: Object,
     editBill: Object
   },
   data: {
@@ -76,9 +76,9 @@ Component({
         })
       } else {
         // 收入或者支出的tab
-        getApp().globalData.selectedCategory = ''
+        getApp().globalData.selectedCategory = null
         this.setData({
-          selectedCategory: ''
+          selectedCategory: null
         })
       }
     },
@@ -127,7 +127,7 @@ Component({
         data: {
           mode: isEdit ? 'updateById' : 'add',
           money: sum,
-          categoryId: selectedCategory,
+          categoryId: selectedCategory._id,
           noteDate: active_date_time,
           description: note,
           flow: active_tab,

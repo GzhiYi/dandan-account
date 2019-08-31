@@ -32,6 +32,7 @@
         bindinput="bindInput"
         maxlength="{{10}}"
         data-name="sum"
+        auto-focus
         style="color: {{ active_tab === 1 ? '#4fd69c;' : '#f75676;'}}"
       />
       <text

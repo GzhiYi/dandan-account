@@ -146,14 +146,18 @@ Component({
       })
       this.getBillList(event.detail[0], event.detail[1], 'list')
     },
-    onControl() {
+    onControl(event) {
       const now = new Date()
       const self= this
-      self.setData({
-        dateRange: null
-      }, function () {
-        self.getBillList(parseTime(now, '{y}-{m}-{d}'), parseTime(now, '{y}-{m}-{d}'), 'list')
-      })
+      console.log(event)
+      const { mode } = event.detail
+      if (mode === 'reset') {
+        self.setData({
+          dateRange: null
+        }, function () {
+          self.getBillList(parseTime(now, '{y}-{m}-{d}'), parseTime(now, '{y}-{m}-{d}'), 'list')
+        })
+      }
     }
   }
 })

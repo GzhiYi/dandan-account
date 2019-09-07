@@ -24,7 +24,7 @@ Component({
       })
     },
     selectMonth(event) {
-      console.log(event)
+      wx.vibrateShort()
       this.setData({
         activeMonth: event.currentTarget.dataset.month - 1
       })

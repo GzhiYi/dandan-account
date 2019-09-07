@@ -1,34 +1,53 @@
+page {
+  overflow-x: hidden;
+  width: 100%;
+}
 .month-selector {
   display: flex;
   flex-wrap: nowrap;
   font-size: 29rpx;
   background-color: #5e72e4;
   color: #fff;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-around;
-  padding-bottom: 20rpx;
+  padding: 0 30rpx 40rpx;
+  height: 100rpx;
+  border-radius: 0 0 20% 20%;
+  margin: 0 -20rpx;
+  overflow-x: hidden;
 }
-.pick-year {
+picker {
   width: 130rpx;
   height: 60rpx;
   line-height: 60rpx;
 }
-.months {
-  display: flex;
+.hide-scroll {
   width: 80%;
-  white-space: nowrap;
+  height: 69rpx;
+  overflow: hidden;
+  display: flex;
   align-items: center;
 }
+.months {
+  display: flex;
+  white-space: nowrap;
+  align-items: flex-start;
+  padding-bottom: 8rpx;
+}
 .month {
-  margin: 0 20rpx;
+  margin: 20rpx;
   display: inline-block;
-  width: 40rpx;
   height: 60rpx;
   line-height: 60rpx;
-  position: relative;
-  top: 50%;
 }
 .active {
   border-bottom: 4rpx solid #fff;
-  padding-bottom: -4rpx;
+}
+.pie {
+  width: 93%;
+  height: 400rpx;
+  background-color: #fff;
+  margin: -50rpx auto 0;
+  border-radius: 25rpx;
+  box-shadow: 0 20px 50px #5e72e43a;
 }

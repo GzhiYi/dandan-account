@@ -1,27 +1,34 @@
 <view class="chart">
-  <view class="month-selector">
-    <picker
-      mode="date"
-      value="{{year}}"
-      fields="year"
-      bindchange="bindYearChange"
-    >
-      <view class="pick-year">{{year}}年 ▾</view>
-    </picker>
-    <scroll-view
-      scroll-into-view="active{{activeMonth}}"
-      scroll-x enable-flex="{{true}}"
-      class="months"
-      scroll-with-animation="{{true}}"
-    >
-      <view
-        class="month {{activeMonth === (item - 1) ? 'active' : ''}}"
-        wx:for="{{months.month}}"
-        wx:key="{{item}}"
-        bindtap="selectMonth"
-        data-month="{{item}}"
-        id="active{{item}}"
-      >{{item}}月</view> 
-    </scroll-view>
+  <view style="width: 100%;overflow-x: hidden;">
+    <view class="month-selector">
+      <picker
+        mode="date"
+        value="{{year}}"
+        fields="year"
+        bindchange="bindYearChange"
+      >
+        <view class="pick-year">{{year}}年 ▾</view>
+      </picker>
+      <view class="hide-scroll">
+        <scroll-view
+          scroll-into-view="active{{activeMonth + 1}}"
+          scroll-x enable-flex="{{true}}"
+          class="months"
+          scroll-with-animation="{{true}}"
+        >
+          <view
+            class="month {{activeMonth === (item - 1) ? 'active' : ''}}"
+            wx:for="{{months.month}}"
+            wx:key="{{item}}"
+            bindtap="selectMonth"
+            data-month="{{item}}"
+            id="active{{item}}"
+          >{{item}}月</view> 
+        </scroll-view>
+      </view>
+    </view>
+  </view>
+  <view class="pie">
+  
   </view>
 </view>

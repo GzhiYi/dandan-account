@@ -1,6 +1,34 @@
-.chart {
-  height: 500rpx;
+.month-selector {
   display: flex;
-  justify-content: center;
+  flex-wrap: nowrap;
+  font-size: 29rpx;
+  background-color: #5e72e4;
+  color: #fff;
   align-items: center;
+  justify-content: space-around;
+  padding-bottom: 20rpx;
+}
+.pick-year {
+  width: 130rpx;
+  height: 60rpx;
+  line-height: 60rpx;
+}
+.months {
+  display: flex;
+  width: 80%;
+  white-space: nowrap;
+  align-items: center;
+}
+.month {
+  margin: 0 20rpx;
+  display: inline-block;
+  width: 40rpx;
+  height: 60rpx;
+  line-height: 60rpx;
+  position: relative;
+  top: 50%;
+}
+.active {
+  border-bottom: 4rpx solid #fff;
+  padding-bottom: -4rpx;
 }

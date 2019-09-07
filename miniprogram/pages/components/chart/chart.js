@@ -6,35 +6,27 @@ Component({
   properties: {
 
   },
-
-  /**
-   * 组件的初始数据
-   */
   data: {
-    count: 0
+    count: 0,
+    year: '2019',
+    months: {
+      month: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+    },
+    activeMonth: new Date().getMonth()
   },
   ready() {
     console.log('chart')
   },
-
-  /**
-   * 组件的方法列表
-   */
   methods: {
-    onTap() {
-      let count = this.data.count
-      if (count === 10) {
-        wx.showToast({
-          title: '你好👋',
-          icon: 'none'
-        })
-        count = -1
-        wx.vibrateLong()
-      } else {
-        wx.vibrateShort()
-      }
+    bindYearChange(event) {
       this.setData({
-        count: count + 1
+        year: event.detail.value
+      })
+    },
+    selectMonth(event) {
+      console.log(event)
+      this.setData({
+        activeMonth: event.currentTarget.dataset.month - 1
       })
     }
   }

@@ -52,3 +52,6 @@ button::after{
   text-align: center;
   border-bottom: solid 1rpx rgba(0,0,0,.1);
 }
+.chart-nav-bg {
+  background-color: #5e72e4;
+}

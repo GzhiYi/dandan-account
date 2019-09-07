@@ -16,7 +16,8 @@ Component({
     statusBarHeight: getApp().globalData.statusBarHeight,
     calendarHeight: 0,
     dateRange: null,
-    today: ''
+    today: '',
+    billResult: {}
   },
   observers: {
     'tab': function(tab) {
@@ -57,9 +58,30 @@ Component({
         success(res) {
           console.log('billRes', res)
           if (res.result && res.result.code === 1) {
+            const billList = res.result.data.page.data || []
             self.setData({
-              billList: res.result.data.page.data || []
+              billList
             })
+            console.log('(((', billList)
+            let pay = 0;
+            let income = 0
+            billList.forEach(item => {
+              if (item.flow === 0) {
+                pay += item.money
+              }
+              if (item.flow === 1) {
+                income += item.money
+              }
+            })
+            self.setData({
+              billResult: {
+                pickRange: {
+                  pay,
+                  income
+                }
+              }
+            })
+            console.log('comme', self.data.billResult)
           } else {
             wx.showToast({
               title: '获取账单失败，稍后再试',

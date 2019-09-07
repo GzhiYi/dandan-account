@@ -71,3 +71,27 @@
   line-height: 38rpx;
   margin: 15rpx 0 -10rpx 40rpx;
 }
+.show-daterange-in {
+  display: flex;
+  justify-content: space-around;
+}
+.pick-tip-bg {
+  background: #5e72e4;
+  color: #fff;
+  border-radius: 7rpx;
+  font-size: 22rpx;
+  padding: 5rpx 10rpx;
+  width: fit-content;
+  margin-top: 3rpx;
+}
+.item-income {
+  color: #4fd69c;
+  margin: 0 12rpx;
+}
+.item-pay {
+  color: #f75676;
+  margin: 0 12rpx;
+}
+.result-time {
+  font-weight: bold;
+}

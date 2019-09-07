@@ -7,6 +7,10 @@ Component({
       type: String,
       value: ''
     },
+    billResult: {
+      type: Object,
+      value: {}
+    },
     mode: {
       type: String,
       value: ''

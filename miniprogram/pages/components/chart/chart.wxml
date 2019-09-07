@@ -29,6 +29,9 @@
     </view>
   </view>
   <view class="pie">
-  
+    <view class="summary">
+      
+    </view>
+    <canvas canvas-id="pie" id="pie" class="charts" bind:touchstart="touchPie"></canvas>
   </view>
 </view>

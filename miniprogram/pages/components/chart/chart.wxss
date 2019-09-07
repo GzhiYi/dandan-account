@@ -45,9 +45,15 @@ picker {
 }
 .pie {
   width: 93%;
-  height: 400rpx;
+  height: 500rpx;
   background-color: #fff;
   margin: -50rpx auto 0;
   border-radius: 25rpx;
-  box-shadow: 0 20px 50px #5e72e43a;
+  box-shadow: 0 20px 50px rgba(94, 114, 228, 0.22745098039215686);
+}
+.charts{
+  width: 90%;
+  margin: 0 auto;
+  height:500rpx;
+  background-color: #FFFFFF;
 }

@@ -95,6 +95,26 @@ exports.main = async (event, context) => {
       };
     }
 
+    if (event.mode === 'textAdd') {
+      for (let i = 0; i < 100; i++) {
+        const res = await db.collection('DANDAN_NOTE').add({
+          data: {
+            mark: i,
+            money: 1,
+            categoryId: 'others_sub',
+            noteDate: new Date('2019-09-07'),
+            description: '测试数据',
+            flow: i > 50 ? 0 : 1,
+            createTime: db.serverDate(),
+            updateTime: db.serverDate(),
+            openId: wxContext.OPENID,
+            isDel: false,
+          }
+        });
+        
+      }
+    }
+
   } catch (e) {
     console.error(e);
     return {

@@ -30,7 +30,7 @@
       </view>
     </view>
     <view wx:if="{{billList.length === 0}}" class="note-tips" bindtap="switchTab">
-      所选日期未找到账单，去记一笔！
+      日期范围未找到账单，去记一笔！
     </view>
   </scroll-view>
   <dialog visible="{{showMenuDialog}}" bind:closeDialog="closeDialog">

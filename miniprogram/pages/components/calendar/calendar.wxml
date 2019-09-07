@@ -2,8 +2,19 @@
 var handle = function(day, dateRange) {
   if (dateRange.indexOf(day.date) !== -1) return 'range-pick';
 };
+var formatDate = function(dateRange, today) {
+  if (dateRange.length === 1) return '再选择一个日期';
+  if (dateRange.length === 0 || (dateRange[0] === today && dateRange[1] === today)) {
+    return '今日';
+  }
+  if (dateRange[0] === dateRange[1]) {
+    return dateRange[0].substring(5);
+  }
+  return dateRange[0].substring(5) + ' ~ ' + dateRange[1].substring(5);
+}
 
 module.exports.handle = handle;
+module.exports.formatDate = formatDate
 </wxs>
 
 <view class="calendar">
@@ -49,6 +60,6 @@ module.exports.handle = handle;
     </view>
   </view>
   <view class="show-daterange">
-    <text wx:if="{{mode === 'range' && dateRange.length  === 2}}">{{dateRange[0]}} ~ {{dateRange[1]}}</text>
+    <text wx:if="{{mode === 'range'}}">{{rangeStyle.formatDate(dateRange, today)}}</text>
   </view>
 </view>

@@ -37,6 +37,7 @@ Component({
       today: this.parseTime(now, '{y}-{m}-{d}')
     })
     this.setCalendar(this.parseTime(now, '{y}-{m}'))
+    console.log('dateRange', this.data.today, this.data.dateRange)
   },
   methods: {
     setCalendar(dateStr) {

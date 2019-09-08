@@ -7,6 +7,10 @@ Component({
       type: String,
       value: ''
     },
+    billResult: {
+      type: Object,
+      value: {}
+    },
     mode: {
       type: String,
       value: ''
@@ -37,6 +41,7 @@ Component({
       today: this.parseTime(now, '{y}-{m}-{d}')
     })
     this.setCalendar(this.parseTime(now, '{y}-{m}'))
+    console.log('dateRange', this.data.today, this.data.dateRange)
   },
   methods: {
     setCalendar(dateStr) {

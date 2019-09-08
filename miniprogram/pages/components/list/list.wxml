@@ -6,6 +6,7 @@
       bind:onRangePick="onRangePick"
       bind:onControl="onControl"
       defaultSelectDate="{{today}}"
+      billResult="{{billResult}}"
     ></calendar>
   </view>
   <scroll-view scroll-y="{{true}}" style="height: {{screenHeight - ((screenHeight + 742.49) / 4.67)}}px;" class="bill-list">
@@ -28,6 +29,9 @@
           data-bill="{{item}}"
         ></image> -->
       </view>
+    </view>
+    <view wx:if="{{billList.length === 0}}" class="note-tips" bindtap="switchTab">
+      日期范围未找到账单，去记一笔！
     </view>
   </scroll-view>
   <dialog visible="{{showMenuDialog}}" bind:closeDialog="closeDialog">

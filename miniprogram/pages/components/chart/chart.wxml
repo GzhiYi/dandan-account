@@ -1,3 +1,44 @@
 <view class="chart">
-  <image bindtap="onTap" src="https://images.vrm.cn/2019/08/29/pig.png" style="width: 150rpx;height: 150rpx;"></image>
+  <view style="width: 100%;overflow-x: hidden;">
+    <view class="month-selector">
+      <picker
+        mode="date"
+        value="{{year}}"
+        fields="year"
+        bindchange="bindYearChange"
+      >
+        <view class="pick-year">{{year}}年 ▾</view>
+      </picker>
+      <view class="hide-scroll">
+        <scroll-view
+          scroll-into-view="active{{activeMonth + 1}}"
+          scroll-x enable-flex="{{true}}"
+          class="months"
+          scroll-with-animation="{{true}}"
+        >
+          <view
+            class="month {{activeMonth === (item - 1) ? 'active' : ''}}"
+            wx:for="{{months.month}}"
+            wx:key="{{item}}"
+            bindtap="selectMonth"
+            data-month="{{item}}"
+            id="active{{item}}"
+          >{{item}}月</view> 
+        </scroll-view>
+      </view>
+    </view>
+  </view>
+  <view class="pie">
+    <view class="summary">
+      <view class="summary-item {{activeTab === 'pay' ? 'pay' : ''}}" bindtap="changeTab" data-tab="pay">
+        月支出
+        <view>2003</view>
+      </view>
+      <view class="summary-item {{activeTab === 'income' ? 'income' : ''}}" bindtap="changeTab" data-tab="income">
+        月收入
+        <view>2003</view>
+      </view>
+    </view>
+    <canvas canvas-id="pie" id="pie" class="charts" style="width: {{cWidth}}px;" bind:touchstart="touchPie"></canvas>
+  </view>
 </view>

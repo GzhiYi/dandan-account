@@ -2,8 +2,19 @@
 var handle = function(day, dateRange) {
   if (dateRange.indexOf(day.date) !== -1) return 'range-pick';
 };
+var formatDate = function(dateRange, today) {
+  if (dateRange.length === 1) return '再选择一个日期';
+  if (dateRange.length === 0 || (dateRange[0] === today && dateRange[1] === today)) {
+    return '今日';
+  }
+  if (dateRange[0] === dateRange[1]) {
+    return dateRange[0].substring(5);
+  }
+  return dateRange[0].substring(5) + ' ~ ' + dateRange[1].substring(5);
+}
 
 module.exports.handle = handle;
+module.exports.formatDate = formatDate
 </wxs>
 
 <view class="calendar">
@@ -49,6 +60,20 @@ module.exports.handle = handle;
     </view>
   </view>
   <view class="show-daterange">
-    <text wx:if="{{mode === 'range' && dateRange.length  === 2}}">{{dateRange[0]}} ~ {{dateRange[1]}}</text>
+    <view class="show-daterange-in" wx:if="{{mode === 'range'}}">
+      <block wx:if="{{dateRange.length !== 1}}">
+        <view style="display: flex;">
+          <view class="result-time">{{rangeStyle.formatDate(dateRange, today)}}</view>
+          <view class="item-pay">支出 {{billResult.pickRange.pay}}</view>
+          <view class="item-income">收入 {{billResult.pickRange.income}} </view>
+        </view>
+        <view style="display: flex;">
+          <view class="result-time">本月</view>
+          <view class="item-pay">支出 *</view>
+          <view class="item-income">收入 *</view>
+        </view>
+      </block>
+      <block wx:else style="font-weight: bold;">选择结束日期</block>
+    </view>
   </view>
 </view>

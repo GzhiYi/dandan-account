@@ -1,4 +1,6 @@
 // pages/components/chart/chart.js
+import uCharts from '../../u-charts.min.js'
+let canvaPie = null
 Component({
   options: {
     styleIsolation: 'shared'
@@ -6,35 +8,93 @@ Component({
   properties: {
 
   },
-
-  /**
-   * 组件的初始数据
-   */
   data: {
-    count: 0
+    count: 0,
+    year: '2019',
+    months: {
+      month: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+    },
+    activeMonth: new Date().getMonth(),
+    pieData: {
+      "series": [{
+        "name": "一班",
+        "data": 50
+      }, {
+        "name": "二班",
+        "data": 30
+      }, {
+        "name": "三班",
+        "data": 20
+      }, {
+        "name": "四班",
+        "data": 18
+      }, {
+        "name": "五班",
+        "data": 8
+      }]
+    },
+    cWidth: 0,
+    cHeight: 0,
+    activeTab: 'pay'
   },
   ready() {
-    console.log('chart')
+    this.setData({
+      cWidth: wx.getSystemInfoSync().screenWidth - 50,
+      cHeight: 500 / 750 * wx.getSystemInfoSync().screenWidth - 50
+    })
+    this.getServerData()
   },
-
-  /**
-   * 组件的方法列表
-   */
   methods: {
-    onTap() {
-      let count = this.data.count
-      if (count === 10) {
-        wx.showToast({
-          title: '你好👋',
-          icon: 'none'
-        })
-        count = -1
-        wx.vibrateLong()
-      } else {
-        wx.vibrateShort()
-      }
+    bindYearChange(event) {
       this.setData({
-        count: count + 1
+        year: event.detail.value
+      })
+    },
+    selectMonth(event) {
+      wx.vibrateShort()
+      this.setData({
+        activeMonth: event.currentTarget.dataset.month - 1
+      })
+    },
+    getServerData() {
+      const { pieData, cWidth, cHeight } = this.data
+      console.log('ddddd', cWidth, cHeight)
+      canvaPie = new uCharts({
+        $this: this,
+        canvasId: 'pie',
+        type: 'pie',
+        fontSize: 11,
+        legend: { show: true },
+        background: '#FFFFFF',
+        pixelRatio: 1,
+        series: pieData.series,
+        animation: true,
+        width: cWidth,
+        height: cHeight,
+        dataLabel: true,
+        extra: {
+          pie: {
+            labelWidth: 15
+          }
+        },
+        legend: {
+          show: false
+        }
+      });
+    },
+    touchPie(e) {
+      console.log('e', e)
+      canvaPie.showToolTip(e, {
+        format: function (item) {
+          console.log('???', item)
+          return item.name + ':' + item.data
+        }
+      })
+    },
+    changeTab(e) {
+      const { tab } = e.currentTarget.dataset
+      this.setData({
+        activeTab: tab
       })
     }
   }

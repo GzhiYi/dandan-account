@@ -1,6 +1,7 @@
 <nav
   style="{{active === 'index' || active === 'list' ? 'display: none;' : ''}}"
   class="nav-instance"
+  my-class="chart-nav-bg"
 ></nav>
 <view hidden="{{active !== 'list'}}">
   <list

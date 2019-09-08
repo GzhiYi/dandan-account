@@ -45,15 +45,44 @@ picker {
 }
 .pie {
   width: 93%;
-  height: 500rpx;
+  height: 700rpx;
   background-color: #fff;
   margin: -50rpx auto 0;
   border-radius: 25rpx;
   box-shadow: 0 20px 50px rgba(94, 114, 228, 0.22745098039215686);
 }
-.charts{
-  width: 90%;
+.charts {
   margin: 0 auto;
   height:500rpx;
   background-color: #FFFFFF;
+}
+.summary {
+  display: flex;
+  width: fit-content;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+.summary-item {
+  font-size: 27rpx;
+  margin: 20rpx;
+  border-radius: 40rpx;
+  padding: 20rpx;
+  width: 120rpx;
+  color: #000;
+  border: 1rpx solid #eee;
+  text-align: center;
+  transition: .5s all;
+}
+.pay {
+  background: #f75676;
+  color: #fff;
+  box-shadow: 0 20px 50px rgba(247, 86, 118, 0.233);
+  border: 1rpx solid rgba(247, 86, 118, 0.233);
+}
+.income {
+  background: #4fd69c;
+  color: #fff;
+  box-shadow: 0 20px 50px rgba(79, 214, 155, 0.226);
+  border: 1rpx solid rgba(79, 214, 155, 0.226);
 }

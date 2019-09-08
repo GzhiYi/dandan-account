@@ -34,12 +34,13 @@ Component({
       }]
     },
     cWidth: 0,
-    cHeight: 0
+    cHeight: 0,
+    activeTab: 'pay'
   },
   ready() {
     this.setData({
-      cWidth: wx.getSystemInfoSync().screenWidth,
-      cHeight: 500 / 750 * wx.getSystemInfoSync().screenWidth
+      cWidth: wx.getSystemInfoSync().screenWidth - 50,
+      cHeight: 500 / 750 * wx.getSystemInfoSync().screenWidth - 50
     })
     this.getServerData()
   },
@@ -68,7 +69,7 @@ Component({
         pixelRatio: 1,
         series: pieData.series,
         animation: true,
-        width: cWidth * .83,
+        width: cWidth,
         height: cHeight,
         dataLabel: true,
         extra: {
@@ -76,6 +77,9 @@ Component({
             labelWidth: 15
           }
         },
+        legend: {
+          show: false
+        }
       });
     },
     touchPie(e) {
@@ -85,6 +89,12 @@ Component({
           console.log('???', item)
           return item.name + ':' + item.data
         }
+      })
+    },
+    changeTab(e) {
+      const { tab } = e.currentTarget.dataset
+      this.setData({
+        activeTab: tab
       })
     }
   }

@@ -25,5 +25,16 @@
       "mode": "getCategoryById",
       "id": "efdeb2615d5d0f3d05a0c2372e18f53b"
     }
+  },
+  {
+    "name": "批量获取分类",
+    "value": {
+      "mode": "getCategoriesByIdBatch",
+      "ids": [
+        "others",
+        "clothes",
+        "daily_necessities"
+      ]
+    }
   }
 ]

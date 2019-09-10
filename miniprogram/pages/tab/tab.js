@@ -1,7 +1,7 @@
 import { parseTime } from '../../date.js'
 Page({
   data: {
-    active: 'chart',
+    active: 'index',
     selectedCategory: null,
     editBill: {},
     isEdit: false,

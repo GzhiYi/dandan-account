@@ -17,6 +17,7 @@ page {
 .date {
   color: #ccc;
   font-size: 25rpx;
+  text-align: right;
 }
 .type {
   background: #5e72e4;

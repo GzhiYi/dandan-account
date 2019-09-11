@@ -252,10 +252,12 @@ Component({
             basicData[flow].push(item)
             if (flow === 'pay') {
               basicData.monthPay += item.data
+              basicData.monthPay = strip(basicData.monthPay)
               basicData.monthPayCount += 1
             }
             if (flow === 'income') {
               basicData.monthIncome += item.data
+              basicData.monthIncome = strip(basicData.monthIncome)
               basicData.monthIncomeCount += 1
             }
           }

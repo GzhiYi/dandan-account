@@ -33,6 +33,7 @@ page {
   white-space: nowrap;
   align-items: flex-start;
   padding-bottom: 8rpx;
+  width: 100%;
 }
 .month {
   margin: 20rpx;
@@ -45,6 +46,7 @@ page {
 }
 .pie {
   width: 93%;
+  min-height: 500rpx;
   background-color: #fff;
   margin: -50rpx auto 0;
   border-radius: 25rpx;
@@ -91,4 +93,12 @@ page {
   justify-content: space-between;
   padding: 0 40rpx 20rpx;
   font-size: 28rpx;
+}
+.empty-chart {
+  height: 400rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 28rpx;
+  color: grey;
 }

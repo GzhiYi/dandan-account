@@ -2,12 +2,17 @@
 import { parseTime } from '../../../date.js'
 import uCharts from '../../u-charts.min.js'
 let canvaPie = null
+let resultBillList = []
+let resultCategoryList = []
+
 Component({
   options: {
     styleIsolation: 'shared'
   },
   properties: {
-
+    tab: {
+      type: String
+    }
   },
   data: {
     count: 0,
@@ -23,7 +28,18 @@ Component({
     cHeight: 0,
     activeTab: 'pay',
     screenHeight: getApp().globalData.screenHeight,
-    basicData: {}
+    basicData: {},
+    fixScroll: true
+  },
+  /**
+   * hack。修复scroll-x在hidden下不显示的问题。该问题存在于ios。
+   */
+  observers: {
+    'tab': function (tab) {
+      this.setData({
+        fixScroll: tab === 'chart'
+      })
+    }
   },
   ready() {
     this.setData({
@@ -31,9 +47,10 @@ Component({
       cHeight: 500 / 750 * wx.getSystemInfoSync().screenWidth - 50
     })
     
-    this.getServerData()
+    this.getServerData('index')
   },
   methods: {
+    // 获取选择月份的第一天和最后一天
     getFirstAndLastDayByMonth(year, month) {
       if (month < 10) {
         month = `0${month}`
@@ -45,27 +62,37 @@ Component({
       const result = [parseTime(firstDay, '{y}-{m}-{d}'), parseTime(lastDay, '{y}-{m}-{d}')]
       return result
     },
+    // 左上角年份变化
     bindYearChange(event) {
+      const self = this
       this.setData({
         year: event.detail.value
+      }, function() {
+        self.getServerData('chart')
       })
     },
+    // 选择月份回调
     selectMonth(event) {
       const self = this
       wx.vibrateShort()
       this.setData({
         activeMonth: event.currentTarget.dataset.month - 1
       }, function() {
-        self.getServerData()
+        self.getServerData('chart')
       })
     },
-    getServerData() {
+    // 渲染数据
+    getServerData(fromTab) {
+      console.log('aha')
       const { pieData, cWidth, cHeight, year, activeMonth, activeTab } = this.data
       const self = this
       const firstAndLastArray = self.getFirstAndLastDayByMonth(year, activeMonth + 1)
-      wx.showLoading({
-        title: '加载数据中...',
-      })
+
+      if (fromTab !== 'index') {
+        wx.showLoading({
+          title: '加载数据中...',
+        })
+      }
       wx.cloud.callFunction({
         name: 'getAccountList',
         data: {
@@ -80,9 +107,13 @@ Component({
             const categoryList = JSON.parse(JSON.stringify(getApp().globalData.categoryList))
             if ('pay' in categoryList) {
               self.fillPie(billList, categoryList)
+              resultBillList = billList
+              resultCategoryList = categoryList
             } else {
               getApp().loadCategoryCallBack = list => {
                 self.fillPie(billList, list)
+                resultBillList = billList
+                resultCategoryList = list
               }
             }
           } else {
@@ -109,15 +140,20 @@ Component({
     },
     changeTab(e) {
       const { tab } = e.currentTarget.dataset
+      const self = this
       wx.vibrateShort({})
       this.setData({
         activeTab: tab
+      }, function() {
+        self.fillPie(resultBillList, resultCategoryList)
       })
     },
     fillPie(billList, categoryList) {
       const self = this
       const { pieData, cWidth, cHeight, year, activeMonth, activeTab } = this.data
       const formatResult = self.handleBillPieData(billList, categoryList)
+      console.log('formatResult', formatResult)
+      console.log('help', self.data.basicData)
       canvaPie = new uCharts({
         $this: self,
         canvasId: 'pie',
@@ -148,6 +184,11 @@ Component({
       const self = this
       // 处理账单和分类的耦合
       const mapFlow = ['pay', 'income']
+
+      // 解决计算浮点问题
+      function strip(num, precision = 12) {
+        return +parseFloat(num.toPrecision(precision));
+      }
       billList.forEach(bill => {
         allCategoryList[mapFlow[bill.flow]].forEach(allCate => {
           allCate.children.forEach(childCate => {
@@ -158,7 +199,8 @@ Component({
                 allCate['bills'] = []
                 allCate['name'] = ''
               }
-              allCate['data'] += bill.money
+              allCate['data'] += strip(bill.money)
+              allCate['data'] = strip(allCate['data'])
               allCate['count'] += 1
               allCate['bills'].push(bill)
               allCate['name'] = allCate.categoryName

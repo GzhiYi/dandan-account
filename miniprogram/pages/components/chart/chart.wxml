@@ -10,10 +10,11 @@
       >
         <view class="pick-year">{{year}}年 ▾</view>
       </picker>
-      <view class="hide-scroll">
+      <view class="hide-scroll" wx:if="{{fixScroll}}">
         <scroll-view
           scroll-into-view="active{{activeMonth + 1}}"
-          scroll-x enable-flex="{{true}}"
+          scroll-x="{{true}}"
+          enable-flex="{{true}}"
           class="months"
           scroll-with-animation="{{true}}"
         >
@@ -40,7 +41,14 @@
         <view>{{basicData.monthIncome || 0}}</view>
       </view>
     </view>
-    <canvas canvas-id="pie" id="pie" class="charts" style="width: {{cWidth}}px;" bind:touchstart="touchPie"></canvas>
+    <block wx:if="{{basicData[activeTab].length > 0}}">
+      <canvas canvas-id="pie" id="pie" class="charts" style="width: {{cWidth}}px;" bind:touchstart="touchPie"></canvas>
+    </block>
+    <block wx:if="{{basicData[activeTab] && basicData[activeTab].length === 0}}">
+      <view class="empty-chart">
+        没有账单数据( ´･･)ﾉ(._.`)
+      </view>
+    </block>
     <view class="select-filter">
       <view class="select-parent">
         选择父类

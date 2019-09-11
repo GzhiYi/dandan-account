@@ -23,7 +23,7 @@
   />
 </view>
 <view hidden="{{active !== 'chart'}}">
-  <chart id="chart"/>
+  <chart id="chart" tab="{{active}}"/>
 </view>
 <cover-view
     class="tab-item-top left"

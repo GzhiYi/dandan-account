@@ -2,6 +2,7 @@
   <view style="width: 100%;overflow-x: hidden;">
     <view class="month-selector">
       <picker
+        class="picker"
         mode="date"
         value="{{year}}"
         fields="year"
@@ -32,13 +33,48 @@
     <view class="summary">
       <view class="summary-item {{activeTab === 'pay' ? 'pay' : ''}}" bindtap="changeTab" data-tab="pay">
         月支出
-        <view>2003</view>
+        <view>{{basicData.monthPay || 0}}</view>
       </view>
       <view class="summary-item {{activeTab === 'income' ? 'income' : ''}}" bindtap="changeTab" data-tab="income">
         月收入
-        <view>2003</view>
+        <view>{{basicData.monthIncome || 0}}</view>
       </view>
     </view>
     <canvas canvas-id="pie" id="pie" class="charts" style="width: {{cWidth}}px;" bind:touchstart="touchPie"></canvas>
+    <view class="select-filter">
+      <view class="select-parent">
+        选择父类
+      </view>
+      <view class="select-child">
+        选择父类
+      </view>
+    </view>
+  </view>
+  <view class="bill-list">
+    <scroll-view scroll-y="{{true}}" style="height: {{screenHeight - ((screenHeight + 742.49) / 4.67)}}px;" class="bill-list">
+      <view class="bill-item" wx:for="{{billList}}" wx:key="{{item._id}}">
+        <view class="type-date">
+          <view class="type">{{item.category.categoryName}}</view>
+          <view class="description" wx:if="{{item.description}}">{{item.description}}</view>
+        </view>
+        <view class="money-date">
+          <view>
+            <view class="money" style="color: {{ item.flow === 1 ? '#4fd69c;' : '#f75676;'}}">
+              {{item.flow === 0 ? '-' : '+'}}{{item.money}}
+            </view>
+            <view class="date">{{item.noteDate}}</view>
+          </view>
+          <!-- <image
+            src="../../../images/menu.png"
+            style="width: 32rpx;height: 32rpx;padding: 13rpx 0 13rpx 13rpx;"
+            bindtap="showMenu"
+            data-bill="{{item}}"
+          ></image> -->
+        </view>
+      </view>
+      <view wx:if="{{billList.length === 0}}" class="note-tips" bindtap="switchTab">
+        日期范围未找到账单，去记一笔！
+      </view>
+    </scroll-view>
   </view>
 </view>

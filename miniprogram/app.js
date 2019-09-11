@@ -34,7 +34,8 @@ App({
     screenWidth: 0,
     screenHeight: 0,
     categoryList: {},
-    selectedCategory: ''
+    selectedCategory: '',
+    basicData: []
   },
   getCategory() {
     const self = this

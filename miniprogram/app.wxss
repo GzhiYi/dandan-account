@@ -17,7 +17,7 @@ button::after{
   box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, .075);
 }
 .primary {
-  background-color: #1da1f2;
+  background-color: #1da1f2 !important;
 }
 .success {
   background-color: #4fd69c;

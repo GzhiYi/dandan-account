@@ -43,8 +43,10 @@ Page({
   },
   onReFetchBillList() {
     const list = this.selectComponent('#list')
+    const chart = this.selectComponent('#chart')
     const now = new Date()
     list.getBillList(parseTime(now, '{y}-{m}-{d}'), parseTime(now, '{y}-{m}-{d}'), 'index')
+    chart.getServerData('index')
   },
   onEditBill(event) {
     this.setData({

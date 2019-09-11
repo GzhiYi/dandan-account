@@ -23,7 +23,13 @@
   />
 </view>
 <view hidden="{{active !== 'chart'}}">
-  <chart id="chart" tab="{{active}}"/>
+  <chart
+    id="chart"
+    tab="{{active}}"
+    bind:hideTab="onHideTab"
+    bind:reFetchBillList="onReFetchBillList"
+    bind:editBill="onEditBill"
+  />
 </view>
 <cover-view
     class="tab-item-top left"

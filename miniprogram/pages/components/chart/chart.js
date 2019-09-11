@@ -1,6 +1,6 @@
 // pages/components/chart/chart.js
 import { parseTime } from '../../../date.js'
-import uCharts from '../../u-charts.min.js'
+import uCharts from '../../u-charts.js'
 let canvaPie = null
 let resultBillList = []
 let resultCategoryList = []
@@ -29,7 +29,13 @@ Component({
     activeTab: 'pay',
     screenHeight: getApp().globalData.screenHeight,
     basicData: {},
-    fixScroll: true
+    fixScroll: true,
+    activeParentIndex: 0,
+    activeParentCategory: {},
+    showParentDialog: false,
+    showMenuDialog: false,
+    editItem: {},
+    showConfirmDelete: false
   },
   /**
    * hack。修复scroll-x在hidden下不显示的问题。该问题存在于ios。
@@ -42,6 +48,7 @@ Component({
     }
   },
   ready() {
+    console.log('screentHeight', getApp().globalData.screenHeight)
     this.setData({
       cWidth: wx.getSystemInfoSync().screenWidth - 50,
       cHeight: 500 / 750 * wx.getSystemInfoSync().screenWidth - 50
@@ -105,6 +112,11 @@ Component({
           if (res.result && res.result.code === 1) {
             const billList = res.result.data.page.data || []
             const categoryList = JSON.parse(JSON.stringify(getApp().globalData.categoryList))
+            // 重置一些参数
+            self.setData({
+              activeParentIndex: 0,
+              activeParentCategory: {}
+            })
             if ('pay' in categoryList) {
               self.fillPie(billList, categoryList)
               resultBillList = billList
@@ -132,9 +144,16 @@ Component({
       })
     },
     touchPie(e) {
+      console.log('een', e)
+      const self = this
       canvaPie.showToolTip(e, {
         format: function (item) {
-          return item.name + ':' + item.data
+          console.log('hhhh', item)
+          self.setData({
+            activeParentCategory: item.originData,
+            activeParentIndex: item.index
+          })
+          return item._proportion_.toFixed(2) + '%'
         }
       })
     },
@@ -221,11 +240,13 @@ Component({
         monthIncomeCount: 0
       }
       mapFlow.forEach(flow => {
-        allCategoryList[flow].filter(item => item.bills && item.bills.length > 0).forEach(item => {
+        allCategoryList[flow].filter(item => item.bills && item.bills.length > 0).forEach((item, index) => {
           if (item.name && item.data) {
             pieSeriesData[flow].push({
               name: item.name,
-              data: item.data
+              data: item.data,
+              originData: item,
+              index: index
             })
             basicData[flow].push(item)
             if (flow === 'pay') {
@@ -241,7 +262,9 @@ Component({
         })
       })
       self.setData({
-        basicData
+        basicData,
+        // 处理选择的父子分类
+        activeParentCategory: basicData[activeTab].length > 0 ? basicData[activeTab][0] : {}
       })
       getApp().globalData.basicData = basicData
       return pieSeriesData
@@ -250,7 +273,88 @@ Component({
       arr.forEach(item => {
         delete obj[item]
       })
-
+    },
+    onShowDialog(event) {
+      console.log('event', event)
+      if (event.currentTarget.dataset.type === 'parent') {
+        this.setData({
+          showParentDialog: true
+        })
+      }
+      this.triggerEvent('hideTab', true)
+    },
+    selectParentCategory(event) {
+      console.log('event', event)
+      const { category, index } = event.currentTarget.dataset
+      this.setData({
+        activeParentCategory: category,
+        activeParentIndex: index,
+        showParentDialog: false
+      })
+      this.triggerEvent('hideTab', false)
+      console.log('???', this.data.activeParentCategory, index)
+    },
+    showMenu(event) {
+      const self = this
+      const { bill } = event.currentTarget.dataset
+      self.setData({
+        editItem: bill,
+        showMenuDialog: true
+      })
+      self.triggerEvent('hideTab', true)
+    },
+    closeDialog() {
+      this.setData({
+        showMenuDialog: false,
+        showConfirmDelete: false
+      })
+      this.triggerEvent('hideTab', false)
+    },
+    editBill() {
+      const self = this
+      const { editItem } = self.data
+      self.setData({
+        showMenuDialog: false
+      })
+      this.triggerEvent('hideTab', false)
+      self.triggerEvent('editBill', editItem)
+    },
+    deleteBill() {
+      const self = this
+      const { editItem } = self.data
+      if (!self.data.showConfirmDelete) {
+        self.setData({
+          showConfirmDelete: !self.data.showConfirmDelete
+        })
+        wx.vibrateShort()
+      } else {
+        self.closeDialog()
+        wx.vibrateShort()
+        wx.cloud.callFunction({
+          name: 'account',
+          data: {
+            mode: 'deleteById',
+            id: editItem._id
+          },
+          success(res) {
+            if (res.result.code === 1) {
+              wx.showToast({
+                title: '删除成功',
+                icon: 'none'
+              })
+              self.setData({
+                editItem: {}
+              })
+              self.triggerEvent('reFetchBillList')
+            } else {
+              wx.showToast({
+                title: '删除失败，请重试',
+                icon: 'none'
+              })
+            }
+          }
+        })
+      }
     }
   }
 })

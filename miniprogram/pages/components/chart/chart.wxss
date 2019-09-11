@@ -50,7 +50,7 @@ page {
   background-color: #fff;
   margin: -50rpx auto 0;
   border-radius: 25rpx;
-  box-shadow: 0 20px 50px rgba(94, 114, 228, 0.22745098039215686);
+  box-shadow: 0 20px 50px rgba(94, 114, 228, 0.23);
 }
 .charts {
   margin: 0 auto;
@@ -101,4 +101,10 @@ page {
   align-items: center;
   font-size: 28rpx;
   color: grey;
+}
+.dialog-bills {
+  max-height: 660rpx;
+}
+.bill-list {
+  margin-top: 22rpx;
 }

@@ -12,6 +12,7 @@
     bind:editBill="onEditBill"
     bind:hideTab="onHideTab"
     tab="{{active}}"
+    currentMonthData="{{currentMonthData}}"
   />
 </view>
 <view hidden="{{active !== 'index'}}">
@@ -29,6 +30,7 @@
     bind:hideTab="onHideTab"
     bind:reFetchBillList="onReFetchBillList"
     bind:editBill="onEditBill"
+    bind:currentMonthData="onSyncCurrentMonthData"
   />
 </view>
 <cover-view

@@ -4,6 +4,7 @@ import uCharts from '../../u-charts.js'
 let canvaPie = null
 let resultBillList = []
 let resultCategoryList = []
+let firstFetch = true
 
 Component({
   options: {
@@ -266,7 +267,11 @@ Component({
         // 处理选择的父子分类
         activeParentCategory: basicData[activeTab].length > 0 ? basicData[activeTab][0] : {}
       })
-      getApp().globalData.basicData = basicData
+      if (firstFetch) {
+        self.triggerEvent('currentMonthData', JSON.parse(JSON.stringify(basicData)))
+        firstFetch = false
+      }
+      
       return pieSeriesData
     },
     deletePro(obj, arr) {
@@ -306,7 +311,8 @@ Component({
     closeDialog() {
       this.setData({
         showMenuDialog: false,
-        showConfirmDelete: false
+        showConfirmDelete: false,
+        showParentDialog: false
       })
       this.triggerEvent('hideTab', false)
     },

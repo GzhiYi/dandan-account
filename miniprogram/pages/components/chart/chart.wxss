@@ -6,7 +6,7 @@ page {
   display: flex;
   flex-wrap: nowrap;
   font-size: 29rpx;
-  background-color: #5e72e4;
+  background: linear-gradient(#7471e0, #a171d8);
   color: #fff;
   align-items: flex-start;
   justify-content: space-around;
@@ -107,4 +107,16 @@ page {
 }
 .bill-list {
   margin-top: 22rpx;
+}
+.active-bar {
+  width: 160rpx;
+  height: 9rpx;
+  position: absolute;
+  background: rgba(255, 166, 0, 0.671);
+  left: 0;
+  right: 0;
+  margin: auto;
+  bottom: 10rpx;
+  z-index: -1;
+  border-radius: 6rpx;
 }

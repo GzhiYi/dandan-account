@@ -7,6 +7,7 @@
       bind:onControl="onControl"
       defaultSelectDate="{{today}}"
       billResult="{{billResult}}"
+      currentMonthData="{{currentMonthData}}"
     ></calendar>
   </view>
   <scroll-view scroll-y="{{true}}" style="height: {{screenHeight - ((screenHeight + 742.49) / 4.67)}}px;" class="bill-list">

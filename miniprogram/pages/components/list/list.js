@@ -5,7 +5,11 @@ Component({
     styleIsolation: 'shared'
   },
   properties: {
-    tab: String
+    tab: String,
+    currentMonthData: {
+      type: Object,
+      value: {}
+    }
   },
   data: {
     billList: null,
@@ -31,6 +35,7 @@ Component({
     self.setData({
       today: parseTime(now, '{y}-{m}-{d}')
     })
+    console.log('hhheee', self.data.basicData)
   },
   methods: {
     getBillList(startDate, endDate, fetchFrom, page = 1) {

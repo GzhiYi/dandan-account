@@ -1,11 +1,12 @@
 import { parseTime } from '../../date.js'
 Page({
   data: {
-    active: 'chart',
+    active: 'index',
     selectedCategory: null,
     editBill: {},
     isEdit: false,
-    hideTab: false
+    hideTab: false,
+    currentMonthData: {}
   },
   onLoad() {
     this.calCalendarHeight()
@@ -66,6 +67,11 @@ Page({
   onHideTab(event) {
     this.setData({
       hideTab: event.detail
+    })
+  },
+  onSyncCurrentMonthData(event) {
+    this.setData({
+      currentMonthData: event.detail
     })
   },
   onShareAppMessage() {

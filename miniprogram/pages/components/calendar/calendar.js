@@ -18,6 +18,10 @@ Component({
     showToday: {
       type: Boolean,
       value: true
+    },
+    currentMonthData: {
+      type: Object,
+      value: {}
     }
   },
   data: {

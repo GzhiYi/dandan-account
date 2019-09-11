@@ -66,14 +66,15 @@
   background-color: #e6f2ff;
 }
 .show-daterange {
-  height: 38rpx;
+  height: 74rpx;
   font-size: 24rpx;
   line-height: 38rpx;
-  margin: 15rpx 0 -10rpx 40rpx;
+  margin: 0rpx 0 -10rpx 40rpx;
+  align-items: center;
 }
 .show-daterange-in {
   display: flex;
-  justify-content: space-around;
+  flex-direction: column;
 }
 .pick-tip-bg {
   background: #5e72e4;

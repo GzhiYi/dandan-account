@@ -95,7 +95,7 @@
   </view>
 </view>
 <!-- 父类选择弹窗 -->
-<dialog visible="{{showParentDialog}}">
+<dialog visible="{{showParentDialog}}" bind:closeDialog="closeDialog">
   <view slot="content">
     <view class="d-header">
       查看该父类下的账单
@@ -105,13 +105,15 @@
       <view
         wx:for="{{basicData[activeTab]}}"
         wx:key="{{item._id}}"
-        class='list-item-btn'
+        class="list-item-btn"
         bindtap="closeDialog"
-        style="{{index === basicData[activeTab].length - 1 ? 'border-bottom: none;' : ''}}"
+        style="{{index === basicData[activeTab].length - 1 ? 'border-bottom: none;position: relative;' : 'position: relative;'}}"
         bindtap="selectParentCategory"
         data-category="{{item}}"
         data-index="{{index}}"
-      >{{item.categoryName}}</view>
+      >{{item.categoryName}}
+        <view class="active-bar" wx:if="{{activeParentIndex === index}}"></view>
+      </view>
     </scroll-view>
   </view>
 </dialog>

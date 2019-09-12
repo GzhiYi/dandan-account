@@ -1,3 +1,8 @@
+# 访问
+![扫码_搜索联合传播样式-标准色版.png](https://i.loli.net/2019/09/12/7L5QH9Pk2aODtJb.jpg)
+
+`欢迎star && fork。`
+
 # 函数文档
 
 <details>

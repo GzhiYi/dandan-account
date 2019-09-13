@@ -11,7 +11,10 @@ Page({
     showAddDialog: false,
     addCategory: {}, // 要增加的父级分类
     addCategoryName: '',
-    loadingAdd: false
+    loadingAdd: false,
+    showMenuDialog: false,
+    editItem: {},
+    showConfirmDelete: false
   },
 
   /**
@@ -44,9 +47,19 @@ Page({
       showAddDialog: true
     })
   },
+  showMenu(event) {
+    const self = this
+    const { category } = event.currentTarget.dataset
+    self.setData({
+      editItem: category,
+      showMenuDialog: true
+    })
+  },
   closeDialog() {
     this.setData({
-      showAddDialog: false
+      showAddDialog: false,
+      showMenuDialog: false,
+      showConfirmDelete: false
     })
   },
   confirmAddCategory() {
@@ -109,25 +122,33 @@ Page({
       [`${event.currentTarget.dataset.name}`]: value
     })
   },
-  deleteCategory(event) {
-    const { category } = event.currentTarget.dataset
+  deleteCategory() {
     const self = this
-    console.log('hhh', category)
-    wx.cloud.callFunction({
-      name: 'category',
-      data: {
-        mode: 'deleteById',
-        id: category._id
-      },
-      success(res) {
-        if (res.result.code === 1) {
-          wx.showToast({
-            title: '删除成功',
-            icon: 'none'
-          })
-          self.getLatestCategory()
+    const { editItem } = self.data
+    if (!self.data.showConfirmDelete) {
+      self.setData({
+        showConfirmDelete: !self.data.showConfirmDelete
+      })
+      wx.vibrateShort()
+    } else {
+      self.closeDialog()
+      wx.vibrateShort()
+      wx.cloud.callFunction({
+        name: 'category',
+        data: {
+          mode: 'deleteById',
+          id: editItem._id
+        },
+        success(res) {
+          if (res.result.code === 1) {
+            wx.showToast({
+              title: '删除成功',
+              icon: 'none'
+            })
+            self.getLatestCategory()
+          }
         }
-      }
-    })
+      })
+    }
   }
 })

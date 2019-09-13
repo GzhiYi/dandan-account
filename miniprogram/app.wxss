@@ -17,7 +17,7 @@ button::after{
   box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, .075);
 }
 .primary {
-  background-color: #1da1f2;
+  background-color: #1da1f2 !important;
 }
 .success {
   background-color: #4fd69c;
@@ -53,5 +53,5 @@ button::after{
   border-bottom: solid 1rpx rgba(0,0,0,.1);
 }
 .chart-nav-bg {
-  background-color: #5e72e4;
+  background-color: #7471e0;
 }

@@ -16,7 +16,7 @@
 
 }
 .category {
-  padding: 30rpx 0;
+  padding: 0 0 30rpx;
 }
 .child-category {
   display: flex;

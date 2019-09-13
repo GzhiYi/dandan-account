@@ -1,7 +1,8 @@
-<view class="chart">
+<view class="chart" style='pointer-events: auto;'>
   <view style="width: 100%;overflow-x: hidden;">
     <view class="month-selector">
       <picker
+        class="picker"
         mode="date"
         value="{{year}}"
         fields="year"
@@ -9,10 +10,11 @@
       >
         <view class="pick-year">{{year}}年 ▾</view>
       </picker>
-      <view class="hide-scroll">
+      <view class="hide-scroll" wx:if="{{fixScroll}}">
         <scroll-view
           scroll-into-view="active{{activeMonth + 1}}"
-          scroll-x enable-flex="{{true}}"
+          scroll-x="{{true}}"
+          enable-flex="{{true}}"
           class="months"
           scroll-with-animation="{{true}}"
         >
@@ -32,13 +34,116 @@
     <view class="summary">
       <view class="summary-item {{activeTab === 'pay' ? 'pay' : ''}}" bindtap="changeTab" data-tab="pay">
         月支出
-        <view>2003</view>
+        <view>{{basicData.monthPay || 0}}</view>
       </view>
       <view class="summary-item {{activeTab === 'income' ? 'income' : ''}}" bindtap="changeTab" data-tab="income">
         月收入
-        <view>2003</view>
+        <view>{{basicData.monthIncome || 0}}</view>
       </view>
     </view>
-    <canvas canvas-id="pie" id="pie" class="charts" style="width: {{cWidth}}px;" bind:touchstart="touchPie"></canvas>
+    <view hidden="{{showParentDialog || showMenuDialog ? true : false}}">
+      <canvas
+        canvas-id="pie"
+        wx:if="{{basicData[activeTab].length > 0}}"
+        id="pie"
+        class="charts"
+        style="width: {{cWidth}}px;"
+        bind:touchstart="touchPie"
+      ></canvas>
+    </view>
+    <view class="charts hide-pie-tip" hidden="{{!showParentDialog? true : false}}">
+      |д･)害怕躲起来
+    </view>
+    <view class="charts hide-pie-tip" hidden="{{!showMenuDialog? true : false}}">
+      |д･)害怕躲起来
+    </view>
+
+    <view class="empty-chart" wx:if="{{basicData[activeTab] && basicData[activeTab].length === 0}}">
+        没有账单数据( ´･･)ﾉ(._.`)
+    </view>
+    <view class="select-filter">
+      <view
+        class="select-parent type primary"
+        wx:if="{{basicData[activeTab].length > 0}}"
+        bindtap="onShowDialog"
+        data-type="parent"
+      >
+        <!-- <image src="../../../images/right-chevron.png" class="chevron"></image> -->
+        已选：{{activeParentCategory.categoryName}}
+      </view>
+      <!-- <view class="select-child" wx:if="{{basicData[activeTab].length > 0}}">
+        选择父类
+      </view> -->
+      <view class="chart-sum" wx:if="{{basicData.netAssets}}">
+        余：<text
+          class="chart-sum-text"
+          style="color: {{basicData.netAssets >= 0 ? '#4fd69c' : '#f75676'}}"
+        >{{basicData.netAssets >= 0 ? '+' : ''}}{{basicData.netAssets}}</text>
+      </view>
+    </view>
+  </view>
+  <view class="bill-list">
+    <scroll-view scroll-y="{{true}}" style="height: {{((screenHeight - 390) / .7)}}rpx;" class="bill-list">
+      <view
+        class="bill-item"
+        wx:for="{{basicData[activeTab][activeParentIndex].bills}}"
+        wx:key="{{item._id}}"
+        bindtap="showMenu"
+        data-bill="{{item}}"
+      >
+        <view class="type-date">
+          <view class="type">{{item.category.categoryName}}</view>
+          <view class="description" wx:if="{{item.description}}">{{item.description}}</view>
+        </view>
+        <view class="money-date">
+          <view>
+            <view class="money" style="color: {{ item.flow === 1 ? '#4fd69c;' : '#f75676;'}}">
+              {{item.flow === 0 ? '-' : '+'}}{{item.money}}
+            </view>
+            <view class="date">{{item.noteDate}}</view>
+          </view>
+        </view>
+      </view>
+      <view wx:if="{{billList.length === 0}}" class="note-tips" bindtap="switchTab">
+        日期范围未找到账单，去记一笔！
+      </view>
+    </scroll-view>
   </view>
 </view>
+<!-- 父类选择弹窗 -->
+<dialog visible="{{showParentDialog}}" bind:closeDialog="closeDialog">
+  <view slot="content">
+    <view class="d-header">
+      查看该父类下的账单
+      <view class="divide"></view>
+    </view>
+    <scroll-view class="dialog-bills" scroll-y>
+      <view
+        wx:for="{{basicData[activeTab]}}"
+        wx:key="{{item._id}}"
+        class="list-item-btn"
+        bindtap="closeDialog"
+        style="{{index === basicData[activeTab].length - 1 ? 'border-bottom: none;position: relative;' : 'position: relative;'}}"
+        bindtap="selectParentCategory"
+        data-category="{{item}}"
+        data-index="{{index}}"
+      >{{item.categoryName}}
+        <view class="active-bar" wx:if="{{activeParentIndex === index}}"></view>
+      </view>
+    </scroll-view>
+  </view>
+</dialog>
+<!-- 编辑弹窗 -->
+<dialog visible="{{showMenuDialog}}" bind:closeDialog="closeDialog">
+  <view slot="content">
+    <view class="d-header">
+    {{editItem.description || editItem.category.categoryName}}
+      <view class="divide"></view>
+    </view>
+    <view class='list-item-btn' style="color: #4fd69c;" bindtap="editBill">编辑</view>
+    <view class='list-item-btn' style="color: #f75676;" bindtap="deleteBill">
+    {{showConfirmDelete ? '再次点击确认删除' : '删除'}}
+    </view>
+    <view class='list-item-btn' bindtap="closeDialog" style="border-bottom: none;">取消</view>
+  </view>
+</dialog>

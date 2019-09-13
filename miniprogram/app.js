@@ -18,7 +18,6 @@ App({
     // 获取手机信息以配置顶栏
     wx.getSystemInfo({
       success: res => {
-        console.log('res', res)
         this.globalData.statusBarHeight = res.statusBarHeight
         this.globalData.navBarHeight = 44 + res.statusBarHeight
         this.globalData.screenWidth = res.screenWidth
@@ -43,10 +42,8 @@ App({
       name: 'getCategory',
       data: {},
       success(res) {
-        console.log("1", res)
         if (res.result.code === 1) {
           const list = res.result.data
-          console.log(list)
           // 分离出支出和收入的分类列表
           categoryList['pay'] = list.filter(item => item.flow === Flow.pay)
           categoryList['income'] = list.filter(item => item.flow === Flow.income)

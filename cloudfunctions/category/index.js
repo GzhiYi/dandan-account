@@ -43,13 +43,26 @@ exports.main = async (event, context) => {
       }
     }
 
-    if (event.mode === 'deleteById') {
+    if (event.mode === 'deleteByIdAndFlow') {
       const res = await db.collection('DANDAN_NOTE_CATEGORY').doc(id)
       .update({
         data: {
           isDel: true,
         }
       });
+
+      if (res.stats.updated > 0) {
+        // 这样就是异步删除了8?
+        cloud.callFunction({
+          name: "account",
+          data: {
+            mode: 'deleteByCategoryId',
+            categoryId: id,
+            flow: Number(flow)
+          }
+        })
+      }
+     
       return {
         code: 1,
         data: res,

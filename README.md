@@ -47,6 +47,13 @@
 | --------   | -----   | ---- |
 | id|id|是|
 
+
+### 根据菜单ID删除账单（函数名：account, mode: deleteByCategoryId）
+
+| key| 说明    | 是否必填  |
+| --------   | -----   | ---- |
+| categoryId|菜单ID, categoryId|是|
+
 </details>
 
 <details>
@@ -94,23 +101,18 @@
 
 ### 按开始时间与结束时间聚合金钱（函数名：accountAggregate, mode: aggregateAccountByDateRange）
 
----
+| key| 说明 | 是否必填 |
+| -------- | ----- | ---- |
+| startDate|开始时间, 需要注意的是, 假如是2019-9-8日, 传入的格式必须是 ** 2019-09-08 **|是|
+| endDate|结束时间,  需要注意的是, 假如是2019-9-8日, 传入的格式必须是 ** 2019-09-08 **|是|
 
-返回值:
-```
-{
-    flowIn: 100,
-    flowOut: 90,
-    startDate: "2019-08-20",
-    endDate: "2019-08-20",
-}
-```
-
----
+### 根据FLOW流向详细聚合数据（函数名：accountAggregate, mode: aggregateAccountInDetail）
 
 | key| 说明 | 是否必填 |
 | -------- | ----- | ---- |
 | startDate|开始时间, 需要注意的是, 假如是2019-9-8日, 传入的格式必须是 ** 2019-09-08 **|是|
 | endDate|结束时间,  需要注意的是, 假如是2019-9-8日, 传入的格式必须是 ** 2019-09-08 **|是|
+| flow|金钱流向|是|
+
 
 </details>

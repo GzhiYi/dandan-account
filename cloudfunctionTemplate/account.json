@@ -34,5 +34,12 @@
       "mode": "getNoteById",
       "id": "3c4c6d855d5c0b07050a1a5a0b18e0fa"
     }
+  },
+  {
+    "name": "按菜单ID删除记录",
+    "value": {
+      "mode": "deleteByCategoryId",
+      "categoryId": ""
+    }
   }
 ]

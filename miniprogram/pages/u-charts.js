@@ -1155,7 +1155,6 @@ function getPieTextMaxLength(series) {
   let maxLength = 0;
   for (let i = 0; i < series.length; i++) {
     let item = series[i];
-    console.log('item', item)
     let text = item.format ? item.format(+item._proportion_.toFixed(2)) : util.toFixed(item._proportion_ * 100) + '%';
     maxLength = Math.max(maxLength, measureText(text));
   }

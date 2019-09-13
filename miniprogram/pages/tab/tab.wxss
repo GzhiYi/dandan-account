@@ -11,16 +11,19 @@ tab-item-left {
   border: 10rpx solid rgba(204, 204, 204, 0.8);
   margin: 0 24rpx;
   height: fit-content;
-  transition: .5s all;
   background-color: rgba(255, 255, 255, 0.8);
 }
 .icon {
   width: 70rpx;
   height: 70rpx;
+  transition: .5s all;
+  transform-origin: center;
 }
 .icon-middle {
   width: 90rpx;
   height: 90rpx;
+  transition: .5s all;
+  transform-origin: center;
 }
 .left {
   width: 70rpx;
@@ -41,4 +44,7 @@ tab-item-left {
   right: 0;
   margin: auto;
   bottom: 52rpx;
+}
+.active-bottom-tab {
+  border: 10rpx solid rgba(255, 142, 142, 0.8);
 }

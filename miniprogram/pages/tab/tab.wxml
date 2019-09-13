@@ -34,29 +34,41 @@
   />
 </view>
 <cover-view
-    class="tab-item-top left"
+    class="tab-item-top left {{active === 'list' ? 'active-bottom-tab' : ''}}"
     bindtap="goTo"
+    bindlongtap="showIconName"
     data-active="list"
-    style="{{scale === 'list' ? 'transform: scale(.8, .8)' : ''}}"
     hidden="{{hideTab}}"
   >
-    <cover-image class="icon" src="../../images/calendar{{active === 'list' ? '' : '-dark'}}.png"></cover-image>
+    <cover-image
+      style="{{scale === 'list' ? 'transform: scale(.8, .8)' : ''}}"
+      class="icon"
+      src="../../images/app.png"
+    ></cover-image>
   </cover-view>
   <cover-view
-    class="tab-item-top middle"
+    class="tab-item-top middle {{active === 'index' ? 'active-bottom-tab' : ''}}"
     bindtap="goTo"
+    bindlongtap="showIconName"
     data-active="index"
-    style="{{scale === 'index' ? 'transform: scale(.8, .8)' : ''}}"
     hidden="{{hideTab}}"
   >
-    <cover-image class="icon-middle" src="../../images/quill.png"></cover-image>
+    <cover-image
+      style="{{scale === 'index' ? 'transform: scale(.8, .8)' : ''}}"
+      class="icon-middle"
+      src="../../images/message.png"
+    ></cover-image>
   </cover-view>
   <cover-view
-    class="tab-item-top right"
+    class="tab-item-top right {{active === 'chart' ? 'active-bottom-tab' : ''}}"
     bindtap="goTo"
+    bindlongtap="showIconName"
     data-active="chart"
-    style="{{scale === 'chart' ? 'transform: scale(.8, .8)' : ''}}"
     hidden="{{hideTab}}"
   >
-    <cover-image class="icon" src="../../images/pie-chart{{active === 'chart' ? '' : '-dark'}}.png"></cover-image>
+    <cover-image
+      style="{{scale === 'chart' ? 'transform: scale(.8, .8);' : ''}}"
+      class="icon"
+      src="../../images/{{activeRightIcon}}.png"
+    ></cover-image>
   </cover-view>

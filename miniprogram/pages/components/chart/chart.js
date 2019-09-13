@@ -5,6 +5,7 @@ let canvaPie = null
 let resultBillList = []
 let resultCategoryList = []
 let firstFetch = true
+let currentMonthBasicData = {}
 
 Component({
   options: {
@@ -81,9 +82,11 @@ Component({
     // 选择月份回调
     selectMonth(event) {
       const self = this
+      const { month } = event.currentTarget.dataset
+      if (month - 1 === self.data.activeMonth) return false
       wx.vibrateShort()
       this.setData({
-        activeMonth: event.currentTarget.dataset.month - 1
+        activeMonth: month - 1
       }, function() {
         self.getServerData('chart')
       })
@@ -150,12 +153,13 @@ Component({
             activeParentCategory: item.originData,
             activeParentIndex: item.index
           })
-          return item._proportion_.toFixed(2) * 100 + '%'
+          return item.data + ' | ' +item._proportion_.toFixed(2) * 100 + '%'
         }
       })
     },
     changeTab(e) {
       const { tab } = e.currentTarget.dataset
+      if (tab === this.data.activeTab) return false
       const self = this
       wx.vibrateShort({})
       this.setData({
@@ -269,9 +273,11 @@ Component({
         activeParentCategory: basicData[activeTab].length > 0 ? basicData[activeTab][0] : {}
       })
       if (firstFetch) {
-        self.triggerEvent('currentMonthData', JSON.parse(JSON.stringify(basicData)))
+        currentMonthBasicData = basicData
         firstFetch = false
       }
+      currentMonthBasicData.netAssets = basicData.netAssets
+      self.triggerEvent('currentMonthData', JSON.parse(JSON.stringify(currentMonthBasicData)))
       
       return pieSeriesData
     },

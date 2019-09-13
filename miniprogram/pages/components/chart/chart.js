@@ -17,7 +17,7 @@ Component({
   },
   data: {
     count: 0,
-    year: '2019',
+    year: new Date().getFullYear(),
     months: {
       month: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
     },
@@ -154,7 +154,7 @@ Component({
             activeParentCategory: item.originData,
             activeParentIndex: item.index
           })
-          return item._proportion_.toFixed(2) + '%'
+          return item._proportion_.toFixed(2) * 100 + '%'
         }
       })
     },

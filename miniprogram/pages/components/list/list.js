@@ -70,6 +70,11 @@ Component({
             console.log('(((', billList)
             let pay = 0;
             let income = 0
+            // 解决计算浮点问题
+            function strip(num, precision = 12) {
+              return +parseFloat(num.toPrecision(precision));
+            }
+
             billList.forEach(item => {
               if (item.flow === 0) {
                 pay += item.money
@@ -81,8 +86,8 @@ Component({
             self.setData({
               billResult: {
                 pickRange: {
-                  pay,
-                  income
+                  pay: strip(pay),
+                  income: strip(income)
                 }
               }
             })

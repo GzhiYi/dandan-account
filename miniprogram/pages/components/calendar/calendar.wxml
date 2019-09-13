@@ -10,7 +10,7 @@ var formatDate = function(dateRange, today) {
   if (dateRange[0] === dateRange[1]) {
     return dateRange[0].substring(5);
   }
-  return dateRange[0].substring(5) + ' ~ ' + dateRange[1].substring(5);
+  return dateRange[0] + ' ~ ' + dateRange[1];
 }
 
 module.exports.handle = handle;
@@ -63,14 +63,14 @@ module.exports.formatDate = formatDate
     <view class="show-daterange-in" wx:if="{{mode === 'range'}}">
       <block wx:if="{{dateRange.length !== 1}}">
         <view style="display: flex;justify-content: flex-end;">
-          <view class="result-time">{{rangeStyle.formatDate(dateRange, today)}}</view>
-          <view class="item-pay">支出 {{billResult.pickRange.pay}}</view>
-          <view class="item-income">收入 {{billResult.pickRange.income}} </view>
-        </view>
-        <view style="display: flex;justify-content: flex-end;">
           <view class="result-time">本月</view>
           <view class="item-pay">支出 {{currentMonthData.monthPay || 0}}</view>
           <view class="item-income">收入 {{currentMonthData.monthIncome || 0}}</view>
+        </view>
+        <view style="display: flex;justify-content: flex-end;">
+          <view class="result-time">{{rangeStyle.formatDate(dateRange, today)}}</view>
+          <view class="item-pay">支出 {{billResult.pickRange.pay}}</view>
+          <view class="item-income">收入 {{billResult.pickRange.income}} </view>
         </view>
       </block>
       <view wx:else style="font-weight: bold;height: 74rpx;line-height: 74rpx;">选择结束日期</view>

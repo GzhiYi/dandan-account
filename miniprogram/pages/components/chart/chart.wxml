@@ -41,14 +41,20 @@
         <view>{{basicData.monthIncome || 0}}</view>
       </view>
     </view>
-    <canvas
-      canvas-id="pie"
-      wx:if="{{basicData[activeTab].length > 0}}"
-      id="pie"
-      class="charts"
-      style="width: {{cWidth}}px;"
-      bind:touchstart="touchPie"
-    ></canvas>
+    <view hidden="{{showParentDialog ? true : false}}">
+      <canvas
+        canvas-id="pie"
+        wx:if="{{basicData[activeTab].length > 0}}"
+        id="pie"
+        class="charts"
+        style="width: {{cWidth}}px;opacity: {{showParentDialog ? 0 : 1}};"
+        bind:touchstart="touchPie"
+      ></canvas>
+    </view>
+    <view class="charts hide-pie-tip" hidden="{{!showParentDialog ? true : false}}">
+      |д･)害怕躲起来
+    </view>
+
     <view class="empty-chart" wx:if="{{basicData[activeTab] && basicData[activeTab].length === 0}}">
         没有账单数据( ´･･)ﾉ(._.`)
     </view>

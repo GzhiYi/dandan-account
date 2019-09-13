@@ -132,3 +132,10 @@ page {
   display: flex;
   align-items: center;
 }
+.hide-pie-tip {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 28rpx;
+  color: grey;
+}

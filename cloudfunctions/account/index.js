@@ -116,21 +116,30 @@ exports.main = async (event, context) => {
     }
 
     if (event.mode === 'deleteByCategoryId') {
+
+      let afterCategoryId = "others_sub"
+      if (flow === 1) {
+        afterCategoryId = "income_others"
+      }
+
       const res = await db.collection('DANDAN_NOTE')
-      .where({
-        categoryId: categoryId,
-        isDel: false,
-      }).update({
-        data: {
-          isDel: true,
-        }
-      });
+        .where({
+          categoryId: categoryId,
+          isDel: false,
+        }).update({
+          data: {
+            categoryId: afterCategoryId,
+          }
+        });
+
       return {
         code: 1,
         data: res,
         message: "操作成功",
       };
     }
+
+
 
   } catch (e) {
     console.error(e);

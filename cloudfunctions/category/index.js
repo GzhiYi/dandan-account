@@ -43,7 +43,7 @@ exports.main = async (event, context) => {
       }
     }
 
-    if (event.mode === 'deleteById') {
+    if (event.mode === 'deleteByIdAndFlow') {
       const res = await db.collection('DANDAN_NOTE_CATEGORY').doc(id)
       .update({
         data: {
@@ -58,6 +58,7 @@ exports.main = async (event, context) => {
           data: {
             mode: 'deleteByCategoryId',
             categoryId: id,
+            flow: Number(flow)
           }
         })
       }

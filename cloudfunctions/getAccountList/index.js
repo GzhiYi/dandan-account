@@ -97,7 +97,6 @@ exports.main = async (event, context) => {
     })
 
     const currentTimePre = doHandleYear() + "-" + doHandleMonth() + "-";
-    console.log("currentTimePre: " + currentTimePre);
     // 获取当月内的收入和支出
     const monthAggregateResult = await cloud.callFunction({
       name: 'accountAggregate',
@@ -108,7 +107,6 @@ exports.main = async (event, context) => {
         OPENID: wxContext.OPENID
       }
     });
-    console.log(monthAggregateResult)
 
     return {
       code: 1,

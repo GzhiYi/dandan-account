@@ -24,7 +24,7 @@ exports.main = async (event, context) => {
   });
 
   const $ = db.command.aggregate;
-  const { mode, startDate, endDate, flow, categoryId } = event;
+  const { mode, startDate, endDate, flow, categoryId, OPENID } = event;
 
   // 根据日期范围获取聚集金额总数
   // if (mode === 'aggregateAccountByDateRange') {
@@ -134,6 +134,50 @@ exports.main = async (event, context) => {
   //     endDate: endDate,
   //   }
   // }
+
+  // 按时间聚合, 聚合出支出和收入的数据
+  if (mode === 'aggregateAccountByDateRange') {
+    const basicProject = {
+      _id: 0,
+      money: 1,
+      isDel: 1,
+      openId: 1,
+      flow: 1,
+      categoryId: 1,
+      isTarget: $.and([
+        $.gte([$.dateToString({
+          date: '$noteDate',
+          format: '%Y-%m-%d',
+          timezone: 'Asia/Shanghai'
+        }), startDate]),
+        $.lte([$.dateToString({
+          date: '$noteDate',
+          format: '%Y-%m-%d',
+          timezone: 'Asia/Shanghai'
+        }), endDate])
+      ])
+    };
+
+    const basicMatch = {
+      isDel: false,
+      openId: $.eq(OPENID ? OPENID : wxContext.OPENID),
+      isTarget: true,
+    };
+
+    const sumResult = await db.collection("DANDAN_NOTE")
+      .aggregate()
+      .project(basicProject)
+      .match(basicMatch)
+      .group({
+        _id: "$flow",
+        allSum: $.sum("$money"),
+        count: $.sum(1)
+      })
+      .end();
+    return {
+      sumResult: sumResult.list
+    }
+  }
  
   // 根据FLOW流向详细聚合数据
   if (mode === 'aggregateAccountInDetail') {
@@ -159,9 +203,11 @@ exports.main = async (event, context) => {
       ])
     };
 
+
+
     const basicMatch = {
       isDel: false,
-      openId: $.eq(wxContext.OPENID),
+      openId: $.eq(OPENID ? OPENID : wxContext.OPENID),
       flow: Number(flow),
       isTarget: true,
     };

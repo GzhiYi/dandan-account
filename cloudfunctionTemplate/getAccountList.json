@@ -19,8 +19,8 @@
       "mode": "getAccountListByTime",
       "page": "1",
       "limit": "5",
-      "startDate": "2019-8-29",
-      "endDate": "2019-8-30"
+      "startDate": "2019-09-01",
+      "endDate": "2019-09-30"
     }
   }
 ]

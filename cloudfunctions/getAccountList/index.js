@@ -85,12 +85,38 @@ exports.main = async (event, context) => {
       await getCategory(note, db);
     }
 
-    console.log(res);
+    // 获取所选时间内的收入和支出
+    const aggregateResult = await cloud.callFunction({
+      name: 'accountAggregate',
+      data: {
+        mode: 'aggregateAccountByDateRange',
+        startDate: startDate,
+        endDate: endDate,
+        OPENID: wxContext.OPENID
+      }
+    })
+
+    const currentTimePre = doHandleYear() + "-" + doHandleMonth() + "-";
+    console.log("currentTimePre: " + currentTimePre);
+    // 获取当月内的收入和支出
+    const monthAggregateResult = await cloud.callFunction({
+      name: 'accountAggregate',
+      data: {
+        mode: 'aggregateAccountByDateRange',
+        startDate: currentTimePre + "01",
+        endDate: currentTimePre + "31",
+        OPENID: wxContext.OPENID
+      }
+    });
+    console.log(monthAggregateResult)
+
     return {
       code: 1,
       data: {
         page: res,
         count: totalCount.total,
+        rangeResult: aggregateResult.result.sumResult,
+        monthResult: monthAggregateResult.result.sumResult
       },
       message: '获取记录成功',
     }
@@ -153,4 +179,22 @@ function parseTime(time, cFormat) {
     return value || 0
   })
   return timeStr
+}
+
+function doHandleMonth() {
+  var myDate = new Date();
+  var tMonth = myDate.getMonth();
+
+  var m = tMonth + 1;
+  if (m.toString().length == 1) {
+    m = "0" + m;
+  }
+  return m;
+}
+
+function doHandleYear() {
+  var myDate = new Date();
+  var tYear = myDate.getFullYear();
+
+  return tYear;
 }

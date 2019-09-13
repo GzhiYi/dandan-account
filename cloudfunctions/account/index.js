@@ -115,6 +115,23 @@ exports.main = async (event, context) => {
       }
     }
 
+    if (event.mode === 'deleteByCategoryId') {
+      const res = await db.collection('DANDAN_NOTE')
+      .where({
+        categoryId: categoryId,
+        isDel: false,
+      }).update({
+        data: {
+          isDel: true,
+        }
+      });
+      return {
+        code: 1,
+        data: res,
+        message: "操作成功",
+      };
+    }
+
   } catch (e) {
     console.error(e);
     return {

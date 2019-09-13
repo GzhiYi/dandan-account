@@ -50,6 +50,18 @@ exports.main = async (event, context) => {
           isDel: true,
         }
       });
+
+      if (res.stats.updated > 0) {
+        // 这样就是异步删除了8?
+        cloud.callFunction({
+          name: "account",
+          data: {
+            mode: 'deleteByCategoryId',
+            categoryId: id,
+          }
+        })
+      }
+     
       return {
         code: 1,
         data: res,

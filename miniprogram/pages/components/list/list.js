@@ -35,11 +35,9 @@ Component({
     self.setData({
       today: parseTime(now, '{y}-{m}-{d}')
     })
-    console.log('hhheee', self.data.basicData)
   },
   methods: {
     getBillList(startDate, endDate, fetchFrom, page = 1) {
-
       const self = this
       if (fetchFrom !== 'index') {
         wx.showLoading({
@@ -61,20 +59,17 @@ Component({
         name: 'getAccountList',
         data,
         success(res) {
-          console.log('billRes', res)
           if (res.result && res.result.code === 1) {
             const billList = res.result.data.page.data || []
             self.setData({
               billList
             })
-            console.log('(((', billList)
             let pay = 0;
             let income = 0
             // 解决计算浮点问题
             function strip(num, precision = 12) {
               return +parseFloat(num.toPrecision(precision));
             }
-
             billList.forEach(item => {
               if (item.flow === 0) {
                 pay += item.money
@@ -91,7 +86,6 @@ Component({
                 }
               }
             })
-            console.log('comme', self.data.billResult)
           } else {
             wx.showToast({
               title: '获取账单失败，稍后再试',
@@ -181,7 +175,6 @@ Component({
     onControl(event) {
       const now = new Date()
       const self= this
-      console.log(event)
       const { mode } = event.detail
       if (mode === 'reset') {
         self.setData({

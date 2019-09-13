@@ -10,7 +10,7 @@ const mapFace = {
 }
 Page({
   data: {
-    active: 'chart',
+    active: 'index',
     selectedCategory: null,
     editBill: {},
     isEdit: false,
@@ -129,7 +129,7 @@ Page({
   },
   onShareAppMessage() {
     return {
-      title: '猪猪邀你测试下',
+      title: '可能是东半球最单纯的记账小程序🌚',
       path: '/pages/tab/tab',
       imageUrl: 'https://images.vrm.cn/2019/08/29/pig.png'
     }

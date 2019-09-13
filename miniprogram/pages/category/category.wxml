@@ -20,7 +20,7 @@
             wx:if="{{child.openId !== 'SYSTEM'}}"
             src="../../images/backspace-arrow.png"
             style="width: 28rpx;height: 28rpx;"
-            catchtap="deleteCategory"
+            catchtap="showMenu"
             data-category="{{child}}"
           ></image>
         </view>
@@ -41,3 +41,15 @@
     <view class='list-item-btn' bindtap="closeDialog" style="border-bottom: none;">取消</view>
   </view>
 </dialog>
+  <dialog visible="{{showMenuDialog}}" bind:closeDialog="closeDialog">
+    <view slot="content">
+      <view class="d-header">
+        <text>删除分类：{{editItem.description || editItem.category.categoryName}}?\n该分类下的账单分类将变为杂项。</text>
+        <view class="divide"></view>
+      </view>
+      <view class='list-item-btn' style="color: #f75676;" bindtap="deleteCategory">
+      {{showConfirmDelete ? '再次点击确认删除' : '删除'}}
+      </view>
+      <view class='list-item-btn' bindtap="closeDialog" style="border-bottom: none;">取消</view>
+    </view>
+  </dialog>

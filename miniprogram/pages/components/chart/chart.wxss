@@ -91,7 +91,7 @@ page {
 .select-filter {
   display: flex;
   justify-content: space-between;
-  padding: 0 40rpx 20rpx;
+  padding: 0 30rpx 20rpx;
   font-size: 28rpx;
 }
 .empty-chart {

@@ -140,6 +140,15 @@ Component({
             })
           }
         },
+        fail() {
+          wx.showToast({
+            title: '获取账单失败，稍后再试',
+            icon: 'none'
+          })
+          self.setData({
+            billList: []
+          })
+        },
         complete() {
           wx.hideLoading()
         }
@@ -172,8 +181,6 @@ Component({
       const self = this
       const { pieData, cWidth, cHeight, year, activeMonth, activeTab } = this.data
       const formatResult = self.handleBillPieData(billList, categoryList)
-      console.log('formatResult', formatResult)
-      console.log('help', self.data.basicData)
       canvaPie = new uCharts({
         $this: self,
         canvasId: 'pie',
@@ -208,7 +215,7 @@ Component({
       // 解决计算浮点问题
       function strip(num, precision = 12) {
         return +parseFloat(num.toPrecision(precision));
-      }
+      }      
       billList.forEach(bill => {
         allCategoryList[mapFlow[bill.flow]].forEach(allCate => {
           allCate.children.forEach(childCate => {
@@ -287,7 +294,6 @@ Component({
       })
     },
     onShowDialog(event) {
-      console.log('event', event)
       if (event.currentTarget.dataset.type === 'parent') {
         this.setData({
           showParentDialog: true
@@ -296,7 +302,6 @@ Component({
       this.triggerEvent('hideTab', true)
     },
     selectParentCategory(event) {
-      console.log('event', event)
       const { category, index } = event.currentTarget.dataset
       this.setData({
         activeParentCategory: category,

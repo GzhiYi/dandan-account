@@ -68,8 +68,8 @@
         bindtap="onShowDialog"
         data-type="parent"
       >
-        <image src="../../../images/right-chevron.png" class="chevron"></image>
-        {{activeParentCategory.categoryName}}
+        <!-- <image src="../../../images/right-chevron.png" class="chevron"></image> -->
+        已选：{{activeParentCategory.categoryName}}
       </view>
       <!-- <view class="select-child" wx:if="{{basicData[activeTab].length > 0}}">
         选择父类

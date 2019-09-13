@@ -110,7 +110,7 @@ Page({
     }
     if (active === 'index') {
       wx.showToast({
-        title: '记笔账吧 ❤️',
+        title: '( •̀ᄇ• ́)ﻭ✧来记笔账 ❤️',
         icon: 'none'
       })
     }

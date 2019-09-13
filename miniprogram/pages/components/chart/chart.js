@@ -132,12 +132,13 @@ Component({
             }
           } else {
             wx.showToast({
-              title: '获取账单失败，稍后再试',
+              title: '获取账单失败，正在重试...',
               icon: 'none'
             })
             self.setData({
               billList: []
             })
+            self.getServerData()
           }
         },
         fail() {

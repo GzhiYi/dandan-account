@@ -114,7 +114,7 @@
 <dialog visible="{{showParentDialog}}" bind:closeDialog="closeDialog">
   <view slot="content">
     <view class="d-header">
-      查看该父类下的账单
+      查看该分类下的账单
       <view class="divide"></view>
     </view>
     <scroll-view class="dialog-bills" scroll-y>

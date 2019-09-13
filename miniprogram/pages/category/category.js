@@ -137,7 +137,8 @@ Page({
         name: 'category',
         data: {
           mode: 'deleteById',
-          id: editItem._id
+          id: editItem._id,
+          flow: editItem.flow
         },
         success(res) {
           if (res.result.code === 1) {

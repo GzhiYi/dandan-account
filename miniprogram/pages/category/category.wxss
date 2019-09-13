@@ -44,7 +44,7 @@
   color: #fff !important;
 }
 .item {
-  background-color: #1da1f2;
+  background-color: #5e72e4;
   margin: 24rpx 24rpx 30rpx 24rpx;
   border-radius: 8rpx;
   border: 1px solid rgba(255,255,255,.78);

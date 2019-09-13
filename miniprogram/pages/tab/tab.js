@@ -32,10 +32,6 @@ Page({
   calCalendarHeight() {
     const query = wx.createSelectorQuery().in(this)
     query.select('.cal-calendar').boundingClientRect(function (rect) {
-      // self.setData({
-      //   calendarHeight: rect.height
-      // })
-      console.log('rect', rect)
     }).exec()
   },
   goTo(event) {
@@ -69,7 +65,6 @@ Page({
     index.dectiveEdit()
   },
   onSwitchTab(data) {
-    console.log(data)
     this.setData({
       active: data.detail
     })
@@ -104,7 +99,6 @@ Page({
     })
   },
   showIconName(event) {
-    console.log('event', event)
     const { active } = event.currentTarget.dataset
 
     wx.vibrateShort()

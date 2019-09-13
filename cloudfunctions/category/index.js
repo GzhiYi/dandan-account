@@ -14,7 +14,11 @@ exports.main = async (event, context) => {
     env: process.env.ENV === 'release' ? 'release-wifo3' : wxContext.ENV
   });
   const { id, categoryName, categoryIcon, description, flow,
-    type, parentId, isSelectable, } = event;
+    type, parentId, isSelectable, ids } = event;
+
+  const _ = db.command;
+  const $ = db.command.aggregate;
+
   try {
     if (event.mode === 'add') {
       const res = await db.collection('DANDAN_NOTE_CATEGORY')
@@ -65,6 +69,21 @@ exports.main = async (event, context) => {
         message: "操作成功",
       };
     }
+
+    if (event.mode === 'getCategoriesByIdBatch') {
+      const res = await db.collection('DANDAN_NOTE_CATEGORY')
+        .where({
+          _id: _.in(ids),
+          isDel: false,
+        }).get();
+
+      return {
+        code: 1,
+        data: res,
+        message: "操作成功",
+      };
+    }
+
 
   } catch (e) {
     console.error(e);

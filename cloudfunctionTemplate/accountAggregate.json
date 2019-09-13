@@ -1,0 +1,19 @@
+[
+  {
+    "name": "按时间范围聚合数据",
+    "value": {
+      "mode": "aggregateAccountByDateRange",
+      "startDate": "2019-09-07",
+      "endDate": "2019-09-07"
+    }
+  },
+  {
+    "name": "详细聚合数据",
+    "value": {
+      "mode": "aggregateAccountInDetail",
+      "flow": "1",
+      "startDate": "2019-09-07",
+      "endDate": "2019-09-07"
+    }
+  }
+]

@@ -31,8 +31,8 @@
         ></image> -->
       </view>
     </view>
-    <view wx:if="{{billList.length === 0}}" class="note-tips" bindtap="switchTab">
-      日期范围未找到账单，去记一笔！
+    <view wx:if="{{billList.length === 0}}" class="note-tips">
+      没有账单数据( ´･･)ﾉ(._.`)
     </view>
   </scroll-view>
   <dialog visible="{{showMenuDialog}}" bind:closeDialog="closeDialog">

@@ -238,7 +238,8 @@ Component({
         monthPay: 0,
         monthPayCount: 0,
         monthIncome: 0,
-        monthIncomeCount: 0
+        monthIncomeCount: 0,
+        netAssets: 0
       }
       mapFlow.forEach(flow => {
         allCategoryList[flow].filter(item => item.bills && item.bills.length > 0).forEach((item, index) => {
@@ -264,6 +265,8 @@ Component({
           self.deletePro(item, ['categoryIcon', 'children', 'createTime', 'description', 'isDel', 'isSelectable', 'openId', 'parentId', 'type'])
         })
       })
+      // 计算净资产
+      basicData.netAssets = strip(basicData.monthIncome - basicData.monthPay)
       self.setData({
         basicData,
         // 处理选择的父子分类

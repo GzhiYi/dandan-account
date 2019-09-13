@@ -51,7 +51,7 @@
     ></canvas>
     <view class="empty-chart" wx:if="{{basicData[activeTab] && basicData[activeTab].length === 0}}">
         没有账单数据( ´･･)ﾉ(._.`)
-      </view>
+    </view>
     <view class="select-filter">
       <view
         class="select-parent type primary"
@@ -59,11 +59,18 @@
         bindtap="onShowDialog"
         data-type="parent"
       >
+        <image src="../../../images/right-chevron.png" class="chevron"></image>
         {{activeParentCategory.categoryName}}
       </view>
       <!-- <view class="select-child" wx:if="{{basicData[activeTab].length > 0}}">
         选择父类
       </view> -->
+      <view class="chart-sum" wx:if="{{basicData.netAssets}}">
+        余：<text
+          class="chart-sum-text"
+          style="color: {{basicData.netAssets >= 0 ? '#4fd69c' : '#f75676'}}"
+        >{{basicData.netAssets >= 0 ? '+' : '-'}}{{basicData.netAssets}}</text>
+      </view>
     </view>
   </view>
   <view class="bill-list">

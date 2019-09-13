@@ -49,7 +49,6 @@ Component({
     }
   },
   ready() {
-    console.log('screentHeight', getApp().globalData.screenHeight)
     this.setData({
       cWidth: wx.getSystemInfoSync().screenWidth - 50,
       cHeight: 500 / 750 * wx.getSystemInfoSync().screenWidth - 50
@@ -91,7 +90,6 @@ Component({
     },
     // 渲染数据
     getServerData(fromTab) {
-      console.log('aha')
       const { pieData, cWidth, cHeight, year, activeMonth, activeTab } = this.data
       const self = this
       const firstAndLastArray = self.getFirstAndLastDayByMonth(year, activeMonth + 1)
@@ -145,11 +143,9 @@ Component({
       })
     },
     touchPie(e) {
-      console.log('een', e)
       const self = this
       canvaPie.showToolTip(e, {
         format: function (item) {
-          console.log('hhhh', item)
           self.setData({
             activeParentCategory: item.originData,
             activeParentIndex: item.index
@@ -302,7 +298,6 @@ Component({
         showParentDialog: false
       })
       this.triggerEvent('hideTab', false)
-      console.log('???', this.data.activeParentCategory, index)
     },
     showMenu(event) {
       const self = this

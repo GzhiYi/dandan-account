@@ -41,17 +41,20 @@
         <view>{{basicData.monthIncome || 0}}</view>
       </view>
     </view>
-    <view hidden="{{showParentDialog ? true : false}}">
+    <view hidden="{{showParentDialog || showMenuDialog ? true : false}}">
       <canvas
         canvas-id="pie"
         wx:if="{{basicData[activeTab].length > 0}}"
         id="pie"
         class="charts"
-        style="width: {{cWidth}}px;opacity: {{showParentDialog ? 0 : 1}};"
+        style="width: {{cWidth}}px;"
         bind:touchstart="touchPie"
       ></canvas>
     </view>
-    <view class="charts hide-pie-tip" hidden="{{!showParentDialog ? true : false}}">
+    <view class="charts hide-pie-tip" hidden="{{!showParentDialog? true : false}}">
+      |д･)害怕躲起来
+    </view>
+    <view class="charts hide-pie-tip" hidden="{{!showMenuDialog? true : false}}">
       |д･)害怕躲起来
     </view>
 
@@ -75,7 +78,7 @@
         余：<text
           class="chart-sum-text"
           style="color: {{basicData.netAssets >= 0 ? '#4fd69c' : '#f75676'}}"
-        >{{basicData.netAssets >= 0 ? '+' : '-'}}{{basicData.netAssets}}</text>
+        >{{basicData.netAssets >= 0 ? '+' : ''}}{{basicData.netAssets}}</text>
       </view>
     </view>
   </view>

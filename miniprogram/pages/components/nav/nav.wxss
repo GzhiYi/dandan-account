@@ -34,8 +34,8 @@
   padding:0 10rpx;
 }
 .nav-icon {
-  width: 42rpx;
-  height: 42rpx;
+  width: 36rpx;
+  height: 36rpx;
 }
 .loading-icon {
   animation: headRotate 2s linear infinite;

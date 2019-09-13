@@ -2,7 +2,7 @@
   <view style="height:{{statusBarHeight}}px;"></view>
   <view class='content'>
     <view class='nav-icon-view-back' bindtap='back' wx:if="{{showBackIcon}}">
-      后退
+      <image class='nav-icon' src='../../../images/arrow-left.png'></image>
     </view>
   </view>
 </view>

@@ -14,7 +14,8 @@ Page({
     loadingAdd: false,
     showMenuDialog: false,
     editItem: {},
-    showConfirmDelete: false
+    showConfirmDelete: false,
+    shouldUpdateBill: false
   },
 
   /**
@@ -26,6 +27,7 @@ Page({
       billType: options.type
     })
     self.getCategoryList(options.type)
+    console.log('get', getCurrentPages())
   },
   getCategoryList(flow) {
     this.setData({
@@ -107,7 +109,6 @@ Page({
         })
       }
     })
-
   },
   getLatestCategory() {
     const self = this
@@ -136,20 +137,39 @@ Page({
       wx.cloud.callFunction({
         name: 'category',
         data: {
-          mode: 'deleteById',
+          mode: 'deleteByIdAndFlow',
           id: editItem._id,
           flow: editItem.flow
         },
         success(res) {
+          console.log('res', res)
           if (res.result.code === 1) {
             wx.showToast({
               title: '删除成功',
               icon: 'none'
             })
+            self.setData({
+              shouldUpdateBill: true // 删除分类成功的话必须更新账单
+            })
             self.getLatestCategory()
           }
         }
       })
+    }
+  },
+  onUnload() {
+    const { shouldUpdateBill } = this.data
+    const self = this
+    if (shouldUpdateBill) {
+      try {
+        getCurrentPages()[0].onReFetchBillList()
+      }
+      catch (err) {
+        wx.showToast({
+          title: '更新账单失败，可能要重启小程序哦。',
+          icon: 'none'
+        })
+      }
     }
   }
 })

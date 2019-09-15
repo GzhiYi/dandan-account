@@ -12,11 +12,11 @@ const MAX_LIMIT = 50;
 exports.main = async (event, context) => {
   const wxContext = cloud.getWXContext();
   cloud.updateConfig({
-    env: process.env.ENV === 'local' ? 'release-wifo3' : wxContext.ENV
+    env: process.env ? (process.env.ENV === 'local' ? 'release-wifo3' : wxContext.ENV) : wxContext.ENV
   })
   // 初始化数据库
   const db = cloud.database({
-    env: process.env.ENV === 'local' ? 'release-wifo3' : wxContext.ENV
+    env: process.env ? (process.env.ENV === 'local' ? 'release-wifo3' : wxContext.ENV) : wxContext.ENV
   });
   const _ = db.command;
   // page: 当前页数

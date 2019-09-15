@@ -35,36 +35,15 @@ Component({
   },
   attached() {
   },
-  detached() {
-    this.hideLoading()
-  },
   methods: {
     back() {
       wx.navigateBack({
         delta: 1,
         fail(error) {
           wx.redirectTo({
-            url: '/pages/group/group',
+            url: '/pages/tab/tab',
           })
         }
-      })
-    },
-    /**
-   * 开始旋转
-   */
-    showLoading() {
-      var that = this;
-      this.setData({
-        showLoadingIcon: true
-      })
-    },
-
-    /**
-     * 停止旋转
-     */
-    hideLoading() {
-      this.setData({
-        showLoadingIcon: false
       })
     },
     goTo(event) {
@@ -72,15 +51,6 @@ Component({
       wx.navigateTo({
         url: `/pages/${page}/${page}`
       })
-    },
-    inDev() {
-      wx.showToast({
-        title: '功能正在开发中...',
-        icon: 'none'
-      })
-    },
-    newGroup() {
-      getCurrentPages()[0].showNewGroupModal()
     }
   }
 })

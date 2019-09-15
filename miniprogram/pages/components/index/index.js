@@ -23,7 +23,8 @@ Component({
     currentActiveDateTime: '',
     loadingCreate: false,
     isEdit: false,
-    pickDate: ''
+    pickDate: '',
+    clickPigNum: 0
   },
   ready() {
     const now = new Date()
@@ -181,6 +182,33 @@ Component({
       this.setData({
         active_date_time: event.detail.value,
         active_date: this.converDate(event.detail.value, false)
+      })
+    },
+    clickPig() {
+      const self = this
+      let { clickPigNum } = self.data
+      wx.vibrateShort()
+      if (clickPigNum <= 4) {
+        clickPigNum++
+        const temp = ['！', '！！', '！！！', '！！！！', '！！！！！']
+        wx.showToast({
+          title: '你再点我' + temp[clickPigNum - 1],
+          icon: 'none'
+        })
+      }
+      if (clickPigNum === 5) {
+        setTimeout(() => {
+          self.setData({
+            clickPigNum: 0
+          })
+          wx.showToast({
+            title: '我又出现了 - -',
+            icon: 'none'
+          })
+        }, 5000)
+      }
+      self.setData({
+        clickPigNum
       })
     }
   }

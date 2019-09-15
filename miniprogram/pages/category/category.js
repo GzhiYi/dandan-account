@@ -176,6 +176,7 @@ Page({
         getCurrentPages()[0].onReFetchBillList()
       }
       catch (err) {
+        console.log('update error', err)
         wx.showToast({
           title: '更新账单失败，可能要重启小程序哦。',
           icon: 'none'

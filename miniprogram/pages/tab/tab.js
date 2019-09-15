@@ -52,6 +52,7 @@ Page({
     const list = this.selectComponent('#list')
     const chart = this.selectComponent('#chart')
     const now = new Date()
+    console.log('trigger: 重新获取账单列表')
     list.getBillList(parseTime(now, '{y}-{m}-{d}'), parseTime(now, '{y}-{m}-{d}'), 'index')
     chart.getServerData('index')
   },

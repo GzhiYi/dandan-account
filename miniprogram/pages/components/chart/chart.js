@@ -131,29 +131,27 @@ Component({
               }
             }
           } else {
-            wx.showToast({
-              title: '获取账单失败，正在重试...',
-              icon: 'none'
-            })
-            self.setData({
-              billList: []
-            })
-            self.getServerData()
+            self.reFetch()
           }
         },
         fail() {
-          wx.showToast({
-            title: '获取账单失败，稍后再试',
-            icon: 'none'
-          })
-          self.setData({
-            billList: []
-          })
+          self.reFetch()
         },
         complete() {
           wx.hideLoading()
         }
       })
+    },
+    reFetch() {
+      const self = this
+      wx.showToast({
+        title: '获取账单失败，正在重试...',
+        icon: 'none'
+      })
+      self.setData({
+        billList: []
+      })
+      self.getServerData()
     },
     touchPie(e) {
       const self = this

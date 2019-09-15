@@ -8,12 +8,12 @@ exports.main = async (event, context) => {
 
   const wxContext = cloud.getWXContext();
   cloud.updateConfig({
-    env: process.env.ENV === 'release' ? 
+    env: process.env.ENV === 'local' ? 
       'release-wifo3' : wxContext.ENV
   })
   // 初始化数据库
   const db = cloud.database({
-    env: process.env.ENV === 'release' ?
+    env: process.env.ENV === 'local' ?
      'release-wifo3' : wxContext.ENV
   });
 

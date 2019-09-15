@@ -152,7 +152,18 @@ Page({
               shouldUpdateBill: true // 删除分类成功的话必须更新账单
             })
             self.getLatestCategory()
+          } else {
+            wx.showToast({
+              title: '删除失败，再试试？',
+              icon: 'none'
+            })
           }
+        },
+        fail() {
+          wx.showToast({
+            title: '删除失败，再试试？',
+            icon: 'none'
+          })
         }
       })
     }

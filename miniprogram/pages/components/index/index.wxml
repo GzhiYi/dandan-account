@@ -1,5 +1,11 @@
 <view class="banner">
-  <image src="https://images.vrm.cn/2019/08/29/pig.png" style="width: 150rpx;height: 150rpx;"></image>
+  <image
+    wx:if="{{clickPigNum < 5}}"
+    src="https://images.vrm.cn/2019/08/29/pig.png"
+    style="width: 150rpx;height: 150rpx;"
+    bindtap="clickPig"
+  ></image>
+  <view wx:else>|д･)怂了</view>
 </view>
 <view class="tab">
   <view

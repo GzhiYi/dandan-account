@@ -53,14 +53,25 @@ exports.main = async (event, context) => {
 
       if (res.stats.updated > 0) {
         // 这样就是异步删除了8?
-        cloud.callFunction({
-          name: "account",
-          data: {
-            mode: 'deleteByCategoryId',
+        let afterCategoryId = "others_sub"
+        if (flow == 1) {
+          afterCategoryId = "income_others"
+        }
+        const updateRes = await db.collection('DANDAN_NOTE')
+          .where({
             categoryId: id,
-            flow: Number(flow)
-          }
-        })
+            isDel: false,
+          }).update({
+            data: {
+              categoryId: afterCategoryId,
+            }
+          });
+
+        return {
+          code: 1,
+          data: updateRes,
+          message: "操作成功",
+        };
       }
      
       return {

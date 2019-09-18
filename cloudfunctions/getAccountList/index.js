@@ -5,7 +5,7 @@ cloud.init()
 
 const DEFAULT_LIMIT = 10;
 const DEFAULT_PAGE = 1;
-const MAX_LIMIT = 50;
+const MAX_LIMIT = 500;
 
 
 // 云函数入口函数

@@ -7,6 +7,11 @@ let resultCategoryList = []
 let firstFetch = true
 let currentMonthBasicData = {}
 
+// 解决计算浮点问题
+function strip(num, precision = 12) {
+  return +parseFloat(num.toPrecision(precision));
+}
+
 Component({
   options: {
     styleIsolation: 'shared'
@@ -163,7 +168,8 @@ Component({
             activeParentCategory: item.originData,
             activeParentIndex: item.index
           })
-          return item.data + ' | ' +item._proportion_.toFixed(2) * 100 + '%'
+          console.log('item', item)
+          return item.name + ' | ' + item.data + ' | ' + strip(item._proportion_.toFixed(2) * 100) + '%'
         }
       })
     },
@@ -213,10 +219,6 @@ Component({
       // 处理账单和分类的耦合
       const mapFlow = ['pay', 'income']
 
-      // 解决计算浮点问题
-      function strip(num, precision = 12) {
-        return +parseFloat(num.toPrecision(precision));
-      }      
       billList.forEach(bill => {
         allCategoryList[mapFlow[bill.flow]].forEach(allCate => {
           allCate.children.forEach(childCate => {

@@ -18,15 +18,11 @@ Component({
     }
   },
   data: {
-    count: 0,
     year: new Date().getFullYear().toString(), // 不转为字符串IOS将从1年开始
     months: {
       month: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
     },
     activeMonth: new Date().getMonth(),
-    pieData: {
-      "series": []
-    },
     cWidth: 0,
     cHeight: 0,
     activeTab: 'pay',
@@ -38,7 +34,8 @@ Component({
     showParentDialog: false,
     showMenuDialog: false,
     editItem: {},
-    showConfirmDelete: false
+    showConfirmDelete: false,
+    billList: undefined
   },
   /**
    * hack。修复scroll-x在hidden下不显示的问题。该问题存在于ios。
@@ -93,7 +90,7 @@ Component({
     },
     // 渲染数据
     getServerData(fromTab) {
-      const { pieData, cWidth, cHeight, year, activeMonth, activeTab } = this.data
+      const { year, activeMonth } = this.data
       const self = this
       const firstAndLastArray = self.getFirstAndLastDayByMonth(year, activeMonth + 1)
 
@@ -130,6 +127,9 @@ Component({
                 resultCategoryList = list
               }
             }
+            self.setData({
+              billList
+            })
           }
         },
         fail() {

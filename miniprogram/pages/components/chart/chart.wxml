@@ -105,8 +105,8 @@
           </view>
         </view>
       </view>
-      <view wx:if="{{billList.length === 0}}" class="note-tips" bindtap="switchTab">
-        日期范围未找到账单，去记一笔！
+      <view class="empty-chart" wx:if="{{billList.length === 0}}">
+        没有账单数据( ´･･)ﾉ(._.`)
       </view>
     </scroll-view>
   </view>

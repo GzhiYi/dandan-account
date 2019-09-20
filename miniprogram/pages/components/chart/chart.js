@@ -18,7 +18,7 @@ Component({
   },
   data: {
     count: 0,
-    year: new Date().getFullYear(),
+    year: new Date().getFullYear().toString(), // 不转为字符串IOS将从1年开始
     months: {
       month: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
     },
@@ -155,6 +155,8 @@ Component({
     },
     touchPie(e) {
       const self = this
+      // hack，解决relative定位后canvas无法正常点击的问题
+      e.currentTarget.offsetTop += 110
       canvaPie.showToolTip(e, {
         format: function (item) {
           self.setData({

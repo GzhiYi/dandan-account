@@ -1,5 +1,5 @@
-<view class="chart" style='pointer-events: auto;'>
-  <view style="width: 100%;overflow-x: hidden;">
+<view class="chart">
+  <view class="selector-view">
     <view class="month-selector">
       <picker
         class="picker"
@@ -71,11 +71,12 @@
         <!-- <image src="../../../images/right-chevron.png" class="chevron"></image> -->
         已选：{{activeParentCategory.categoryName}}
       </view>
+      <view wx:else></view>
       <!-- <view class="select-child" wx:if="{{basicData[activeTab].length > 0}}">
         选择父类
       </view> -->
       <view class="chart-sum" wx:if="{{basicData.netAssets}}">
-        余：<text
+        月余：<text
           class="chart-sum-text"
           style="color: {{basicData.netAssets >= 0 ? '#4fd69c' : '#f75676'}}"
         >{{basicData.netAssets >= 0 ? '+' : ''}}{{basicData.netAssets}}</text>

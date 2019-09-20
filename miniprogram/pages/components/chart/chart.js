@@ -1,16 +1,12 @@
 // pages/components/chart/chart.js
 import { parseTime } from '../../../date.js'
+import { strip, debounce } from '../../../util'
 import uCharts from '../../u-charts.js'
 let canvaPie = null
 let resultBillList = []
 let resultCategoryList = []
 let firstFetch = true
 let currentMonthBasicData = {}
-
-// 解决计算浮点问题
-function strip(num, precision = 12) {
-  return +parseFloat(num.toPrecision(precision));
-}
 
 Component({
   options: {
@@ -59,7 +55,6 @@ Component({
       cWidth: wx.getSystemInfoSync().screenWidth - 50,
       cHeight: 500 / 750 * wx.getSystemInfoSync().screenWidth - 50
     })
-    
     this.getServerData('index')
   },
   methods: {
@@ -135,8 +130,6 @@ Component({
                 resultCategoryList = list
               }
             }
-          } else {
-            self.reFetch()
           }
         },
         fail() {
@@ -147,17 +140,12 @@ Component({
         }
       })
     },
-    reFetch() {
-      const self = this
-      wx.showToast({
-        title: '获取账单失败，正在重试...',
-        icon: 'none'
-      })
-      self.setData({
+    reFetch: debounce(function () {
+      this.setData({
         billList: []
       })
-      self.getServerData()
-    },
+      this.getServerData()
+    }, 300),
     touchPie(e) {
       const self = this
       // hack，解决relative定位后canvas无法正常点击的问题
@@ -173,7 +161,7 @@ Component({
         }
       })
     },
-    changeTab(e) {
+    changeTab: debounce(function(e) {
       const { tab } = e.currentTarget.dataset
       if (tab === this.data.activeTab) return false
       const self = this
@@ -183,10 +171,10 @@ Component({
       }, function() {
         self.fillPie(resultBillList, resultCategoryList)
       })
-    },
+    }, 200),
     fillPie(billList, categoryList) {
       const self = this
-      const { pieData, cWidth, cHeight, year, activeMonth, activeTab } = this.data
+      const { cWidth, cHeight, activeTab } = this.data
       const formatResult = self.handleBillPieData(billList, categoryList)
       canvaPie = new uCharts({
         $this: self,

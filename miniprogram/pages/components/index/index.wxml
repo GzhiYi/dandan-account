@@ -109,7 +109,7 @@
         name="note"
         value="{{note}}"
         bindinput="bindInput"
-        maxlength="{{100}}"
+        maxlength="100"
         data-name="note"
         placeholder="简要备注说明"
       />

@@ -34,7 +34,14 @@
       添加 {{addCategory.categoryName}} 子分类
       <view class="divide"></view>
     </view>
-    <input value="{{addCategoryName}}" data-name="addCategoryName" bindinput="bindInput" placeholder="输入子分类名" class="fill-cate"></input>
+    <input
+      value="{{addCategoryName}}"
+      data-name="addCategoryName" 
+      bindinput="bindInput"
+      placeholder="输入子分类名"
+      class="fill-cate"
+      maxlength="10"
+    ></input>
     
     <view class='list-item-btn' style="color: #4fd69c;" bindtap="confirmAddCategory" wx:if="{{!loadingAdd}}">确认</view>
     <view class='list-item-btn' style="color: #4fd69c;" wx:else>添加中...</view>

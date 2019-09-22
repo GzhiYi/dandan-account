@@ -1,4 +1,4 @@
-import { parseTime } from '../../../date.js'
+import { parseTime } from '../../../util'
 let dateRange = null
 Component({
   options: {

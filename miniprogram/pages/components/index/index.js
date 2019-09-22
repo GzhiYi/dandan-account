@@ -1,5 +1,5 @@
 // pages/components/index/index.js
-import { parseTime } from '../../../date.js'
+import { parseTime } from '../../../util'
 
 Component({
   options: {

@@ -1,6 +1,4 @@
-// pages/components/chart/chart.js
-import { parseTime } from '../../../date.js'
-import { strip, debounce } from '../../../util'
+import { strip, debounce, parseTime } from '../../../util'
 import uCharts from '../../u-charts.js'
 let canvaPie = null
 let resultBillList = []
@@ -49,7 +47,7 @@ Component({
   },
   ready() {
     this.setData({
-      cWidth: wx.getSystemInfoSync().screenWidth - 50,
+      cWidth: wx.getSystemInfoSync().screenWidth - 30,
       cHeight: 500 / 750 * wx.getSystemInfoSync().screenWidth - 50
     })
     this.getServerData('index')

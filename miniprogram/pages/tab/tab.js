@@ -1,4 +1,4 @@
-import { parseTime } from '../../date.js'
+import { parseTime } from '../../util'
 const mapFace = {
   'greed': '我还能存！',
   'kiss': '继续继续',
@@ -10,7 +10,7 @@ const mapFace = {
 }
 Page({
   data: {
-    active: 'chart',
+    active: 'list',
     selectedCategory: null,
     editBill: {},
     hideTab: false,

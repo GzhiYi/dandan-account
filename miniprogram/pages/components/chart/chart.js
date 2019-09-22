@@ -154,22 +154,23 @@ Component({
             activeParentCategory: item.originData,
             activeParentIndex: item.index
           })
-          console.log('item', item)
           return item.name + ' | ' + item.data + ' | ' + strip(item._proportion_.toFixed(2) * 100) + '%'
         }
       })
     },
-    changeTab: debounce(function(e) {
-      const { tab } = e.currentTarget.dataset
+    changeTab(e) {
+      const {
+        tab
+      } = e.currentTarget.dataset
       if (tab === this.data.activeTab) return false
       const self = this
       wx.vibrateShort({})
       this.setData({
         activeTab: tab
-      }, function() {
+      }, function () {
         self.fillPie(resultBillList, resultCategoryList)
       })
-    }, 200),
+    },
     fillPie(billList, categoryList) {
       const self = this
       const { cWidth, cHeight, activeTab } = this.data

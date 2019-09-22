@@ -10,7 +10,7 @@ const mapFace = {
 }
 Page({
   data: {
-    active: 'list',
+    active: 'chart',
     selectedCategory: null,
     editBill: {},
     hideTab: false,
@@ -73,7 +73,8 @@ Page({
   },
   onSyncCurrentMonthData(event) {
     const currentMonthData = event.detail
-    const netAssets = currentMonthData.netAssets
+    const netAssets = (currentMonthData.monthResult[1].allSum - currentMonthData.monthResult[0].allSum) || 0
+    console.log('净收入', currentMonthData)
     let icon = 'tongue'
     if (netAssets > 5000) {
       icon = 'greed'

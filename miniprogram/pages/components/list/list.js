@@ -5,11 +5,7 @@ Component({
     styleIsolation: 'shared'
   },
   properties: {
-    tab: String,
-    currentMonthData: {
-      type: Object,
-      value: {}
-    }
+    tab: String
   },
   data: {
     billList: null,
@@ -19,7 +15,7 @@ Component({
     screenHeight: getApp().globalData.screenHeight,
     statusBarHeight: getApp().globalData.statusBarHeight,
     today: '',
-    billResult: {}
+    billResult: null
   },
   observers: {
     'tab': function(tab) {
@@ -58,31 +54,9 @@ Component({
         data,
         success(res) {
           if (res.result && res.result.code === 1) {
-            const billList = res.result.data.page.data || []
+            // 新聚合接口，带分页
             self.setData({
-              billList
-            })
-            let pay = 0;
-            let income = 0
-            // 解决计算浮点问题
-            function strip(num, precision = 12) {
-              return +parseFloat(num.toPrecision(precision));
-            }
-            billList.forEach(item => {
-              if (item.flow === 0) {
-                pay += item.money
-              }
-              if (item.flow === 1) {
-                income += item.money
-              }
-            })
-            self.setData({
-              billResult: {
-                pickRange: {
-                  pay: strip(pay),
-                  income: strip(income)
-                }
-              }
+              billResult: res.result.data
             })
           } else {
             wx.showToast({
@@ -90,7 +64,7 @@ Component({
               icon: 'none'
             })
             self.setData({
-              billList: []
+              billResult: null
             })
           }
         },

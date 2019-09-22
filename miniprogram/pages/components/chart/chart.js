@@ -33,7 +33,8 @@ Component({
     showMenuDialog: false,
     editItem: {},
     showConfirmDelete: false,
-    billList: undefined
+    billList: undefined,
+    billResult: null
   },
   /**
    * hack。修复scroll-x在hidden下不显示的问题。该问题存在于ios。
@@ -107,12 +108,14 @@ Component({
         },
         success(res) {
           if (res.result && res.result.code === 1) {
+            console.log('fffff', res.result.data)
             const billList = res.result.data.page.data || []
             const categoryList = JSON.parse(JSON.stringify(getApp().globalData.categoryList))
             // 重置一些参数
             self.setData({
               activeParentIndex: 0,
-              activeParentCategory: {}
+              activeParentCategory: {},
+              billResult: res.result.data
             })
             if ('pay' in categoryList) {
               self.fillPie(billList, categoryList)
@@ -175,6 +178,7 @@ Component({
       const self = this
       const { cWidth, cHeight, activeTab } = this.data
       const formatResult = self.handleBillPieData(billList, categoryList)
+      console.log('lalalalal', formatResult[activeTab])
       canvaPie = new uCharts({
         $this: self,
         canvasId: 'pie',
@@ -274,7 +278,7 @@ Component({
         firstFetch = false
       }
       currentMonthBasicData.netAssets = basicData.netAssets
-      self.triggerEvent('currentMonthData', JSON.parse(JSON.stringify(currentMonthBasicData)))
+      self.triggerEvent('currentMonthData', JSON.parse(JSON.stringify(self.data.billResult)))
       
       return pieSeriesData
     },

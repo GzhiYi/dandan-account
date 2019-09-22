@@ -58,7 +58,7 @@ exports.main = async (event, context) => {
       })
       .end();
     return {
-      sumResult: sumResult.list
+      sumResult: sumResult.list.sort((a, b) => a._id - b._id)
     }
   }
  
@@ -125,7 +125,7 @@ exports.main = async (event, context) => {
     // TODO: 等官方出了连接查询这里可以直接使用聚合和连接的方法处理好数据
 
     return {
-      sumResult: sumResult.list.length > 0 ? sumResult.list[0] : {},
+      sumResult: sumResult.list.length > 0 ? sumResult.list[0].sort((a, b) => a._id - b._id) : {},
       detailResult: detailResult.list,
     }
   }

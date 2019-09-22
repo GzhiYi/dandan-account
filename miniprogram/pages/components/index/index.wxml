@@ -48,7 +48,7 @@
       >0.00</text>
     </view>
   </view>
-  <view class="section">
+  <view class="section" bindtap="goToCategory">
     <view class="label">分类</view>
     <view class="input-field" style="flex-direction: row;">
       <view

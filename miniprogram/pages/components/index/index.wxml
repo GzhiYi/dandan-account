@@ -55,11 +55,11 @@
         class="cate"
         style="background-color: {{active_tab === 1 ? '#4fd69c;' : '#f75676;'}}color: #fff;"
         wx:if="{{selectedCategory}}"
-        bindtap="goToCategory"
+        catchTap="goToCategory"
       >
       {{selectedCategory.categoryName}}
       </view>
-      <view class="cate" bindtap="goToCategory" style="margin-right: 0;">...</view>
+      <view class="cate" catchTap="goToCategory" style="margin-right: 0;">...</view>
     </view>
   </view>
   <view class="section">

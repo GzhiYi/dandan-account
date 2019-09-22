@@ -8,6 +8,7 @@ Page({
     addCategory: {}, // 要增加的父级分类
     addCategoryName: '',
     loadingAdd: false,
+    loadingDelete: false,
     showMenuDialog: false,
     editItem: {},
     showConfirmDelete: false
@@ -20,7 +21,6 @@ Page({
     const self = this
     billType = options.type
     self.getCategoryList(options.type)
-    console.log('get', getCurrentPages())
   },
   getCategoryList(flow) {
     this.setData({
@@ -82,7 +82,7 @@ Page({
       success(res) {
         if (res.result.code === 1) {
           wx.showToast({
-            title: '新增成功',
+            title: '添加成功',
             icon: 'none'
           })
           let lastFlow = addCategory.flow
@@ -116,14 +116,15 @@ Page({
   deleteCategory() {
     const self = this
     const { editItem } = self.data
+    wx.vibrateShort()
     if (!self.data.showConfirmDelete) {
       self.setData({
         showConfirmDelete: !self.data.showConfirmDelete
       })
-      wx.vibrateShort()
     } else {
-      self.closeDialog()
-      wx.vibrateShort()
+      self.setData({
+        loadingDelete: true
+      })
       wx.cloud.callFunction({
         name: 'category',
         data: {
@@ -132,13 +133,14 @@ Page({
           flow: editItem.flow
         },
         success(res) {
-          console.log('res', res)
           if (res.result.code === 1) {
             wx.showToast({
               title: '删除成功',
               icon: 'none'
             })
+            self.closeDialog()
             shouldUpdateBill = true // 删除分类成功的话必须更新账单
+            getApp().globalData.selectedCategory = null
             self.getLatestCategory()
           } else {
             wx.showToast({
@@ -152,6 +154,11 @@ Page({
             title: '删除失败，再试试？',
             icon: 'none'
           })
+        },
+        complete() {
+          self.setData({
+            loadingDelete: false
+          })
         }
       })
     }
@@ -162,7 +169,6 @@ Page({
         getCurrentPages()[0].onReFetchBillList()
       }
       catch (err) {
-        console.log('update error', err)
         wx.showToast({
           title: '更新账单失败，可能要重启小程序哦。',
           icon: 'none'

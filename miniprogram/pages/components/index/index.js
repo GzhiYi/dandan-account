@@ -26,8 +26,6 @@ Component({
       active_date_time: date
     })
   },
-  attached() {
-  },
   /**
    * 组件的方法列表
    */
@@ -143,6 +141,7 @@ Component({
         }
       })
     },
+    // tab.js调用
     dectiveEdit() {
       const { editBill } = this.data
       this.setData({

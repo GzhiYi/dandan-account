@@ -22,11 +22,9 @@ Page({
   },
   onShow() {
     const { selectedCategory } = getApp().globalData
-    if (selectedCategory) {
-      this.setData({
-        selectedCategory
-      })
-    }
+    this.setData({
+      selectedCategory
+    })
   }, 
   calCalendarHeight() {
     const query = wx.createSelectorQuery().in(this)

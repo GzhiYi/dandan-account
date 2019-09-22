@@ -23,14 +23,9 @@
           </view>
           <view class="date">{{item.noteDate}}</view>
         </view>
-        <!-- <image
-          src="../../../images/menu.png"
-          style="width: 32rpx;height: 32rpx;padding: 13rpx 0 13rpx 13rpx;"
-          bindtap="showMenu"
-          data-bill="{{item}}"
-        ></image> -->
       </view>
     </view>
+    <view class="fake-bill-item"></view>
     <view wx:if="{{billList.length === 0}}" class="note-tips">
       没有账单数据( ´･･)ﾉ(._.`)
     </view>

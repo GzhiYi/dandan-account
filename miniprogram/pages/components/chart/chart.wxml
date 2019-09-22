@@ -105,6 +105,7 @@
           </view>
         </view>
       </view>
+      <view class="fake-bill-item"></view>
       <view class="empty-chart" wx:if="{{billList.length === 0}}">
         没有账单数据( ´･･)ﾉ(._.`)
       </view>

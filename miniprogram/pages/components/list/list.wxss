@@ -14,6 +14,9 @@ page {
   background-color: #fff;
   border-radius: 14rpx;
 }
+.fake-bill-item {
+  height: 100rpx;
+}
 .date {
   color: #ccc;
   font-size: 25rpx;

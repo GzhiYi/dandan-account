@@ -1,21 +1,16 @@
-// pages/category/category.js
-Page({
+let billType = 0
+let shouldUpdateBill = false
 
-  /**
-   * 页面的初始数据
-   */
+Page({
   data: {
-    billType: 0,
     categoryList: [],
-    category: '',
     showAddDialog: false,
     addCategory: {}, // 要增加的父级分类
     addCategoryName: '',
     loadingAdd: false,
     showMenuDialog: false,
     editItem: {},
-    showConfirmDelete: false,
-    shouldUpdateBill: false
+    showConfirmDelete: false
   },
 
   /**
@@ -23,9 +18,7 @@ Page({
    */
   onLoad: function (options) {
     const self = this
-    self.setData({
-      billType: options.type
-    })
+    billType = options.type
     self.getCategoryList(options.type)
     console.log('get', getCurrentPages())
   },
@@ -36,9 +29,6 @@ Page({
   },
   selectCategory(event) {
     const { category } = event.currentTarget.dataset
-    this.setData({
-      category
-    })
     getApp().globalData.selectedCategory = category
     wx.navigateBack()
   },
@@ -114,7 +104,7 @@ Page({
     const self = this
     getApp().getCategory()
     getApp().loadCategoryCallBack = list => {
-      self.getCategoryList(self.data.billType)
+      self.getCategoryList(billType)
     }
   },
   bindInput(event) {
@@ -148,9 +138,7 @@ Page({
               title: '删除成功',
               icon: 'none'
             })
-            self.setData({
-              shouldUpdateBill: true // 删除分类成功的话必须更新账单
-            })
+            shouldUpdateBill = true // 删除分类成功的话必须更新账单
             self.getLatestCategory()
           } else {
             wx.showToast({
@@ -169,8 +157,6 @@ Page({
     }
   },
   onUnload() {
-    const { shouldUpdateBill } = this.data
-    const self = this
     if (shouldUpdateBill) {
       try {
         getCurrentPages()[0].onReFetchBillList()

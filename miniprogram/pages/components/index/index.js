@@ -1,9 +1,6 @@
 // pages/components/index/index.js
 import { parseTime } from '../../../date.js'
-const Flow = {
-  pay: 0,
-  income: 1
-}
+
 Component({
   options: {
     styleIsolation: 'shared'
@@ -16,23 +13,17 @@ Component({
     sum: '',
     note: '',
     active_tab: 0,
-    active_category: '吃',
     active_date: '今天',
-    categoryList: [],
     active_date_time: '',
-    currentActiveDateTime: '',
     loadingCreate: false,
     isEdit: false,
-    pickDate: '',
     clickPigNum: 0
   },
   ready() {
     const now = new Date()
     const date = parseTime(now, '{y}-{m}-{d}')
     this.setData({
-      active_date_time: date,
-      currentActiveDateTime: date,
-      pickDate: date
+      active_date_time: date
     })
   },
   attached() {
@@ -137,7 +128,7 @@ Component({
         success(res) {
           if (res.result.code === 1) {
             wx.showToast({
-              title: isEdit ? '修改成功' : '成功新增一笔账单',
+              title: isEdit ? '😬修改成功' : '😉成功新增一笔账单',
               icon: 'none'
             })
             getApp().globalData.selectedCategory = ''
@@ -171,8 +162,6 @@ Component({
         active_tab: 0,
         active_category: '吃',
         active_date: '今天',
-        categoryList: [],
-        active_date_time: this.data.currentActiveDateTime,
         loadingCreate: false,
         isEdit: false,
         selectedCategory: ''

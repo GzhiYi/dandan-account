@@ -1,5 +1,5 @@
-// pages/components/list/list.js
 import { parseTime } from '../../../date.js'
+let dateRange = null
 Component({
   options: {
     styleIsolation: 'shared'
@@ -18,8 +18,6 @@ Component({
     showConfirmDelete: false,
     screenHeight: getApp().globalData.screenHeight,
     statusBarHeight: getApp().globalData.statusBarHeight,
-    calendarHeight: 0,
-    dateRange: null,
     today: '',
     billResult: {}
   },
@@ -51,9 +49,9 @@ Component({
         startDate,
         endDate
       }
-      if (self.data.dateRange) {
-        data.startDate = self.data.dateRange[0]
-        data.endDate = self.data.dateRange[1]
+      if (dateRange) {
+        data.startDate = dateRange[0]
+        data.endDate = dateRange[1]
       }
       wx.cloud.callFunction({
         name: 'getAccountList',
@@ -167,9 +165,7 @@ Component({
       }
     },
     onRangePick(event) {
-      this.setData({
-        dateRange: event.detail
-      })
+      dateRange = event.detail
       this.getBillList(event.detail[0], event.detail[1], 'list')
     },
     onControl(event) {
@@ -177,11 +173,8 @@ Component({
       const self= this
       const { mode } = event.detail
       if (mode === 'reset') {
-        self.setData({
-          dateRange: null
-        }, function () {
-          self.getBillList(parseTime(now, '{y}-{m}-{d}'), parseTime(now, '{y}-{m}-{d}'), 'list')
-        })
+        dateRange = null
+        self.getBillList(parseTime(now, '{y}-{m}-{d}'), parseTime(now, '{y}-{m}-{d}'), 'list')
       }
     }
   }

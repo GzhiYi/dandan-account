@@ -13,7 +13,6 @@ Page({
     active: 'chart',
     selectedCategory: null,
     editBill: {},
-    isEdit: false,
     hideTab: false,
     currentMonthData: {},
     activeRightIcon: 'tongue'
@@ -59,8 +58,7 @@ Page({
   onEditBill(event) {
     this.setData({
       editBill: event.detail,
-      active: 'index',
-      isEdit: true
+      active: 'index'
     })
     const index = this.selectComponent('#index')
     index.dectiveEdit()

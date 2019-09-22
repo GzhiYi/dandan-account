@@ -41,6 +41,10 @@ button::after{
   font-size: 37rpx;
   text-align: center;
 }
+.dialog-tip {
+  font-size: 27rpx;
+  color: grey;
+}
 .divide {
   width: 43%;
   height: 3rpx;

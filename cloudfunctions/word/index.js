@@ -30,4 +30,37 @@ exports.main = async (event, context) => {
       }
     }
   }
+  if (mode == 'update') {
+    try {
+      const { word, expire } = event
+      console.log('word', word, expire)
+      const authUsers = ['obBpt5WNBt2DoPFnUQyX5BA0O7L8']
+      if (!authUsers.includes(wxContext.OPENID)) {
+        return {
+          code: -1,
+          data: null,
+          message: '无访问权限'
+        }
+      }
+      const res = await db.collection("DANDAN_WORD").doc('23fdfcbb-0f0c-4196-9d53-8c1ae616f04b')
+      .update({
+        data: {
+          word,
+          show: true,
+          expire
+        }
+      })
+      return {
+        code: 1,
+        data: null,
+        message: '更新成功'
+      }
+    } catch (error) {
+      return {
+        code: -1,
+        data: error,
+        message: '更新失败'
+      }
+    }
+  }
 }

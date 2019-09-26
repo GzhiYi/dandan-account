@@ -70,6 +70,10 @@ Page({
       hideTab: event.detail
     })
   },
+  onGetNewWord() {
+    const index = this.selectComponent('#index')
+    index.getWord()
+  },
   onSyncCurrentMonthData(event) {
     const currentMonthData = event.detail
     if (currentMonthData.page && currentMonthData.page.length === 0) return

@@ -14,9 +14,8 @@ Component({
   },
   data: {
     showBackIcon: false,
-    isEscape: getApp().globalData.isEscape,
-    showTheme: true,
-    showIssue: false
+    showIssue: false,
+    showBannerSetting: false
   },
   ready() {
     let {
@@ -30,7 +29,7 @@ Component({
       showBackIcon: showIcons.includes('back'),
       showHomeIcons: showIcons.includes('home'),
       showIssue: showIcons.includes('bug'),
-      showTheme: [1, 2, 3, '1', '2', '3'].includes(wx.getStorageSync('openCount'))
+      showBannerSetting: showIcons.includes('banner')
     })
   },
   attached() {
@@ -51,6 +50,9 @@ Component({
       wx.navigateTo({
         url: `/pages/${page}/${page}`
       })
+    },
+    showBanner() {
+      this.triggerEvent('showBanner')
     }
   }
 })

@@ -11,7 +11,10 @@ Page({
     loadingDelete: false,
     showMenuDialog: false,
     editItem: {},
-    showConfirmDelete: false
+    showConfirmDelete: false,
+    showBannerDialog: false,
+    word: '',
+    loadingSetting: false
   },
 
   /**
@@ -51,7 +54,8 @@ Page({
     this.setData({
       showAddDialog: false,
       showMenuDialog: false,
-      showConfirmDelete: false
+      showConfirmDelete: false,
+      showBannerDialog: false
     })
   },
   confirmAddCategory() {
@@ -163,6 +167,12 @@ Page({
       })
     }
   },
+  onShowBanner() {
+    const self = this
+    self.setData({
+      showBannerDialog: true
+    })
+  },
   onUnload() {
     if (shouldUpdateBill) {
       try {
@@ -175,5 +185,58 @@ Page({
         })
       }
     }
+  },
+  confirmUpdateBanner() {
+    const self = this
+    const { word } = this.data
+    if (!word) {
+      wx.showToast({
+        title: '未填写话术',
+        icon: 'none'
+      })
+      return
+    }
+    self.setData({
+      loadingSetting: true
+    })
+    wx.cloud.callFunction({
+      name: 'word',
+      data: {
+        mode: 'update',
+        word,
+        expire: +new Date(new Date().getTime() + 24 * 60 * 60 * 1000)
+      },
+      success(res) {
+        console.log('lalal', res)
+        if (res.result.code === 1) {
+          self.closeDialog()
+          self.setData({
+            word: ''
+          })
+          wx.showToast({
+            title: '设置成功',
+            icon: 'none'
+          })
+          getCurrentPages()[0].onGetNewWord()
+        } else {
+          wx.showToast({
+            title: res.result.message,
+            icon: 'none'
+          })
+        }
+
+      },
+      fail(error) {
+        wx.showToast({
+          title: '操作失败',
+          icon: 'none'
+        })
+      },
+      complete() {
+        self.setData({
+          loadingSetting: false
+        })
+      }
+    })
   }
 })

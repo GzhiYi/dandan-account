@@ -13,11 +13,10 @@ Component({
     }
   },
   data: {
-    showLoadingIcon: false,
     showBackIcon: false,
-    showHomeIcons: false,
     isEscape: getApp().globalData.isEscape,
-    showTheme: true
+    showTheme: true,
+    showIssue: false
   },
   ready() {
     let {
@@ -30,6 +29,7 @@ Component({
       navBarHeight,
       showBackIcon: showIcons.includes('back'),
       showHomeIcons: showIcons.includes('home'),
+      showIssue: showIcons.includes('bug'),
       showTheme: [1, 2, 3, '1', '2', '3'].includes(wx.getStorageSync('openCount'))
     })
   },

@@ -92,10 +92,9 @@ Component({
       const { year, activeMonth } = this.data
       const self = this
       const firstAndLastArray = self.getFirstAndLastDayByMonth(year, activeMonth + 1)
-
       if (fromTab !== 'index') {
         wx.showLoading({
-          title: '加载数据中...',
+          title: '加载中...',
         })
       }
       wx.cloud.callFunction({
@@ -108,7 +107,6 @@ Component({
         },
         success(res) {
           if (res.result && res.result.code === 1) {
-            console.log('fffff', res.result.data)
             const billList = res.result.data.page.data || []
             const categoryList = JSON.parse(JSON.stringify(getApp().globalData.categoryList))
             // 重置一些参数
@@ -178,7 +176,6 @@ Component({
       const self = this
       const { cWidth, cHeight, activeTab } = this.data
       const formatResult = self.handleBillPieData(billList, categoryList)
-      console.log('lalalalal', formatResult[activeTab])
       canvaPie = new uCharts({
         $this: self,
         canvasId: 'pie',

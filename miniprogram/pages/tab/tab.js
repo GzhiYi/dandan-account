@@ -49,7 +49,6 @@ Page({
     const list = this.selectComponent('#list')
     const chart = this.selectComponent('#chart')
     const now = new Date()
-    console.log('trigger: 重新获取账单列表')
     list.getBillList(parseTime(now, '{y}-{m}-{d}'), parseTime(now, '{y}-{m}-{d}'), 'index')
     chart.getServerData('index')
   },
@@ -74,7 +73,6 @@ Page({
   onSyncCurrentMonthData(event) {
     const currentMonthData = event.detail
     const netAssets = (currentMonthData.monthResult[1].allSum - currentMonthData.monthResult[0].allSum) || 0
-    console.log('净收入', currentMonthData)
     let icon = 'tongue'
     if (netAssets > 5000) {
       icon = 'greed'

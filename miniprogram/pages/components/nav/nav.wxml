@@ -4,5 +4,13 @@
     <view class='nav-icon-view-back' bindtap='back' wx:if="{{showBackIcon}}">
       <image class='nav-icon' src='../../../images/arrow-left.png'></image>
     </view>
+    <view class='nav-icon-view-back' wx:if="{{showIssue}}">
+      <button
+        style="border: none;"
+        plain='true'
+        class='nav-icon issue'
+        open-type="feedback"
+      ></button>
+    </view>
   </view>
 </view>

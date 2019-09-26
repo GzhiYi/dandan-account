@@ -1,10 +1,15 @@
 <view class="banner">
-  <image
-    wx:if="{{clickPigNum < 5}}"
-    src="https://images.vrm.cn/2019/08/29/pig.png"
-    style="width: 150rpx;height: 150rpx;"
-    bindtap="clickPig"
-  ></image>
+  <view class="banner-show" wx:if="{{clickPigNum < 5}}">
+    <image
+      src="https://images.vrm.cn/2019/08/29/pig.png"
+      style="width: 150rpx;height: 150rpx;"
+      bindtap="clickPig"
+    ></image>
+    <view class='pig-talk' bindtap="closeTalk" data-word="{{wordData}}" wx:if="{{wordData}}">
+      <view class='word-tang-left'></view>
+      <view class='word-detail'>{{wordData.word}}</view>
+    </view>
+  </view>
   <view wx:else>|д･)怂了</view>
 </view>
 <view class="tab">

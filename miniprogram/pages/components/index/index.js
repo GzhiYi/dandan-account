@@ -17,7 +17,8 @@ Component({
     active_date_time: '',
     loadingCreate: false,
     isEdit: false,
-    clickPigNum: 0
+    clickPigNum: 0,
+    wordData: null
   },
   ready() {
     const now = new Date()
@@ -25,11 +26,47 @@ Component({
     this.setData({
       active_date_time: date
     })
+    this.getWord()
   },
   /**
    * 组件的方法列表
    */
   methods: {
+    getWord() {
+      const self = this
+      const storeWordData = wx.getStorageSync('word')
+      const storeHideWord = wx.getStorageSync('hideWord')
+      wx.cloud.callFunction({
+        name: 'word',
+        data: {
+          mode: 'get'
+        },
+        success(res) {
+          const response = res.result
+          if (response.code === 1) {
+            // 本地缓存信息
+            const wordData = response.data
+            if (((wordData.word !== storeWordData.word) || new Date() < new Date(wordData.expire)) && wordData.show && storeHideWord.word !== wordData.word) {
+              wx.setStorageSync('word', wordData)
+              self.setData({
+                wordData
+              })
+            }
+          }
+        }
+      })
+    },
+    // 关闭对话通知
+    closeTalk(event) {
+      wx.setStorageSync('hideWord', this.data.wordData)
+      this.setData({
+        wordData: null
+      })
+      wx.showToast({
+        title: '已隐藏提示',
+        icon: 'none'
+      })
+    },
     bindInput(event) {
       const { value } = event.detail
       this.setData({

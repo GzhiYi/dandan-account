@@ -167,7 +167,8 @@ Component({
       const self = this
       wx.vibrateShort({})
       this.setData({
-        activeTab: tab
+        activeTab: tab,
+        activeParentIndex: 0
       }, function () {
         self.fillPie(resultBillList, resultCategoryList)
       })

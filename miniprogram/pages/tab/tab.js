@@ -72,6 +72,7 @@ Page({
   },
   onSyncCurrentMonthData(event) {
     const currentMonthData = event.detail
+    if (currentMonthData.page && currentMonthData.page.length === 0) return
     const netAssets = (currentMonthData.monthResult[1].allSum - currentMonthData.monthResult[0].allSum) || 0
     let icon = 'tongue'
     if (netAssets > 5000) {

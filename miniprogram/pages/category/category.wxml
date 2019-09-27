@@ -73,14 +73,14 @@
 <dialog visible="{{showBannerDialog}}"  bind:closeDialog="closeDialog">
   <view slot="content">
     <view class="d-header">
-      设置Banner话术
+      设置Banner语句
       <view class="divide"></view>
     </view>
     <input
       value="{{word}}"
       data-name="word" 
       bindinput="bindInput"
-      placeholder="话术"
+      placeholder="输入语句"
       class="fill-cate"
     ></input>
     

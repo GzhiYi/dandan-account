@@ -8,7 +8,7 @@ var formatDate = function(dateRange, today) {
     return '今日';
   }
   if (dateRange[0] === dateRange[1]) {
-    return dateRange[0].substring(5);
+    return dateRange[0];
   }
   return dateRange[0] + ' ~ ' + dateRange[1];
 }

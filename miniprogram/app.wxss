@@ -40,6 +40,7 @@ button::after{
 .d-header {
   font-size: 37rpx;
   text-align: center;
+  padding: 30rpx;
 }
 .dialog-tip {
   font-size: 27rpx;

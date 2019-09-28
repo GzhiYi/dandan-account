@@ -1,15 +1,11 @@
-// pages/components/list/list.js
-import { parseTime } from '../../../date.js'
+import { parseTime } from '../../../util'
+let dateRange = null
 Component({
   options: {
     styleIsolation: 'shared'
   },
   properties: {
-    tab: String,
-    currentMonthData: {
-      type: Object,
-      value: {}
-    }
+    tab: String
   },
   data: {
     billList: null,
@@ -18,10 +14,8 @@ Component({
     showConfirmDelete: false,
     screenHeight: getApp().globalData.screenHeight,
     statusBarHeight: getApp().globalData.statusBarHeight,
-    calendarHeight: 0,
-    dateRange: null,
     today: '',
-    billResult: {}
+    billResult: null
   },
   observers: {
     'tab': function(tab) {
@@ -51,40 +45,18 @@ Component({
         startDate,
         endDate
       }
-      if (self.data.dateRange) {
-        data.startDate = self.data.dateRange[0]
-        data.endDate = self.data.dateRange[1]
+      if (dateRange) {
+        data.startDate = dateRange[0]
+        data.endDate = dateRange[1]
       }
       wx.cloud.callFunction({
         name: 'getAccountList',
         data,
         success(res) {
           if (res.result && res.result.code === 1) {
-            const billList = res.result.data.page.data || []
+            // 新聚合接口，带分页
             self.setData({
-              billList
-            })
-            let pay = 0;
-            let income = 0
-            // 解决计算浮点问题
-            function strip(num, precision = 12) {
-              return +parseFloat(num.toPrecision(precision));
-            }
-            billList.forEach(item => {
-              if (item.flow === 0) {
-                pay += item.money
-              }
-              if (item.flow === 1) {
-                income += item.money
-              }
-            })
-            self.setData({
-              billResult: {
-                pickRange: {
-                  pay: strip(pay),
-                  income: strip(income)
-                }
-              }
+              billResult: res.result.data
             })
           } else {
             wx.showToast({
@@ -92,7 +64,7 @@ Component({
               icon: 'none'
             })
             self.setData({
-              billList: []
+              billResult: null
             })
           }
         },
@@ -167,9 +139,7 @@ Component({
       }
     },
     onRangePick(event) {
-      this.setData({
-        dateRange: event.detail
-      })
+      dateRange = event.detail
       this.getBillList(event.detail[0], event.detail[1], 'list')
     },
     onControl(event) {
@@ -177,11 +147,8 @@ Component({
       const self= this
       const { mode } = event.detail
       if (mode === 'reset') {
-        self.setData({
-          dateRange: null
-        }, function () {
-          self.getBillList(parseTime(now, '{y}-{m}-{d}'), parseTime(now, '{y}-{m}-{d}'), 'list')
-        })
+        dateRange = null
+        self.getBillList(parseTime(now, '{y}-{m}-{d}'), parseTime(now, '{y}-{m}-{d}'), 'list')
       }
     }
   }

@@ -1,4 +1,4 @@
-import { parseTime } from '../../date.js'
+import { parseTime } from '../../util'
 const mapFace = {
   'greed': '我还能存！',
   'kiss': '继续继续',
@@ -13,7 +13,6 @@ Page({
     active: 'index',
     selectedCategory: null,
     editBill: {},
-    isEdit: false,
     hideTab: false,
     currentMonthData: {},
     activeRightIcon: 'tongue'
@@ -23,11 +22,9 @@ Page({
   },
   onShow() {
     const { selectedCategory } = getApp().globalData
-    if (selectedCategory) {
-      this.setData({
-        selectedCategory
-      })
-    }
+    this.setData({
+      selectedCategory
+    })
   }, 
   calCalendarHeight() {
     const query = wx.createSelectorQuery().in(this)
@@ -52,15 +49,13 @@ Page({
     const list = this.selectComponent('#list')
     const chart = this.selectComponent('#chart')
     const now = new Date()
-    console.log('trigger: 重新获取账单列表')
     list.getBillList(parseTime(now, '{y}-{m}-{d}'), parseTime(now, '{y}-{m}-{d}'), 'index')
     chart.getServerData('index')
   },
   onEditBill(event) {
     this.setData({
       editBill: event.detail,
-      active: 'index',
-      isEdit: true
+      active: 'index'
     })
     const index = this.selectComponent('#index')
     index.dectiveEdit()
@@ -75,9 +70,14 @@ Page({
       hideTab: event.detail
     })
   },
+  onGetNewWord() {
+    const index = this.selectComponent('#index')
+    index.getWord()
+  },
   onSyncCurrentMonthData(event) {
     const currentMonthData = event.detail
-    const netAssets = currentMonthData.netAssets
+    if (currentMonthData.page && currentMonthData.page.length === 0) return
+    const netAssets = (currentMonthData.monthResult[1].allSum - currentMonthData.monthResult[0].allSum) || 0
     let icon = 'tongue'
     if (netAssets > 5000) {
       icon = 'greed'

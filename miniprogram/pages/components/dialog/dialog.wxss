@@ -1,13 +1,15 @@
 .dialog {
   margin:0 16px 30px;
   position:fixed;
-  bottom:0rpx;
   left:0;
   right:0;
+  bottom: 0;
   border-radius: 18rpx;
   padding: 15rpx;
   background:#fff;
   z-index:99;
+  animation-duration: .4s;
+  animation-name: slideUp;
 }
 .dialog-bg {
   background:rgba(0, 0, 0, 0.705);
@@ -16,4 +18,23 @@
   position:fixed;
   top:0;
   z-index: 98;
+}
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+  }
+
+  to {
+    transform: translateY(0%);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(0%);
+  }
+
+  to {
+    transform: translateY(100%);
+  }
 }

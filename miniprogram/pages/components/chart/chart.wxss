@@ -16,6 +16,10 @@ page {
   margin: 0 -20rpx;
   overflow-x: hidden;
 }
+.selector-view {
+  width: 100%;
+  overflow-x: hidden;
+}
 .picker {
   width: 130rpx;
   height: 60rpx;
@@ -38,8 +42,8 @@ page {
 .month {
   margin: 20rpx;
   display: inline-block;
-  height: 60rpx;
-  line-height: 60rpx;
+  height: 53rpx;
+  line-height: 53rpx;
 }
 .active {
   border-bottom: 4rpx solid #fff;
@@ -51,6 +55,8 @@ page {
   margin: -69rpx auto 0;
   border-radius: 25rpx;
   box-shadow: 0 20px 50px rgba(94, 114, 228, 0.23);
+  z-index: 2;
+  position: relative;
 }
 .charts {
   margin: 0 auto;
@@ -70,6 +76,7 @@ page {
   border-radius: 40rpx;
   padding: 20rpx;
   color: #000;
+  background-color: #fff;
   border: 1rpx solid #eee;
   text-align: center;
   transition: .5s all;

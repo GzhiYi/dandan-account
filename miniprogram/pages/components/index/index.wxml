@@ -1,10 +1,15 @@
 <view class="banner">
-  <image
-    wx:if="{{clickPigNum < 5}}"
-    src="https://images.vrm.cn/2019/08/29/pig.png"
-    style="width: 150rpx;height: 150rpx;"
-    bindtap="clickPig"
-  ></image>
+  <view class="banner-show" wx:if="{{clickPigNum < 5}}">
+    <image
+      src="https://images.vrm.cn/2019/08/29/pig.png"
+      style="width: 150rpx;height: 150rpx;"
+      bindtap="clickPig"
+    ></image>
+    <view class='pig-talk' bindtap="closeTalk" data-word="{{wordData}}" wx:if="{{wordData}}">
+      <view class='word-tang-left'></view>
+      <view class='word-detail'>{{wordData.word}}</view>
+    </view>
+  </view>
   <view wx:else>|д･)怂了</view>
 </view>
 <view class="tab">
@@ -48,18 +53,18 @@
       >0.00</text>
     </view>
   </view>
-  <view class="section">
+  <view class="section" bindtap="goToCategory">
     <view class="label">分类</view>
     <view class="input-field" style="flex-direction: row;">
       <view
         class="cate"
         style="background-color: {{active_tab === 1 ? '#4fd69c;' : '#f75676;'}}color: #fff;"
         wx:if="{{selectedCategory}}"
-        bindtap="goToCategory"
+        catchTap="goToCategory"
       >
       {{selectedCategory.categoryName}}
       </view>
-      <view class="cate" bindtap="goToCategory" style="margin-right: 0;">...</view>
+      <view class="cate" catchTap="goToCategory" style="margin-right: 0;">...</view>
     </view>
   </view>
   <view class="section">
@@ -109,7 +114,7 @@
         name="note"
         value="{{note}}"
         bindinput="bindInput"
-        maxlength="{{100}}"
+        maxlength="100"
         data-name="note"
         placeholder="简要备注说明"
       />

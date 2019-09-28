@@ -45,3 +45,8 @@
   50% {transform: rotate(180deg);}
   100% {transform: rotate(360deg);}
 }
+.issue {
+  background-size: 71%;
+  background-repeat: no-repeat;
+  background-image:url("https://6461-dandan-zdm86-1259814516.tcb.qcloud.la/love.png?sign=c6781214ccab90318a9b800ece6e46d2&t=1569510988");
+}

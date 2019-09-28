@@ -1,9 +1,6 @@
 // pages/components/index/index.js
-import { parseTime } from '../../../date.js'
-const Flow = {
-  pay: 0,
-  income: 1
-}
+import { parseTime } from '../../../util'
+
 Component({
   options: {
     styleIsolation: 'shared'
@@ -16,31 +13,60 @@ Component({
     sum: '',
     note: '',
     active_tab: 0,
-    active_category: '吃',
     active_date: '今天',
-    categoryList: [],
     active_date_time: '',
-    currentActiveDateTime: '',
     loadingCreate: false,
     isEdit: false,
-    pickDate: '',
-    clickPigNum: 0
+    clickPigNum: 0,
+    wordData: null
   },
   ready() {
     const now = new Date()
     const date = parseTime(now, '{y}-{m}-{d}')
     this.setData({
-      active_date_time: date,
-      currentActiveDateTime: date,
-      pickDate: date
+      active_date_time: date
     })
-  },
-  attached() {
+    this.getWord()
   },
   /**
    * 组件的方法列表
    */
   methods: {
+    getWord() {
+      const self = this
+      const storeWordData = wx.getStorageSync('word')
+      const storeHideWord = wx.getStorageSync('hideWord')
+      wx.cloud.callFunction({
+        name: 'word',
+        data: {
+          mode: 'get'
+        },
+        success(res) {
+          const response = res.result
+          if (response.code === 1) {
+            // 本地缓存信息
+            const wordData = response.data
+            if (((wordData.word !== storeWordData.word) || new Date() < new Date(wordData.expire)) && wordData.show && storeHideWord.word !== wordData.word) {
+              wx.setStorageSync('word', wordData)
+              self.setData({
+                wordData
+              })
+            }
+          }
+        }
+      })
+    },
+    // 关闭对话通知
+    closeTalk(event) {
+      wx.setStorageSync('hideWord', this.data.wordData)
+      this.setData({
+        wordData: null
+      })
+      wx.showToast({
+        title: '已隐藏提示',
+        icon: 'none'
+      })
+    },
     bindInput(event) {
       const { value } = event.detail
       this.setData({
@@ -137,7 +163,7 @@ Component({
         success(res) {
           if (res.result.code === 1) {
             wx.showToast({
-              title: isEdit ? '修改成功' : '成功新增一笔账单',
+              title: isEdit ? '😬修改成功' : '😉成功新增一笔账单',
               icon: 'none'
             })
             getApp().globalData.selectedCategory = ''
@@ -152,6 +178,7 @@ Component({
         }
       })
     },
+    // tab.js调用
     dectiveEdit() {
       const { editBill } = this.data
       this.setData({
@@ -171,8 +198,6 @@ Component({
         active_tab: 0,
         active_category: '吃',
         active_date: '今天',
-        categoryList: [],
-        active_date_time: this.data.currentActiveDateTime,
         loadingCreate: false,
         isEdit: false,
         selectedCategory: ''

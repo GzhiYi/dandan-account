@@ -6,6 +6,10 @@
   justify-content: center;
   align-items: center;
 }
+.banner-show {
+  display: flex;
+  align-items: center;
+}
 .tab {
   display: flex;
   justify-content: space-around;
@@ -108,4 +112,27 @@
   text-align: center;
   margin: 10rpx auto 10rpx;
   padding: 3rpx 0;
+}
+.pig-talk {
+  display: flex;
+  align-items: center;
+  padding: 14rpx 0;
+  justify-content: center;
+  margin-left: 27rpx;
+}
+.word-tang-left {
+  width: 0;
+  height: 0;
+  border-bottom: 10px solid rgba(255, 142, 142, 0.8);
+  border-left: 10px solid transparent;
+}
+.word-detail {
+  max-width: 500rpx;
+  font-size: 25rpx;
+  background-color: rgba(255, 142, 142, 0.8);
+  padding: 9px;
+  border-radius: 24rpx;
+  word-break: break-all;
+  word-wrap: break-word;
+  overflow: hidden;
 }

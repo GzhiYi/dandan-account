@@ -2,6 +2,7 @@
   style="{{active === 'index' || active === 'list' ? 'display: none;' : ''}}"
   class="nav-instance"
   my-class="chart-nav-bg"
+  showIcons="{{['bug']}}"
 ></nav>
 <view hidden="{{active !== 'list'}}">
   <list

@@ -1,5 +1,5 @@
-<view class="chart" style='pointer-events: auto;'>
-  <view style="width: 100%;overflow-x: hidden;">
+<view class="chart">
+  <view class="selector-view">
     <view class="month-selector">
       <picker
         class="picker"
@@ -34,11 +34,11 @@
     <view class="summary">
       <view class="summary-item {{activeTab === 'pay' ? 'pay' : ''}}" bindtap="changeTab" data-tab="pay">
         月支出
-        <view>{{basicData.monthPay || 0}}</view>
+        <view>{{billResult.monthResult[0].allSum || 0}}</view>
       </view>
       <view class="summary-item {{activeTab === 'income' ? 'income' : ''}}" bindtap="changeTab" data-tab="income">
         月收入
-        <view>{{basicData.monthIncome || 0}}</view>
+        <view>{{billResult.monthResult[1].allSum || 0}}</view>
       </view>
     </view>
     <view hidden="{{showParentDialog || showMenuDialog ? true : false}}">
@@ -71,14 +71,15 @@
         <!-- <image src="../../../images/right-chevron.png" class="chevron"></image> -->
         已选：{{activeParentCategory.categoryName}}
       </view>
+      <view wx:else></view>
       <!-- <view class="select-child" wx:if="{{basicData[activeTab].length > 0}}">
         选择父类
       </view> -->
-      <view class="chart-sum" wx:if="{{basicData.netAssets}}">
-        余：<text
+      <view class="chart-sum" wx:if="{{billResult.monthResult.length > 0}}">
+        月余：<text
           class="chart-sum-text"
-          style="color: {{basicData.netAssets >= 0 ? '#4fd69c' : '#f75676'}}"
-        >{{basicData.netAssets >= 0 ? '+' : ''}}{{basicData.netAssets}}</text>
+          style="color: {{(billResult.monthResult[1].allSum - billResult.monthResult[0].allSum) >= 0 ? '#4fd69c' : '#f75676'}}"
+        >{{(billResult.monthResult[1].allSum - billResult.monthResult[0].allSum) >= 0 ? '+' : ''}}{{billResult.monthResult[1].allSum - billResult.monthResult[0].allSum}}</text>
       </view>
     </view>
   </view>
@@ -104,8 +105,9 @@
           </view>
         </view>
       </view>
-      <view wx:if="{{billList.length === 0}}" class="note-tips" bindtap="switchTab">
-        日期范围未找到账单，去记一笔！
+      <view class="fake-bill-item"></view>
+      <view class="empty-chart" wx:if="{{billList.length === 0}}">
+        没有账单数据( ´･･)ﾉ(._.`)
       </view>
     </scroll-view>
   </view>

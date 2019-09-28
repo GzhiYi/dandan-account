@@ -1,6 +1,8 @@
 const DAY_NUM = 42
 const WEEK_DAY_NUM = 7
 const DATE_CHECK = /^(\d{4})-(\d{2})-(\d{2})$/
+const TWOMONTH_TIMESTAMP = 5184000000
+
 Component({
   properties: {
     defaultSelectDate: {
@@ -18,10 +20,6 @@ Component({
     showToday: {
       type: Boolean,
       value: true
-    },
-    currentMonthData: {
-      type: Object,
-      value: {}
     }
   },
   data: {
@@ -156,6 +154,17 @@ Component({
         } else if (!dateRange[1]) {
           dateRange.push(day.date)
           dateRange.sort((a, b) => a > b ? 1 : -1)
+          const beginTimeStamp = Date.parse(new Date(`${dateRange[0]}`))
+          const endTimeStamp = Date.parse(new Date(`${dateRange[1]}`))
+          // 土豆服务器表示不要选跨度这么大的区间，限制60天
+          if (endTimeStamp - beginTimeStamp >= TWOMONTH_TIMESTAMP) {
+            wx.showToast({
+              title: '😭土豆服务器不要选择间隔超过60天',
+              icon: 'none'
+            })
+            dateRange = dateRange[0]
+            return false
+          }
           this.setData({
             dateRange
           })

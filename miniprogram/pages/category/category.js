@@ -1,21 +1,20 @@
-// pages/category/category.js
-Page({
+let billType = 0
+let shouldUpdateBill = false
 
-  /**
-   * 页面的初始数据
-   */
+Page({
   data: {
-    billType: 0,
     categoryList: [],
-    category: '',
     showAddDialog: false,
     addCategory: {}, // 要增加的父级分类
     addCategoryName: '',
     loadingAdd: false,
+    loadingDelete: false,
     showMenuDialog: false,
     editItem: {},
     showConfirmDelete: false,
-    shouldUpdateBill: false
+    showBannerDialog: false,
+    word: '',
+    loadingSetting: false
   },
 
   /**
@@ -23,11 +22,8 @@ Page({
    */
   onLoad: function (options) {
     const self = this
-    self.setData({
-      billType: options.type
-    })
+    billType = options.type
     self.getCategoryList(options.type)
-    console.log('get', getCurrentPages())
   },
   getCategoryList(flow) {
     this.setData({
@@ -36,9 +32,6 @@ Page({
   },
   selectCategory(event) {
     const { category } = event.currentTarget.dataset
-    this.setData({
-      category
-    })
     getApp().globalData.selectedCategory = category
     wx.navigateBack()
   },
@@ -61,7 +54,8 @@ Page({
     this.setData({
       showAddDialog: false,
       showMenuDialog: false,
-      showConfirmDelete: false
+      showConfirmDelete: false,
+      showBannerDialog: false
     })
   },
   confirmAddCategory() {
@@ -92,7 +86,7 @@ Page({
       success(res) {
         if (res.result.code === 1) {
           wx.showToast({
-            title: '新增成功',
+            title: '添加成功',
             icon: 'none'
           })
           let lastFlow = addCategory.flow
@@ -114,7 +108,7 @@ Page({
     const self = this
     getApp().getCategory()
     getApp().loadCategoryCallBack = list => {
-      self.getCategoryList(self.data.billType)
+      self.getCategoryList(billType)
     }
   },
   bindInput(event) {
@@ -126,14 +120,15 @@ Page({
   deleteCategory() {
     const self = this
     const { editItem } = self.data
+    wx.vibrateShort()
     if (!self.data.showConfirmDelete) {
       self.setData({
         showConfirmDelete: !self.data.showConfirmDelete
       })
-      wx.vibrateShort()
     } else {
-      self.closeDialog()
-      wx.vibrateShort()
+      self.setData({
+        loadingDelete: true
+      })
       wx.cloud.callFunction({
         name: 'category',
         data: {
@@ -142,15 +137,14 @@ Page({
           flow: editItem.flow
         },
         success(res) {
-          console.log('res', res)
           if (res.result.code === 1) {
             wx.showToast({
               title: '删除成功',
               icon: 'none'
             })
-            self.setData({
-              shouldUpdateBill: true // 删除分类成功的话必须更新账单
-            })
+            self.closeDialog()
+            shouldUpdateBill = true // 删除分类成功的话必须更新账单
+            getApp().globalData.selectedCategory = null
             self.getLatestCategory()
           } else {
             wx.showToast({
@@ -164,24 +158,85 @@ Page({
             title: '删除失败，再试试？',
             icon: 'none'
           })
+        },
+        complete() {
+          self.setData({
+            loadingDelete: false
+          })
         }
       })
     }
   },
-  onUnload() {
-    const { shouldUpdateBill } = this.data
+  onShowBanner() {
     const self = this
+    self.setData({
+      showBannerDialog: true
+    })
+  },
+  onUnload() {
     if (shouldUpdateBill) {
       try {
         getCurrentPages()[0].onReFetchBillList()
       }
       catch (err) {
-        console.log('update error', err)
         wx.showToast({
           title: '更新账单失败，可能要重启小程序哦。',
           icon: 'none'
         })
       }
     }
+  },
+  confirmUpdateBanner() {
+    const self = this
+    const { word } = this.data
+    if (!word) {
+      wx.showToast({
+        title: '未填写话术',
+        icon: 'none'
+      })
+      return
+    }
+    self.setData({
+      loadingSetting: true
+    })
+    wx.cloud.callFunction({
+      name: 'word',
+      data: {
+        mode: 'update',
+        word,
+        expire: +new Date(new Date().getTime() + 24 * 60 * 60 * 1000)
+      },
+      success(res) {
+        console.log('lalal', res)
+        if (res.result.code === 1) {
+          self.closeDialog()
+          self.setData({
+            word: ''
+          })
+          wx.showToast({
+            title: '设置成功',
+            icon: 'none'
+          })
+          getCurrentPages()[0].onGetNewWord()
+        } else {
+          wx.showToast({
+            title: res.result.message,
+            icon: 'none'
+          })
+        }
+
+      },
+      fail(error) {
+        wx.showToast({
+          title: '操作失败',
+          icon: 'none'
+        })
+      },
+      complete() {
+        self.setData({
+          loadingSetting: false
+        })
+      }
+    })
   }
 })

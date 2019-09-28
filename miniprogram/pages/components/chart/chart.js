@@ -1,5 +1,4 @@
-// pages/components/chart/chart.js
-import { parseTime } from '../../../date.js'
+import { strip, debounce, parseTime } from '../../../util'
 import uCharts from '../../u-charts.js'
 let canvaPie = null
 let resultBillList = []
@@ -17,15 +16,11 @@ Component({
     }
   },
   data: {
-    count: 0,
-    year: new Date().getFullYear(),
+    year: new Date().getFullYear().toString(), // 不转为字符串IOS将从1年开始
     months: {
       month: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
     },
     activeMonth: new Date().getMonth(),
-    pieData: {
-      "series": []
-    },
     cWidth: 0,
     cHeight: 0,
     activeTab: 'pay',
@@ -37,7 +32,9 @@ Component({
     showParentDialog: false,
     showMenuDialog: false,
     editItem: {},
-    showConfirmDelete: false
+    showConfirmDelete: false,
+    billList: undefined,
+    billResult: null
   },
   /**
    * hack。修复scroll-x在hidden下不显示的问题。该问题存在于ios。
@@ -51,10 +48,9 @@ Component({
   },
   ready() {
     this.setData({
-      cWidth: wx.getSystemInfoSync().screenWidth - 50,
+      cWidth: wx.getSystemInfoSync().screenWidth - 30,
       cHeight: 500 / 750 * wx.getSystemInfoSync().screenWidth - 50
     })
-    
     this.getServerData('index')
   },
   methods: {
@@ -93,13 +89,12 @@ Component({
     },
     // 渲染数据
     getServerData(fromTab) {
-      const { pieData, cWidth, cHeight, year, activeMonth, activeTab } = this.data
+      const { year, activeMonth } = this.data
       const self = this
       const firstAndLastArray = self.getFirstAndLastDayByMonth(year, activeMonth + 1)
-
       if (fromTab !== 'index') {
         wx.showLoading({
-          title: '加载数据中...',
+          title: '加载中...',
         })
       }
       wx.cloud.callFunction({
@@ -117,7 +112,8 @@ Component({
             // 重置一些参数
             self.setData({
               activeParentIndex: 0,
-              activeParentCategory: {}
+              activeParentCategory: {},
+              billResult: res.result.data
             })
             if ('pay' in categoryList) {
               self.fillPie(billList, categoryList)
@@ -130,8 +126,9 @@ Component({
                 resultCategoryList = list
               }
             }
-          } else {
-            self.reFetch()
+            self.setData({
+              billList
+            })
           }
         },
         fail() {
@@ -142,43 +139,43 @@ Component({
         }
       })
     },
-    reFetch() {
-      const self = this
-      wx.showToast({
-        title: '获取账单失败，正在重试...',
-        icon: 'none'
-      })
-      self.setData({
+    reFetch: debounce(function () {
+      this.setData({
         billList: []
       })
-      self.getServerData()
-    },
+      this.getServerData()
+    }, 300),
     touchPie(e) {
       const self = this
+      // hack，解决relative定位后canvas无法正常点击的问题
+      e.currentTarget.offsetTop += 110
       canvaPie.showToolTip(e, {
         format: function (item) {
           self.setData({
             activeParentCategory: item.originData,
             activeParentIndex: item.index
           })
-          return item.data + ' | ' +item._proportion_.toFixed(2) * 100 + '%'
+          return item.name + ' | ' + item.data + ' | ' + strip(item._proportion_.toFixed(2) * 100) + '%'
         }
       })
     },
     changeTab(e) {
-      const { tab } = e.currentTarget.dataset
+      const {
+        tab
+      } = e.currentTarget.dataset
       if (tab === this.data.activeTab) return false
       const self = this
       wx.vibrateShort({})
       this.setData({
-        activeTab: tab
-      }, function() {
+        activeTab: tab,
+        activeParentIndex: 0
+      }, function () {
         self.fillPie(resultBillList, resultCategoryList)
       })
     },
     fillPie(billList, categoryList) {
       const self = this
-      const { pieData, cWidth, cHeight, year, activeMonth, activeTab } = this.data
+      const { cWidth, cHeight, activeTab } = this.data
       const formatResult = self.handleBillPieData(billList, categoryList)
       canvaPie = new uCharts({
         $this: self,
@@ -211,10 +208,6 @@ Component({
       // 处理账单和分类的耦合
       const mapFlow = ['pay', 'income']
 
-      // 解决计算浮点问题
-      function strip(num, precision = 12) {
-        return +parseFloat(num.toPrecision(precision));
-      }      
       billList.forEach(bill => {
         allCategoryList[mapFlow[bill.flow]].forEach(allCate => {
           allCate.children.forEach(childCate => {
@@ -283,7 +276,7 @@ Component({
         firstFetch = false
       }
       currentMonthBasicData.netAssets = basicData.netAssets
-      self.triggerEvent('currentMonthData', JSON.parse(JSON.stringify(currentMonthBasicData)))
+      self.triggerEvent('currentMonthData', JSON.parse(JSON.stringify(self.data.billResult)))
       
       return pieSeriesData
     },

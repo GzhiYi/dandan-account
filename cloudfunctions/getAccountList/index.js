@@ -11,14 +11,12 @@ const MAX_LIMIT = 500;
 // 云函数入口函数
 exports.main = async (event, context) => {
   const wxContext = cloud.getWXContext();
-
   cloud.updateConfig({
-    env: wxContext.ENV === 'local' ? 'release-wifo3' : wxContext.ENV
+    env: process.env ? (process.env.ENV === 'local' ? 'release-wifo3' : wxContext.ENV) : wxContext.ENV
   })
-
   // 初始化数据库
   const db = cloud.database({
-    env: wxContext.ENV === 'local' ? 'release-wifo3' : wxContext.ENV
+    env: process.env ? (process.env.ENV === 'local' ? 'release-wifo3' : wxContext.ENV) : wxContext.ENV
   });
   const _ = db.command;
   // page: 当前页数
@@ -79,7 +77,7 @@ exports.main = async (event, context) => {
       .where(basicWhere)
       .skip(offset)
       .limit(limit)
-      .orderBy("noteDate", "desc")
+      .orderBy("createTime", "desc")
       .get();
 
     // 遍历结果, 获取对应的菜单

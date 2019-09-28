@@ -8,40 +8,38 @@ exports.main = async (event, context) => {
 
   const wxContext = cloud.getWXContext();
   cloud.updateConfig({
-    env: wxContext.ENV === 'local' ? 'release-wifo3' : wxContext.ENV
+    env: process.env ? (process.env.ENV === 'local' ? 'release-wifo3' : wxContext.ENV) : wxContext.ENV
   })
   // 初始化数据库
   const db = cloud.database({
-    env: wxContext.ENV === 'local' ? 'release-wifo3' : wxContext.ENV
+    env: process.env ? (process.env.ENV === 'local' ? 'release-wifo3' : wxContext.ENV) : wxContext.ENV
   });
 
   const $ = db.command.aggregate;
   const { mode, startDate, endDate, flow, categoryId, OPENID } = event;
 
-  const basicProject = {
-    _id: 0,
-    money: 1,
-    isDel: 1,
-    openId: 1,
-    flow: 1,
-    categoryId: 1,
-    isTarget: $.and([
-      $.gte([$.dateToString({
-        date: '$noteDate',
-        format: '%Y-%m-%d',
-        timezone: 'Asia/Shanghai'
-      }), startDate]),
-      $.lte([$.dateToString({
-        date: '$noteDate',
-        format: '%Y-%m-%d',
-        timezone: 'Asia/Shanghai'
-      }), endDate])
-    ])
-  };
-
-  // 按时间聚合, 聚合出支出和收入(即两个flow)的数据
-  // 判断时间思路: 筛选出时间范围合适的记录置为"isTarget", 最后统计isTarget的数目和金钱
+  // 按时间聚合, 聚合出支出和收入的数据
   if (mode === 'aggregateAccountByDateRange') {
+    const basicProject = {
+      _id: 0,
+      money: 1,
+      isDel: 1,
+      openId: 1,
+      flow: 1,
+      categoryId: 1,
+      isTarget: $.and([
+        $.gte([$.dateToString({
+          date: '$noteDate',
+          format: '%Y-%m-%d',
+          timezone: 'Asia/Shanghai'
+        }), startDate]),
+        $.lte([$.dateToString({
+          date: '$noteDate',
+          format: '%Y-%m-%d',
+          timezone: 'Asia/Shanghai'
+        }), endDate])
+      ])
+    };
 
     const basicMatch = {
       isDel: false,
@@ -64,8 +62,31 @@ exports.main = async (event, context) => {
     }
   }
  
-  // 根据FLOW和时间流向详细聚合数据
+  // 根据FLOW流向详细聚合数据
   if (mode === 'aggregateAccountInDetail') {
+
+    const basicProject = {
+      _id: 0,
+      money: 1,
+      isDel: 1,
+      openId: 1,
+      flow: 1,
+      categoryId: 1,
+      isTarget: $.and([
+        $.gte([$.dateToString({
+          date: '$noteDate',
+          format: '%Y-%m-%d',
+          timezone: 'Asia/Shanghai'
+        }), startDate]),
+        $.lte([$.dateToString({
+          date: '$noteDate',
+          format: '%Y-%m-%d',
+          timezone: 'Asia/Shanghai'
+        }), endDate])
+      ])
+    };
+
+
 
     const basicMatch = {
       isDel: false,

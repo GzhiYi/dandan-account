@@ -12,11 +12,13 @@ const MAX_LIMIT = 500;
 exports.main = async (event, context) => {
   const wxContext = cloud.getWXContext();
   cloud.updateConfig({
-    env: process.env ? (process.env.ENV === 'local' ? 'release-wifo3' : wxContext.ENV) : wxContext.ENV
+    env: wxContext.ENV === 'local' ? 'release-wifo3' : wxContext.ENV
+
   })
   // 初始化数据库
   const db = cloud.database({
-    env: process.env ? (process.env.ENV === 'local' ? 'release-wifo3' : wxContext.ENV) : wxContext.ENV
+    env: wxContext.ENV === 'local' ? 'release-wifo3' : wxContext.ENV
+
   });
   const _ = db.command;
   // page: 当前页数
@@ -113,8 +115,8 @@ exports.main = async (event, context) => {
       data: {
         page: res,
         count: totalCount.total,
-        rangeResult: aggregateResult.result.sumResult,
-        monthResult: monthAggregateResult.result.sumResult
+        rangeResult: aggregateResult.result.code == 1 ? aggregateResult.result.sumResult : [],
+        monthResult: monthAggregateResult.result.code == 1 ? monthAggregateResult.result.sumResult : []
       },
       message: '获取记录成功',
     }

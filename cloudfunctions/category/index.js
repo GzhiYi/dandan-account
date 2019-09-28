@@ -7,11 +7,11 @@ cloud.init()
 exports.main = async (event, context) => {
   const wxContext = cloud.getWXContext();
   cloud.updateConfig({
-    env: process.env ? (process.env.ENV === 'local' ? 'release-wifo3' : wxContext.ENV) : wxContext.ENV
+    env: wxContext.ENV === 'local' ? 'release-wifo3' : wxContext.ENV
       })
   // 初始化数据库
   const db = cloud.database({
-    env: process.env ? (process.env.ENV === 'local' ? 'release-wifo3' : wxContext.ENV) : wxContext.ENV
+    env: wxContext.ENV === 'local' ? 'release-wifo3' : wxContext.ENV
   });
   const { id, categoryName, categoryIcon, description, flow,
     type, parentId, isSelectable, ids } = event;

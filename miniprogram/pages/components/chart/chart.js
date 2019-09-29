@@ -52,6 +52,7 @@ Component({
       cHeight: 500 / 750 * wx.getSystemInfoSync().screenWidth - 50
     })
     this.getServerData('index')
+    this.summaryData()
   },
   methods: {
     // 获取选择月份的第一天和最后一天
@@ -85,6 +86,35 @@ Component({
         activeMonth: month - 1
       }, function() {
         self.getServerData('chart')
+      })
+    },
+    // 获取支出和收入的基本数据
+    summaryData() {
+      const {
+        year,
+        activeMonth,
+        activeTab
+      } = this.data
+      const self = this
+      const firstAndLastArray = self.getFirstAndLastDayByMonth(year, activeMonth + 1)
+      wx.cloud.callFunction({
+        name: 'accountAggregate',
+        data: {
+          mode: 'aggregateAccountByDateRange',
+          startDate: firstAndLastArray[0],
+          endDate: firstAndLastArray[1]
+        },
+        success(res) {
+          console.log('res', res)
+          if (res.result.length > 0) {
+            self.setData({
+              summaryData: res.result.sumResult
+            })
+          }
+        },
+        fail(error) {
+          console.log('error', error)
+        }
       })
     },
     // 渲染数据

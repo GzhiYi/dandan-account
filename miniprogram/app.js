@@ -32,11 +32,14 @@ App({
     screenWidth: 0,
     screenHeight: 0,
     categoryList: {},
-    selectedCategory: ''
+    selectedCategory: '',
+    defaultCategoryList: []
   },
+  // 在app.js处进行分类的获取，以便所有页面方便使用
   getCategory() {
     const self = this
     let categoryList = {}
+    let defaultCategoryList = []
     wx.cloud.callFunction({
       name: 'getCategory',
       data: {},
@@ -46,7 +49,20 @@ App({
           // 分离出支出和收入的分类列表
           categoryList['pay'] = list.filter(item => item.flow === Flow.pay)
           categoryList['income'] = list.filter(item => item.flow === Flow.income)
+          // 筛选出默认下的分类为：早餐午餐和晚餐
+          const defaultCategoryIds = ['food_and_drink_breakfast', 'food_and_drink_lunch', 'food_and_drink_dinner']
           self.globalData.categoryList = categoryList
+          list.forEach(parent => {
+            parent.children.forEach(child => {
+              if (defaultCategoryIds.includes(child._id)) {
+                defaultCategoryList.push(child)
+              }
+            })
+          })
+          self.globalData.defaultCategoryList = defaultCategoryList
+          if (self.loadDefaultCategoryCallBack) {
+            self.loadDefaultCategoryCallBack(defaultCategoryList)
+          }
           if (self.loadCategoryCallBack) {
             self.loadCategoryCallBack(list)
           }

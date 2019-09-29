@@ -1,6 +1,6 @@
 // pages/components/index/index.js
 import { parseTime } from '../../../util'
-
+let globalDefaultCategory = {}
 Component({
   options: {
     styleIsolation: 'shared'
@@ -27,6 +27,22 @@ Component({
       active_date_time: date
     })
     this.getWord()
+    getApp().loadDefaultCategoryCallBack = list => {
+      // 根据时间对默认选择对分类进行“推荐”
+      const hour = new Date().getHours()
+      let defaultCategory = {}
+      if (hour >= 4 && hour < 10) {
+        defaultCategory = list[0]
+      } else if (hour >= 10 && hour < 15) {
+        defaultCategory = list[1]
+      } else if (hour >= 15 || (hour >= 0 && hour < 4)) {
+        defaultCategory = list[2]
+      }
+      globalDefaultCategory = defaultCategory
+      this.setData({
+        selectedCategory: defaultCategory
+      })
+    }
   },
   /**
    * 组件的方法列表
@@ -103,9 +119,9 @@ Component({
         })
       } else {
         // 收入或者支出的tab
-        getApp().globalData.selectedCategory = null
+        getApp().globalData.selectedCategory = dataset.value === 0 ? globalDefaultCategory : null
         this.setData({
-          selectedCategory: null
+          selectedCategory: dataset.value === 0 ? globalDefaultCategory : null
         })
       }
     },
@@ -166,7 +182,7 @@ Component({
               title: isEdit ? '😬修改成功' : '😉成功新增一笔账单',
               icon: 'none'
             })
-            getApp().globalData.selectedCategory = ''
+            getApp().globalData.selectedCategory = getApp().globalData.defaultCategoryList[0]
             self.resetStatus()
             self.triggerEvent('reFetchBillList')
           }

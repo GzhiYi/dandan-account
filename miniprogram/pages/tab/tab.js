@@ -10,7 +10,7 @@ const mapFace = {
 }
 Page({
   data: {
-    active: 'index',
+    active: 'chart',
     selectedCategory: null,
     editBill: {},
     hideTab: false,

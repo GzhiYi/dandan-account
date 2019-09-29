@@ -32,11 +32,11 @@ Component({
       const hour = new Date().getHours()
       let defaultCategory = {}
       if (hour >= 4 && hour < 10) {
-        defaultCategory = list[0]
+        defaultCategory = list.filter(item => item._id === 'food_and_drink_breakfast')[0]
       } else if (hour >= 10 && hour < 15) {
-        defaultCategory = list[1]
+        defaultCategory = list.filter(item => item._id === 'food_and_drink_lunch')[0]
       } else if (hour >= 15 || (hour >= 0 && hour < 4)) {
-        defaultCategory = list[2]
+        defaultCategory = list.filter(item => item._id === 'food_and_drink_dinner')[0]
       }
       globalDefaultCategory = defaultCategory
       this.setData({

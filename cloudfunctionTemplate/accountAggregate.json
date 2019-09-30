@@ -24,5 +24,13 @@
       "startDate": "2019-09-07",
       "endDate": "2019-09-07"
     }
+  },
+  {
+    "name": "饼图数据",
+    "value": {
+      "mode": "getPieChartData",
+      "startDate": "2019-09-07",
+      "endDate": "2019-09-07"
+    }
   }
 ]

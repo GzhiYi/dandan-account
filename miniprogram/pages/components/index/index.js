@@ -182,7 +182,9 @@ Component({
               title: isEdit ? '😬修改成功' : '😉成功新增一笔账单',
               icon: 'none'
             })
-            getApp().globalData.selectedCategory = getApp().globalData.defaultCategoryList[0]
+            self.setData({
+              selectedCategory: globalDefaultCategory
+            })
             self.resetStatus()
             self.triggerEvent('reFetchBillList')
           }
@@ -215,8 +217,7 @@ Component({
         active_category: '吃',
         active_date: '今天',
         loadingCreate: false,
-        isEdit: false,
-        selectedCategory: ''
+        isEdit: false
       })
     },
     bindDateChange(event) {

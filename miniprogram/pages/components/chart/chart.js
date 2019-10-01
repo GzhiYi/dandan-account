@@ -3,7 +3,7 @@ import uCharts from '../../u-charts.js'
 let canvasPie = null
 let resultBillList = []
 let resultCategoryList = []
-let firstFetch = true
+let firstFetch = true // 用于判断请求是否为第一次，true为本月数据
 let currentMonthBasicData = {}
 
 Component({
@@ -28,13 +28,15 @@ Component({
     basicData: {},
     fixScroll: true,
     activeParentIndex: 0,
-    activeParentCategory: {},
+    activeParentCategory: null,
     showParentDialog: false,
     showMenuDialog: false,
     editItem: {},
     showConfirmDelete: false,
     billList: undefined,
-    billResult: null
+    billResult: null,
+    pieChartData: null,
+    categoryList: []
   },
   /**
    * hack。修复scroll-x在hidden下不显示的问题。该问题存在于ios。
@@ -51,8 +53,7 @@ Component({
       cWidth: wx.getSystemInfoSync().screenWidth - 30,
       cHeight: 500 / 750 * wx.getSystemInfoSync().screenWidth - 50
     })
-    // this.getServerData('index')
-    this.summaryData()
+    this.getPieChartData()
   },
   methods: {
     // 获取选择月份的第一天和最后一天
@@ -73,7 +74,7 @@ Component({
       this.setData({
         year: event.detail.value
       }, function() {
-        self.getServerData('chart')
+        self.getPieChartData()
       })
     },
     // 选择月份回调
@@ -85,11 +86,11 @@ Component({
       this.setData({
         activeMonth: month - 1
       }, function() {
-        self.getServerData('chart')
+        self.getPieChartData()
       })
     },
     // 获取支出和收入的基本数据
-    summaryData() {
+    getPieChartData() {
       const {
         year,
         activeMonth,
@@ -97,112 +98,48 @@ Component({
       } = this.data
       const self = this
       const firstAndLastArray = self.getFirstAndLastDayByMonth(year, activeMonth + 1)
-      console.log('activeTab', activeTab)
-      wx.cloud.callFunction({
-        name: 'accountAggregate',
-        data: {
-          mode: 'aggregateAccountInDetail',
-          startDate: firstAndLastArray[0],
-          endDate: firstAndLastArray[1],
-          flow: activeTab === 'pay' ? 0 : 1
-        },
-        success(res) {
-          console.log('！！！！！！！！', res)
-          if (res.result.code === 1) {
-            self.createPie(res.result.detailResult.map((item, index) => {
-              item['data'] = item.allSum
-              item['name'] = item.fatherCategoryName
-              item['index'] = index
-              delete item.sonCategories
-              return item
-            }))
-          }
-        },
-        fail(error) {
-          console.log('error', error)
-        }
-      })
-    },
-    createPie(list) {
-      console.log('lllist', JSON.parse(JSON.stringify(list)))
-      const self = this
-      const { cWidth, cHeight, activeTab } = this.data
-      try {
-        canvasPie = new uCharts({
-          $this: self,
-          canvasId: 'pie',
-          type: 'pie',
-          fontSize: 11,
-          legend: {
-            show: true
-          },
-          background: '#FFFFFF',
-          pixelRatio: 1,
-          series: JSON.parse(JSON.stringify(list)),
-          animation: true,
-          width: cWidth,
-          height: cHeight,
-          dataLabel: true,
-          extra: {
-            pie: {
-              labelWidth: 15
-            }
-          },
-          legend: {
-            show: false
-          }
-        });
-      } catch (error) {
-        console.log('createPieError', error)
-      }
-
-    },
-    // 渲染数据
-    getServerData(fromTab) {
-      const { year, activeMonth } = this.data
-      const self = this
-      const firstAndLastArray = self.getFirstAndLastDayByMonth(year, activeMonth + 1)
-      if (fromTab !== 'index') {
+      if (!firstFetch) {
         wx.showLoading({
-          title: '加载中...',
+          title: '加载数据中'
         })
       }
       wx.cloud.callFunction({
-        name: 'getAccountList',
+        name: 'accountAggregate',
         data: {
-          mode: 'getAccountListByTime',
-          limit: 100,
+          mode: 'getPieChartData',
           startDate: firstAndLastArray[0],
           endDate: firstAndLastArray[1]
         },
         success(res) {
-          if (res.result && res.result.code === 1) {
-            const billList = res.result.data.page.data || []
-            const categoryList = JSON.parse(JSON.stringify(getApp().globalData.categoryList))
-            // 重置一些参数
+          const { result } = res
+          if (result && result.code === 1) {
+            const dataList = result.detailResult[activeTab === 'pay' ? 'flowOut' : 'flowIn']['dataList']
             self.setData({
-              activeParentIndex: 0,
-              activeParentCategory: {},
-              billResult: res.result.data
+              pieChartData: dataList.length === 0 ? null : result.detailResult,
+              categoryList: dataList
             })
-            if ('pay' in categoryList) {
-              self.fillPie(billList, categoryList)
-              resultBillList = billList
-              resultCategoryList = categoryList
-            } else {
-              getApp().loadCategoryCallBack = list => {
-                self.fillPie(billList, list)
-                resultBillList = billList
-                resultCategoryList = list
-              }
+            if (dataList.length > 0) {
+              self.fillPie(result.detailResult)
             }
+            if (firstFetch) {
+              self.triggerEvent('currentMonthData', JSON.parse(JSON.stringify(result.detailResult)))
+              // 将第一次获取改为false
+              firstFetch = false
+            }
+          } else {
+            getApp().showError()
+            // 请求失败还是要把数据重置，避免误导
             self.setData({
-              billList
+              pieChartData: null
             })
           }
         },
-        fail() {
-          self.reFetch()
+        fail(error) {
+          getApp().showError(JSON.stringify(error))
+          // 请求失败还是要把数据重置，避免误导
+          self.setData({
+            pieChartData: null
+          })
         },
         complete() {
           wx.hideLoading()
@@ -213,21 +150,26 @@ Component({
       this.setData({
         billList: []
       })
-      this.getServerData()
     }, 300),
     touchPie(e) {
       const self = this
       // hack，解决relative定位后canvas无法正常点击的问题
       e.currentTarget.offsetTop += 110
+      console.log('e', e)
       canvasPie.showToolTip(e, {
         format: function (item) {
           self.setData({
-            activeParentCategory: item.originData,
+            activeParentCategory: item,
             activeParentIndex: item.index
           })
+          self.fetchBillList(item)
           return item.name + ' | ' + item.data + ' | ' + strip(item._proportion_.toFixed(2) * 100) + '%'
         }
       })
+    },
+    // 获取该分类下的账单列表，支持分页。
+    fetchBillList(item) {
+      console.log(`请求分类${item.categoryName}下的账单`)
     },
     changeTab(e) {
       const {
@@ -240,23 +182,28 @@ Component({
         activeTab: tab,
         activeParentIndex: 0
       }, function () {
-        self.fillPie(resultBillList, resultCategoryList)
+        self.fillPie()
       })
     },
-    fillPie(billList, categoryList) {
+    fillPie() {
       const self = this
+      const pieChartData = this.data.pieChartData
       const { cWidth, cHeight, activeTab } = this.data
-      const formatResult = self.handleBillPieData(billList, categoryList)
-      console.log('help', formatResult[activeTab])
+      const fillPieData = pieChartData[activeTab === 'pay' ? 'flowOut' : 'flowIn']['dataList'].map((bill, index) => {
+        bill['data'] = bill.allSum
+        bill['name'] = bill.categoryName
+        bill['index'] = index
+        return bill
+      })
+      
       canvasPie = new uCharts({
         $this: self,
         canvasId: 'pie',
         type: 'pie',
         fontSize: 11,
-        legend: { show: true },
         background: '#FFFFFF',
         pixelRatio: 1,
-        series: JSON.parse(JSON.stringify(formatResult[activeTab])),
+        series: JSON.parse(JSON.stringify(fillPieData)),
         animation: true,
         width: cWidth,
         height: cHeight,

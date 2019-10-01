@@ -69,5 +69,11 @@ App({
         }
       }
     })
+  },
+  showError(title = '请求失败，请稍后再试😢') {
+    wx.showToast({
+      title,
+      icon: 'none'
+    })
   }
 })

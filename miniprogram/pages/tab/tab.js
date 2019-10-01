@@ -50,7 +50,7 @@ Page({
     const chart = this.selectComponent('#chart')
     const now = new Date()
     list.getBillList(parseTime(now, '{y}-{m}-{d}'), parseTime(now, '{y}-{m}-{d}'), 'index')
-    chart.getServerData('index')
+    chart.getPieChartData()
   },
   onEditBill(event) {
     this.setData({
@@ -76,8 +76,8 @@ Page({
   },
   onSyncCurrentMonthData(event) {
     const currentMonthData = event.detail
-    if (currentMonthData.page && currentMonthData.page.length === 0) return
-    const netAssets = (currentMonthData.monthResult[1].allSum - currentMonthData.monthResult[0].allSum) || 0
+    if (!('flowIn' in currentMonthData) || !('flowOut' in currentMonthData)) return
+    const netAssets = (currentMonthData.flowIn.allSum - currentMonthData.flowOut.allSum) || 0
     let icon = 'tongue'
     if (netAssets > 5000) {
       icon = 'greed'

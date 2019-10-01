@@ -44,7 +44,6 @@
     <view hidden="{{showParentDialog || showMenuDialog ? true : false}}">
       <canvas
         canvas-id="pie"
-        wx:if="{{basicData[activeTab].length > 0}}"
         id="pie"
         class="charts"
         style="width: {{cWidth}}px;"

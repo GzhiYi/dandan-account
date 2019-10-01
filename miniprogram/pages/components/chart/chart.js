@@ -1,6 +1,6 @@
 import { strip, debounce, parseTime } from '../../../util'
 import uCharts from '../../u-charts.js'
-let canvaPie = null
+let canvasPie = null
 let resultBillList = []
 let resultCategoryList = []
 let firstFetch = true
@@ -51,7 +51,7 @@ Component({
       cWidth: wx.getSystemInfoSync().screenWidth - 30,
       cHeight: 500 / 750 * wx.getSystemInfoSync().screenWidth - 50
     })
-    this.getServerData('index')
+    // this.getServerData('index')
     this.summaryData()
   },
   methods: {
@@ -97,25 +97,65 @@ Component({
       } = this.data
       const self = this
       const firstAndLastArray = self.getFirstAndLastDayByMonth(year, activeMonth + 1)
+      console.log('activeTab', activeTab)
       wx.cloud.callFunction({
         name: 'accountAggregate',
         data: {
-          mode: 'aggregateAccountByDateRange',
+          mode: 'aggregateAccountInDetail',
           startDate: firstAndLastArray[0],
-          endDate: firstAndLastArray[1]
+          endDate: firstAndLastArray[1],
+          flow: activeTab === 'pay' ? 0 : 1
         },
         success(res) {
-          console.log('res', res)
-          if (res.result.length > 0) {
-            self.setData({
-              summaryData: res.result.sumResult
-            })
+          console.log('！！！！！！！！', res)
+          if (res.result.code === 1) {
+            self.createPie(res.result.detailResult.map((item, index) => {
+              item['data'] = item.allSum
+              item['name'] = item.fatherCategoryName
+              item['index'] = index
+              delete item.sonCategories
+              return item
+            }))
           }
         },
         fail(error) {
           console.log('error', error)
         }
       })
+    },
+    createPie(list) {
+      console.log('lllist', JSON.parse(JSON.stringify(list)))
+      const self = this
+      const { cWidth, cHeight, activeTab } = this.data
+      try {
+        canvasPie = new uCharts({
+          $this: self,
+          canvasId: 'pie',
+          type: 'pie',
+          fontSize: 11,
+          legend: {
+            show: true
+          },
+          background: '#FFFFFF',
+          pixelRatio: 1,
+          series: JSON.parse(JSON.stringify(list)),
+          animation: true,
+          width: cWidth,
+          height: cHeight,
+          dataLabel: true,
+          extra: {
+            pie: {
+              labelWidth: 15
+            }
+          },
+          legend: {
+            show: false
+          }
+        });
+      } catch (error) {
+        console.log('createPieError', error)
+      }
+
     },
     // 渲染数据
     getServerData(fromTab) {
@@ -179,7 +219,7 @@ Component({
       const self = this
       // hack，解决relative定位后canvas无法正常点击的问题
       e.currentTarget.offsetTop += 110
-      canvaPie.showToolTip(e, {
+      canvasPie.showToolTip(e, {
         format: function (item) {
           self.setData({
             activeParentCategory: item.originData,
@@ -207,7 +247,8 @@ Component({
       const self = this
       const { cWidth, cHeight, activeTab } = this.data
       const formatResult = self.handleBillPieData(billList, categoryList)
-      canvaPie = new uCharts({
+      console.log('help', formatResult[activeTab])
+      canvasPie = new uCharts({
         $this: self,
         canvasId: 'pie',
         type: 'pie',

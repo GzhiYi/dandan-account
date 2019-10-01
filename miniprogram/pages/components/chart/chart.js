@@ -155,7 +155,6 @@ Component({
       const self = this
       // hack，解决relative定位后canvas无法正常点击的问题
       e.currentTarget.offsetTop += 110
-      console.log('e', e)
       canvasPie.showToolTip(e, {
         format: function (item) {
           self.setData({
@@ -163,6 +162,7 @@ Component({
             activeParentIndex: item.index
           })
           self.fetchBillList(item)
+          wx.vibrateShort()
           return item.name + ' | ' + item.data + ' | ' + strip(item._proportion_.toFixed(2) * 100) + '%'
         }
       })
@@ -218,86 +218,6 @@ Component({
         }
       });
     },
-    handleBillPieData(billList, categoryList) {
-      const { activeTab } = this.data
-      
-      const allCategoryList = JSON.parse(JSON.stringify(categoryList))
-      const self = this
-      // 处理账单和分类的耦合
-      const mapFlow = ['pay', 'income']
-
-      billList.forEach(bill => {
-        allCategoryList[mapFlow[bill.flow]].forEach(allCate => {
-          allCate.children.forEach(childCate => {
-            if (childCate._id === bill.categoryId) {
-              if (!allCate['data'] && !allCate['count']) {
-                allCate['data'] = 0
-                allCate['count'] = 0
-                allCate['bills'] = []
-                allCate['name'] = ''
-              }
-              allCate['data'] += strip(bill.money)
-              allCate['data'] = strip(allCate['data'])
-              allCate['count'] += 1
-              allCate['bills'].push(bill)
-              allCate['name'] = allCate.categoryName
-            }
-          })
-        })
-      })
-      let pieSeriesData = {
-        pay: [],
-        income: []
-      }
-      let basicData = {
-        pay: [],
-        income:[],
-        monthPay: 0,
-        monthPayCount: 0,
-        monthIncome: 0,
-        monthIncomeCount: 0,
-        netAssets: 0
-      }
-      mapFlow.forEach(flow => {
-        allCategoryList[flow].filter(item => item.bills && item.bills.length > 0).forEach((item, index) => {
-          if (item.name && item.data) {
-            pieSeriesData[flow].push({
-              name: item.name,
-              data: item.data,
-              originData: item,
-              index: index
-            })
-            basicData[flow].push(item)
-            if (flow === 'pay') {
-              basicData.monthPay += item.data
-              basicData.monthPay = strip(basicData.monthPay)
-              basicData.monthPayCount += 1
-            }
-            if (flow === 'income') {
-              basicData.monthIncome += item.data
-              basicData.monthIncome = strip(basicData.monthIncome)
-              basicData.monthIncomeCount += 1
-            }
-          }
-          self.deletePro(item, ['categoryIcon', 'children', 'createTime', 'description', 'isDel', 'isSelectable', 'openId', 'parentId', 'type'])
-        })
-      })
-      // 计算净资产
-      basicData.netAssets = strip(basicData.monthIncome - basicData.monthPay)
-      self.setData({
-        basicData,
-        // 处理选择的父子分类
-        activeParentCategory: basicData[activeTab].length > 0 ? basicData[activeTab][0] : {}
-      })
-      if (firstFetch) {
-        currentMonthBasicData = basicData
-        firstFetch = false
-      }
-      currentMonthBasicData.netAssets = basicData.netAssets
-      self.triggerEvent('currentMonthData', JSON.parse(JSON.stringify(self.data.billResult)))
-      
-      return pieSeriesData
-    },
     deletePro(obj, arr) {
       arr.forEach(item => {
         delete obj[item]
@@ -313,6 +233,7 @@ Component({
     },
     selectParentCategory(event) {
       const { category, index } = event.currentTarget.dataset
+      wx.vibrateShort()
       this.setData({
         activeParentCategory: category,
         activeParentIndex: index,

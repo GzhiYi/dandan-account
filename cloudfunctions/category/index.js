@@ -108,6 +108,20 @@ exports.main = async (event, context) => {
       };
     }
 
+    // 根据父分类ID获取子分类ID
+    if (event.mode === 'getCategoriesByParentCID') {
+      const res = await db.collection('DANDAN_NOTE_CATEGORY')
+        .where({
+          parentId: id,
+          isDel: false,
+        }).get();
+      return {
+        code: 1,
+        data: res,
+        message: "操作成功",
+      };
+    }
+
 
   } catch (e) {
     console.error(e);

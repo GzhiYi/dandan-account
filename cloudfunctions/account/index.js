@@ -18,6 +18,9 @@ exports.main = async (event, context) => {
     env: wxContext.ENV === 'local' ? 'release-wifo3' : wxContext.ENV
 
     });
+
+  const _ = db.command
+
   try {
     // 增加一条记录
     if (event.mode === 'add') {
@@ -140,8 +143,6 @@ exports.main = async (event, context) => {
         message: "操作成功",
       };
     }
-
-
 
   } catch (e) {
     console.error(e);

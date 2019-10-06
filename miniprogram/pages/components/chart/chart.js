@@ -25,7 +25,6 @@ Component({
     cHeight: 0,
     activeTab: 'pay',
     screenHeight: getApp().globalData.screenHeight,
-    basicData: {},
     fixScroll: true,
     activeParentIndex: 0,
     activeParentCategory: null,
@@ -258,6 +257,7 @@ Component({
     fillPie() {
       const self = this
       const pieChartData = this.data.pieChartData
+      if (!pieChartData) return
       const { cWidth, cHeight, activeTab } = this.data
       const fillPieData = pieChartData[activeTab === 'pay' ? 'flowOut' : 'flowIn']['dataList'].map((bill, index) => {
         bill['data'] = bill.allSum

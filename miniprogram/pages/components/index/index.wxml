@@ -53,17 +53,17 @@
       >0.00</text>
     </view>
   </view>
-  <view class="section" bindtap="goToCategory">
+  <view class="section" bindtap="goToCategory" style="height: 84rpx;">
     <view class="label">分类</view>
     <view class="input-field" style="flex-direction: row;">
       <view
         class="cate"
         style="background-color: {{active_tab === 1 ? '#4fd69c;' : '#f75676;'}}color: #fff;"
         wx:if="{{selectedCategory}}"
-        catchTap="goToCategory"
       >
       {{selectedCategory.categoryName}}
       </view>
+
       <view class="cate" catchTap="goToCategory" style="margin-right: 0;">...</view>
     </view>
   </view>

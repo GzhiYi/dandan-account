@@ -1,6 +1,6 @@
 .banner {
   width: 100%;
-  height: 434rpx;
+  height: 410rpx;
   background: linear-gradient(40deg,#ff6ec4,#5e72e4);
   display: flex;
   justify-content: center;

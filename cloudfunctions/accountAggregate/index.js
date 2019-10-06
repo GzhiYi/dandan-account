@@ -62,6 +62,7 @@ exports.main = async (event, context) => {
         })
         .end();
       return {
+        code: 1,
         sumResult: sumResult.list.sort((a, b) => a._id - b._id)
       }
     }

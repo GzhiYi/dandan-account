@@ -41,5 +41,12 @@
       "mode": "deleteByCategoryId",
       "categoryId": ""
     }
+  },
+  {
+    "name": "根据父ID获取列表",
+    "value": {
+      "mode": "getAccountByParentCID",
+      "categoryId": "daily_necessities"
+    }
   }
 ]

@@ -100,18 +100,21 @@ Component({
       })
     },
     // 获取支出和收入的基本数据
-    getPieChartData() {
+    getPieChartData(isNewBill = false) {
       const {
         year,
         activeMonth,
-        activeTab
+        activeTab,
+        activeParentCategory
       } = this.data
       const self = this
       const firstAndLastArray = self.getFirstAndLastDayByMonth(year, activeMonth + 1)
-      if (!firstFetch) {
-        wx.showLoading({
-          title: '加载数据中'
+      // isNewBill，是否为增加账单后重新获取数据
+      if (isNewBill) {
+        self.setData({
+          billList: []
         })
+        self.fetchBillList(activeParentCategory)
       }
       wx.cloud.callFunction({
         name: 'accountAggregate',

@@ -50,7 +50,7 @@ Page({
     const chart = this.selectComponent('#chart')
     const now = new Date()
     list.getBillList(parseTime(now, '{y}-{m}-{d}'), parseTime(now, '{y}-{m}-{d}'), 'index')
-    chart.getPieChartData()
+    chart.getPieChartData(true)
   },
   onEditBill(event) {
     this.setData({

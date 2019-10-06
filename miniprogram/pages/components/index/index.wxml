@@ -70,7 +70,7 @@
   <view class="section">
     <view class="label">日期</view>
     <view class="input-field">
-      <view class="select-date">{{active_date_time}}</view>
+      <view class="select-date">{{active_date_time}}{{active_date !== '今天' ?  (" ("+ active_date + ")") : ''}}</view>
       <view class="select-field">
         <view
           class="date-item"
@@ -108,8 +108,9 @@
     </view>
   </view>
   <view class="section" style="border-bottom: none;">
-    <view class="label">备注</view>
-    <view class="input-field" style="width: 80%;">
+    <view class="label" wx:if="{{showPayType}}" bindtap="onShowPayTypeDialog">备注/{{payType}}</view>
+    <view class="label" wx:else>备注</view>
+    <view class="input-field" style="width: {{showPayType ? '60' : '80'}}%;">
       <input
         name="note"
         value="{{note}}"
@@ -125,3 +126,17 @@
     <button class="warn" style="opacity: .5;" wx:else>{{isEdit ? '编辑' : '创建'}}中...</button>
   </view>
 </form>
+<!-- 支付方式弹窗 -->
+<dialog visible="{{showPayTypeDialog}}" bind:closeDialog="closeDialog">
+  <view slot="content">
+    <view class="d-header">
+      选择本笔账单的支付方式
+      <view class="divide"></view>
+    </view>
+    <view class="list-item-btn {{payType === '支付宝' ? 'active-paytype' : ''}}" bindtap="selectType" data-paytype="支付宝">支付宝</view>
+    <view class="list-item-btn {{payType === '微信' ? 'active-paytype' : ''}}" bindtap="selectType" data-paytype="微信">微信</view>
+    <view class="list-item-btn {{payType === '信用卡' ? 'active-paytype' : ''}}" bindtap="selectType" data-paytype="信用卡">信用卡</view>
+    <view class="list-item-btn {{payType === '掌上生活' ? 'active-paytype' : ''}}" bindtap="selectType" data-paytype="掌上生活">掌上生活</view>
+    <view class='list-item-btn' bindtap="closeDialog" style="border-bottom: none;">取消</view>
+  </view>
+</dialog>

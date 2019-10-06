@@ -191,6 +191,7 @@ Component({
     },
     // 获取该分类下的账单列表，支持分页。
     fetchBillList(item) {
+      if (!item) return
       const self = this
       self.setData({
         loadingBills: true

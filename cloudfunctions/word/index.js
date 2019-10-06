@@ -21,6 +21,7 @@ exports.main = async (event, context) => {
       return {
         code: 1,
         data: res.data[0],
+        openId: wxContext.OPENID,
         message: '获取成功'
       }
     } catch (error) {

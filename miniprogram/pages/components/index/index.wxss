@@ -136,3 +136,6 @@
   word-wrap: break-word;
   overflow: hidden;
 }
+.active-paytype {
+  color: #ff6ec4;
+}

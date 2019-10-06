@@ -18,7 +18,10 @@ Component({
     loadingCreate: false,
     isEdit: false,
     clickPigNum: 0,
-    wordData: null
+    wordData: null,
+    showPayType: false,
+    showPayTypeDialog: false,
+    payType: '支付宝'
   },
   ready() {
     const now = new Date()
@@ -67,6 +70,12 @@ Component({
               self.setData({
                 wordData
               })
+              const authUsers = ['obBpt5XdwPJAfwnIWEq2FZdDIrBQ']
+              if (authUsers.includes(response.openId)) {
+                self.setData({
+                  showPayType: true
+                })
+              }
             }
           }
         }
@@ -139,7 +148,10 @@ Component({
         active_tab,
         selectedCategory,
         isEdit,
-        editBill
+        editBill,
+        // 某轩的需求
+        showPayType,
+        payType
       } = this.data
       if (!/^0{1}([.]\d{1,2})?$|^[1-9]\d*([.]{1}[0-9]{1,2})?$/.test(Number(sum)) || isNaN(Number(sum))) {
         wx.showToast({
@@ -172,7 +184,7 @@ Component({
           money: sum,
           categoryId: selectedCategory._id,
           noteDate: active_date_time,
-          description: note,
+          description: note ? (showPayType ? `${payType}-${note}` : note) : note,
           flow: active_tab,
           id: isEdit ? editBill._id : ''
         },
@@ -252,6 +264,25 @@ Component({
       self.setData({
         clickPigNum
       })
+    },
+    selectType(event) {
+      this.setData({
+        payType: event.target.dataset.paytype,
+        showPayTypeDialog: false
+      })
+      this.triggerEvent('hideTab', false)
+    },
+    onShowPayTypeDialog() {
+      this.setData({
+        showPayTypeDialog: true
+      })
+      this.triggerEvent('hideTab', true)
+    },
+    closeDialog() {
+      this.setData({
+        showPayTypeDialog: false
+      })
+      this.triggerEvent('hideTab', false)
     }
   }
 })

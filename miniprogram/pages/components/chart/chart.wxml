@@ -68,7 +68,7 @@
         data-type="parent"
       >
         <image src="../../../images/right-chevron.png" class="chevron"></image>
-        {{activeParentCategory ? '已选：' : '请选择分类'}}{{activeParentCategory.categoryName}}
+        {{activeParentCategory ? '已选：' : '请选择分类'}}{{activeParentCategory.categoryName}}{{activeParentCategory ? (" "+  total +"笔") : ''}}
       </view>
       <view class="chart-sum" wx:if="{{pieChartData}}">
         月余：<text
@@ -79,10 +79,10 @@
     </view>
   </view>
   <view class="bill-list">
-    <scroll-view scroll-y="{{true}}" style="height: {{((screenHeight - 390) / .7)}}rpx;" class="bill-list">
+    <scroll-view scroll-y="{{true}}" style="height: {{((screenHeight - 390) / .7)}}rpx;" bindscrolltolower="onScrollBottom" class="bill-list">
       <view
         class="bill-item"
-        wx:for="{{basicData[activeTab][activeParentIndex].bills}}"
+        wx:for="{{billList}}"
         wx:key="{{item._id}}"
         bindtap="showMenu"
         data-bill="{{item}}"
@@ -102,7 +102,7 @@
       </view>
       <view class="fake-bill-item"></view>
       <view class="empty-chart" wx:if="{{billList.length === 0}}">
-        没有账单数据( ´･･)ﾉ(._.`)
+        {{ loadingBills === -1 ? '选择分类以查看账单' : loadingBills ? '加载账单中...' : '' }}
       </view>
     </scroll-view>
   </view>
@@ -114,7 +114,7 @@
       查看该分类下的账单
       <view class="divide"></view>
     </view>
-    <scroll-view class="dialog-bills" scroll-y>
+    <scroll-view class="dialog-bills" scroll-y="true">
       <view
         wx:for="{{categoryList}}"
         wx:key="{{item.categoryId}}"

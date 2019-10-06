@@ -1,10 +1,10 @@
 import { strip, debounce, parseTime } from '../../../util'
 import uCharts from '../../u-charts.js'
 let canvasPie = null
-let resultBillList = []
-let resultCategoryList = []
 let firstFetch = true // 用于判断请求是否为第一次，true为本月数据
-let currentMonthBasicData = {}
+let page = 1 // 默认的分页值
+let hasNext = false // 是否有下一页
+const DEFAULT_LIMIT = 40
 
 Component({
   options: {
@@ -33,10 +33,12 @@ Component({
     showMenuDialog: false,
     editItem: {},
     showConfirmDelete: false,
-    billList: undefined,
+    billList: [],
     billResult: null,
     pieChartData: null,
-    categoryList: []
+    categoryList: [],
+    loadingBills: -1,
+    total: 0
   },
   /**
    * hack。修复scroll-x在hidden下不显示的问题。该问题存在于ios。
@@ -72,19 +74,27 @@ Component({
     bindYearChange(event) {
       const self = this
       this.setData({
-        year: event.detail.value
+        year: event.detail.value,
+        billList: [],
+        selectParentCategory: {}
       }, function() {
         self.getPieChartData()
       })
+      // 重置请求参数值
+      self.resetRequestParam()
     },
     // 选择月份回调
     selectMonth(event) {
       const self = this
       const { month } = event.currentTarget.dataset
       if (month - 1 === self.data.activeMonth) return false
+      // 重置请求参数值
+      self.resetRequestParam()
       wx.vibrateShort()
       this.setData({
-        activeMonth: month - 1
+        activeMonth: month - 1,
+        billList: [],
+        selectParentCategory: {}
       }, function() {
         self.getPieChartData()
       })
@@ -151,14 +161,24 @@ Component({
         billList: []
       })
     }, 300),
+    resetRequestParam() {
+      page = 1,
+      hasNext = false
+      this.setData({
+        activeParentCategory: null
+      })
+    },
     touchPie(e) {
       const self = this
+      // 重置请求参数值
+      self.resetRequestParam()
       // hack，解决relative定位后canvas无法正常点击的问题
       e.currentTarget.offsetTop += 110
       canvasPie.showToolTip(e, {
         format: function (item) {
           self.setData({
             activeParentCategory: item,
+            billList: [],
             activeParentIndex: item.index
           })
           self.fetchBillList(item)
@@ -169,7 +189,52 @@ Component({
     },
     // 获取该分类下的账单列表，支持分页。
     fetchBillList(item) {
-      console.log(`请求分类${item.categoryName}下的账单`)
+      const self = this
+      self.setData({
+        loadingBills: true
+      })
+      wx.cloud.callFunction({
+        name: 'getAccountList',
+        data: {
+          mode: 'getAccountListByParentCID',
+          categoryId: item.categoryId,
+          limit: DEFAULT_LIMIT,
+          page: page
+        },
+        success(res) {
+          const result = res.result
+          if (result.code === 1) {
+            // 如果返回的计数大于约定的限制数的话，就代表有下一页
+            hasNext = result.data.count - (page * DEFAULT_LIMIT) > 0
+            if (hasNext) {
+              page = page + 1
+            }
+            let tempBillList = self.data.billList
+            tempBillList = [...tempBillList, ...result.data.page.data]
+            self.setData({
+              billList: tempBillList,
+              total: result.data.count
+            })
+          }
+        },
+        fail() {
+          getApp().showError()
+        },
+        complete() {
+          self.setData({
+            loadingBills: false
+          })
+          wx.hideLoading()
+        }
+      })
+    },
+    onScrollBottom() {
+      if (hasNext) {
+        this.fetchBillList(this.data.activeParentCategory)
+        wx.showLoading({
+          title: '加载中...'
+        })
+      }
     },
     changeTab(e) {
       const {
@@ -180,7 +245,9 @@ Component({
       wx.vibrateShort({})
       this.setData({
         activeTab: tab,
-        activeParentIndex: 0
+        activeParentIndex: 0,
+        activeParentCategory: null,
+        billList: []
       }, function () {
         self.fillPie()
       })
@@ -234,12 +301,17 @@ Component({
     selectParentCategory(event) {
       const { category, index } = event.currentTarget.dataset
       wx.vibrateShort()
+      // 重置请求参数值
+      this.resetRequestParam()
       this.setData({
-        activeParentCategory: category,
         activeParentIndex: index,
-        showParentDialog: false
+        showParentDialog: false,
+        activeParentCategory: category,
+        billList: []
       })
       this.triggerEvent('hideTab', false)
+      // 获取账单
+      this.fetchBillList(category)
     },
     showMenu(event) {
       const self = this

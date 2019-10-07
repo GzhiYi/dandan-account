@@ -221,9 +221,9 @@ Component({
         sum: '',
         note: '',
         active_tab: 0,
-        active_category: '吃',
         active_date: '今天',
         loadingCreate: false,
+        selectedCategory: globalDefaultCategory,
         isEdit: false
       })
     },

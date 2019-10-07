@@ -70,7 +70,7 @@
   <view class="section">
     <view class="label">日期</view>
     <view class="input-field">
-      <view class="select-date">{{active_date_time}}{{active_date !== '今天' ?  (" ("+ active_date + ")") : ''}}</view>
+      <view class="select-date">{{active_date_time}}{{active_date === '昨天' || active_date === '前天' ?  (" ("+ active_date + ")") : ''}}</view>
       <view class="select-field">
         <view
           class="date-item"

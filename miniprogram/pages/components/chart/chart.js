@@ -193,6 +193,11 @@ Component({
     fetchBillList(item) {
       if (!item) return
       const self = this
+      const {
+        year,
+        activeMonth
+      } = self.data
+      const firstAndLastArray = self.getFirstAndLastDayByMonth(year, activeMonth + 1)
       self.setData({
         loadingBills: true
       })
@@ -201,6 +206,8 @@ Component({
         data: {
           mode: 'getAccountListByParentCID',
           categoryId: item.categoryId,
+          startDate: firstAndLastArray[0],
+          endDate: firstAndLastArray[1],
           limit: DEFAULT_LIMIT,
           page: page
         },

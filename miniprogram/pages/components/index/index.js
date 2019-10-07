@@ -68,14 +68,9 @@ Component({
             if (((wordData.word !== storeWordData.word) || new Date() < new Date(wordData.expire)) && wordData.show && storeHideWord.word !== wordData.word) {
               wx.setStorageSync('word', wordData)
               self.setData({
-                wordData
+                wordData,
+                showPayType: response.showPayType
               })
-              const authUsers = ['obBpt5XdwPJAfwnIWEq2FZdDIrBQ']
-              if (authUsers.includes(response.openId)) {
-                self.setData({
-                  showPayType: true
-                })
-              }
             }
           }
         }

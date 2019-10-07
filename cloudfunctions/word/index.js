@@ -18,10 +18,11 @@ exports.main = async (event, context) => {
   if (mode === 'get') {
     try {
       const res = await db.collection("DANDAN_WORD").get()
+      const payTypeAuthUsers = ['obBpt5XdwPJAfwnIWEq2FZdDIrBQ']
       return {
         code: 1,
         data: res.data[0],
-        openId: wxContext.OPENID,
+        showPayType: payTypeAuthUsers.includes(wxContext.OPENID),
         message: '获取成功'
       }
     } catch (error) {

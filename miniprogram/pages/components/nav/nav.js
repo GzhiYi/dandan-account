@@ -19,15 +19,12 @@ Component({
   },
   ready() {
     let {
-      statusBarHeight,
-      navBarHeight
+      statusBarHeight
     } = getApp().globalData
     const { showIcons } = this.data
     this.setData({
       statusBarHeight,
-      navBarHeight,
       showBackIcon: showIcons.includes('back'),
-      showHomeIcons: showIcons.includes('home'),
       showIssue: showIcons.includes('bug'),
       showBannerSetting: showIcons.includes('banner')
     })

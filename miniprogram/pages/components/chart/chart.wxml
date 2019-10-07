@@ -66,6 +66,7 @@
         class="select-parent type primary"
         bindtap="onShowDialog"
         data-type="parent"
+        wx:if="{{pieChartData}}"
       >
         <image src="../../../images/right-chevron.png" class="chevron"></image>
         {{activeParentCategory ? '已选：' : '请选择分类'}}{{activeParentCategory.categoryName}}{{activeParentCategory ? (" "+  total +"笔") : ''}}

@@ -25,7 +25,6 @@ Component({
     cHeight: 0,
     activeTab: 'pay',
     screenHeight: getApp().globalData.screenHeight,
-    basicData: {},
     fixScroll: true,
     activeParentIndex: 0,
     activeParentCategory: null,
@@ -192,7 +191,13 @@ Component({
     },
     // 获取该分类下的账单列表，支持分页。
     fetchBillList(item) {
+      if (!item) return
       const self = this
+      const {
+        year,
+        activeMonth
+      } = self.data
+      const firstAndLastArray = self.getFirstAndLastDayByMonth(year, activeMonth + 1)
       self.setData({
         loadingBills: true
       })
@@ -201,6 +206,8 @@ Component({
         data: {
           mode: 'getAccountListByParentCID',
           categoryId: item.categoryId,
+          startDate: firstAndLastArray[0],
+          endDate: firstAndLastArray[1],
           limit: DEFAULT_LIMIT,
           page: page
         },
@@ -258,6 +265,7 @@ Component({
     fillPie() {
       const self = this
       const pieChartData = this.data.pieChartData
+      if (!pieChartData) return
       const { cWidth, cHeight, activeTab } = this.data
       const fillPieData = pieChartData[activeTab === 'pay' ? 'flowOut' : 'flowIn']['dataList'].map((bill, index) => {
         bill['data'] = bill.allSum

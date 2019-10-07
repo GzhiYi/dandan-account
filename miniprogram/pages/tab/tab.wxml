@@ -22,6 +22,7 @@
     id="index"
     selectedCategory="{{selectedCategory}}"
     editBill="{{editBill}}"
+    bind:hideTab="onHideTab"
   />
 </view>
 <view hidden="{{active !== 'chart'}}">

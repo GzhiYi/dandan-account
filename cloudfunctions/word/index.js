@@ -18,9 +18,11 @@ exports.main = async (event, context) => {
   if (mode === 'get') {
     try {
       const res = await db.collection("DANDAN_WORD").get()
+      const payTypeAuthUsers = ['obBpt5XdwPJAfwnIWEq2FZdDIrBQ']
       return {
         code: 1,
         data: res.data[0],
+        showPayType: payTypeAuthUsers.includes(wxContext.OPENID),
         message: '获取成功'
       }
     } catch (error) {
@@ -34,8 +36,7 @@ exports.main = async (event, context) => {
   if (mode == 'update') {
     try {
       const { word, expire } = event
-      console.log('word', word, expire)
-      const authUsers = ['obBpt5WNBt2DoPFnUQyX5BA0O7L8']
+      const authUsers = ['obBpt5WNBt2DoPFnUQyX5BA0O7L8', 'obBpt5XdwPJAfwnIWEq2FZdDIrBQ']
       if (!authUsers.includes(wxContext.OPENID)) {
         return {
           code: -1,

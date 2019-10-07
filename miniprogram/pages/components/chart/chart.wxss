@@ -114,6 +114,7 @@ page {
 }
 .bill-list {
   margin-top: 22rpx;
+  -webkit-overflow-scrolling: touch;
 }
 .active-bar {
   width: 160rpx;

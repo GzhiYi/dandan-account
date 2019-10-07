@@ -97,18 +97,6 @@ exports.main = async (event, context) => {
     const totalCount = await db.collection("DANDAN_NOTE")
       .where(basicWhere).count();
 
-    // 总数为0, 直接返回
-    if (totalCount.total <= 0) {
-      return {
-        code: 1,
-        data: {
-          page: [],
-          count: totalCount.total,
-        },
-        message: '获取记录成功',
-      }
-    }
-
     // 开始查询
     const res = await db.collection("DANDAN_NOTE")
       .where(basicWhere)

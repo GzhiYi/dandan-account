@@ -5,7 +5,7 @@ cloud.init()
 
 const DEFAULT_LIMIT = 10;
 const DEFAULT_PAGE = 1;
-const MAX_LIMIT = 500;
+const MAX_LIMIT = 100;
 
 
 // 云函数入口函数
@@ -65,7 +65,9 @@ exports.main = async (event, context) => {
       basicWhere.noteDate = _.gte(new Date(startDate)).and(_.lte(new Date(endDate)))
       shouldAggregate = true
     } else if (event.mode === 'getAccountListByParentCID') {
+      // TODO: 把名字改了, getAccountListByParentCIDAndTime
       shouldAggregate = false;
+      basicWhere.noteDate = _.gte(new Date(startDate)).and(_.lte(new Date(endDate)))
       if (categoryId !== undefined) {
         const sonCIDs = [];
         const cResult = await cloud.callFunction({

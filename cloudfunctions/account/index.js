@@ -10,12 +10,17 @@ exports.main = async (event, context) => {
   // 取参
   const { id, money, categoryId, noteDate, description, flow } = event;
   cloud.updateConfig({
-    env: process.env ? ( process.env.ENV === 'local' ? 'release-wifo3' : wxContext.ENV ) : wxContext.ENV
+    env: wxContext.ENV === 'local' ? 'release-wifo3' : wxContext.ENV
+
   })
   // 初始化数据库
   const db = cloud.database({
-    env: process.env ? (process.env.ENV === 'local' ? 'release-wifo3' : wxContext.ENV) : wxContext.ENV
+    env: wxContext.ENV === 'local' ? 'release-wifo3' : wxContext.ENV
+
     });
+
+  const _ = db.command
+
   try {
     // 增加一条记录
     if (event.mode === 'add') {
@@ -138,8 +143,6 @@ exports.main = async (event, context) => {
         message: "操作成功",
       };
     }
-
-
 
   } catch (e) {
     console.error(e);

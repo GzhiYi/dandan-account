@@ -22,5 +22,14 @@
       "startDate": "2019-09-01",
       "endDate": "2019-09-30"
     }
+  },
+  {
+    "name": "根据父分类ID获取列表",
+    "value": {
+      "mode": "getAccountListByParentCID",
+      "categoryId": "others",
+      "page": "1",
+      "limit": "50"
+    }
   }
 ]

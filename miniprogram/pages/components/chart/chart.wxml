@@ -34,18 +34,18 @@
     <view class="summary">
       <view class="summary-item {{activeTab === 'pay' ? 'pay' : ''}}" bindtap="changeTab" data-tab="pay">
         月支出
-        <view>{{billResult.monthResult[0].allSum || 0}}</view>
+        <view>{{pieChartData.flowOut.allSum || 0}}</view>
       </view>
       <view class="summary-item {{activeTab === 'income' ? 'income' : ''}}" bindtap="changeTab" data-tab="income">
         月收入
-        <view>{{billResult.monthResult[1].allSum || 0}}</view>
+        <view>{{pieChartData.flowIn.allSum || 0}}</view>
       </view>
     </view>
     <view hidden="{{showParentDialog || showMenuDialog ? true : false}}">
       <canvas
         canvas-id="pie"
-        wx:if="{{basicData[activeTab].length > 0}}"
         id="pie"
+        wx:if="{{pieChartData}}"
         class="charts"
         style="width: {{cWidth}}px;"
         bind:touchstart="touchPie"
@@ -58,36 +58,32 @@
       |д･)害怕躲起来
     </view>
 
-    <view class="empty-chart" wx:if="{{basicData[activeTab] && basicData[activeTab].length === 0}}">
+    <view class="empty-chart" wx:if="{{!pieChartData}}">
         没有账单数据( ´･･)ﾉ(._.`)
     </view>
     <view class="select-filter">
       <view
         class="select-parent type primary"
-        wx:if="{{basicData[activeTab].length > 0}}"
         bindtap="onShowDialog"
         data-type="parent"
+        wx:if="{{pieChartData}}"
       >
-        <!-- <image src="../../../images/right-chevron.png" class="chevron"></image> -->
-        已选：{{activeParentCategory.categoryName}}
+        <image src="../../../images/right-chevron.png" class="chevron"></image>
+        {{activeParentCategory ? '已选：' : '请选择分类'}}{{activeParentCategory.categoryName}}{{activeParentCategory ? (" "+  total +"笔") : ''}}
       </view>
-      <view wx:else></view>
-      <!-- <view class="select-child" wx:if="{{basicData[activeTab].length > 0}}">
-        选择父类
-      </view> -->
-      <view class="chart-sum" wx:if="{{billResult.monthResult.length > 0}}">
+      <view class="chart-sum" wx:if="{{pieChartData}}">
         月余：<text
           class="chart-sum-text"
-          style="color: {{(billResult.monthResult[1].allSum - billResult.monthResult[0].allSum) >= 0 ? '#4fd69c' : '#f75676'}}"
-        >{{(billResult.monthResult[1].allSum - billResult.monthResult[0].allSum) >= 0 ? '+' : ''}}{{billResult.monthResult[1].allSum - billResult.monthResult[0].allSum}}</text>
+          style="color: {{(pieChartData.flowIn.allSum - pieChartData.flowOut.allSum) >= 0 ? '#4fd69c' : '#f75676'}}"
+        >{{(pieChartData.flowIn.allSum - pieChartData.flowOut.allSum) >= 0 ? '+' : ''}}{{pieChartData.flowIn.allSum - pieChartData.flowOut.allSum}}</text>
       </view>
     </view>
   </view>
   <view class="bill-list">
-    <scroll-view scroll-y="{{true}}" style="height: {{((screenHeight - 390) / .7)}}rpx;" class="bill-list">
+    <scroll-view scroll-y="{{true}}" style="height: {{((screenHeight - 390) / .7)}}rpx;" bindscrolltolower="onScrollBottom" class="bill-list">
       <view
         class="bill-item"
-        wx:for="{{basicData[activeTab][activeParentIndex].bills}}"
+        wx:for="{{billList}}"
         wx:key="{{item._id}}"
         bindtap="showMenu"
         data-bill="{{item}}"
@@ -107,7 +103,7 @@
       </view>
       <view class="fake-bill-item"></view>
       <view class="empty-chart" wx:if="{{billList.length === 0}}">
-        没有账单数据( ´･･)ﾉ(._.`)
+        {{ loadingBills === -1 ? '选择分类以查看账单' : loadingBills ? '加载账单中...' : '' }}
       </view>
     </scroll-view>
   </view>
@@ -119,13 +115,13 @@
       查看该分类下的账单
       <view class="divide"></view>
     </view>
-    <scroll-view class="dialog-bills" scroll-y>
+    <scroll-view class="dialog-bills" scroll-y="true">
       <view
-        wx:for="{{basicData[activeTab]}}"
-        wx:key="{{item._id}}"
+        wx:for="{{categoryList}}"
+        wx:key="{{item.categoryId}}"
         class="list-item-btn"
         bindtap="closeDialog"
-        style="{{index === basicData[activeTab].length - 1 ? 'border-bottom: none;position: relative;' : 'position: relative;'}}"
+        style="{{index === categoryList.length - 1 ? 'border-bottom: none;position: relative;' : 'position: relative;'}}"
         bindtap="selectParentCategory"
         data-category="{{item}}"
         data-index="{{index}}"

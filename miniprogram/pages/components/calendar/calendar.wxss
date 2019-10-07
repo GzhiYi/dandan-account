@@ -11,7 +11,6 @@
   font-size: 26rpx;
   padding: 0 4px;
   margin-right: 40rpx;
-  background: #e6f2ff;
   border-radius: 17rpx;
 }
 .date-display {

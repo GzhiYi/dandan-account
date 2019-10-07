@@ -7,11 +7,11 @@ cloud.init()
 exports.main = async (event, context) => {
   const wxContext = cloud.getWXContext();
   cloud.updateConfig({
-    env: process.env ? (process.env.ENV === 'local' ? 'release-wifo3' : wxContext.ENV) : wxContext.ENV
+    env: wxContext.ENV === 'local' ? 'release-wifo3' : wxContext.ENV
       })
   // 初始化数据库
   const db = cloud.database({
-    env: process.env ? (process.env.ENV === 'local' ? 'release-wifo3' : wxContext.ENV) : wxContext.ENV
+    env: wxContext.ENV === 'local' ? 'release-wifo3' : wxContext.ENV
   });
   const { id, categoryName, categoryIcon, description, flow,
     type, parentId, isSelectable, ids } = event;
@@ -101,6 +101,20 @@ exports.main = async (event, context) => {
           isDel: false,
         }).get();
 
+      return {
+        code: 1,
+        data: res,
+        message: "操作成功",
+      };
+    }
+
+    // 根据父分类ID获取子分类ID
+    if (event.mode === 'getCategoriesByParentCID') {
+      const res = await db.collection('DANDAN_NOTE_CATEGORY')
+        .where({
+          parentId: id,
+          isDel: false,
+        }).get();
       return {
         code: 1,
         data: res,

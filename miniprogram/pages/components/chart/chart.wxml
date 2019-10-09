@@ -1,3 +1,10 @@
+<wxs module="numHandler">
+var handle = function(num) {
+  return +parseFloat(num.toPrecision(12));
+};
+
+module.exports.handle = handle;
+</wxs>
 <view class="chart">
   <view class="selector-view">
     <view class="month-selector">
@@ -34,11 +41,11 @@
     <view class="summary">
       <view class="summary-item {{activeTab === 'pay' ? 'pay' : ''}}" bindtap="changeTab" data-tab="pay">
         月支出
-        <view>{{pieChartData.flowOut.allSum || 0}}</view>
+        <view>{{numHandler.handle(pieChartData.flowOut.allSum || 0)}}</view>
       </view>
       <view class="summary-item {{activeTab === 'income' ? 'income' : ''}}" bindtap="changeTab" data-tab="income">
         月收入
-        <view>{{pieChartData.flowIn.allSum || 0}}</view>
+        <view>{{numHandler.handle(pieChartData.flowIn.allSum || 0)}}</view>
       </view>
     </view>
     <view hidden="{{showParentDialog || showMenuDialog ? true : false}}">
@@ -75,7 +82,7 @@
         月余：<text
           class="chart-sum-text"
           style="color: {{(pieChartData.flowIn.allSum - pieChartData.flowOut.allSum) >= 0 ? '#4fd69c' : '#f75676'}}"
-        >{{(pieChartData.flowIn.allSum - pieChartData.flowOut.allSum) >= 0 ? '+' : ''}}{{pieChartData.flowIn.allSum - pieChartData.flowOut.allSum}}</text>
+        >{{(pieChartData.flowIn.allSum - pieChartData.flowOut.allSum) >= 0 ? '+' : ''}}{{numHandler.handle(pieChartData.flowIn.allSum - pieChartData.flowOut.allSum)}}</text>
       </view>
     </view>
   </view>

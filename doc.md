@@ -59,4 +59,39 @@
 ### 云函数和前端的部分实现
 
 1. 记账页
+![cover3.png](https://i.loli.net/2019/10/10/MG8b9rKIdsnFm4c.png)
 记账页面是这个记账小程序核心的数据写入页面。也就是写入账单表的页面。保留最基本也是最普遍选择的一些选项，有金额、分类、日期、备注。不需要记录太多的其余数据，事实上，对一个纯记账的工具而言，这些数据足以表现和记录记账。恰恰是足够简洁明了，才能让用户专注记账。
+
+通过调用云函数向账单表数据插入数据：
+```javascript
+wx.cloud.callFunction({
+  name: 'account', // 定义的云函数名
+  data: {
+    mode: isEdit ? 'updateById' : 'add', // 对于同一个业务对象下的云函数，我通过mode进行区分，减少云函数的个数
+    money: sum, // 钱数，无论正负都去正值
+    categoryId: selectedCategory._id, // 选择的分类id
+    noteDate: active_date_time, // 记账的时间
+    description: note, // 记账的备注
+    flow: active_tab, // 0支出，1收入
+    id: isEdit ? editBill._id : '' // 编辑或者新增
+  },
+  success(res) {
+    if (res.result.code === 1) { // 操作成功后续的操作，最要是更新账单列表和报表数据
+      wx.showToast({
+        title: isEdit ? '😬修改成功' : '😉成功新增一笔账单',
+        icon: 'none'
+      })
+      self.setData({
+        selectedCategory: globalDefaultCategory
+      })
+      self.resetStatus()
+      self.triggerEvent('reFetchBillList')
+    }
+  },
+  complete() {
+    self.setData({
+      loadingCreate: false
+    })
+  }
+})
+```

@@ -45,14 +45,18 @@
 ### 分类表
 
 关联用户创建账单的分类。包含的字段有：
-- _id:
-- categoryIcon:
-- categoryName: 
-- createTime: 
-- description:
-- flow:
-- isDel:
-- isSelectable:
-- openId: 
-- parentId: 
-- type: 
+- _id:随机生成的账单唯一ID
+- categoryIcon:分类的图标图片
+- categoryName:分类名
+- createTime: 创建时间
+- description: 分类的描述
+- flow: 0支出，1收入
+- isDel:逻辑删除的标示符
+- openId: 绑定的用户唯一openId
+- parentId: 父分类的id，如果是父分类，则为空
+- type: 0支出，1收入
+
+### 云函数和前端的部分实现
+
+1. 记账页
+记账页面是这个记账小程序核心的数据写入页面。也就是写入账单表的页面。保留最基本也是最普遍选择的一些选项，有金额、分类、日期、备注。不需要记录太多的其余数据，事实上，对一个纯记账的工具而言，这些数据足以表现和记录记账。恰恰是足够简洁明了，才能让用户专注记账。

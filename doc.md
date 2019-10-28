@@ -95,3 +95,46 @@ wx.cloud.callFunction({
   }
 })
 ```
+
+2. 记账记录页
+为了更好的体现每天的记账情况，觉得通过日历的方式呈现所选择的某天的记账情况。
+![cover2.png](https://i.loli.net/2019/10/10/Y7Cmsu3BDvn6F2P.png)
+编写一个日历组件，由于组件的代码量多，就不贴出来，就主要呈现下选择某一天后所调用的云函数，从而看出如何获取到记账数据的。
+```javascript
+// 计算总数
+const totalCount = await db.collection("DANDAN_NOTE")
+  .where(basicWhere).count();
+
+// 开始查询
+const res = await db.collection("DANDAN_NOTE")
+  .where(basicWhere)
+  .skip(offset)
+  .limit(limit)
+  .orderBy("createTime", "desc")
+  .get();
+
+// 遍历结果, 获得对应的分类ID, 并且用分类ID获取对应的分类信息
+if (categoryInfoMap.size <= 0) {
+  const cidList = [];
+  for (let note of res.data) {
+    cidList.push(note.categoryId)
+  }
+
+  const cResult = await cloud.callFunction({
+    name: 'category',
+    data: {
+      mode: 'getCategoriesByIdBatch',
+      ids: cidList
+    }
+  })
+
+  if (cResult.result.code === 1) {
+    for (category of cResult.result.data.data) {
+      categoryInfoMap.set(category._id, category)
+    }
+  }
+}
+```
+
+3. 报表页面
+![cover1.png](https://i.loli.net/2019/10/10/Bem9OGzp8KAgaIS.png)

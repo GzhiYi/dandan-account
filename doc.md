@@ -138,3 +138,115 @@ if (categoryInfoMap.size <= 0) {
 
 3. 报表页面
 ![cover1.png](https://i.loli.net/2019/10/10/Bem9OGzp8KAgaIS.png)
+报表页面需要用到一个canvas库。将数据以饼图的方式呈现出来。大致也是汇总账单数据并提供分页功能等，但需要用到云函数聚合api。  
+可以看下：
+```javascript
+// 获取饼图数据
+    if (mode === 'getPieChartData') {
+      const basicMatch = { // 基础匹配数据
+        isDel: false,
+        openId: $.eq(OPENID ? OPENID : wxContext.OPENID),
+        isTarget: true,
+      };
+
+      const detailResult = await db.collection("DANDAN_NOTE")
+        .aggregate()
+        .project(basicProject)
+        .match(basicMatch)
+        .group({
+          _id: {
+            categoryId: '$categoryId',
+            flow: '$flow'
+          },
+          allSum: $.sum("$money"),
+          count: $.sum(1),
+        })
+        .replaceRoot({
+          newRoot: $.mergeObjects(["$_id", '$$ROOT'])
+        })
+        .project({
+          _id: 0
+        })
+        // 查子目录的信息, 以此获取父目录的ID
+        .lookup({
+          from: 'DANDAN_NOTE_CATEGORY',
+          localField: 'categoryId',
+          foreignField: '_id',
+          as: 'categoryInfo',
+        })
+        .replaceRoot({
+          newRoot: $.mergeObjects([$.arrayElemAt(['$categoryInfo', 0]), '$$ROOT'])
+        })
+        .project({
+          allSum: 1,
+          count: 1,
+          flow: 1,
+          _id: 0,
+          fatherCategoryId: '$parentId',
+        })
+        // 已经得到parentId, 可以再次进行聚合
+        .group({
+          _id: {
+            categoryId: '$fatherCategoryId',
+            flow: "$flow"
+          },
+          allSum: $.sum("$allSum"),
+          count: $.sum("$count"),
+        })
+        .replaceRoot({
+          newRoot: $.mergeObjects(["$_id", '$$ROOT'])
+        })
+        .project({
+          _id: 0
+        })
+        // 用父目录ID查询父目录信息
+        .lookup({
+          from: 'DANDAN_NOTE_CATEGORY',
+          localField: 'categoryId',
+          foreignField: '_id',
+          as: 'fatherCategoryInfo',
+        })
+        .replaceRoot({
+          newRoot: $.mergeObjects([$.arrayElemAt(['$fatherCategoryInfo', 0]), '$$ROOT'])
+        })
+        .project({
+          _id: 0,
+          allSum: 1,
+          count: 1,
+          flow: 1,
+          categoryId: 1,
+          categoryName: 1
+        })
+        .end();
+      
+      const returnObj = {}
+
+      const flowOutList = [];
+      const flowInList = [];
+      let sumAllIn = 0;
+      let sumAllOut = 0;
+      // 遍历获取每个流的总金额
+      for (let item of detailResult.list) {
+        if (item.flow === 1) {
+          sumAllIn = keepTwoDecimal(sumAllIn + item.allSum)
+          flowInList.push(item)
+        } else {
+          sumAllOut = keepTwoDecimal(sumAllOut + item.allSum)
+          flowOutList.push(item)
+        }
+      }
+      returnObj.flowIn = {
+        allSum: sumAllIn,
+        dataList: flowInList
+      }
+      returnObj.flowOut = {
+        allSum: sumAllOut,
+        dataList: flowOutList
+      }
+
+      return {
+        code: 1,
+        detailResult: returnObj,
+      }
+    }
+```

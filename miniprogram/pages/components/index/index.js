@@ -30,8 +30,7 @@ Component({
       active_date_time: date
     })
     this.getWord()
-    getApp().loadDefaultCategoryCallBack = list => {
-      // 根据时间对默认选择对分类进行“推荐”
+    function handleDefaultCategory(list) {
       const hour = new Date().getHours()
       let defaultCategory = {}
       if (hour >= 4 && hour < 10) {
@@ -42,9 +41,20 @@ Component({
         defaultCategory = list.filter(item => item._id === 'food_and_drink_dinner')[0]
       }
       globalDefaultCategory = defaultCategory
+      return defaultCategory
+    }
+    const globalDefaultCategoryList = getApp().globalData.defaultCategoryList
+    if (globalDefaultCategoryList.length > 0) {
       this.setData({
-        selectedCategory: defaultCategory
+        selectedCategory: handleDefaultCategory(globalDefaultCategoryList)
       })
+    } else {
+      getApp().loadDefaultCategoryCallBack = list => {
+        // 根据时间对默认选择对分类进行“推荐”
+        this.setData({
+          selectedCategory: handleDefaultCategory(list)
+        })
+      }
     }
   },
   /**

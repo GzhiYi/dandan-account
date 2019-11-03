@@ -247,17 +247,22 @@ Component({
       }
     },
     changeTab(e) {
+      const self = this
       const {
         tab
       } = e.currentTarget.dataset
-      if (tab === this.data.activeTab) return false
-      const self = this
+      const {
+        pieChartData,
+        activeTab
+      } = self.data
+      if (tab === activeTab) return false
       wx.vibrateShort({})
-      this.setData({
+      self.setData({
         activeTab: tab,
         activeParentIndex: 0,
         activeParentCategory: null,
-        billList: []
+        billList: [],
+        categoryList: pieChartData[tab === 'pay' ? 'flowOut' : 'flowIn']['dataList'] || []
       }, function () {
         self.fillPie()
       })

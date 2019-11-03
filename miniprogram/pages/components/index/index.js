@@ -78,10 +78,13 @@ Component({
             if (((wordData.word !== storeWordData.word) || new Date() < new Date(wordData.expire)) && wordData.show && storeHideWord.word !== wordData.word) {
               wx.setStorageSync('word', wordData)
               self.setData({
-                wordData,
-                showPayType: response.showPayType
+                wordData
               })
             }
+            // 无论如何都要设置这个
+            self.setData({
+              showPayType: !response.showPayType
+            })
           }
         }
       })

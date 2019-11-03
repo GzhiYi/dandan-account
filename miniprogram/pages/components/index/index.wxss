@@ -40,7 +40,8 @@
   background-color: #fff;
 }
 .section input {
-  padding: 20rpx 0;
+  /* padding: 20rpx 0; */
+  height: 80rpx;
   text-align: right;
   width: 100%;
 }

@@ -147,3 +147,7 @@ page {
   font-size: 28rpx;
   color: grey;
 }
+.category-list-style {
+  padding: 2rpx 14rpx;
+  border-radius: 9rpx;
+}

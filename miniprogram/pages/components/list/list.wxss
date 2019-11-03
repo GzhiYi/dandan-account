@@ -50,5 +50,4 @@ page {
 .money-date {
   display: flex;
   align-items: center;
-  min-width: 153rpx;
 }

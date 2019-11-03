@@ -45,7 +45,7 @@
       <canvas
         canvas-id="pie"
         id="pie"
-        wx:if="{{pieChartData}}"
+        wx:if="{{pieChartData && pieChartData[activeTab === 'pay' ? 'flowOut' : 'flowIn'].dataList.length !== 0}}"
         class="charts"
         style="width: {{cWidth}}px;"
         bind:touchstart="touchPie"
@@ -58,7 +58,7 @@
       |д･)害怕躲起来
     </view>
 
-    <view class="empty-chart" wx:if="{{!pieChartData}}">
+    <view class="empty-chart" wx:if="{{!pieChartData || pieChartData[activeTab === 'pay' ? 'flowOut' : 'flowIn'].dataList.length === 0}}">
         没有账单数据( ´･･)ﾉ(._.`)
     </view>
     <view class="select-filter">

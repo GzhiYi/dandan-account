@@ -127,9 +127,10 @@ Component({
           if (result && result.code === 1) {
             const dataList = result.detailResult[activeTab === 'pay' ? 'flowOut' : 'flowIn']['dataList']
             self.setData({
-              pieChartData: dataList.length === 0 ? null : result.detailResult,
+              pieChartData: result.detailResult,
               categoryList: dataList
             })
+            
             if (dataList.length > 0) {
               self.fillPie(result.detailResult)
             }

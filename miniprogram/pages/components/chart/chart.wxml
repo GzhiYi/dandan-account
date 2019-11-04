@@ -87,6 +87,7 @@
         wx:key="{{item._id}}"
         bindtap="showMenu"
         data-bill="{{item}}"
+        style="{{item._id === editItem._id && showMenuDialog ? 'border: 4rpx solid #f75676; padding: 16rpx 26rpx;' : ''}}"
       >
         <view class="type-date">
           <view class="type">{{item.category.categoryName}}</view>
@@ -111,9 +112,10 @@
 <!-- 父类选择弹窗 -->
 <dialog visible="{{showParentDialog}}" bind:closeDialog="closeDialog">
   <view slot="content">
+    <view class="pop-indicator"></view>
     <view class="d-header">
       查看该分类下的账单
-      <view class="divide"></view>
+      <view class="dialog-tip">饼图比例小无法点击可在此选择查看</view>
     </view>
     <scroll-view class="dialog-bills" scroll-y="true">
       <view
@@ -134,9 +136,11 @@
 <!-- 编辑弹窗 -->
 <dialog visible="{{showMenuDialog}}" bind:closeDialog="closeDialog">
   <view slot="content">
+    <view class="pop-indicator"></view>
     <view class="d-header">
-    {{editItem.description || editItem.category.categoryName}}
-      <view class="divide"></view>
+    {{editItem.category.categoryName}}
+    <view class="dialog-tip">金额：{{editItem.flow === 0 ? '-' : '+'}}{{editItem.money}}，记账日期：{{editItem.noteDate}}</view>
+    <view class="dialog-tip" wx:if="{{editItem.description}}">备注：{{editItem.description}}</view>
     </view>
     <view class='list-item-btn' style="color: #4fd69c;" bindtap="editBill">编辑</view>
     <view class='list-item-btn' style="color: #f75676;" bindtap="deleteBill">

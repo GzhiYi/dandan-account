@@ -83,7 +83,7 @@ Component({
             }
             // 无论如何都要设置这个
             self.setData({
-              showPayType: !response.showPayType
+              showPayType: response.showPayType
             })
           }
         }

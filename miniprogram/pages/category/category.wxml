@@ -36,9 +36,9 @@
 </view>
 <dialog visible="{{showAddDialog}}">
   <view slot="content">
+    <view class="pop-indicator"></view>
     <view class="d-header">
       添加 {{addCategory.categoryName}} 子分类
-      <view class="divide"></view>
     </view>
     <input
       value="{{addCategoryName}}"
@@ -56,9 +56,9 @@
 </dialog>
 <dialog visible="{{showMenuDialog}}" bind:closeDialog="closeDialog">
   <view slot="content">
+    <view class="pop-indicator"></view>
     <view class="d-header">
       <text>删除分类：{{editItem.description || editItem.category.categoryName}}?</text>
-      <view class="divide"></view>
       <view class="dialog-tip">原分类下的账单分类将变为杂项。</view>
     </view>
     <view class='list-item-btn' style="color: #f75676;" bindtap="deleteCategory" wx:if="{{!loadingDelete}}">
@@ -72,9 +72,9 @@
 </dialog>
 <dialog visible="{{showBannerDialog}}"  bind:closeDialog="closeDialog">
   <view slot="content">
+    <view class="pop-indicator"></view>
     <view class="d-header">
       设置Banner语句
-      <view class="divide"></view>
     </view>
     <input
       value="{{word}}"

@@ -202,11 +202,30 @@ Component({
               title: isEdit ? '😬修改成功' : '😉成功新增一笔账单',
               icon: 'none'
             })
+            self.resetStatus()
+            self.triggerEvent('reFetchBillList')
+            if (active_tab === 0) {
+              // 本地记录用户记账高频分类
+              const m = wx.getStorageSync('localCategory') || []
+              const keys = m.map(item => item._id)
+              // 如果本地已有缓存
+              const index = keys.indexOf(selectedCategory._id)
+              if (index !== -1) {
+                m[index]['pickTime'] = ++m[index]['pickTime']
+              } else {
+                // 如果没有
+                m.push({
+                  ...selectedCategory,
+                  'pickTime': 1
+                })
+              }
+              // TODO 这个排序为啥不生效？？？？？问号脸？？
+              wx.setStorageSync('localCategory', m.sort((a, b) => a.pickTime - b.pickTime))
+            }
+
             self.setData({
               selectedCategory: globalDefaultCategory
             })
-            self.resetStatus()
-            self.triggerEvent('reFetchBillList')
           }
         },
         complete() {

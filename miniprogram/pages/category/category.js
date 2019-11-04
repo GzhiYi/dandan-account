@@ -14,7 +14,8 @@ Page({
     showConfirmDelete: false,
     showBannerDialog: false,
     word: '',
-    loadingSetting: false
+    loadingSetting: false,
+    localCategory: []
   },
 
   /**
@@ -24,6 +25,9 @@ Page({
     const self = this
     billType = options.type
     self.getCategoryList(options.type)
+    self.setData({
+      localCategory: wx.getStorageSync('localCategory').slice(0, 8)
+    })
   },
   getCategoryList(flow) {
     this.setData({

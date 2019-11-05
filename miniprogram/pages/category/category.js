@@ -25,9 +25,11 @@ Page({
     const self = this
     billType = options.type
     self.getCategoryList(options.type)
-    self.setData({
-      localCategory: wx.getStorageSync('localCategory').slice(0, 8)
-    })
+    if (options.type == 0) {
+      self.setData({
+        localCategory: wx.getStorageSync('localCategory').slice(0, 8)
+      })
+    }
   },
   getCategoryList(flow) {
     this.setData({

@@ -219,8 +219,8 @@ Component({
                   'pickTime': 1
                 })
               }
-              // TODO 这个排序为啥不生效？？？？？问号脸？？
-              wx.setStorageSync('localCategory', m.sort((a, b) => a.pickTime - b.pickTime))
+              // em.... 经过storage后的数据类型会从数值类型转为字符串类型
+              wx.setStorageSync('localCategory', m.sort((a, b) => Number(b.pickTime) - Number(a.pickTime)))
             }
 
             self.setData({

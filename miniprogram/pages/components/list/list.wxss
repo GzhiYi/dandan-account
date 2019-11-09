@@ -21,6 +21,7 @@ page {
   color: #ccc;
   font-size: 25rpx;
   text-align: right;
+  min-width: 140rpx;
 }
 .type {
   background: #5e72e4;

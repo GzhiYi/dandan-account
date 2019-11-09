@@ -35,6 +35,7 @@ page {
   color: #ccc;
   font-size: 25rpx;
   text-align: right;
+  min-width: 140rpx;
 }
 .type {
   background: #5e72e4;
@@ -56,4 +57,10 @@ page {
 .place {
   width: 100%;
   height: 281rpx;
+}
+.empty-search {
+  font-size: 28rpx;
+  color: grey;
+  text-align: center;
+  margin-top: 70px;
 }

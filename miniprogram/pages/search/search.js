@@ -1,27 +1,12 @@
 Page({
   data: {
-    billList: [],
+    billList: null,
     screenHeight: getApp().globalData.screenHeight,
-    statusBarHeight: getApp().globalData.statusBarHeight
+    statusBarHeight: getApp().globalData.statusBarHeight,
+    isSearching: false
   },
   onLoad: function (options) {
-    const bill = this.data.billList
-    for(let i = 0; i < 100; i++) {
-      bill.push({
-        _id: i + 1,
-        category: {
-          categoryName: ''
-        },
-        description: '....',
-        flow: 1,
-        money: 100,
-        note: 'this is fake note.'
-      })
-      this.setData({
-        billList: bill
-      })
-    }
-    this
+
   },
   onReady: function () {
 
@@ -31,8 +16,34 @@ Page({
   },
   confirmTap(event) {
     const { value } = event.detail
-    if (!value) return
+    const self = this
+    if (!value || !value.trim()) return
 
     // 查询操作
+    self.setData({
+      isSearching: true,
+      billList: []
+    })
+    wx.cloud.callFunction({
+      name: 'search',
+      data: {
+        keyWord: value
+      },
+      success(res) {
+        if (res.result.code === 1) {
+          self.setData({
+            billList: res.result.data
+          })
+        }
+      },
+      fail(error) {
+        getApp().showError('查询出错，要不稍后再试😢')
+      },
+      complete() {
+        self.setData({
+          isSearching: false
+        })
+      }
+    })
   }
 })

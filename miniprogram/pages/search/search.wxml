@@ -15,13 +15,12 @@
 <view class="search-result">
   <view class="place"></view>
   <scroll-view scroll-y="{{true}}" style="height: {{screenHeight - ((screenHeight + 442.49) / 4.67)}}px;" class="bill-list">
+    <view class="empty-search" wx:if="{{isSearching}}">查询中...</view>
+    <view class="empty-search" wx:if="{{billList.length === 0 && !isSearching}}">没有找到账单( ´･･)ﾉ(._.`)</view>
     <view
       class="bill-item"
       wx:for="{{billList}}"
       wx:key="{{item._id}}"
-      bindtap="showMenu"
-      data-bill="{{item}}"
-      style="{{item._id === editItem._id && showMenuDialog ? 'border: 4rpx solid #f75676; padding: 16rpx 26rpx;' : ''}}"
     >
       <view class="type-date">
         <view class="type">{{item.category.categoryName}}</view>

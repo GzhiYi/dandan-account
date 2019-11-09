@@ -9,6 +9,7 @@ Page({
       wx.redirectTo({
         url: '/pages/tab/tab'
       })
+      wx.setStorageSync('isOnboarding', 'v3.5.0')
     } else {
       this.setData({
         step: step + 1

@@ -25,6 +25,12 @@ App({
     })
     // 分类应当全局优先获取
     this.getCategory()
+    const isOnboarding = wx.getStorageSync('isOnboarding')
+    if (!isOnboarding) {
+      wx.redirectTo({
+        url: '/pages/onboarding/onboarding'
+      })
+    }
   },
   globalData: {
     statusBarHeight: 0,

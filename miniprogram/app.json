@@ -1,9 +1,9 @@
 {
   "pages": [
-    "pages/onboarding/onboarding",
     "pages/tab/tab",
     "pages/category/category",
-    "pages/search/search"
+    "pages/search/search",
+    "pages/onboarding/onboarding"
   ],
   "window": {
     "backgroundColor": "#F6F6F6",

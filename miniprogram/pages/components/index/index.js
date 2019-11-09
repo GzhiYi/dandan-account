@@ -48,12 +48,14 @@ Component({
       this.setData({
         selectedCategory: handleDefaultCategory(globalDefaultCategoryList)
       })
+      getApp().globalData.selectedCategory = handleDefaultCategory(list)
     } else {
       getApp().loadDefaultCategoryCallBack = list => {
         // 根据时间对默认选择对分类进行“推荐”
         this.setData({
           selectedCategory: handleDefaultCategory(list)
         })
+        getApp().globalData.selectedCategory = handleDefaultCategory(list)
       }
     }
   },

@@ -213,7 +213,6 @@ Page({
         expire: +new Date(new Date().getTime() + 24 * 60 * 60 * 1000)
       },
       success(res) {
-        console.log('lalal', res)
         if (res.result.code === 1) {
           self.closeDialog()
           self.setData({

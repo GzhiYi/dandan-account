@@ -4,7 +4,7 @@
   left:0;
   right:0;
   bottom: 0;
-  border-radius: 18rpx;
+  border-radius: 38rpx;
   padding: 15rpx;
   background:#fff;
   z-index:99;

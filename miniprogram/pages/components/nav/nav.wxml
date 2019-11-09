@@ -13,5 +13,14 @@
         open-type="feedback"
       ></button>
     </view>
+    <view class='nav-icon-view-back' wx:if="{{showSearch}}">
+      <button
+        style="border: none;height: 39rpx;"
+        plain='true'
+        class='nav-icon search'
+        bindtap="goTo"
+        data-page="search"
+      ></button>
+    </view>
   </view>
 </view>

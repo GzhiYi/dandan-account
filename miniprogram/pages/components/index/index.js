@@ -30,8 +30,7 @@ Component({
       active_date_time: date
     })
     this.getWord()
-    getApp().loadDefaultCategoryCallBack = list => {
-      // 根据时间对默认选择对分类进行“推荐”
+    function handleDefaultCategory(list) {
       const hour = new Date().getHours()
       let defaultCategory = {}
       if (hour >= 4 && hour < 10) {
@@ -42,9 +41,22 @@ Component({
         defaultCategory = list.filter(item => item._id === 'food_and_drink_dinner')[0]
       }
       globalDefaultCategory = defaultCategory
+      return defaultCategory
+    }
+    const globalDefaultCategoryList = getApp().globalData.defaultCategoryList
+    if (globalDefaultCategoryList.length > 0) {
       this.setData({
-        selectedCategory: defaultCategory
+        selectedCategory: handleDefaultCategory(globalDefaultCategoryList)
       })
+      getApp().globalData.selectedCategory = handleDefaultCategory(list)
+    } else {
+      getApp().loadDefaultCategoryCallBack = list => {
+        // 根据时间对默认选择对分类进行“推荐”
+        this.setData({
+          selectedCategory: handleDefaultCategory(list)
+        })
+        getApp().globalData.selectedCategory = handleDefaultCategory(list)
+      }
     }
   },
   /**
@@ -68,10 +80,13 @@ Component({
             if (((wordData.word !== storeWordData.word) || new Date() < new Date(wordData.expire)) && wordData.show && storeHideWord.word !== wordData.word) {
               wx.setStorageSync('word', wordData)
               self.setData({
-                wordData,
-                showPayType: response.showPayType
+                wordData
               })
             }
+            // 无论如何都要设置这个
+            self.setData({
+              showPayType: response.showPayType
+            })
           }
         }
       })
@@ -189,11 +204,30 @@ Component({
               title: isEdit ? '😬修改成功' : '😉成功新增一笔账单',
               icon: 'none'
             })
+            self.resetStatus()
+            self.triggerEvent('reFetchBillList')
+            if (active_tab === 0) {
+              // 本地记录用户记账高频分类
+              const m = wx.getStorageSync('localCategory') || []
+              const keys = m.map(item => item._id)
+              // 如果本地已有缓存
+              const index = keys.indexOf(selectedCategory._id)
+              if (index !== -1) {
+                m[index]['pickTime'] = ++m[index]['pickTime']
+              } else {
+                // 如果没有
+                m.push({
+                  ...selectedCategory,
+                  'pickTime': 1
+                })
+              }
+              // em.... 经过storage后的数据类型会从数值类型转为字符串类型
+              wx.setStorageSync('localCategory', m.sort((a, b) => Number(b.pickTime) - Number(a.pickTime)))
+            }
+
             self.setData({
               selectedCategory: globalDefaultCategory
             })
-            self.resetStatus()
-            self.triggerEvent('reFetchBillList')
           }
         },
         complete() {

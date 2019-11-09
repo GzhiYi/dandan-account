@@ -186,7 +186,7 @@ Component({
           })
           self.fetchBillList(item)
           wx.vibrateShort()
-          return item.name + ' | ' + item.data + ' | ' + strip(item._proportion_.toFixed(2) * 100) + '%'
+          return item.name + ' / ' + item.data + ' / ' + strip(item._proportion_.toFixed(2) * 100) + '%'
         }
       })
     }, 300, true),

@@ -35,7 +35,7 @@
   <view class="item" wx:for="{{categoryList}}" wx:key="{{item._id}}">
     <view class="parent-name">
       {{item.categoryName}}
-      <text class="add-icon" bindtap="showDialog" data-target="{{item}}">+</text>
+      <text wx:if="{{isEdit}}" class="add-icon" bindtap="showDialog" data-target="{{item}}">+</text>
     </view>
     <view class="child-category">
       <view
@@ -49,7 +49,7 @@
         <view class="name">{{child.categoryName}}
           <image
             class="delete-icon"
-            wx:if="{{child.openId !== 'SYSTEM'}}"
+            wx:if="{{child.openId !== 'SYSTEM' && isEdit}}"
             src="../../images/backspace-arrow.png"
             style="width: 28rpx;height: 28rpx;"
             catchtap="showMenu"
@@ -59,6 +59,9 @@
       </view>
     </view>
   </view>
+</view>
+<view class="edit-mode" bindtap="changeEdit">
+  <image src="../../images/{{isEdit ? 'cancel' : 'pencil'}}.png" class="edit-mode-img"></image>
 </view>
 <dialog visible="{{showAddDialog}}">
   <view slot="content">

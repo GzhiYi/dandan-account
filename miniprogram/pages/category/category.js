@@ -15,7 +15,8 @@ Page({
     showBannerDialog: false,
     word: '',
     loadingSetting: false,
-    localCategory: []
+    localCategory: [],
+    isEdit: false
   },
 
   /**
@@ -242,6 +243,13 @@ Page({
           loadingSetting: false
         })
       }
+    })
+  },
+  changeEdit() {
+    const { isEdit } = this.data
+    wx.vibrateShort()
+    this.setData({
+      isEdit: !isEdit
     })
   }
 })

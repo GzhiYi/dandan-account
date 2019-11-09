@@ -1,7 +1,5 @@
 <nav
   class="nav-instance"
-  my-class="{{theme}}-set-bg"
-  my-icon-class="{{theme}}-set-icon-bg"
   showIcons="{{['back', 'banner']}}"
   bind:showBanner="onShowBanner"
 ></nav>

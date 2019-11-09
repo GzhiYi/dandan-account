@@ -1,0 +1,13 @@
+<nav
+  class="nav-instance"
+  showIcons="{{['back']}}"
+></nav>
+<view class="more-chart">
+  <canvas
+    canvas-id="linechart-month"
+    id="linechart-month"
+    class="charts"
+    style="width: {{400}}px;"
+    bind:touchstart="touchPie"
+  ></canvas>
+</view>

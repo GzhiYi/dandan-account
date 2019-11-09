@@ -1,0 +1,5 @@
+.charts {
+  margin: 0 auto;
+  height:400rpx;
+  background-color: #FFFFFF;
+}

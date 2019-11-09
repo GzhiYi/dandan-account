@@ -1,5 +1,6 @@
 {
   "pages": [
+    "pages/morechart/morechart",
     "pages/tab/tab",
     "pages/category/category",
     "pages/search/search",

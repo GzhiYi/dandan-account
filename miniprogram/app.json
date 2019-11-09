@@ -1,5 +1,6 @@
 {
   "pages": [
+    "pages/onboarding/onboarding",
     "pages/tab/tab",
     "pages/category/category",
     "pages/search/search"

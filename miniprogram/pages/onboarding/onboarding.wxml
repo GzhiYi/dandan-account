@@ -1,0 +1,78 @@
+<view class="onboarding">
+  <view class="content" wx:if="{{step === 1}}">
+    <view class="cover-out">
+      <image
+    src="https://6461-dandan-zdm86-1259814516.tcb.qcloud.la/onboarding-step1.png?sign=4e2d8ea34c16222d2b0054859f885db8&t=1573279740"
+    class="cover"></image>
+    </view>
+    <view class="word">
+      <view class="title"><text class="bold">很高兴</text>认识你！</view>
+      <view class="description">我会一直与你一起体验更好的记账工具。</view>
+    </view>
+  </view>
+  <view class="content" wx:if="{{step === 2}}">
+    <view class="cover-out">
+      <image
+    src="https://6461-dandan-zdm86-1259814516.tcb.qcloud.la/onboarding-step2.png?sign=e19a6a9610d073286d09a6370face02d&t=1573280757"
+    class="cover"></image>
+    </view>
+    <view class="word">
+      <view class="title"><text class="bold">重视隐私，</text>不利用、不追踪。</view>
+      <view class="description">单单记账永不获取用户隐私信息，给你最单纯的记账体验。</view>
+    </view>
+  </view>
+  <view class="content" wx:if="{{step === 3}}">
+    <view class="cover-out">
+      <image
+    src="https://6461-dandan-zdm86-1259814516.tcb.qcloud.la/onboarding-step3.gif?sign=442a38dc2b21158335b7e501bd2cc014&t=1573280924"
+    class="cover"></image>
+    </view>
+    <view class="word">
+      <view class="title">简单快速。</view>
+      <view class="description">记一笔账只需要几秒，告别冗余操作。</view>
+    </view>
+  </view>
+  <view class="content" wx:if="{{step === 4}}">
+    <view class="cover-out">
+      <image
+    src="https://6461-dandan-zdm86-1259814516.tcb.qcloud.la/onboarding-step4.png?sign=ad61b00244955a37e0be3651fc085b12&t=1573281400"
+    class="cover"></image>
+    </view>
+    <view class="word">
+      <view class="title">直观图表。</view>
+      <view class="description">无论查账还是统计图表，都十分清晰明了，让你有更清晰的理财计划。</view>
+    </view>
+  </view>
+  <view class="content" wx:if="{{step === 5}}">
+    <view class="cover-out">
+      <image
+    src="https://6461-dandan-zdm86-1259814516.tcb.qcloud.la/onboarding-step5.gif?sign=82f4c43ca1ac954fe3ea42b61c97232c&t=1573281920"
+    class="cover"></image>
+    </view>
+    <view class="word">
+      <view class="title">持续更新。</view>
+      <view class="description">我们初衷是专注于功能和体验的记账工具，因此后续会持续更新更多功能，可一同期待！</view>
+    </view>
+  </view>
+  <view class="content" wx:if="{{step === 6}}">
+    <view class="cover-out" style="background-color: #FFF6F7;">
+      <image
+    src="https://images.vrm.cn/2019/08/29/pig.png" style="width: 212rpx;height: 212rpx;"></image>
+    </view>
+    <view class="word">
+      <view class="title"><text class="bold">一同开启…</text></view>
+      <view class="description">开启你的记账生涯吧。</view>
+    </view>
+  </view>
+  <view class="navigator navigator-left">
+    <view class="dot {{step === 1 ? 'dot-active' : ''}}"></view>
+    <view class="dot {{step === 2 ? 'dot-active' : ''}}"></view>
+    <view class="dot {{step === 3 ? 'dot-active' : ''}}"></view>
+    <view class="dot {{step === 4 ? 'dot-active' : ''}}"></view>
+    <view class="dot {{step === 5 ? 'dot-active' : ''}}"></view>
+    <view class="dot {{step === 6 ? 'dot-active' : ''}}"></view>
+  </view>
+  <view class="navigator navigator-right" bindtap="next">
+    {{step === 6 ? 'START' : 'STEP ' + step}}
+  </view>
+</view>

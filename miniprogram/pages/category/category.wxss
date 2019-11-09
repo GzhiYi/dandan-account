@@ -79,6 +79,9 @@
   position: fixed;
   bottom: 60rpx;
   right: 60rpx;
+  display: flex;
+  border-radius: 50%;
+  background-color: #fff;
 }
 .edit-mode-img {
   width: 90rpx;

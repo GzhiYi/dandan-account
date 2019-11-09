@@ -163,7 +163,7 @@ Component({
       this.setData({
         billList: []
       })
-    }, 300),
+    }, 300, true),
     resetRequestParam() {
       page = 1,
       hasNext = false
@@ -171,7 +171,7 @@ Component({
         activeParentCategory: null
       })
     },
-    touchPie(e) {
+    touchPie: debounce(function(e) {
       const self = this
       // 重置请求参数值
       self.resetRequestParam()
@@ -189,7 +189,7 @@ Component({
           return item.name + ' | ' + item.data + ' | ' + strip(item._proportion_.toFixed(2) * 100) + '%'
         }
       })
-    },
+    }, 300, true),
     // 获取该分类下的账单列表，支持分页。
     fetchBillList(item) {
       if (!item) return

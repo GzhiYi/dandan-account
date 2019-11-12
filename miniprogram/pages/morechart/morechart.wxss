@@ -1,3 +1,6 @@
+page {
+  overflow: hidden;
+}
 .charts {
   margin: 0 auto;
   height:400rpx;
@@ -7,6 +10,7 @@
   text-align: center;
   font-size: 28rpx;
   color: #777;
+  margin-bottom: 60rpx;
 }
 .pick-date {
   text-align: center;
@@ -18,6 +22,8 @@
   font-size: 28rpx;
   padding: 10rpx;
   color: #555;
+  height: 46rpx;
+  line-height: 46rpx;
 }
 .date-tip {
   text-align: center;

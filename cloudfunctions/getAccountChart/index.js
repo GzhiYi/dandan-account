@@ -114,7 +114,7 @@ var AccountChartService = function (mode,date){
       .then(res => {
         let resList = res.list;
         
-        let lastDay = new Date(new Date(o.date).getFullYear(), new Date(o.date).getMonth(), 0).getDate();
+        let lastDay = new Date(new Date(o.date).getFullYear(), new Date(o.date).getMonth()+1, 0).getDate();
         let resListSize = resList.length;
         let xAxisData = new Array();      //x轴数据
         var incomeData = new Array();     //收入数据

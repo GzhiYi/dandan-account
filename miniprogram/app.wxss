@@ -41,10 +41,19 @@ button::after{
   font-size: 37rpx;
   text-align: center;
   padding: 30rpx;
+  border-bottom: 2rpx solid #eee;
 }
 .dialog-tip {
   font-size: 27rpx;
   color: grey;
+  margin: 4rpx 0;
+}
+.pop-indicator {
+  background-color: #E9EBEE;
+  height: 10rpx;
+  width: 68rpx;
+  margin: 3rpx auto;
+  border-radius: 19rpx;
 }
 .divide {
   width: 43%;

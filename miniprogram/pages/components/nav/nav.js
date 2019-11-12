@@ -15,6 +15,7 @@ Component({
   data: {
     showBackIcon: false,
     showIssue: false,
+    showSearch: false,
     showBannerSetting: false
   },
   ready() {
@@ -26,7 +27,8 @@ Component({
       statusBarHeight,
       showBackIcon: showIcons.includes('back'),
       showIssue: showIcons.includes('bug'),
-      showBannerSetting: showIcons.includes('banner')
+      showBannerSetting: showIcons.includes('banner'),
+      showSearch: showIcons.includes('search'),
     })
   },
   attached() {

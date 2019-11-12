@@ -25,7 +25,7 @@
   display:flex;
   justify-content:center;
   align-items:center;
-  margin-right: 22rpx;
+  margin-right: 23rpx;
 }
 .has-font {
   width:74px;
@@ -36,6 +36,8 @@
 .nav-icon {
   width: 36rpx;
   height: 36rpx;
+  background-size: 66%;
+  background-repeat: no-repeat;
 }
 .loading-icon {
   animation: headRotate 2s linear infinite;
@@ -46,7 +48,11 @@
   100% {transform: rotate(360deg);}
 }
 .issue {
-  background-size: 71%;
-  background-repeat: no-repeat;
-  background-image:url("https://6461-dandan-zdm86-1259814516.tcb.qcloud.la/love.png?sign=c6781214ccab90318a9b800ece6e46d2&t=1569510988");
+  background-image:url("https://6461-dandan-zdm86-1259814516.tcb.qcloud.la/telemarketer.png?sign=52b81c866fee1a02585b92c6ca5e1441&t=1573302479");
+}
+.search {
+  background-image: url("https://6461-dandan-zdm86-1259814516.tcb.qcloud.la/search.png?sign=bf636b48f7322a460a4107910d4e9a3b&t=1573268446");
+}
+.more-chart {
+  background-image: url("https://6461-dandan-zdm86-1259814516.tcb.qcloud.la/stats.png?sign=0099917fdb61393a6fd2d8fb5f5baf56&t=1573302662");
 }

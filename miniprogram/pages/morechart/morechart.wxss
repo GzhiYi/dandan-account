@@ -3,3 +3,24 @@
   height:400rpx;
   background-color: #FFFFFF;
 }
+.desc {
+  text-align: center;
+  font-size: 28rpx;
+  color: #777;
+}
+.pick-date {
+  text-align: center;
+  border: 1px solid #eee;
+  width: 50%;
+  margin: 10rpx auto 80rpx;
+  border-radius: 15rpx;
+  box-shadow: 0 20px 50px rgba(41, 50, 104, 0.23);
+  font-size: 28rpx;
+  padding: 10rpx;
+  color: #555;
+}
+.date-tip {
+  text-align: center;
+  font-size: 25rpx;
+  color: grey;
+}

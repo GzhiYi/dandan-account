@@ -125,9 +125,9 @@ var AccountChartService = function (mode,date){
           xAxisData.push(day + "日");
           //该日期存有账单数据
           if (y < resListSize && parseInt(resList[y].noteDate) === day) {
-            incomeData.push(resList[y].income);
-            expensesData.push(resList[y].expenses);
-            netIncomeData.push(resList[y].netIncome);
+            incomeData.push(strip(resList[y].income));
+            expensesData.push(strip(resList[y].expenses));
+            netIncomeData.push(strip(resList[y].netIncome));
             y++;
           } else {
             incomeData.push(0);
@@ -213,9 +213,9 @@ var AccountChartService = function (mode,date){
           xAxisData.push(month + "月");
           //该日期存有账单数据
           if (y < resListSize && parseInt(resList[y].noteMonth) === month) {
-            incomeData.push(resList[y].income);
-            expensesData.push(resList[y].expenses);
-            netIncomeData.push(resList[y].netIncome);
+            incomeData.push(strip(resList[y].income));
+            expensesData.push(strip(resList[y].expenses));
+            netIncomeData.push(strip(resList[y].netIncome));
             y++;
           } else {
             incomeData.push(0);
@@ -264,6 +264,10 @@ var AccountChartService = function (mode,date){
       return false;
     }
     return true;
+  }
+
+  function strip(num, precision = 12) {
+    return +parseFloat(num.toPrecision(precision));
   }
 
   return o;

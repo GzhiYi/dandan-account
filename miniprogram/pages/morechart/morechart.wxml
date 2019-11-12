@@ -11,7 +11,7 @@
     fields="month"
     bindchange="bindDateChange"
   >
-    <view class="pick-date">{{date}}</view>
+    <view class="pick-date">{{date}}           ▾</view>
   </picker>
 </view>
 <view class="more-chart">

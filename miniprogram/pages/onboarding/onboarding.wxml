@@ -73,6 +73,6 @@
     <view class="dot {{step === 6 ? 'dot-active' : ''}}"></view>
   </view>
   <view class="navigator navigator-right" bindtap="next">
-    {{step === 6 ? 'START' : 'STEP ' + step}}
+    {{step === 6 ? '开启' : '下一页'}}
   </view>
 </view>

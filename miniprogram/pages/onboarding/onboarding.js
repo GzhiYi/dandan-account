@@ -11,6 +11,7 @@ Page({
       })
       wx.setStorageSync('isOnboarding', 'v3.5.0')
     } else {
+      wx.vibrateShort()
       this.setData({
         step: step + 1
       })

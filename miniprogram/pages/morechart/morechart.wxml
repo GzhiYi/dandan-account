@@ -1,0 +1,43 @@
+<nav
+  class="nav-instance"
+  showIcons="{{['back']}}"
+></nav>
+<view class="filter">
+  <view class="date-tip">切换时间</view>
+  <picker
+    class="picker"
+    mode="date"
+    value="{{date}}"
+    fields="month"
+    bindchange="bindDateChange"
+  >
+    <view class="pick-date">{{date}}</view>
+  </picker>
+</view>
+<view class="more-chart">
+  <canvas
+    canvas-id="linechart-month"
+    id="linechart-month"
+    class="charts"
+    style="width: {{400}}px;"
+    bind:touchstart="touchLineA"
+    bind:touchmove="moveLineA"
+    bind:touchend="touchEndLineA"
+  ></canvas>
+  <view class="desc">
+    11月记账折线图
+  </view>
+
+  <canvas
+    canvas-id="linechart-year"
+    id="linechart-year"
+    class="charts"
+    style="width: {{400}}px;"
+    bind:touchstart="touchLineB"
+    bind:touchmove="moveLineB"
+    bind:touchend="touchEndLineB"
+  ></canvas>
+  <view class="desc">
+    2019年记账折线图
+  </view>
+</view>

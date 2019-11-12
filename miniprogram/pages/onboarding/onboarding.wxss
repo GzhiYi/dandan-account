@@ -1,0 +1,55 @@
+.navigator {
+  position: absolute;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 180rpx;
+}
+.navigator-right {
+  background: #ff5b4c;
+  right: 0;
+  width: 45%;
+  border-radius: 75rpx 0 0;
+  color: #fff;
+  border-left: 16rpx solid #ffe0dc;
+  border-top: 16rpx solid #ffe0dc;
+  font-size: 32rpx;
+}
+.navigator-left {
+  width: 50%;
+}
+.dot {
+  width: 8rpx;
+  height: 8rpx;
+  background-color: #ccc;
+  margin-right: 21rpx;
+  border-radius: 50%;
+}
+.dot-active {
+  background-color: #1c1c1c;
+}
+.cover-out {
+  height: 600rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.cover {
+  width: 800rpx;
+  height: 600rpx;
+}
+.word {
+  margin: 20rpx 40rpx;
+}
+.title {
+  font-size: 70rpx;
+  margin-bottom: 40rpx;
+}
+.description {
+  color: #1c1c1c;
+  font-size: 40rpx;
+}
+.bold {
+  font-weight: bold;
+}

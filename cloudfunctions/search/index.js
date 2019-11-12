@@ -20,7 +20,8 @@ exports.main = async (event, context) => {
   // 获取该用户的分类
   const categoryList = await db.collection("DANDAN_NOTE_CATEGORY")
   .where({
-    openId: _.eq(wxContext.OPENID).or(_.eq("SYSTEM"))
+    openId: _.eq(wxContext.OPENID).or(_.eq("SYSTEM")),
+    isDel: false
   })
   .get()
   try {

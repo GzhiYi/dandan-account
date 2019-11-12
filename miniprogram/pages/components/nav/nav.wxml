@@ -17,6 +17,15 @@
       <button
         style="border: none;height: 39rpx;"
         plain='true'
+        class='nav-icon more-chart'
+        bindtap="goTo"
+        data-page="morechart"
+      ></button>
+    </view>
+    <view class='nav-icon-view-back' wx:if="{{showSearch}}">
+      <button
+        style="border: none;height: 39rpx;"
+        plain='true'
         class='nav-icon search'
         bindtap="goTo"
         data-page="search"

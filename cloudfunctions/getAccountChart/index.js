@@ -1,23 +1,16 @@
 // 云函数入口文件
 const cloud = require('wx-server-sdk')
-cloud.init()
+cloud.init();
 
-const wxContext = cloud.getWXContext();
-cloud.updateConfig({
-  env: wxContext.ENV === 'local' ? 'release-wifo3' : wxContext.ENV
-})
-
-let { OPENID, APPID, UNIONID } = cloud.getWXContext()
 //全局变量
 const MAX_LIMIT = 100;//最大限制数
 
 // 云函数入口函数
 exports.main = async (event, context) => {
-
   const { mode,date } = event;
-  const service = AccountChartService(mode, date);
+  let service = AccountChartService(mode, date);
   try {
-      return service.getAccountChart();
+      return await service.getAccountChart();
   } catch (e) {
     console.error(e);
     return {
@@ -30,11 +23,13 @@ exports.main = async (event, context) => {
 }
  
 //账单图表service类 2019-11-12
-var AccountChartService = function (mode,date){
+var AccountChartService = function (mode,date,openId){
   var o = new Object();
   o.mode = mode;
   o.date = date;
-  
+
+  const wxContext = cloud.getWXContext();
+
   /**
    * 获取数据库连接对象
    */
@@ -50,12 +45,12 @@ var AccountChartService = function (mode,date){
     }
   }
 
-  o.getAccountChart = async function () {
+  o.getAccountChart = function () {
     if (o.mode == "getAccountChartByMonth") {
-      return await o.getAccountChartByMonth();
+      return o.getAccountChartByMonth();
     }
     if (o.mode == "getAccountChartByYear") {
-      return await o.getAccountChartByYear();
+      return o.getAccountChartByYear();
     } 
     return {
       code: -1,
@@ -91,7 +86,7 @@ var AccountChartService = function (mode,date){
         }),
       })
       .match({
-        openId: OPENID,
+        openId: wxContext.OPENID,
         formatDate: o.date
       })
       .group({
@@ -179,7 +174,7 @@ var AccountChartService = function (mode,date){
         }),
       })
       .match({
-        openId: OPENID,
+        openId: wxContext.OPENID,
         formatDate: o.date
       })
       .group({
@@ -254,7 +249,8 @@ var AccountChartService = function (mode,date){
       }, {
         name: '净收入',
         data: netIncomeArray
-      }]
+      }],
+      operId: wxContext.OPENID
     }
   }
 

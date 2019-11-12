@@ -25,7 +25,7 @@
     bind:touchend="touchEndLineA"
   ></canvas>
   <view class="desc">
-    11月记账折线图
+    {{month}}月记账折线图
   </view>
 
   <canvas
@@ -38,6 +38,6 @@
     bind:touchend="touchEndLineB"
   ></canvas>
   <view class="desc">
-    2019年记账折线图
+    {{year}}年记账折线图
   </view>
 </view>

@@ -87,7 +87,8 @@ var AccountChartService = function (mode,date,openId){
       })
       .match({
         openId: wxContext.OPENID,
-        formatDate: o.date
+        formatDate: o.date,
+        isDel : false
       })
       .group({
         _id: '$noteDay',
@@ -175,7 +176,8 @@ var AccountChartService = function (mode,date,openId){
       })
       .match({
         openId: wxContext.OPENID,
-        formatDate: o.date
+        formatDate: o.date,
+        isDel: false
       })
       .group({
         _id: '$noteMonth',

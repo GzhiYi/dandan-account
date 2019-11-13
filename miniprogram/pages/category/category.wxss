@@ -3,8 +3,11 @@
   font-size: 27rpx;
   color: #fff;
   padding: 10rpx;
-  display: inline-block;
+  display: flex;
   width: 97%;
+  height: 41rpx;
+  justify-content: space-between;
+  align-items: center;
 }
 .add-icon {
   font-size: 30rpx;
@@ -16,7 +19,7 @@
 
 }
 .category {
-  padding: 0 0 30rpx;
+  padding: 0 0 130rpx;
 }
 .child-category {
   display: flex;
@@ -71,4 +74,16 @@
   padding: 0 8rpx;
   margin-left: 15rpx;
   margin-right: -12rpx;
+}
+.edit-mode {
+  position: fixed;
+  bottom: 60rpx;
+  right: 60rpx;
+  display: flex;
+  border-radius: 50%;
+  background-color: #fff;
+}
+.edit-mode-img {
+  width: 90rpx;
+  height: 90rpx;
 }

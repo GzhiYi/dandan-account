@@ -22,6 +22,7 @@
   display: flex;
   justify-content: space-between;
   margin: 0 0 20rpx;
+  min-width: 140rpx;
 }
 .week {
   display: flex;

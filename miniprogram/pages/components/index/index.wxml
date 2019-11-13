@@ -129,9 +129,9 @@
 <!-- 支付方式弹窗 -->
 <dialog visible="{{showPayTypeDialog}}" bind:closeDialog="closeDialog">
   <view slot="content">
+    <view class="pop-indicator"></view>
     <view class="d-header">
       选择本笔账单的支付方式
-      <view class="divide"></view>
     </view>
     <view class="list-item-btn {{payType === '支付宝' ? 'active-paytype' : ''}}" bindtap="selectType" data-paytype="支付宝">支付宝</view>
     <view class="list-item-btn {{payType === '微信' ? 'active-paytype' : ''}}" bindtap="selectType" data-paytype="微信">微信</view>

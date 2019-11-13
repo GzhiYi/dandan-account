@@ -52,7 +52,7 @@ module.exports.handle = handle;
       <canvas
         canvas-id="pie"
         id="pie"
-        wx:if="{{pieChartData}}"
+        wx:if="{{pieChartData && pieChartData[activeTab === 'pay' ? 'flowOut' : 'flowIn'].dataList.length !== 0}}"
         class="charts"
         style="width: {{cWidth}}px;"
         bind:touchstart="touchPie"
@@ -65,7 +65,7 @@ module.exports.handle = handle;
       |д･)害怕躲起来
     </view>
 
-    <view class="empty-chart" wx:if="{{!pieChartData}}">
+    <view class="empty-chart" wx:if="{{!pieChartData || pieChartData[activeTab === 'pay' ? 'flowOut' : 'flowIn'].dataList.length === 0}}">
         没有账单数据( ´･･)ﾉ(._.`)
     </view>
     <view class="select-filter">
@@ -94,6 +94,7 @@ module.exports.handle = handle;
         wx:key="{{item._id}}"
         bindtap="showMenu"
         data-bill="{{item}}"
+        style="{{item._id === editItem._id && showMenuDialog ? 'border: 4rpx solid #f75676; padding: 16rpx 26rpx;' : ''}}"
       >
         <view class="type-date">
           <view class="type">{{item.category.categoryName}}</view>
@@ -118,9 +119,10 @@ module.exports.handle = handle;
 <!-- 父类选择弹窗 -->
 <dialog visible="{{showParentDialog}}" bind:closeDialog="closeDialog">
   <view slot="content">
+    <view class="pop-indicator"></view>
     <view class="d-header">
       查看该分类下的账单
-      <view class="divide"></view>
+      <view class="dialog-tip">饼图比例小无法点击可在此选择查看</view>
     </view>
     <scroll-view class="dialog-bills" scroll-y="true">
       <view
@@ -132,8 +134,8 @@ module.exports.handle = handle;
         bindtap="selectParentCategory"
         data-category="{{item}}"
         data-index="{{index}}"
-      >{{item.categoryName}}
-        <view class="active-bar" wx:if="{{activeParentIndex === index}}"></view>
+      >
+        <text class="category-list-style" style="background: {{activeParentIndex === index ? 'rgb(255, 248, 198);' : ''}}">{{item.categoryName}}</text>
       </view>
     </scroll-view>
   </view>
@@ -141,9 +143,11 @@ module.exports.handle = handle;
 <!-- 编辑弹窗 -->
 <dialog visible="{{showMenuDialog}}" bind:closeDialog="closeDialog">
   <view slot="content">
+    <view class="pop-indicator"></view>
     <view class="d-header">
-    {{editItem.description || editItem.category.categoryName}}
-      <view class="divide"></view>
+    {{editItem.category.categoryName}}
+    <view class="dialog-tip">金额：{{editItem.flow === 0 ? '-' : '+'}}{{editItem.money}}，记账日期：{{editItem.noteDate}}</view>
+    <view class="dialog-tip" wx:if="{{editItem.description}}">备注：{{editItem.description}}</view>
     </view>
     <view class='list-item-btn' style="color: #4fd69c;" bindtap="editBill">编辑</view>
     <view class='list-item-btn' style="color: #f75676;" bindtap="deleteBill">

@@ -55,8 +55,25 @@ Component({
         success(res) {
           if (res.result && res.result.code === 1) {
             // 新聚合接口，带分页
-            self.setData({
-              billResult: res.result.data
+            let response = res.result.data
+            let billResult = {
+              monthResult: {},
+              rangeResult: {}
+            }
+            response.monthResult.forEach(item => {
+              billResult['monthResult'][item._id === 1 ? 'income' : 'pay'] = item
+            })
+            response.rangeResult.forEach(item => {
+              billResult['rangeResult'][item._id === 1 ? 'income' : 'pay'] = item
+            })
+            delete response.monthResult
+            delete response.rangeResult
+
+            self.setData({ 
+              billResult: {
+                ...response,
+                ...billResult
+              }
             })
           } else {
             wx.showToast({

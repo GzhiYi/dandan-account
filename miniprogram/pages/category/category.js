@@ -14,7 +14,9 @@ Page({
     showConfirmDelete: false,
     showBannerDialog: false,
     word: '',
-    loadingSetting: false
+    loadingSetting: false,
+    localCategory: [],
+    isEdit: false
   },
 
   /**
@@ -24,6 +26,11 @@ Page({
     const self = this
     billType = options.type
     self.getCategoryList(options.type)
+    if (options.type == 0) {
+      self.setData({
+        localCategory: wx.getStorageSync('localCategory').slice(0, 8)
+      })
+    }
   },
   getCategoryList(flow) {
     this.setData({
@@ -207,7 +214,6 @@ Page({
         expire: +new Date(new Date().getTime() + 24 * 60 * 60 * 1000)
       },
       success(res) {
-        console.log('lalal', res)
         if (res.result.code === 1) {
           self.closeDialog()
           self.setData({
@@ -237,6 +243,13 @@ Page({
           loadingSetting: false
         })
       }
+    })
+  },
+  changeEdit() {
+    const { isEdit } = this.data
+    wx.vibrateShort()
+    this.setData({
+      isEdit: !isEdit
     })
   }
 })

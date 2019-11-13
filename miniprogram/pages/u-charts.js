@@ -1731,7 +1731,7 @@ function drawPieText(series, opts, config, context, radius, center) {
   var lastTextObject = null;
 
   var seriesConvert = series.map(function(item) {
-    var text = item.name + ': ' + item.data;
+    var text = item.name + ': ' + util.toFixed(item.data);
     if(item._rose_proportion_) item._proportion_=item._rose_proportion_;
     var arc = 2 * Math.PI - (item._start_ + 2 * Math.PI * item._proportion_ / 2);
     var color = item.color;

@@ -1,23 +1,16 @@
 // 云函数入口文件
 const cloud = require('wx-server-sdk')
-cloud.init()
+cloud.init();
 
-const wxContext = cloud.getWXContext();
-cloud.updateConfig({
-  env: wxContext.ENV === 'local' ? 'release-wifo3' : wxContext.ENV
-})
-
-let { OPENID, APPID, UNIONID } = cloud.getWXContext()
 //全局变量
 const MAX_LIMIT = 100;//最大限制数
 
 // 云函数入口函数
 exports.main = async (event, context) => {
-
   const { mode,date } = event;
-  const service = AccountChartService(mode, date);
+  let service = AccountChartService(mode, date);
   try {
-      return service.getAccountChart();
+      return await service.getAccountChart();
   } catch (e) {
     console.error(e);
     return {
@@ -30,11 +23,13 @@ exports.main = async (event, context) => {
 }
  
 //账单图表service类 2019-11-12
-var AccountChartService = function (mode,date){
+var AccountChartService = function (mode,date,openId){
   var o = new Object();
   o.mode = mode;
   o.date = date;
-  
+
+  const wxContext = cloud.getWXContext();
+
   /**
    * 获取数据库连接对象
    */
@@ -50,12 +45,12 @@ var AccountChartService = function (mode,date){
     }
   }
 
-  o.getAccountChart = async function () {
+  o.getAccountChart = function () {
     if (o.mode == "getAccountChartByMonth") {
-      return await o.getAccountChartByMonth();
+      return o.getAccountChartByMonth();
     }
     if (o.mode == "getAccountChartByYear") {
-      return await o.getAccountChartByYear();
+      return o.getAccountChartByYear();
     } 
     return {
       code: -1,
@@ -91,8 +86,9 @@ var AccountChartService = function (mode,date){
         }),
       })
       .match({
-        openId: OPENID,
-        formatDate: o.date
+        openId: wxContext.OPENID,
+        formatDate: o.date,
+        isDel : false
       })
       .group({
         _id: '$noteDay',
@@ -114,7 +110,7 @@ var AccountChartService = function (mode,date){
       .then(res => {
         let resList = res.list;
         
-        let lastDay = new Date(new Date(o.date).getFullYear(), new Date(o.date).getMonth(), 0).getDate();
+        let lastDay = new Date(new Date(o.date).getFullYear(), new Date(o.date).getMonth()+1, 0).getDate();
         let resListSize = resList.length;
         let xAxisData = new Array();      //x轴数据
         var incomeData = new Array();     //收入数据
@@ -125,9 +121,9 @@ var AccountChartService = function (mode,date){
           xAxisData.push(day + "日");
           //该日期存有账单数据
           if (y < resListSize && parseInt(resList[y].noteDate) === day) {
-            incomeData.push(resList[y].income);
-            expensesData.push(resList[y].expenses);
-            netIncomeData.push(resList[y].netIncome);
+            incomeData.push(strip(resList[y].income));
+            expensesData.push(strip(resList[y].expenses));
+            netIncomeData.push(strip(resList[y].netIncome));
             y++;
           } else {
             incomeData.push(0);
@@ -179,8 +175,9 @@ var AccountChartService = function (mode,date){
         }),
       })
       .match({
-        openId: OPENID,
-        formatDate: o.date
+        openId: wxContext.OPENID,
+        formatDate: o.date,
+        isDel: false
       })
       .group({
         _id: '$noteMonth',
@@ -213,9 +210,9 @@ var AccountChartService = function (mode,date){
           xAxisData.push(month + "月");
           //该日期存有账单数据
           if (y < resListSize && parseInt(resList[y].noteMonth) === month) {
-            incomeData.push(resList[y].income);
-            expensesData.push(resList[y].expenses);
-            netIncomeData.push(resList[y].netIncome);
+            incomeData.push(strip(resList[y].income));
+            expensesData.push(strip(resList[y].expenses));
+            netIncomeData.push(strip(resList[y].netIncome));
             y++;
           } else {
             incomeData.push(0);
@@ -254,7 +251,8 @@ var AccountChartService = function (mode,date){
       }, {
         name: '净收入',
         data: netIncomeArray
-      }]
+      }],
+      operId: wxContext.OPENID
     }
   }
 
@@ -264,6 +262,10 @@ var AccountChartService = function (mode,date){
       return false;
     }
     return true;
+  }
+
+  function strip(num, precision = 12) {
+    return +parseFloat(num.toPrecision(precision));
   }
 
   return o;

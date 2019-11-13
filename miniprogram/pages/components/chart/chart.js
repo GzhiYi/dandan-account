@@ -127,9 +127,10 @@ Component({
           if (result && result.code === 1) {
             const dataList = result.detailResult[activeTab === 'pay' ? 'flowOut' : 'flowIn']['dataList']
             self.setData({
-              pieChartData: dataList.length === 0 ? null : result.detailResult,
+              pieChartData: result.detailResult,
               categoryList: dataList
             })
+            
             if (dataList.length > 0) {
               self.fillPie(result.detailResult)
             }
@@ -162,7 +163,7 @@ Component({
       this.setData({
         billList: []
       })
-    }, 300),
+    }, 300, true),
     resetRequestParam() {
       page = 1,
       hasNext = false
@@ -170,7 +171,7 @@ Component({
         activeParentCategory: null
       })
     },
-    touchPie(e) {
+    touchPie: debounce(function(e) {
       const self = this
       // 重置请求参数值
       self.resetRequestParam()
@@ -185,10 +186,10 @@ Component({
           })
           self.fetchBillList(item)
           wx.vibrateShort()
-          return item.name + ' | ' + +parseFloat(item.data.toPrecision(12)) + ' | ' + strip(item._proportion_.toFixed(2) * 100) + '%'
+          return item.name + ' / ' + +parseFloat(item.data.toPrecision(12)) + ' / ' + strip(item._proportion_.toFixed(2) * 100) + '%'
         }
       })
-    },
+    }, 300, true),
     // 获取该分类下的账单列表，支持分页。
     fetchBillList(item) {
       if (!item) return
@@ -247,17 +248,22 @@ Component({
       }
     },
     changeTab(e) {
+      const self = this
       const {
         tab
       } = e.currentTarget.dataset
-      if (tab === this.data.activeTab) return false
-      const self = this
+      const {
+        pieChartData,
+        activeTab
+      } = self.data
+      if (tab === activeTab) return false
       wx.vibrateShort({})
-      this.setData({
+      self.setData({
         activeTab: tab,
         activeParentIndex: 0,
         activeParentCategory: null,
-        billList: []
+        billList: [],
+        categoryList: pieChartData[tab === 'pay' ? 'flowOut' : 'flowIn']['dataList'] || []
       }, function () {
         self.fillPie()
       })

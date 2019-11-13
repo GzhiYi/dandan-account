@@ -12,9 +12,13 @@ var formatDate = function(dateRange, today) {
   }
   return dateRange[0] + ' ~ ' + dateRange[1];
 }
+var numParse = function(num) {
+  return +parseFloat(num.toPrecision(12));
+}
 
 module.exports.handle = handle;
 module.exports.formatDate = formatDate
+module.exports.numParse = numParse
 </wxs>
 
 <view class="calendar">

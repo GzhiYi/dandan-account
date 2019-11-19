@@ -36,7 +36,7 @@ exports.main = async (event, context) => {
   if (mode == 'update') {
     try {
       const { word, expire } = event
-      const authUsers = ['obBpt5WNBt2DoPFnUQyX5BA0O7L8', 'obBpt5XdwPJAfwnIWEq2FZdDIrBQ']
+      const authUsers = ['obBpt5WNBt2DoPFnUQyX5BA0O7L8', 'obBpt5XdwPJAfwnIWEq2FZdDIrBQ', 'obBpt5fRcE7ZHHM8pZWTEaUcYj-k']
       if (!authUsers.includes(wxContext.OPENID)) {
         return {
           code: -1,

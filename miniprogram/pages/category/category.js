@@ -73,7 +73,7 @@ Page({
         title: '未填写子分类名呀！',
         icon: 'none'
       })
-      return falsee
+      return false
     }
     self.setData({
       loadingAdd: true

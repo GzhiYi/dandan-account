@@ -21,7 +21,8 @@ Component({
     wordData: null,
     showPayType: false,
     showPayTypeDialog: false,
-    payType: '支付宝'
+    payType: '支付宝',
+    payTypeList: []
   },
   ready() {
     const now = new Date()
@@ -85,7 +86,8 @@ Component({
             }
             // 无论如何都要设置这个
             self.setData({
-              showPayType: response.showPayType
+              showPayType: response.showPayType,
+              payTypeList: response.payTypeList
             })
           }
         }
@@ -194,7 +196,8 @@ Component({
           money: sum,
           categoryId: selectedCategory._id,
           noteDate: active_date_time,
-          description: note ? (showPayType ? `${payType}-${note}` : note) : note,
+          // 有备注的话就显示支付方式，没有的话不显示。
+          description: note ? (showPayType && payType ? `${payType}-${note}` : note) : note,
           flow: active_tab,
           id: isEdit ? editBill._id : ''
         },

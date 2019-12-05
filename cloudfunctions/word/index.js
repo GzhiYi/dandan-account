@@ -23,6 +23,14 @@ exports.main = async (event, context) => {
         code: 1,
         data: res.data[0],
         showPayType: payTypeAuthUsers.includes(wxContext.OPENID),
+        payTypeList: [
+          '',
+          '支付宝',
+          '微信',
+          '信用卡',
+          '掌上生活',
+          '招商银行'
+        ],
         message: '获取成功'
       }
     } catch (error) {
@@ -36,7 +44,12 @@ exports.main = async (event, context) => {
   if (mode == 'update') {
     try {
       const { word, expire } = event
-      const authUsers = ['obBpt5WNBt2DoPFnUQyX5BA0O7L8', 'obBpt5XdwPJAfwnIWEq2FZdDIrBQ', 'obBpt5fRcE7ZHHM8pZWTEaUcYj-k']
+      // 能够进行设置banner的openId列表
+      const authUsers = [
+        'obBpt5WNBt2DoPFnUQyX5BA0O7L8',
+        'obBpt5XdwPJAfwnIWEq2FZdDIrBQ',
+        'obBpt5fRcE7ZHHM8pZWTEaUcYj-k'
+      ]
       if (!authUsers.includes(wxContext.OPENID)) {
         return {
           code: -1,

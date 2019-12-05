@@ -163,14 +163,16 @@ Component({
         showPayType,
         payType
       } = this.data
-      if (!/^0{1}([.]\d{1,2})?$|^[1-9]\d*([.]{1}[0-9]{1,2})?$/.test(Number(sum)) || isNaN(Number(sum))) {
+      // hack，欧元键盘不显示.号所以需要进行替换
+      let transSum = sum.replace(',', '.')
+      if (!/^0{1}([.]\d{1,2})?$|^[1-9]\d*([.]{1}[0-9]{1,2})?$/.test(Number(transSum)) || isNaN(Number(transSum))) {
         wx.showToast({
           title: '金额输入不正确，最多两位小数',
           icon: 'none'
         })
         return false
       }
-      if (Number(sum) === 0) {
+      if (Number(transSum) === 0) {
         wx.showToast({
           title: '金额不能为0呀！',
           icon: 'none'
@@ -191,7 +193,7 @@ Component({
         name: 'account',
         data: {
           mode: isEdit ? 'updateById' : 'add',
-          money: sum,
+          money: transSum,
           categoryId: selectedCategory._id,
           noteDate: active_date_time,
           description: note ? (showPayType ? `${payType}-${note}` : note) : note,

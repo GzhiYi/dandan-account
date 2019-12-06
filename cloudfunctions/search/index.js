@@ -34,7 +34,7 @@ exports.main = async (event, context) => {
       },
       {
         money: db.RegExp({
-          regexp: '.*' + keyWord,
+          regexp: keyWord,
           options: 'i',
         })
       }

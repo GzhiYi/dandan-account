@@ -21,7 +21,8 @@ Component({
     wordData: null,
     showPayType: false,
     showPayTypeDialog: false,
-    payType: '支付宝'
+    payType: '支付宝',
+    specialDay: Date.parse(new Date()) < 1577318400000 // before christmas.
   },
   ready() {
     const now = new Date()

@@ -1,2 +1,3 @@
 node_modules/
-cloudfunctions/backup/config.js
+cloudfunctions/backup/wxInfo.js
+cloudfunctions/**/package-lock.json

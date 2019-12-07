@@ -1,23 +1,21 @@
+import { strip } from '../../util'
+
+let isNotifyReset = false
 Page({
   data: {
     billList: null,
     screenHeight: getApp().globalData.screenHeight,
     statusBarHeight: getApp().globalData.statusBarHeight,
-    isSearching: false
-  },
-  onLoad: function (options) {
-
-  },
-  onReady: function () {
-
-  },
-  onShow: function () {
-
+    isSearching: false,
+    word: '',
+    isFocus: true,
+    keyword: '',
+    isSearched: false
   },
   confirmTap(event) {
-    const { value } = event.detail
+    const { keyword } = this.data
     const self = this
-    if (!value || !value.trim()) return
+    if (!keyword || !keyword.trim()) return
 
     // 查询操作
     self.setData({
@@ -27,12 +25,21 @@ Page({
     wx.cloud.callFunction({
       name: 'search',
       data: {
-        keyWord: value
+        keyWord: keyword
       },
       success(res) {
         if (res.result.code === 1) {
+          const billList = res.result.data
+          let income = 0
+          let pay = 0
+          billList.forEach(bill => {
+            if (bill.flow == 0) pay += bill.money
+            if (bill.flow == 1) income += bill.money
+          })
           self.setData({
-            billList: res.result.data
+            billList,
+            isSearched: true,
+            word: `关键字 ${keyword} 搜索结果：收入共：${strip(income)}，支出共：${strip(pay)}`
           })
         }
       },
@@ -44,6 +51,28 @@ Page({
           isSearching: false
         })
       }
+    })
+  },
+  onInputChange(event) {
+    const { value } = event.detail
+    const { word } = this.data
+    // 做判断，如果输入文字并且还没搜索出结果就提示重置
+    if (value && word !== '点猪重置输入哦～' && !isNotifyReset) {
+      this.setData({
+        word: '点猪重置输入哦～',
+        isSearched: false
+      })
+      isNotifyReset = true
+    }
+    this.setData({
+      keyword: value
+    })
+  },
+  resetSearch() {
+    this.setData({
+      keyword: '',
+      word: '',
+      isFocus: true
     })
   }
 })

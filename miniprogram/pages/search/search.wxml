@@ -3,11 +3,26 @@
   showIcons="{{['back']}}"
 ></nav>
 <view class="search">
-  <image src="https://images.vrm.cn/2019/08/29/pig.png" class="search-icon"></image>
+  <view class="banner">
+    <view class="banner-show">
+      <image
+        src="https://images.vrm.cn/2019/08/29/pig.png"
+        style="width: 120rpx;height: 120rpx;"
+        bindtap="resetSearch"
+      ></image>
+      <view class='pig-talk' wx:if="{{word}}" bindtap="resetSearch">
+        <view class='word-tang-left'></view>
+        <view class='word-detail'>{{word}}</view>
+      </view>
+    </view>
+  </view>
   <input
     type="text"
     class="search-input"
+    value="{{keyword}}"
+    bindinput="onInputChange"
     auto-focus
+    focus="{{isFocus}}"
     confirm-type="search"
     bindconfirm='confirmTap'
   />

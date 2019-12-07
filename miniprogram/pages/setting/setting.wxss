@@ -39,3 +39,8 @@ page {
   height: 100rpx;
   float: right;
 }
+.notify-status {
+  font-size: 34rpx;
+  margin-top: 20rpx;
+  text-align: right;
+}

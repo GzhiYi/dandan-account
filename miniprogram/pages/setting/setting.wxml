@@ -17,7 +17,7 @@
       <view class="title">需要推送提醒你记账吗？</view>
       <view class="desc">
         <text>我们会在需要你记账的时候提醒你。</text>
-        <view>已开启，点击关闭</view>
+        <view class="notify-status" bindtap="changeNotify">已开启，点击关闭</view>
       </view>
     </view>
   </view>

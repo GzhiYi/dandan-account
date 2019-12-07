@@ -13,6 +13,7 @@ var formatDate = function(dateRange, today) {
   return dateRange[0] + ' ~ ' + dateRange[1];
 }
 var numParse = function(num) {
+  num = Number(num)
   return +parseFloat(num.toPrecision(12));
 }
 
@@ -68,13 +69,13 @@ module.exports.numParse = numParse
       <block wx:if="{{dateRange.length !== 1}}">
         <view style="display: flex;justify-content: flex-end;">
           <view class="result-time">本月</view>
-          <view class="item-pay">支出 {{billResult.monthResult.pay.allSum || 0}}</view>
-          <view class="item-income">收入 {{billResult.monthResult.income.allSum || 0}}</view>
+          <view class="item-pay">支出 {{rangeStyle.numParse(billResult.monthResult.pay.allSum) || 0}}</view>
+          <view class="item-income">收入 {{rangeStyle.numParse(billResult.monthResult.income.allSum) || 0}}</view>
         </view>
         <view style="display: flex;justify-content: flex-end;">
           <view class="result-time">{{rangeStyle.formatDate(dateRange, today)}}</view>
-          <view class="item-pay">支出 {{billResult.rangeResult.pay.allSum || 0}}</view>
-          <view class="item-income">收入 {{billResult.rangeResult.income.allSum || 0}} </view>
+          <view class="item-pay">支出 {{rangeStyle.numParse(billResult.rangeResult.pay.allSum) || 0}}</view>
+          <view class="item-income">收入 {{rangeStyle.numParse(billResult.rangeResult.income.allSum) || 0}} </view>
         </view>
       </block>
       <view wx:else style="font-weight: bold;height: 74rpx;line-height: 74rpx;">选择结束日期</view>

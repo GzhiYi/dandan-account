@@ -1,10 +1,10 @@
 {
   "pages": [
+    "pages/morechart/morechart",
     "pages/tab/tab",
     "pages/category/category",
     "pages/search/search",
-    "pages/onboarding/onboarding",
-    "pages/morechart/morechart"
+    "pages/onboarding/onboarding"
   ],
   "window": {
     "backgroundColor": "#F6F6F6",

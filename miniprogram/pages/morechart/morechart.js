@@ -10,8 +10,7 @@ Page({
     year: parseTime(new Date(), '{y}'),
     month: parseTime(new Date(), '{m}'),
   },
-  onLoad: function (options) {
-    // TODO, It is fake chart in testing.
+  onLoad: function () {
     this.fillChart()
   },
   fillChart() {
@@ -38,11 +37,6 @@ Page({
         date
       },
       success(res) {
-        console.log('月账单请求参数：', {
-          mode: 'getAccountChartByMonth',
-          date
-        })
-        console.log('月账单数据返回', res)
         const { code } = res.result
         const { categories, series } = res.result.data
         if (res.result.code === 1) {
@@ -81,7 +75,7 @@ Page({
               } //如不写此方法，Y轴刻度默认保留两位小数
             },
             width: 385,
-            height: 200,
+            height: 250,
             extra: {
               line: {
                 type: 'curve'
@@ -107,11 +101,6 @@ Page({
         date: date.split('-')[0]
       },
       success(res) {
-        console.log('年账单请求参数：', {
-          mode: 'getAccountChartByYear',
-          date: date.split('-')[0]
-        })
-        console.log('年账单数据返回：', res)
         const { code } = res.result
         const { categories, series } = res.result.data
         if (res.result.code === 1) {
@@ -150,7 +139,7 @@ Page({
               } //如不写此方法，Y轴刻度默认保留两位小数
             },
             width: 385,
-            height: 200,
+            height: 250,
             extra: {
               line: {
                 type: 'curve'

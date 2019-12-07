@@ -1,0 +1,40 @@
+<nav
+  class="nav-instance"
+  showIcons="{{['back']}}"
+></nav>
+<view class="setting">
+  <view class="part">
+    <view class="left">自言自语</view>
+    <view class="right dandan">
+      <view class="title">很高兴能与你一起</view>
+      <text class="desc">继续坚持记账</text>
+      <image class="pig" src="https://images.vrm.cn/2019/08/29/pig.png" style="width: 120rpx;height: 120rpx;"/>
+    </view>
+  </view>
+  <view class="part">
+    <view class="left">好啰嗦</view>
+    <view class="right dandan">
+      <view class="title">需要推送提醒你记账吗？</view>
+      <view class="desc">
+        <text>我们会在需要你记账的时候提醒你。</text>
+        <view>已开启，点击关闭</view>
+      </view>
+    </view>
+  </view>
+  <view class="part">
+    <view class="left">左边</view>
+    <view class="right">右边</view>
+  </view>
+  <view class="part">
+    <view class="left">左边</view>
+    <view class="right">右边</view>
+  </view>
+  <view class="part">
+    <view class="left">左边</view>
+    <view class="right">右边</view>
+  </view>
+  <view class="part">
+    <view class="left">左边</view>
+    <view class="right">右边</view>
+  </view>
+</view>

@@ -1,4 +1,4 @@
-<view class="banner">
+<view class="{{specialDay ? 'banner-special' : 'banner'}}">
   <view class="banner-show" wx:if="{{clickPigNum < 5}}">
     <image
       src="https://images.vrm.cn/2019/08/29/pig.png"

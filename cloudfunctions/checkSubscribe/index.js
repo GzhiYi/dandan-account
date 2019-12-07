@@ -21,32 +21,55 @@ exports.main = async (event, context) => {
     if (event.mode === 'post') {
       // 如果用户开启
       if (event.type === 'open') {
-        if (checkRes.data.length === 0) {
-          await db.collection('SUBSCRIBE').add({
-            data: {
-              openId: wxContext.OPENID,
-              canSubscribe: true
-            }
-          })
-        } else {
+        try {
+          if (checkRes.data.length === 0) {
+            await db.collection('SUBSCRIBE').add({
+              data: {
+                openId: wxContext.OPENID,
+                canSubscribe: true
+              }
+            })
+          } else {
+            const docId = checkRes.data[0]._id
+            await db.collection('SUBSCRIBE').doc(docId)
+              .update({
+                data: {
+                  canSubscribe: true
+                }
+              })
+          }
+          return {
+            code: 1,
+            msg: '开启成功'
+          }
+        } catch (error) {
+          return {
+            code: 0,
+            msg: '开启失败'
+          }
+        }
+        
+      }
+      if (event.type === 'close') {
+        try {
+          // 如果关闭
           const docId = checkRes.data[0]._id
           await db.collection('SUBSCRIBE').doc(docId)
             .update({
               data: {
-                canSubscribe: true
+                canSubscribe: false
               }
             })
+          return {
+            code: 1,
+            msg: '关闭成功'
+          }
+        } catch (error) {
+          return {
+            code: 0,
+            msg: '关闭失败'
+          }
         }
-      }
-      if (event.type === 'close') {
-        // 如果关闭
-        const docId = checkRes.data[0]._id
-        await db.collection('SUBSCRIBE').doc(docId)
-          .update({
-            data: {
-              canSubscribe: false
-            }
-          })
       }
     }
     if (event.mode === 'get') {

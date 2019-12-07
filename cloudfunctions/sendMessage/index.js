@@ -3,6 +3,38 @@ const cloud = require('wx-server-sdk')
 
 cloud.init()
 
+function parseTime(time, cFormat) {
+  if (arguments.length === 0) {
+    return null
+  }
+  const format = cFormat || '{y}-{m}-{d} {h}:{i}:{s}'
+  let date
+  if (typeof time === 'object') {
+    date = time
+  } else {
+    if (('' + time).length === 10) time = parseInt(time) * 1000
+    date = new Date(time)
+  }
+  const formatObj = {
+    y: date.getFullYear(),
+    m: date.getMonth() + 1,
+    d: date.getDate(),
+    h: date.getHours(),
+    i: date.getMinutes(),
+    s: date.getSeconds(),
+    a: date.getDay()
+  }
+  const timeStr = format.replace(/{(y|m|d|h|i|s|a)+}/g, (result, key) => {
+    let value = formatObj[key]
+    if (key === 'a') return ['一', '二', '三', '四', '五', '六', '日'][value - 1]
+    if (result.length > 0 && value < 10) {
+      value = '0' + value
+    }
+    return value || 0
+  })
+  return timeStr
+}
+
 // 云函数入口函数
 exports.main = async (event, context) => {
   const wxContext = cloud.getWXContext()
@@ -12,65 +44,35 @@ exports.main = async (event, context) => {
   })
   const db = cloud.database({ env })
   // 先查询库中有没保留这个openId的记录
-  const checkRes = await db.collection('SUBSCRIBE')
-    .where({
-      openId: wxContext.OPENID
-    })
-    .get()
-  console.log('checkRes', checkRes)
-  // 如果用户开启
-  if (event.type === 'open') {
-    if (checkRes.data.length === 0) {
-      await db.collection('SUBSCRIBE').add({
-        data: {
-          openId: wxContext.OPENID,
-          canSubscribe: true
-        }
-      })
-    } else {
-      const docId = checkRes.data[0]._id
-      await db.collection('SUBSCRIBE').doc(docId)
-      .update({
-        data: {
-          canSubscribe: true
-        }
-      })
-    }
-  }
-  if (event.type === 'close') {
-    // 如果关闭
-    const docId = checkRes.data[0]._id
-    await db.collection('SUBSCRIBE').doc(docId)
-    .update({
-      data: {
-        canSubscribe: false
+  const checkRes = await db.collection('SUBSCRIBE').get()
+  const sendList = checkRes.data.filter(item => item.canSubscribe)
+  try {
+    sendList.forEach(async user => {
+      try {
+        await cloud.openapi.subscribeMessage.send({
+          touser: user.openId,
+          page: 'pages/tab/tab',
+          data: {
+            time1: {
+              value: parseTime(new Date(), '{y}年{m}月{d}日')
+            },
+            phrase2: {
+              value: '记得记账哦'
+            }
+          },
+          templateId: '29PkwuWSDZ5qCe_bjIAYE8UPbw4A7HIXL_ZNmNCD__s'
+        })
+      } catch (error) {
+        console.log('error', error)
       }
     })
+    
+  } catch (err) {
+    console.log(err)
+    return {
+      code: 0,
+      data: null,
+      message: '订阅信息发送失败！'
+    }
   }
-  // try {
-  //   const result = await cloud.openapi.subscribeMessage.send({
-  //     touser: 'OPENID',
-  //     page: 'index',
-  //     data: {
-  //       number01: {
-  //         value: '339208499'
-  //       },
-  //       date01: {
-  //         value: '2015年01月05日'
-  //       },
-  //       site01: {
-  //         value: 'TIT创意园'
-  //       },
-  //       site02: {
-  //         value: '广州市新港中路397号'
-  //       }
-  //     },
-  //     templateId: 'TEMPLATE_ID'
-  //   })
-  //   console.log(result)
-  //   return result
-  // } catch (err) {
-  //   console.log(err)
-  //   return err
-  // }
 }

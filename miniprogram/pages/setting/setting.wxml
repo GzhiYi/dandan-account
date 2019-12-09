@@ -12,11 +12,11 @@
     </view>
   </view>
   <view class="part">
-    <view class="left">好啰嗦</view>
+    <view class="left">会对你啰嗦</view>
     <view class="right dandan">
       <view class="title">需要推送提醒你记账吗？</view>
       <view class="desc">
-        <text>我们会在需要你记账的时候提醒你。</text>
+        <text>如果你今天没记账，我会提示一下你。【小心开启】你很可能会在之后觉得我很啰嗦，会有弹窗提示什么的，不需要记得关闭，如果需要才开启。</text>
         <view class="notify-status" bindtap="changeNotify">{{status ? '已开启，点击关闭' : '已关闭，点击开启'}}</view>
       </view>
     </view>

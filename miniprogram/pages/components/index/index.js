@@ -1,6 +1,7 @@
 // pages/components/index/index.js
 import { parseTime } from '../../../util'
 let globalDefaultCategory = {}
+let subscribeStatus = false // 是否已接受订阅推送
 Component({
   options: {
     styleIsolation: 'shared'
@@ -60,6 +61,8 @@ Component({
         getApp().globalData.selectedCategory = handleDefaultCategory(list)
       }
     }
+    // 获取一下订阅消息状态，如果是可以推送消息的话就进行推送授权收集
+    this.getUserSucscribeStatus()
   },
   /**
    * 组件的方法列表
@@ -234,6 +237,26 @@ Component({
             self.setData({
               selectedCategory: globalDefaultCategory
             })
+
+            // 埋点！增加订阅的机会--!!决定还是在账单成功后再增加一个吧
+            if (subscribeStatus) {
+              wx.requestSubscribeMessage({
+                tmplIds: ['29PkwuWSDZ5qCe_bjIAYE8UPbw4A7HIXL_ZNmNCD__s'],
+                success(res) {
+                  if (res.errMsg === 'requestSubscribeMessage:ok') {
+                    // 如果订阅成功，则修改状态
+                    self.changeStatus('open')
+                  }
+                },
+                fail() {
+                  wx.showToast({
+                    title: '由于拒绝订阅，所以将关闭推送',
+                    icon: 'none'
+                  })
+                  self.changeStatus('close')
+                }
+              })
+            }
           }
         },
         complete() {
@@ -318,6 +341,41 @@ Component({
         showPayTypeDialog: false
       })
       this.triggerEvent('hideTab', false)
-    }
+    },
+    // 获取订阅状态
+    getUserSucscribeStatus() {
+      wx.cloud.callFunction({
+        name: 'checkSubscribe',
+        data: {
+          mode: 'get'
+        },
+        success(res) {
+          if (res.result.code === 1) {
+            subscribeStatus = res.result.data
+          }
+        }
+      })
+    },
+    changeStatus(type) {
+      const self = this
+      wx.cloud.callFunction({
+        name: 'checkSubscribe',
+        data: {
+          mode: 'post',
+          type
+        },
+        success(res) {
+          if (res.result.code === 1) {
+            wx.showToast({
+              title: type === 'open' ? '开启订阅成功' : '关闭订阅成功',
+              icon: 'none'
+            })
+          }
+        },
+        complete() {
+          self.getUserSucscribeStatus()
+        }
+      })
+    },
   }
 })

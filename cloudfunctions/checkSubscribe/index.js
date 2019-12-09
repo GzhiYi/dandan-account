@@ -18,6 +18,7 @@ exports.main = async (event, context) => {
         openId: wxContext.OPENID
       })
       .get()
+    console.log('checkRes', checkRes)
     if (event.mode === 'post') {
       // 如果用户开启
       if (event.type === 'open') {
@@ -75,7 +76,7 @@ exports.main = async (event, context) => {
     if (event.mode === 'get') {
       return {
         code: 1,
-        data: checkRes.data[0].canSubscribe
+        data: checkRes.data.length === 1 ? checkRes.data[0].canSubscribe : false
       }
     }
   } catch (error) {

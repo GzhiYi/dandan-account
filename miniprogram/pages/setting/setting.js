@@ -51,7 +51,14 @@ Page({
         mode: 'post',
         type
       },
-      success(res) {},
+      success(res) {
+        if (res.result.code === 1) {
+          wx.showToast({
+            title: type === 'open' ? '开启订阅成功' : '关闭订阅成功',
+            icon: 'none'
+          })
+        }
+      },
       complete() {
         self.getUserSucscribeStatus()
       }

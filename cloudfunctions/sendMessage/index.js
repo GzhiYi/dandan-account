@@ -46,9 +46,11 @@ exports.main = async (event, context) => {
   // 先查询库中有没保留这个openId的记录
   const checkRes = await db.collection('SUBSCRIBE').get()
   const sendList = checkRes.data.filter(item => item.canSubscribe)
+  console.log('checkRes', checkRes)
   try {
     sendList.forEach(async user => {
       try {
+        console.log('发送user', user)
         await cloud.openapi.subscribeMessage.send({
           touser: user.openId,
           page: 'pages/tab/tab',
@@ -63,7 +65,16 @@ exports.main = async (event, context) => {
           templateId: '29PkwuWSDZ5qCe_bjIAYE8UPbw4A7HIXL_ZNmNCD__s'
         })
       } catch (error) {
-        console.log('error', error)
+        // 如果出现错误，十有八九是因为订阅信息的量消耗完了。
+        // 重置是否推送为false
+        console.log('error', user)
+        // const docId = checkRes.data[0]._id
+        // await db.collection('SUBSCRIBE').doc(docId)
+        //   .update({
+        //     data: {
+        //       canSubscribe: false
+        //     }
+        //   })
       }
     })
     

@@ -80,7 +80,7 @@ exports.main = async (event, context) => {
     }
   } catch (error) {
     return {
-      code: 1,
+      code: 0,
       data: JSON.stringify(error)
     }
   }

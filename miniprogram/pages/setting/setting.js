@@ -4,6 +4,8 @@ Page({
   data: {
     canSubscribe: false,
     status: null,
+    isChangeing: false,
+    showAuthDialog: false,
   },
   onLoad() {
     if (wx.requestSubscribeMessage) {
@@ -19,6 +21,9 @@ Page({
       status,
     } = this.data
     if (this.data.canSubscribe) {
+      self.setData({
+        isChangeing: true,
+      })
       if (!status) {
         wx.requestSubscribeMessage({
           tmplIds: ['29PkwuWSDZ5qCe_bjIAYE8UPbw4A7HIXL_ZNmNCD__s'],
@@ -29,9 +34,8 @@ Page({
             }
           },
           fail() {
-            wx.showToast({
-              title: '由于拒绝订阅，所以将关闭推送',
-              icon: 'none',
+            self.setData({
+              showAuthDialog: true,
             })
             self.changeStatus('close')
           },
@@ -56,14 +60,19 @@ Page({
       },
       success(res) {
         if (res.result.code === 1) {
-          wx.showToast({
-            title: type === 'open' ? '开启订阅成功' : '关闭订阅成功',
-            icon: 'none',
-          })
+          setTimeout(() => {
+            wx.showToast({
+              title: type === 'open' ? '开启订阅成功' : '关闭订阅成功',
+              icon: 'none',
+            })
+          }, 1000)
         }
       },
       complete() {
         self.getUserSucscribeStatus()
+        self.setData({
+          isChangeing: false,
+        })
       },
     })
   },
@@ -81,6 +90,21 @@ Page({
           })
         }
       },
+    })
+  },
+  openSetting() {
+    const self = this
+    wx.openSetting({
+      success() {
+        self.setData(({
+          showAuthDialog: false,
+        }))
+      },
+    })
+  },
+  closeDialog() {
+    this.setData({
+      showAuthDialog: false,
     })
   },
 })

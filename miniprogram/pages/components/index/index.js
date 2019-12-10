@@ -3,6 +3,7 @@ import { parseTime } from '../../../util'
 
 let globalDefaultCategory = {}
 let subscribeStatus = false // 是否已接受订阅推送
+let isShowSubscribeTips = false
 Component({
   options: {
     styleIsolation: 'shared',
@@ -199,10 +200,13 @@ Component({
         return false
       }
       // 埋点！增加订阅的机会--!!决定还是在账单成功后再增加一个吧
-      if (subscribeStatus) {
+      if (subscribeStatus && !isShowSubscribeTips) {
         wx.requestSubscribeMessage({
           tmplIds: ['29PkwuWSDZ5qCe_bjIAYE8UPbw4A7HIXL_ZNmNCD__s'],
           success(res) {
+            // 如果弹出一次了，就不要再烦人家了
+            isShowSubscribeTips = true
+            // eslint-disable-next-line no-console
             if (res.errMsg === 'requestSubscribeMessage:ok') {
               // 如果订阅成功，则修改状态
               self.changeStatus('open')
@@ -210,7 +214,7 @@ Component({
           },
           fail() {
             wx.showToast({
-              title: '由于拒绝订阅，所以将关闭推送',
+              title: '由于拒绝订阅，将关闭推送。可到设置打开。',
               icon: 'none',
             })
             self.changeStatus('close')

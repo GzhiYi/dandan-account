@@ -12,12 +12,13 @@
     </view>
   </view>
   <view class="part">
-    <view class="left">会对你啰嗦</view>
+    <view class="left">对你啰嗦</view>
     <view class="right dandan">
       <view class="title">需要推送提醒你记账吗？</view>
       <view class="desc">
-        <text>如果你今天没记账，我会提示一下你。【小心开启】你很可能会在之后觉得我很啰嗦，会有弹窗提示什么的，不需要记得关闭，如果需要才开启。</text>
-        <view class="notify-status" bindtap="changeNotify">{{status ? '已开启，点击关闭' : '已关闭，点击开启'}}</view>
+        <text>如果你今天没记账，我会提示一下你。【注意】要是开启了可别嫌弃我啰嗦。为了更好推送，需要勾选【总是保持允许，不再询问】。如果不保持选择，会在记账成功后弹出申请，挺烦的，建议开启。</text>
+        <view wx:if="{{!isChangeing}}" class="notify-status" bindtap="changeNotify">{{status ? '已开启，点击关闭' : '已关闭，点击开启'}}</view>
+        <view wx:else class="notify-status">...</view>
       </view>
     </view>
   </view>
@@ -38,3 +39,14 @@
     <view class="right">右边</view>
   </view>
 </view>
+<dialog visible="{{showAuthDialog}}" bind:closeDialog="closeDialog">
+  <view slot="content">
+    <view class="pop-indicator"></view>
+    <view class="d-header">
+    订阅信息开启失败
+    <view class="dialog-tip">由于你的设备拒绝了订阅权限，我们无法主动替你开启。请打开设置进行手动开启～</view>
+    </view>
+    <view class='list-item-btn' style="color: #4fd69c;" bindtap="openSetting">打开设置</view>
+    <view class='list-item-btn' bindtap="closeDialog" style="border-bottom: none;">取消</view>
+  </view>
+</dialog>

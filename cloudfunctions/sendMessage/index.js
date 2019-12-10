@@ -56,12 +56,16 @@ exports.main = async () => {
         // 在发送之前查询这个openId在今天是否有进行记账
         const checkBill = await db.collection('DANDAN_NOTE')
           .where({
-            openId: wxContext.OPENID,
+            openId: user.openId,
             noteDate: _.gte(new Date(startTime)).and(_.lte(new Date(endTime))),
           })
           .get()
+        // eslint-disable-next-line no-console
+        console.log('查出账单数', checkBill)
         // 如果账单数量为0，则说明今天没记到帐啦。
         if (checkBill.data.length === 0) {
+          // eslint-disable-next-line no-console
+          console.log(`向${user.openId}发送推送`)
           await cloud.openapi.subscribeMessage.send({
             touser: user.openId,
             page: 'pages/tab/tab',

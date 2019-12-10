@@ -43,32 +43,43 @@ exports.main = async (event, context) => {
     env
   })
   const db = cloud.database({ env })
+  const _ = db.command
   // 先查询库中有没保留这个openId的记录
   const checkRes = await db.collection('SUBSCRIBE').get()
   const sendList = checkRes.data.filter(item => item.canSubscribe)
-  console.log('checkRes', checkRes)
   try {
     sendList.forEach(async user => {
       try {
-        console.log('发送user', user)
-        await cloud.openapi.subscribeMessage.send({
-          touser: user.openId,
-          page: 'pages/tab/tab',
-          data: {
-            time1: {
-              value: parseTime(new Date(), '{y}年{m}月{d}日')
+        const startTime = new Date(new Date(new Date().toLocaleDateString()).getTime())
+        const endTime = new Date(new Date(new Date().toLocaleDateString()).getTime() + 24 * 60 * 60 * 1000 - 1)
+        // 在发送之前查询这个openId在今天是否有进行记账
+        const checkBill = await db.collection('DANDAN_NOTE')
+          .where({
+            openId: wxContext.OPENID,
+            noteDate: _.gte(new Date(startTime)).and(_.lte(new Date(endTime)))
+          })
+          .get()
+        // 如果账单数量为0，则说明今天没记到帐啦。
+        if (checkBill.data.length === 0) {
+          await cloud.openapi.subscribeMessage.send({
+            touser: user.openId,
+            page: 'pages/tab/tab',
+            data: {
+              time1: {
+                value: parseTime(new Date(), '{y}年{m}月{d}日')
+              },
+              phrase2: {
+                value: '记得记账哦'
+              }
             },
-            phrase2: {
-              value: '记得记账哦'
-            }
-          },
-          templateId: '29PkwuWSDZ5qCe_bjIAYE8UPbw4A7HIXL_ZNmNCD__s'
-        })
+            templateId: '29PkwuWSDZ5qCe_bjIAYE8UPbw4A7HIXL_ZNmNCD__s'
+          })
+        }
       } catch (error) {
         // 如果出现错误，十有八九是因为订阅信息的量消耗完了。
         // 重置是否推送为false
         // 出现推送失败也不要重置为false，这不符合逻辑
-        console.log('error。十有八九是因为订阅信息的量消耗完了')
+        console.error('error。十有八九是因为订阅信息的量消耗完了',)
         // const docId = checkRes.data[0]._id
         // await db.collection('SUBSCRIBE').doc(docId)
         //   .update({
@@ -80,7 +91,6 @@ exports.main = async (event, context) => {
     })
     
   } catch (err) {
-    console.log(err)
     return {
       code: 0,
       data: null,

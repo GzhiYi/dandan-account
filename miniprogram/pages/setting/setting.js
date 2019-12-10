@@ -1,3 +1,4 @@
+import { debounce } from '../../util'
 Page({
   data: {
     canSubscribe: false,
@@ -11,15 +12,16 @@ Page({
     }
     this.getUserSucscribeStatus()
   },
-  changeNotify() {
+  changeNotify: debounce(function () {
     const self = this
-    const { status } = this.data
+    const {
+      status
+    } = this.data
     if (this.data.canSubscribe) {
       if (!status) {
         wx.requestSubscribeMessage({
           tmplIds: ['29PkwuWSDZ5qCe_bjIAYE8UPbw4A7HIXL_ZNmNCD__s'],
           success(res) {
-            console.log('res', res)
             if (res.errMsg === 'requestSubscribeMessage:ok') {
               // 如果订阅成功，则修改状态
               self.changeStatus('open')
@@ -42,7 +44,7 @@ Page({
         icon: 'none'
       })
     }
-  },
+  }, 600, true),
   changeStatus(type) {
     const self = this
     wx.cloud.callFunction({

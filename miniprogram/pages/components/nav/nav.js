@@ -16,7 +16,8 @@ Component({
     showBackIcon: false,
     showIssue: false,
     showSearch: false,
-    showBannerSetting: false
+    showBannerSetting: false,
+    showSetting: false
   },
   ready() {
     let {
@@ -29,6 +30,7 @@ Component({
       showIssue: showIcons.includes('bug'),
       showBannerSetting: showIcons.includes('banner'),
       showSearch: showIcons.includes('search'),
+      showSetting: showIcons.includes('setting')
     })
   },
   attached() {

@@ -192,6 +192,25 @@ Component({
         })
         return false
       }
+      // 埋点！增加订阅的机会--!!决定还是在账单成功后再增加一个吧
+      if (subscribeStatus) {
+        wx.requestSubscribeMessage({
+          tmplIds: ['29PkwuWSDZ5qCe_bjIAYE8UPbw4A7HIXL_ZNmNCD__s'],
+          success(res) {
+            if (res.errMsg === 'requestSubscribeMessage:ok') {
+              // 如果订阅成功，则修改状态
+              self.changeStatus('open')
+            }
+          },
+          fail(error) {
+            wx.showToast({
+              title: '由于拒绝订阅，所以将关闭推送',
+              icon: 'none'
+            })
+            self.changeStatus('close')
+          }
+        })
+      }
       self.setData({
         loadingCreate: true
       })
@@ -237,26 +256,6 @@ Component({
             self.setData({
               selectedCategory: globalDefaultCategory
             })
-
-            // 埋点！增加订阅的机会--!!决定还是在账单成功后再增加一个吧
-            if (subscribeStatus) {
-              wx.requestSubscribeMessage({
-                tmplIds: ['29PkwuWSDZ5qCe_bjIAYE8UPbw4A7HIXL_ZNmNCD__s'],
-                success(res) {
-                  if (res.errMsg === 'requestSubscribeMessage:ok') {
-                    // 如果订阅成功，则修改状态
-                    self.changeStatus('open')
-                  }
-                },
-                fail() {
-                  wx.showToast({
-                    title: '由于拒绝订阅，所以将关闭推送',
-                    icon: 'none'
-                  })
-                  self.changeStatus('close')
-                }
-              })
-            }
           }
         },
         complete() {
@@ -364,14 +363,7 @@ Component({
           mode: 'post',
           type
         },
-        success(res) {
-          if (res.result.code === 1) {
-            wx.showToast({
-              title: type === 'open' ? '开启订阅成功' : '关闭订阅成功',
-              icon: 'none'
-            })
-          }
-        },
+        success(res) {},
         complete() {
           self.getUserSucscribeStatus()
         }

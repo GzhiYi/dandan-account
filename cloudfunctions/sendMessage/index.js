@@ -67,7 +67,8 @@ exports.main = async (event, context) => {
       } catch (error) {
         // 如果出现错误，十有八九是因为订阅信息的量消耗完了。
         // 重置是否推送为false
-        console.log('error', user)
+        // 出现推送失败也不要重置为false，这不符合逻辑
+        console.log('error。十有八九是因为订阅信息的量消耗完了')
         // const docId = checkRes.data[0]._id
         // await db.collection('SUBSCRIBE').doc(docId)
         //   .update({

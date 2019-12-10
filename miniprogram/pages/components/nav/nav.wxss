@@ -56,3 +56,6 @@
 .more-chart {
   background-image: url("https://6461-dandan-zdm86-1259814516.tcb.qcloud.la/stats.png?sign=0099917fdb61393a6fd2d8fb5f5baf56&t=1573302662");
 }
+.setting {
+  background-image: url("https://6461-dandan-zdm86-1259814516.tcb.qcloud.la/setting.png?sign=a83fa2798189e29de46aa876cfe33a2e&t=1575944868");
+}

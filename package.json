@@ -12,7 +12,7 @@
     "lint-staged": "^9.5.0"
   },
   "scripts": {
-    "pre-push": "lint-staged"
+    "pre-commit": "lint-staged"
   },
   "lint-staged": {
     "*.js": "eslint"
@@ -31,7 +31,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-push": "npm run pre-push"
+      "pre-commit": "npm run pre-commit"
     }
   },
   "homepage": "https://github.com/GzhiYi/dandan-account#readme"

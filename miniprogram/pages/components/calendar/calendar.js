@@ -7,20 +7,20 @@ Component({
   properties: {
     defaultSelectDate: {
       type: String,
-      value: ''
+      value: '',
     },
     billResult: {
       type: Object,
-      value: {}
+      value: {},
     },
     mode: {
       type: String,
-      value: ''
+      value: '',
     },
     showToday: {
       type: Boolean,
-      value: true
-    }
+      value: true,
+    },
   },
   data: {
     pickDate: '',
@@ -29,18 +29,18 @@ Component({
     allDays: [],
     selectedDate: '',
     today: '',
-    dateRange: []
+    dateRange: [],
   },
   ready() {
     const now = new Date()
     if (!DATE_CHECK.test(this.data.defaultSelectDate)) {
       this.setData({
-        defaultSelectDate: ''
+        defaultSelectDate: '',
       })
     }
     this.setData({
       selectedDate: this.data.defaultSelectDate || this.parseTime(now, '{y}-{m}-{d}'),
-      today: this.parseTime(now, '{y}-{m}-{d}')
+      today: this.parseTime(now, '{y}-{m}-{d}'),
     })
     this.setCalendar(this.parseTime(now, '{y}-{m}'))
   },
@@ -60,7 +60,7 @@ Component({
       const nextMonthOrigin = [...Array(self.getMonthDayNum(selectDate.getFullYear(), selectDate.getMonth() + 2)).keys()]
       const lastMonthFinal = [...lastMonthOrigin].splice(lastMonthOrigin.length - (tMonthFirstDayWeek - 1), lastMonthOrigin.length)
       const nextMonthFinal = [...nextMonthOrigin].splice(0, DAY_NUM - lastMonthFinal.length - thisMonthOrigin.length)
-      
+
       self.setData({
         pickDate,
         pickDateDisplay: self.parseTime(selectDate, '{y}年{m}月'),
@@ -68,20 +68,20 @@ Component({
         allDays: [
           ...this.mapMonth(lastMonthFinal, thisYear, Number(thisMonth) - 1, pickDate),
           ...this.mapMonth(thisMonthOrigin, thisYear, Number(thisMonth), pickDate),
-          ...this.mapMonth(nextMonthFinal, thisYear, Number(thisMonth) + 1, pickDate)
-        ]
+          ...this.mapMonth(nextMonthFinal, thisYear, Number(thisMonth) + 1, pickDate),
+        ],
       })
     },
     mapMonth(dayArr, year, month, pickDate = null) {
       const thisMonthNum = pickDate && Number(pickDate.split('-')[1])
-      return dayArr.map(item => {
+      return dayArr.map((item) => {
         const date = `${year}-${month < 10 ? `0${month}` : month}-${(item + 1) < 10 ? `0${item + 1}` : item + 1}`
         const week = new Date(date).getDay()
         return {
           dateNumber: item + 1,
           date,
           week: week === 0 ? 7 : week,
-          position: thisMonthNum === month ? '' : month === thisMonthNum - 1 ? 'next-month' : 'pre-month'
+          position: thisMonthNum === month ? '' : month === thisMonthNum - 1 ? 'next-month' : 'pre-month',
         }
       })
     },
@@ -89,7 +89,7 @@ Component({
       const { value } = event.detail
       this.setData({
         pickDate: value,
-        pickDateDisplay: this.parseTime(value, '{y}年{m}月')
+        pickDateDisplay: this.parseTime(value, '{y}年{m}月'),
       })
       this.setCalendar(value)
       this.triggerEvent('onPickDateChange', value)
@@ -102,11 +102,11 @@ Component({
     control(event) {
       const { mode } = event.currentTarget.dataset
       const { pickDate } = this.data
-      let dateArr = pickDate.split('-')
-      let oldMonth = Number(dateArr[1])
-      let oldYear = Number(dateArr[0])
+      const dateArr = pickDate.split('-')
+      const oldMonth = Number(dateArr[1])
+      const oldYear = Number(dateArr[0])
       let newDate = ''
-      switch(mode) {
+      switch (mode) {
         case 'pre':
           newDate = oldMonth === 1 ? `${oldYear - 1}-12` : `${oldYear}-${oldMonth - 1 < 10 ? `0${oldMonth - 1}` : oldMonth - 1}`
           break;
@@ -115,17 +115,18 @@ Component({
           if (this.data.mode === 'range') {
             this.setData({
               selectedDate: newDate,
-              dateRange: []
+              dateRange: [],
             })
           } else {
             this.setData({
-              selectedDate: this.parseTime(new Date(), '{y}-{m}-{d}')
+              selectedDate: this.parseTime(new Date(), '{y}-{m}-{d}'),
             })
           }
           break;
         case 'next':
           newDate = oldMonth === 12 ? `${oldYear + 1}-01` : `${oldYear}-${oldMonth + 1 < 10 ? `0${oldMonth + 1}` : oldMonth + 1}`
           break;
+        default:
       }
       const timeParse = this.parseTime(new Date(newDate), '{y}-{m}')
       this.setCalendar(timeParse)
@@ -134,7 +135,7 @@ Component({
       }
       this.triggerEvent('onControl', {
         mode,
-        newDate: timeParse
+        newDate: timeParse,
       })
       wx.vibrateShort()
     },
@@ -144,42 +145,42 @@ Component({
       let dateRange = [...this.data.dateRange]
       if (mode === 'range') {
         this.setData({
-          selectedDate: ''
+          selectedDate: '',
         })
         if (!dateRange[0]) {
           dateRange.push(day.date)
           this.setData({
-            dateRange
+            dateRange,
           })
         } else if (!dateRange[1]) {
           dateRange.push(day.date)
-          dateRange.sort((a, b) => a > b ? 1 : -1)
+          dateRange.sort((a, b) => (a > b ? 1 : -1))
           const beginTimeStamp = Date.parse(new Date(`${dateRange[0]}`))
           const endTimeStamp = Date.parse(new Date(`${dateRange[1]}`))
           // 土豆服务器表示不要选跨度这么大的区间，限制60天
           if (endTimeStamp - beginTimeStamp >= TWOMONTH_TIMESTAMP) {
             wx.showToast({
               title: '😭土豆服务器不要选择间隔超过60天',
-              icon: 'none'
+              icon: 'none',
             })
+            // eslint-disable-next-line prefer-destructuring
             dateRange = dateRange[0]
             return false
           }
           this.setData({
-            dateRange
+            dateRange,
           })
           this.findRange(dateRange)
           this.triggerEvent('onRangePick', dateRange)
         } else {
           this.setData({
-            dateRange: [day.date]
+            dateRange: [day.date],
           })
           this.findRange([day.date])
         }
-        
       } else {
         this.setData({
-          selectedDate: day.date
+          selectedDate: day.date,
         })
         this.triggerEvent('onPickDay', day)
       }
@@ -188,13 +189,14 @@ Component({
     findRange(dateRange) {
       const minTimeStamp = Date.parse(dateRange[0])
       const maxTimeStamp = Date.parse(dateRange[1])
-      let allDays = [...this.data.allDays]
-      allDays.forEach(item => {
+      const allDays = [...this.data.allDays]
+      allDays.forEach((item) => {
         const parseDate = Date.parse(item.date)
-        item[`inRange`] = dateRange.length === 1 ? false : parseDate < maxTimeStamp && parseDate > minTimeStamp
+        // eslint-disable-next-line no-param-reassign
+        item.inRange = dateRange.length === 1 ? false : parseDate < maxTimeStamp && parseDate > minTimeStamp
       })
       this.setData({
-        allDays
+        allDays,
       })
     },
     parseTime(time, cFormat) {
@@ -206,7 +208,10 @@ Component({
       if (typeof time === 'object') {
         date = time
       } else {
-        if (('' + time).length === 10) time = parseInt(time) * 1000
+        if ((`${time}`).length === 10) {
+          // eslint-disable-next-line radix
+          time = parseInt(time) * 1000
+        }
         date = new Date(time)
       }
       const formatObj = {
@@ -216,17 +221,17 @@ Component({
         h: date.getHours(),
         i: date.getMinutes(),
         s: date.getSeconds(),
-        a: date.getDay()
+        a: date.getDay(),
       }
       const timeStr = format.replace(/{(y|m|d|h|i|s|a)+}/g, (result, key) => {
         let value = formatObj[key]
         if (key === 'a') return ['一', '二', '三', '四', '五', '六', '日'][value - 1]
         if (result.length > 0 && value < 10) {
-          value = '0' + value
+          value = `0${value}`
         }
         return value || 0
       })
       return timeStr
-    }
-  }
+    },
+  },
 })

@@ -4,20 +4,22 @@ export function strip(num, precision = 12) {
 }
 // 函数节流
 export function debounce(func, wait, immediate) {
-  var timeout, result;
-  var debounced = function () {
-    var context = this;
-    var args = arguments;
+  let timeout;
+  let result;
+  const debounced = function () {
+    const context = this;
+    // eslint-disable-next-line prefer-rest-params
+    const args = arguments;
 
     if (timeout) clearTimeout(timeout);
     if (immediate) {
-      var callNow = !timeout;
-      timeout = setTimeout(function () {
+      const callNow = !timeout;
+      timeout = setTimeout(() => {
         timeout = null;
       }, wait)
       if (callNow) result = func.apply(context, args)
     } else {
-      timeout = setTimeout(function () {
+      timeout = setTimeout(() => {
         func.apply(context, args)
       }, wait);
     }
@@ -39,7 +41,8 @@ export function parseTime(time, cFormat) {
   if (typeof time === 'object') {
     date = time
   } else {
-    if (('' + time).length === 10) time = parseInt(time) * 1000
+    // eslint-disable-next-line radix
+    if ((`${time}`).length === 10) time = parseInt(time) * 1000
     date = new Date(time)
   }
   const formatObj = {
@@ -49,13 +52,13 @@ export function parseTime(time, cFormat) {
     h: date.getHours(),
     i: date.getMinutes(),
     s: date.getSeconds(),
-    a: date.getDay()
+    a: date.getDay(),
   }
   const timeStr = format.replace(/{(y|m|d|h|i|s|a)+}/g, (result, key) => {
     let value = formatObj[key]
     if (key === 'a') return ['一', '二', '三', '四', '五', '六', '日'][value - 1]
     if (result.length > 0 && value < 10) {
-      value = '0' + value
+      value = `0${value}`
     }
     return value || 0
   })

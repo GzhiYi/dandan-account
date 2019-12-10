@@ -1,13 +1,14 @@
 import { debounce } from '../../util'
+
 Page({
   data: {
     canSubscribe: false,
-    status: null
+    status: null,
   },
-  onLoad: function (options) {
+  onLoad() {
     if (wx.requestSubscribeMessage) {
       this.setData({
-        canSubscribe: true
+        canSubscribe: true,
       })
     }
     this.getUserSucscribeStatus()
@@ -15,7 +16,7 @@ Page({
   changeNotify: debounce(function () {
     const self = this
     const {
-      status
+      status,
     } = this.data
     if (this.data.canSubscribe) {
       if (!status) {
@@ -27,13 +28,13 @@ Page({
               self.changeStatus('open')
             }
           },
-          fail(err) {
+          fail() {
             wx.showToast({
               title: '由于拒绝订阅，所以将关闭推送',
-              icon: 'none'
+              icon: 'none',
             })
             self.changeStatus('close')
-          }
+          },
         })
       } else {
         self.changeStatus('close')
@@ -41,7 +42,7 @@ Page({
     } else {
       wx.showToast({
         title: '你的微信版本过低不能订阅哦～',
-        icon: 'none'
+        icon: 'none',
       })
     }
   }, 600, true),
@@ -51,19 +52,19 @@ Page({
       name: 'checkSubscribe',
       data: {
         mode: 'post',
-        type
+        type,
       },
       success(res) {
         if (res.result.code === 1) {
           wx.showToast({
             title: type === 'open' ? '开启订阅成功' : '关闭订阅成功',
-            icon: 'none'
+            icon: 'none',
           })
         }
       },
       complete() {
         self.getUserSucscribeStatus()
-      }
+      },
     })
   },
   getUserSucscribeStatus() {
@@ -71,15 +72,15 @@ Page({
     wx.cloud.callFunction({
       name: 'checkSubscribe',
       data: {
-        mode: 'get'
+        mode: 'get',
       },
       success(res) {
         if (res.result.code === 1) {
           self.setData({
-            status: res.result.data
+            status: res.result.data,
           })
         }
-      }
+      },
     })
-  }
+  },
 })

@@ -1,30 +1,12 @@
+/* eslint-disable no-plusplus */
+/* eslint-disable no-use-before-define */
 // 云函数入口文件
 const cloud = require('wx-server-sdk')
+
 cloud.init();
-
-//全局变量
-const MAX_LIMIT = 100;//最大限制数
-
-// 云函数入口函数
-exports.main = async (event, context) => {
-  const { mode,date } = event;
-  let service = AccountChartService(mode, date);
-  try {
-      return await service.getAccountChart();
-  } catch (e) {
-    console.error(e);
-    return {
-      code: -1,
-      data: [],
-      message: '获取失败'
-    }
-  }
-
-}
- 
-//账单图表service类 2019-11-12
-var AccountChartService = function (mode,date,openId){
-  var o = new Object();
+// 账单图表service类 2019-11-12
+const AccountChartService = function (mode, date) {
+  const o = {};
   o.mode = mode;
   o.date = date;
 
@@ -34,61 +16,66 @@ var AccountChartService = function (mode,date,openId){
    * 获取数据库连接对象
    */
   function getDBConnection() {
-    //数据库对象
+    // 数据库对象
     const db = cloud.database({
-      env: wxContext.ENV === 'local' ? 'release-wifo3' : wxContext.ENV
+      env: wxContext.ENV === 'local' ? 'release-wifo3' : wxContext.ENV,
     });
     return {
       _: db.command,
-      db: db,
-      $: db.command.aggregate
+      db,
+      $: db.command.aggregate,
     }
   }
 
   o.getAccountChart = function () {
-    if (o.mode == "getAccountChartByMonth") {
+    if (o.mode === 'getAccountChartByMonth') {
       return o.getAccountChartByMonth();
     }
-    if (o.mode == "getAccountChartByYear") {
+    if (o.mode === 'getAccountChartByYear') {
       return o.getAccountChartByYear();
-    } 
+    }
     return {
       code: -1,
       data: [],
-      message: '未找到对应方法'
+      message: '未找到对应方法',
     }
   }
 
-  o.getAccountChartByMonth =  async function () {
-    const { _, db, $ } = await getDBConnection();
+  o.getAccountChartByMonth = async function () {
+    const {
+      db,
+      $,
+    } = await getDBConnection();
     const res = await db.collection('DANDAN_NOTE')
       .aggregate()
       .addFields({
         formatDate: $.dateToString({
           date: '$noteDate',
-          format: '%Y-%m'
+          format: '%Y-%m',
         }),
         noteDay: $.dateToString({
           date: '$noteDate',
-          format: '%d'
+          format: '%d',
         }),
         income: $.switch({
-          branches: [
-            { case: $.eq(['$flow', 1]), then: '$money' },
-          ],
-          default: 0
+          branches: [{
+            case: $.eq(['$flow', 1]),
+            then: '$money',
+          }],
+          default: 0,
         }),
         expenses: $.switch({
-          branches: [
-            { case: $.eq(['$flow', 0]), then: $.multiply(['$money', -1]) },
-          ],
-          default: 0
+          branches: [{
+            case: $.eq(['$flow', 0]),
+            then: $.multiply(['$money', -1]),
+          }],
+          default: 0,
         }),
       })
       .match({
         openId: wxContext.OPENID,
         formatDate: o.date,
-        isDel : false
+        isDel: false,
       })
       .group({
         _id: '$noteDay',
@@ -100,26 +87,29 @@ var AccountChartService = function (mode,date,openId){
         noteDate: '$_id',
         income: 1,
         expenses: 1,
-        netIncome: $.add(['$income', '$expenses'])
+        netIncome: $.add(['$income', '$expenses']),
       })
       .sort({
         noteDate: 1,
       })
       .limit(32)
       .end()
-      .then(res => {
-        let resList = res.list;
-        
-        let lastDay = new Date(new Date(o.date).getFullYear(), new Date(o.date).getMonth()+1, 0).getDate();
-        let resListSize = resList.length;
-        let xAxisData = new Array();      //x轴数据
-        var incomeData = new Array();     //收入数据
-        var expensesData = new Array();   //支出数据
-        var netIncomeData = new Array();  //净收入数据
+      // eslint-disable-next-line no-shadow
+      .then((res) => {
+        const resList = res.list;
+
+        const lastDay = new Date(new Date(o.date).getFullYear(), new Date(o.date).getMonth() + 1, 0).getDate();
+        const resListSize = resList.length;
+        const xAxisData = []; // x轴数据
+        const incomeData = []; // 收入数据
+        const expensesData = []; // 支出数据
+        const netIncomeData = []; // 净收入数据
+        // eslint-disable-next-line no-plusplus
         for (let i = 0, y = 0; i < lastDay; i++) {
-          let day = i + 1;
-          xAxisData.push(day + "日");
-          //该日期存有账单数据
+          const day = i + 1;
+          xAxisData.push(`${day}日`);
+          // 该日期存有账单数据
+          // eslint-disable-next-line radix
           if (y < resListSize && parseInt(resList[y].noteDate) === day) {
             incomeData.push(strip(resList[y].income));
             expensesData.push(strip(resList[y].expenses));
@@ -133,51 +123,52 @@ var AccountChartService = function (mode,date,openId){
         }
         return _getChartData(xAxisData, incomeData, expensesData, netIncomeData);
       })
-      .catch(err => {
-        console.error(err);
-        return {
-          data: err,
-          flag: 0
-        };
-      });
+      .catch((err) => ({
+        data: err,
+        flag: 0,
+      }));
     return {
       code: 1,
       data: res,
       message: '查询账单图表数据成功',
     };
-
   }
 
   o.getAccountChartByYear = async function () {
-    const { _, db, $ } = await getDBConnection();
+    const {
+      db,
+      $,
+    } = await getDBConnection();
     const res = await db.collection('DANDAN_NOTE')
       .aggregate()
       .addFields({
         formatDate: $.dateToString({
           date: '$noteDate',
-          format: '%Y'
+          format: '%Y',
         }),
         noteMonth: $.dateToString({
           date: '$noteDate',
-          format: '%m'
+          format: '%m',
         }),
         income: $.switch({
-          branches: [
-            { case: $.eq(['$flow', 1]), then: '$money' },
-          ],
-          default: 0
+          branches: [{
+            case: $.eq(['$flow', 1]),
+            then: '$money',
+          }],
+          default: 0,
         }),
         expenses: $.switch({
-          branches: [
-            { case: $.eq(['$flow', 0]), then: $.multiply(['$money', -1]) },
-          ],
-          default: 0
+          branches: [{
+            case: $.eq(['$flow', 0]),
+            then: $.multiply(['$money', -1]),
+          }],
+          default: 0,
         }),
       })
       .match({
         openId: wxContext.OPENID,
         formatDate: o.date,
-        isDel: false
+        isDel: false,
       })
       .group({
         _id: '$noteMonth',
@@ -189,26 +180,28 @@ var AccountChartService = function (mode,date,openId){
         noteMonth: '$_id',
         income: 1,
         expenses: 1,
-        netIncome: $.add(['$income', '$expenses'])
+        netIncome: $.add(['$income', '$expenses']),
       })
       .sort({
         noteMonth: 1,
       })
       .limit(13)
       .end()
-      .then(res => {
-        let resList = res.list;
+      // eslint-disable-next-line no-shadow
+      .then((res) => {
+        const resList = res.list;
 
-        let monthCount = 12;
-        let resListSize = resList.length;
-        let xAxisData = new Array();      //x轴数据
-        var incomeData = new Array();     //收入数据
-        var expensesData = new Array();   //支出数据
-        var netIncomeData = new Array();  //净收入数据
+        const monthCount = 12;
+        const resListSize = resList.length;
+        const xAxisData = []; // x轴数据
+        const incomeData = []; // 收入数据
+        const expensesData = []; // 支出数据
+        const netIncomeData = []; // 净收入数据
         for (let i = 0, y = 0; i < monthCount; i++) {
-          let month = i + 1;
-          xAxisData.push(month + "月");
-          //该日期存有账单数据
+          const month = i + 1;
+          xAxisData.push(`${month}月`);
+          // 该日期存有账单数据
+          // eslint-disable-next-line radix
           if (y < resListSize && parseInt(resList[y].noteMonth) === month) {
             incomeData.push(strip(resList[y].income));
             expensesData.push(strip(resList[y].expenses));
@@ -223,45 +216,33 @@ var AccountChartService = function (mode,date,openId){
 
         return _getChartData(xAxisData, incomeData, expensesData, netIncomeData);
       })
-      .catch(err => {
-        console.error(err);
-        return {
-          data: err,
-          flag: 0
-        };
-      });
+      .catch((err) => ({
+        data: err,
+        flag: 0,
+      }));
     return {
       code: 1,
       data: res,
       message: '查询账单图表数据成功',
     };
-
   }
 
-  //获取图表数据
+  // 获取图表数据
   async function _getChartData(xAxisArray, incomeArray, expenditureArray, netIncomeArray) {
     return {
       categories: xAxisArray,
       series: [{
         name: '收入',
-        data: incomeArray
+        data: incomeArray,
       }, {
         name: '支出',
-        data: expenditureArray
+        data: expenditureArray,
       }, {
         name: '净收入',
-        data: netIncomeArray
+        data: netIncomeArray,
       }],
-      operId: wxContext.OPENID
+      operId: wxContext.OPENID,
     }
-  }
-
-
-  function isNull(str) {
-    if (str != "" && str != undefined && str != null) {
-      return false;
-    }
-    return true;
   }
 
   function strip(num, precision = 12) {
@@ -269,4 +250,20 @@ var AccountChartService = function (mode,date,openId){
   }
 
   return o;
+}
+
+// 云函数入口函数
+exports.main = async (event) => {
+  const { mode, date } = event;
+  // eslint-disable-next-line no-use-before-define
+  const service = AccountChartService(mode, date);
+  try {
+    return await service.getAccountChart();
+  } catch (e) {
+    return {
+      code: -1,
+      data: [],
+      message: '获取失败',
+    }
+  }
 }

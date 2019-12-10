@@ -16,25 +16,25 @@ Page({
     word: '',
     loadingSetting: false,
     localCategory: [],
-    isEdit: false
+    isEdit: false,
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function (options) {
+  onLoad(options) {
     const self = this
     billType = options.type
     self.getCategoryList(options.type)
-    if (options.type == 0) {
+    if (Number(options.type) === 0) {
       self.setData({
-        localCategory: wx.getStorageSync('localCategory').slice(0, 8)
+        localCategory: wx.getStorageSync('localCategory').slice(0, 8),
       })
     }
   },
   getCategoryList(flow) {
     this.setData({
-      categoryList: getApp().globalData.categoryList[`${flow === '0' ? 'pay' : 'income'}`]
+      categoryList: getApp().globalData.categoryList[`${flow === '0' ? 'pay' : 'income'}`],
     })
   },
   selectCategory(event) {
@@ -46,7 +46,7 @@ Page({
     const { target } = event.currentTarget.dataset
     this.setData({
       addCategory: target,
-      showAddDialog: true
+      showAddDialog: true,
     })
   },
   showMenu(event) {
@@ -54,7 +54,7 @@ Page({
     const { category } = event.currentTarget.dataset
     self.setData({
       editItem: category,
-      showMenuDialog: true
+      showMenuDialog: true,
     })
   },
   closeDialog() {
@@ -62,7 +62,7 @@ Page({
       showAddDialog: false,
       showMenuDialog: false,
       showConfirmDelete: false,
-      showBannerDialog: false
+      showBannerDialog: false,
     })
   },
   confirmAddCategory() {
@@ -71,12 +71,12 @@ Page({
     if (!addCategoryName) {
       wx.showToast({
         title: '未填写子分类名呀！',
-        icon: 'none'
+        icon: 'none',
       })
-      return falsee
+      return false
     }
     self.setData({
-      loadingAdd: true
+      loadingAdd: true,
     })
     wx.cloud.callFunction({
       name: 'category',
@@ -88,40 +88,39 @@ Page({
         flow: addCategory.flow,
         type: 1,
         parentId: addCategory._id,
-        isSelectable: true
+        isSelectable: true,
       },
       success(res) {
         if (res.result.code === 1) {
           wx.showToast({
             title: '添加成功',
-            icon: 'none'
+            icon: 'none',
           })
-          let lastFlow = addCategory.flow
           self.setData({
             showAddDialog: false,
-            addCategoryName: ''
+            addCategoryName: '',
           })
           self.getLatestCategory()
         }
       },
       complete() {
         self.setData({
-          loadingAdd: false
+          loadingAdd: false,
         })
-      }
+      },
     })
   },
   getLatestCategory() {
     const self = this
     getApp().getCategory()
-    getApp().loadCategoryCallBack = list => {
+    getApp().loadCategoryCallBack = () => {
       self.getCategoryList(billType)
     }
   },
   bindInput(event) {
     const { value } = event.detail
     this.setData({
-      [`${event.currentTarget.dataset.name}`]: value
+      [`${event.currentTarget.dataset.name}`]: value,
     })
   },
   deleteCategory() {
@@ -130,24 +129,24 @@ Page({
     wx.vibrateShort()
     if (!self.data.showConfirmDelete) {
       self.setData({
-        showConfirmDelete: !self.data.showConfirmDelete
+        showConfirmDelete: !self.data.showConfirmDelete,
       })
     } else {
       self.setData({
-        loadingDelete: true
+        loadingDelete: true,
       })
       wx.cloud.callFunction({
         name: 'category',
         data: {
           mode: 'deleteByIdAndFlow',
           id: editItem._id,
-          flow: editItem.flow
+          flow: editItem.flow,
         },
         success(res) {
           if (res.result.code === 1) {
             wx.showToast({
               title: '删除成功',
-              icon: 'none'
+              icon: 'none',
             })
             self.closeDialog()
             shouldUpdateBill = true // 删除分类成功的话必须更新账单
@@ -156,39 +155,38 @@ Page({
           } else {
             wx.showToast({
               title: '删除失败，再试试？',
-              icon: 'none'
+              icon: 'none',
             })
           }
         },
         fail() {
           wx.showToast({
             title: '删除失败，再试试？',
-            icon: 'none'
+            icon: 'none',
           })
         },
         complete() {
           self.setData({
-            loadingDelete: false
+            loadingDelete: false,
           })
-        }
+        },
       })
     }
   },
   onShowBanner() {
     const self = this
     self.setData({
-      showBannerDialog: true
+      showBannerDialog: true,
     })
   },
   onUnload() {
     if (shouldUpdateBill) {
       try {
         getCurrentPages()[0].onReFetchBillList()
-      }
-      catch (err) {
+      } catch (err) {
         wx.showToast({
           title: '更新账单失败，可能要重启小程序哦。',
-          icon: 'none'
+          icon: 'none',
         })
       }
     }
@@ -199,57 +197,56 @@ Page({
     if (!word) {
       wx.showToast({
         title: '未填写话术',
-        icon: 'none'
+        icon: 'none',
       })
       return
     }
     self.setData({
-      loadingSetting: true
+      loadingSetting: true,
     })
     wx.cloud.callFunction({
       name: 'word',
       data: {
         mode: 'update',
         word,
-        expire: +new Date(new Date().getTime() + 24 * 60 * 60 * 1000)
+        expire: +new Date(new Date().getTime() + 24 * 60 * 60 * 1000),
       },
       success(res) {
         if (res.result.code === 1) {
           self.closeDialog()
           self.setData({
-            word: ''
+            word: '',
           })
           wx.showToast({
             title: '设置成功',
-            icon: 'none'
+            icon: 'none',
           })
           getCurrentPages()[0].onGetNewWord()
         } else {
           wx.showToast({
             title: res.result.message,
-            icon: 'none'
+            icon: 'none',
           })
         }
-
       },
-      fail(error) {
+      fail() {
         wx.showToast({
           title: '操作失败',
-          icon: 'none'
+          icon: 'none',
         })
       },
       complete() {
         self.setData({
-          loadingSetting: false
+          loadingSetting: false,
         })
-      }
+      },
     })
   },
   changeEdit() {
     const { isEdit } = this.data
     wx.vibrateShort()
     this.setData({
-      isEdit: !isEdit
+      isEdit: !isEdit,
     })
-  }
+  },
 })

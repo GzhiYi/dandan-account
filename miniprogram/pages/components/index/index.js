@@ -1,13 +1,16 @@
 // pages/components/index/index.js
 import { parseTime } from '../../../util'
+
 let globalDefaultCategory = {}
+let subscribeStatus = false // 是否已接受订阅推送
+let isShowSubscribeTips = false
 Component({
   options: {
-    styleIsolation: 'shared'
+    styleIsolation: 'shared',
   },
   properties: {
     selectedCategory: Object,
-    editBill: Object
+    editBill: Object,
   },
   data: {
     sum: '',
@@ -22,24 +25,28 @@ Component({
     showPayType: false,
     showPayTypeDialog: false,
     payType: '支付宝',
-    specialDay: Date.parse(new Date()) < 1577318400000 // before christmas.
+    payTypeList: [],
+    specialDay: Date.parse(new Date()) < 1577318400000, // before christmas.
   },
   ready() {
     const now = new Date()
     const date = parseTime(now, '{y}-{m}-{d}')
     this.setData({
-      active_date_time: date
+      active_date_time: date,
     })
     this.getWord()
     function handleDefaultCategory(list) {
       const hour = new Date().getHours()
       let defaultCategory = {}
       if (hour >= 4 && hour < 10) {
-        defaultCategory = list.filter(item => item._id === 'food_and_drink_breakfast')[0]
+        // eslint-disable-next-line prefer-destructuring
+        defaultCategory = list.filter((item) => item._id === 'food_and_drink_breakfast')[0]
       } else if (hour >= 10 && hour < 15) {
-        defaultCategory = list.filter(item => item._id === 'food_and_drink_lunch')[0]
+        // eslint-disable-next-line prefer-destructuring
+        defaultCategory = list.filter((item) => item._id === 'food_and_drink_lunch')[0]
       } else if (hour >= 15 || (hour >= 0 && hour < 4)) {
-        defaultCategory = list.filter(item => item._id === 'food_and_drink_dinner')[0]
+        // eslint-disable-next-line prefer-destructuring
+        defaultCategory = list.filter((item) => item._id === 'food_and_drink_dinner')[0]
       }
       globalDefaultCategory = defaultCategory
       return defaultCategory
@@ -47,18 +54,20 @@ Component({
     const globalDefaultCategoryList = getApp().globalData.defaultCategoryList
     if (globalDefaultCategoryList.length > 0) {
       this.setData({
-        selectedCategory: handleDefaultCategory(globalDefaultCategoryList)
+        selectedCategory: handleDefaultCategory(globalDefaultCategoryList),
       })
       getApp().globalData.selectedCategory = handleDefaultCategory(globalDefaultCategoryList)
     } else {
-      getApp().loadDefaultCategoryCallBack = list => {
+      getApp().loadDefaultCategoryCallBack = (list) => {
         // 根据时间对默认选择对分类进行“推荐”
         this.setData({
-          selectedCategory: handleDefaultCategory(list)
+          selectedCategory: handleDefaultCategory(list),
         })
         getApp().globalData.selectedCategory = handleDefaultCategory(list)
       }
     }
+    // 获取一下订阅消息状态，如果是可以推送消息的话就进行推送授权收集
+    this.getUserSucscribeStatus()
   },
   /**
    * 组件的方法列表
@@ -71,7 +80,7 @@ Component({
       wx.cloud.callFunction({
         name: 'word',
         data: {
-          mode: 'get'
+          mode: 'get',
         },
         success(res) {
           const response = res.result
@@ -81,32 +90,33 @@ Component({
             if (((wordData.word !== storeWordData.word) || new Date() < new Date(wordData.expire)) && wordData.show && storeHideWord.word !== wordData.word) {
               wx.setStorageSync('word', wordData)
               self.setData({
-                wordData
+                wordData,
               })
             }
             // 无论如何都要设置这个
             self.setData({
-              showPayType: response.showPayType
+              showPayType: response.showPayType,
+              payTypeList: response.payTypeList,
             })
           }
-        }
+        },
       })
     },
     // 关闭对话通知
-    closeTalk(event) {
+    closeTalk() {
       wx.setStorageSync('hideWord', this.data.wordData)
       this.setData({
-        wordData: null
+        wordData: null,
       })
       wx.showToast({
         title: '已隐藏提示',
-        icon: 'none'
+        icon: 'none',
       })
     },
     bindInput(event) {
       const { value } = event.detail
       this.setData({
-        [`${event.currentTarget.dataset.name}`]: value
+        [`${event.currentTarget.dataset.name}`]: value,
       })
     },
     converDate(date, isDate = true) {
@@ -115,9 +125,9 @@ Component({
       let dayMap = {}
       if (isDate) {
         dayMap = {
-          '今天': parseTime(new Date(), '{y}-{m}-{d}'),
-          '昨天': parseTime(yesterday, '{y}-{m}-{d}'),
-          '前天': parseTime(yeyesterday, '{y}-{m}-{d}'),
+          今天: parseTime(new Date(), '{y}-{m}-{d}'),
+          昨天: parseTime(yesterday, '{y}-{m}-{d}'),
+          前天: parseTime(yeyesterday, '{y}-{m}-{d}'),
         }
       } else {
         dayMap = {
@@ -131,17 +141,17 @@ Component({
     changeTab(event) {
       const { dataset } = event.currentTarget
       this.setData({
-        [`active_${dataset.key}`]: dataset.value
+        [`active_${dataset.key}`]: dataset.value,
       })
-      if (/date/.test(dataset.key)) {        
+      if (/date/.test(dataset.key)) {
         this.setData({
-          active_date_time: this.converDate(dataset.value)
+          active_date_time: this.converDate(dataset.value),
         })
       } else {
         // 收入或者支出的tab
         getApp().globalData.selectedCategory = dataset.value === 0 ? globalDefaultCategory : null
         this.setData({
-          selectedCategory: dataset.value === 0 ? globalDefaultCategory : null
+          selectedCategory: dataset.value === 0 ? globalDefaultCategory : null,
         })
       }
     },
@@ -162,33 +172,59 @@ Component({
         editBill,
         // 某轩的需求
         showPayType,
-        payType
+        payType,
       } = this.data
-      // hack，欧元键盘不显示.号所以需要进行替换
-      let transSum = sum.replace(',', '.')
+      let transSum = 0
+      if (sum) {
+        // hack，欧元键盘不显示.号所以需要进行替换
+        transSum = sum.replace(',', '.')
+      }
+      // eslint-disable-next-line no-restricted-globals
       if (!/^0{1}([.]\d{1,2})?$|^[1-9]\d*([.]{1}[0-9]{1,2})?$/.test(Number(transSum)) || isNaN(Number(transSum))) {
         wx.showToast({
           title: '金额输入不正确，最多两位小数',
-          icon: 'none'
+          icon: 'none',
         })
         return false
       }
       if (Number(transSum) === 0) {
         wx.showToast({
           title: '金额不能为0呀！',
-          icon: 'none'
+          icon: 'none',
         })
         return false
       }
       if (!selectedCategory) {
         wx.showToast({
           title: '未选择分类！',
-          icon: 'none'
+          icon: 'none',
         })
         return false
       }
+      // 埋点！增加订阅的机会--!!决定还是在账单成功后再增加一个吧
+      if (subscribeStatus && !isShowSubscribeTips) {
+        wx.requestSubscribeMessage({
+          tmplIds: ['29PkwuWSDZ5qCe_bjIAYE8UPbw4A7HIXL_ZNmNCD__s'],
+          success(res) {
+            // 如果弹出一次了，就不要再烦人家了
+            isShowSubscribeTips = true
+            // eslint-disable-next-line no-console
+            if (res.errMsg === 'requestSubscribeMessage:ok') {
+              // 如果订阅成功，则修改状态
+              self.changeStatus('open')
+            }
+          },
+          fail() {
+            wx.showToast({
+              title: '由于拒绝订阅，将关闭推送。可到设置打开。',
+              icon: 'none',
+            })
+            self.changeStatus('close')
+          },
+        })
+      }
       self.setData({
-        loadingCreate: true
+        loadingCreate: true,
       })
       wx.cloud.callFunction({
         name: 'account',
@@ -197,31 +233,33 @@ Component({
           money: transSum,
           categoryId: selectedCategory._id,
           noteDate: active_date_time,
-          description: note ? (showPayType ? `${payType}-${note}` : note) : note,
+          // 有备注的话就显示支付方式，没有的话不显示。
+          description: note ? (showPayType && payType ? `${payType}-${note}` : note) : note,
           flow: active_tab,
-          id: isEdit ? editBill._id : ''
+          id: isEdit ? editBill._id : '',
         },
         success(res) {
           if (res.result.code === 1) {
             wx.showToast({
               title: isEdit ? '😬修改成功' : '😉成功新增一笔账单',
-              icon: 'none'
+              icon: 'none',
             })
             self.resetStatus()
             self.triggerEvent('reFetchBillList')
             if (active_tab === 0) {
               // 本地记录用户记账高频分类
               const m = wx.getStorageSync('localCategory') || []
-              const keys = m.map(item => item._id)
+              const keys = m.map((item) => item._id)
               // 如果本地已有缓存
               const index = keys.indexOf(selectedCategory._id)
               if (index !== -1) {
-                m[index]['pickTime'] = ++m[index]['pickTime']
+                // eslint-disable-next-line no-plusplus
+                m[index].pickTime = ++m[index].pickTime
               } else {
                 // 如果没有
                 m.push({
                   ...selectedCategory,
-                  'pickTime': 1
+                  pickTime: 1,
                 })
               }
               // em.... 经过storage后的数据类型会从数值类型转为字符串类型
@@ -229,15 +267,15 @@ Component({
             }
 
             self.setData({
-              selectedCategory: globalDefaultCategory
+              selectedCategory: globalDefaultCategory,
             })
           }
         },
         complete() {
           self.setData({
-            loadingCreate: false
+            loadingCreate: false,
           })
-        }
+        },
       })
     },
     // tab.js调用
@@ -250,7 +288,7 @@ Component({
         selectedCategory: editBill.category,
         active_date: this.converDate(editBill.noteDate, false),
         active_date_time: editBill.noteDate,
-        isEdit: true
+        isEdit: true,
       })
     },
     resetStatus() {
@@ -261,13 +299,13 @@ Component({
         active_date: '今天',
         loadingCreate: false,
         selectedCategory: globalDefaultCategory,
-        isEdit: false
+        isEdit: false,
       })
     },
     bindDateChange(event) {
       this.setData({
         active_date_time: event.detail.value,
-        active_date: this.converDate(event.detail.value, false)
+        active_date: this.converDate(event.detail.value, false),
       })
     },
     clickPig() {
@@ -275,46 +313,75 @@ Component({
       let { clickPigNum } = self.data
       wx.vibrateShort()
       if (clickPigNum <= 4) {
+        // eslint-disable-next-line no-plusplus
         clickPigNum++
         const temp = ['！', '！！', '！！！', '！！！！', '！！！！！']
         wx.showToast({
-          title: '你再点我' + temp[clickPigNum - 1],
-          icon: 'none'
+          title: `你再点我${temp[clickPigNum - 1]}`,
+          icon: 'none',
         })
       }
       if (clickPigNum === 5) {
         setTimeout(() => {
           self.setData({
-            clickPigNum: 0
+            clickPigNum: 0,
           })
           wx.showToast({
             title: '我又出现了 - -',
-            icon: 'none'
+            icon: 'none',
           })
         }, 5000)
       }
       self.setData({
-        clickPigNum
+        clickPigNum,
       })
     },
     selectType(event) {
       this.setData({
         payType: event.target.dataset.paytype,
-        showPayTypeDialog: false
+        showPayTypeDialog: false,
       })
       this.triggerEvent('hideTab', false)
     },
     onShowPayTypeDialog() {
       this.setData({
-        showPayTypeDialog: true
+        showPayTypeDialog: true,
       })
       this.triggerEvent('hideTab', true)
     },
     closeDialog() {
       this.setData({
-        showPayTypeDialog: false
+        showPayTypeDialog: false,
       })
       this.triggerEvent('hideTab', false)
-    }
-  }
+    },
+    // 获取订阅状态
+    getUserSucscribeStatus() {
+      wx.cloud.callFunction({
+        name: 'checkSubscribe',
+        data: {
+          mode: 'get',
+        },
+        success(res) {
+          if (res.result.code === 1) {
+            subscribeStatus = res.result.data
+          }
+        },
+      })
+    },
+    changeStatus(type) {
+      const self = this
+      wx.cloud.callFunction({
+        name: 'checkSubscribe',
+        data: {
+          mode: 'post',
+          type,
+        },
+        success() {},
+        complete() {
+          self.getUserSucscribeStatus()
+        },
+      })
+    },
+  },
 })

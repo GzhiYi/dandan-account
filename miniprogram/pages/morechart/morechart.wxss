@@ -1,10 +1,10 @@
 page {
-  overflow: hidden;
+  background-color: #F9F9F9;
 }
 .charts {
   margin: 0 auto;
-  height:400rpx;
-  background-color: #FFFFFF;
+  height: 500rpx;
+  background-color: #F9F9F9;
 }
 .desc {
   text-align: center;
@@ -18,12 +18,12 @@ page {
   width: 50%;
   margin: 10rpx auto 80rpx;
   border-radius: 15rpx;
-  box-shadow: 0 20px 50px rgba(41, 50, 104, 0.23);
   font-size: 28rpx;
   padding: 10rpx;
   color: #555;
   height: 46rpx;
   line-height: 46rpx;
+  background-color: #EBEBEB;
 }
 .date-tip {
   text-align: center;

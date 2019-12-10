@@ -3,8 +3,9 @@
     "pages/tab/tab",
     "pages/category/category",
     "pages/search/search",
+    "pages/morechart/morechart",
     "pages/onboarding/onboarding",
-    "pages/morechart/morechart"
+    "pages/setting/setting"
   ],
   "window": {
     "backgroundColor": "#F6F6F6",

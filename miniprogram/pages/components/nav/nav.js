@@ -1,26 +1,27 @@
 Component({
   externalClasses: ['my-class', 'my-icon-class'],
   options: {
-    multipleSlots: true
+    multipleSlots: true,
   },
   properties: {
     bgColor: {
       type: String,
-      value: 'rgba(0,0,0,0)'
+      value: 'rgba(0,0,0,0)',
     },
     showIcons: {
-      type: Array
-    }
+      type: Array,
+    },
   },
   data: {
     showBackIcon: false,
     showIssue: false,
     showSearch: false,
-    showBannerSetting: false
+    showBannerSetting: false,
+    showSetting: false,
   },
   ready() {
-    let {
-      statusBarHeight
+    const {
+      statusBarHeight,
     } = getApp().globalData
     const { showIcons } = this.data
     this.setData({
@@ -29,6 +30,7 @@ Component({
       showIssue: showIcons.includes('bug'),
       showBannerSetting: showIcons.includes('banner'),
       showSearch: showIcons.includes('search'),
+      showSetting: showIcons.includes('setting'),
     })
   },
   attached() {
@@ -37,21 +39,21 @@ Component({
     back() {
       wx.navigateBack({
         delta: 1,
-        fail(error) {
+        fail() {
           wx.redirectTo({
             url: '/pages/tab/tab',
           })
-        }
+        },
       })
     },
     goTo(event) {
       const { page } = event.currentTarget.dataset
       wx.navigateTo({
-        url: `/pages/${page}/${page}`
+        url: `/pages/${page}/${page}`,
       })
     },
     showBanner() {
       this.triggerEvent('showBanner')
-    }
-  }
+    },
+  },
 })

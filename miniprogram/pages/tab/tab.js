@@ -1,12 +1,13 @@
 import { parseTime } from '../../util'
+
 const mapFace = {
-  'greed': '我还能存！',
-  'kiss': '继续继续',
-  'cool': '嘿嘿',
-  'smile': '小存不亏嘻嘻',
-  'grinning': 'emmm....',
-  'puke': '吃土了',
-  'sad': '土都没得吃了'
+  greed: '我还能存！',
+  kiss: '继续继续',
+  cool: '嘿嘿',
+  smile: '小存不亏嘻嘻',
+  grinning: 'emmm....',
+  puke: '吃土了',
+  sad: '土都没得吃了',
 }
 Page({
   data: {
@@ -15,7 +16,7 @@ Page({
     editBill: {},
     hideTab: false,
     currentMonthData: {},
-    activeRightIcon: 'tongue'
+    activeRightIcon: 'tongue',
   },
   onLoad() {
     this.calCalendarHeight()
@@ -23,25 +24,25 @@ Page({
   onShow() {
     const { selectedCategory } = getApp().globalData
     this.setData({
-      selectedCategory
+      selectedCategory,
     })
-  }, 
+  },
   calCalendarHeight() {
     const query = wx.createSelectorQuery().in(this)
-    query.select('.cal-calendar').boundingClientRect(function (rect) {
+    query.select('.cal-calendar').boundingClientRect(() => {
     }).exec()
   },
   goTo(event) {
     const { active } = event.currentTarget.dataset
     this.setData({
       active,
-      scale: active
+      scale: active,
     })
     wx.vibrateShort()
     const self = this
     setTimeout(() => {
       self.setData({
-        scale: null
+        scale: null,
       })
     }, 200)
   },
@@ -55,19 +56,19 @@ Page({
   onEditBill(event) {
     this.setData({
       editBill: event.detail,
-      active: 'index'
+      active: 'index',
     })
     const index = this.selectComponent('#index')
     index.dectiveEdit()
   },
   onSwitchTab(data) {
     this.setData({
-      active: data.detail
+      active: data.detail,
     })
   },
   onHideTab(event) {
     this.setData({
-      hideTab: event.detail
+      hideTab: event.detail,
     })
   },
   onGetNewWord() {
@@ -96,7 +97,7 @@ Page({
     }
     this.setData({
       currentMonthData,
-      activeRightIcon: icon
+      activeRightIcon: icon,
     })
   },
   showIconName(event) {
@@ -106,19 +107,19 @@ Page({
     if (active === 'chart') {
       wx.showToast({
         title: mapFace[this.data.activeRightIcon],
-        icon: 'none'
+        icon: 'none',
       })
     }
     if (active === 'index') {
       wx.showToast({
         title: '( •̀ᄇ• ́)ﻭ✧来记笔账 ❤️',
-        icon: 'none'
+        icon: 'none',
       })
     }
     if (active === 'list') {
       wx.showToast({
         title: '要养成理财记账习惯哦',
-        icon: 'none'
+        icon: 'none',
       })
     }
   },
@@ -126,7 +127,7 @@ Page({
     return {
       title: '可能是东半球最单纯的记账小程序🌚',
       path: '/pages/tab/tab',
-      imageUrl: 'https://images.vrm.cn/2019/08/29/pig.png'
+      imageUrl: 'https://images.vrm.cn/2019/08/29/pig.png',
     }
-  }
+  },
 })

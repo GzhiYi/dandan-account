@@ -1,12 +1,12 @@
 Component({
   options: {
-    multipleSlots: true
+    multipleSlots: true,
   },
   properties: {
     visible: {
       type: Boolean,
-      value: false
-    }
+      value: false,
+    },
   },
   data: {
   },
@@ -17,9 +17,9 @@ Component({
   methods: {
     closeDialog() {
       this.setData({
-        visible: false
+        visible: false,
       })
       this.triggerEvent('closeDialog')
-    }
-  }
+    },
+  },
 })

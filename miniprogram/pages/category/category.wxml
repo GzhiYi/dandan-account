@@ -20,7 +20,7 @@
         <view class="name">{{child.categoryName}}
           <image
             class="delete-icon"
-            wx:if="{{child.openId !== 'SYSTEM'}}"
+            wx:if="{{child.openId !== 'SYSTEM' && isEdit}}"
             src="../../images/backspace-arrow.png"
             style="width: 28rpx;height: 28rpx;"
             catchtap="showMenu"

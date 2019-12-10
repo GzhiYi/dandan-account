@@ -1,0 +1,52 @@
+page {
+  background-color: #FFFFFF;
+}
+.setting {
+  margin-bottom: 50rpx;
+}
+.part {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 30rpx;
+}
+
+.part .left {
+  width: 16%;
+  padding: 48rpx;
+  font-size: 30rpx;
+  font-weight: 700;
+}
+
+.part .right {
+  width: 54%;
+  border-radius: 38rpx;
+  padding: 48rpx;
+}
+
+.dandan {
+  color: #fff;
+}
+
+.dandan .title {
+  font-size: 28rpx;
+  font-weight: 600;
+  margin-bottom: 10rpx;
+}
+.dandan .desc {
+  font-size: 24rpx;
+}
+.dandan .pig {
+  width: 100rpx;
+  height: 100rpx;
+  float: right;
+}
+.notify-status {
+  font-size: 34rpx;
+  margin-top: 20rpx;
+  text-align: right;
+}
+.fill {
+  width: 100%;
+  height: 200rpx;
+}

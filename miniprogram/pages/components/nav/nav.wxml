@@ -31,5 +31,14 @@
         data-page="search"
       ></button>
     </view>
+    <view class='nav-icon-view-back' wx:if="{{showSetting}}">
+      <button
+        style="border: none;height: 39rpx;"
+        plain='true'
+        class='nav-icon setting'
+        bindtap="goTo"
+        data-page="setting"
+      ></button>
+    </view>
   </view>
 </view>

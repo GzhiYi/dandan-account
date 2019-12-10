@@ -7,10 +7,12 @@
   "devDependencies": {
     "eslint": "^6.7.2",
     "eslint-config-airbnb-base": "^14.0.0",
-    "eslint-plugin-import": "^2.19.1"
+    "eslint-plugin-import": "^2.19.1",
+    "husky": "^3.1.0"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "pre-commit": "npm run eslint"
   },
   "repository": {
     "type": "git",
@@ -23,6 +25,11 @@
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/GzhiYi/dandan-account/issues"
+  },
+  "husky": {
+    "hooks": {
+      "pre-push": "npm run pre-commit"
+    }
   },
   "homepage": "https://github.com/GzhiYi/dandan-account#readme"
 }

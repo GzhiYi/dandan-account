@@ -5,7 +5,7 @@
 <view class="setting">
   <view class="part">
     <view class="left">自言自语</view>
-    <view class="right dandan">
+    <view class="right dandan" style="background-color: #B76FA0;">
       <view class="title">很高兴能与你一起</view>
       <text class="desc">继续坚持记账</text>
       <image class="pig" src="https://images.vrm.cn/2019/08/29/pig.png" style="width: 120rpx;height: 120rpx;"/>
@@ -13,7 +13,7 @@
   </view>
   <view class="part">
     <view class="left">对你啰嗦</view>
-    <view class="right dandan">
+    <view class="right dandan" style="background-color: #5CC9F5;">
       <view class="title">需要推送提醒你记账吗？</view>
       <view class="desc">
         <text>如果你今天没记账，我会提示一下你。【注意】要是开启了可别嫌弃我啰嗦。为了更好推送，需要勾选【总是保持允许，不再询问】。如果不保持选择，会在记账成功后弹出申请，挺烦的，建议开启。</text>
@@ -23,21 +23,33 @@
     </view>
   </view>
   <view class="part">
-    <view class="left">左边</view>
-    <view class="right">右边</view>
+    <view class="left">数据安全</view>
+    <view class="right dandan" style="background-color: #6638F0;">
+      <view class="title">每日备份</view>
+      <view class="desc">
+        <text>所有账单数据每天进行备份，保护数据的安全。只要小程序还在，数据就不会丢。</text>
+      </view>
+    </view>
+  </view>
+  <view class="part" bindtap="copyLink">
+    <view class="left">源码</view>
+    <view class="right dandan" style="background-color: #212529;">
+      <view class="title">代码开源</view>
+      <view class="desc">
+        <text>小程序在开源社区Github开源。对数据处理透明化。点我复制仓库链接，欢迎Star鼓励或贡献代码。</text>
+      </view>
+    </view>
   </view>
   <view class="part">
-    <view class="left">左边</view>
-    <view class="right">右边</view>
+    <view class="left">更多</view>
+    <view class="right dandan" style="background-color: #FE6303;">
+      <view class="title">暂时还没</view>
+      <view class="desc">
+        <text>暂时还没</text>
+      </view>
+    </view>
   </view>
-  <view class="part">
-    <view class="left">左边</view>
-    <view class="right">右边</view>
-  </view>
-  <view class="part">
-    <view class="left">左边</view>
-    <view class="right">右边</view>
-  </view>
+  <view class="fill"></view>
 </view>
 <dialog visible="{{showAuthDialog}}" bind:closeDialog="closeDialog">
   <view slot="content">

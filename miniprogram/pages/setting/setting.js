@@ -107,4 +107,10 @@ Page({
       showAuthDialog: false,
     })
   },
+  copyLink() {
+    wx.setClipboardData({
+      data: 'https://github.com/GzhiYi/dandan-account',
+      success() {},
+    })
+  },
 })

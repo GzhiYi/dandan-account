@@ -174,9 +174,11 @@ Component({
         showPayType,
         payType,
       } = this.data
-      if (!sum) return
-      // hack，欧元键盘不显示.号所以需要进行替换
-      const transSum = sum.replace(',', '.')
+      let transSum = 0
+      if (sum) {
+        // hack，欧元键盘不显示.号所以需要进行替换
+        transSum = sum.replace(',', '.')
+      }
       // eslint-disable-next-line no-restricted-globals
       if (!/^0{1}([.]\d{1,2})?$|^[1-9]\d*([.]{1}[0-9]{1,2})?$/.test(Number(transSum)) || isNaN(Number(transSum))) {
         wx.showToast({

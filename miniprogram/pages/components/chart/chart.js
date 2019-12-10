@@ -49,6 +49,7 @@ Component({
       this.setData({
         fixScroll: tab === 'chart',
       })
+      console.log('test hasky');
     },
   },
   ready() {

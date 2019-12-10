@@ -1,7 +1,8 @@
 // 云函数入口文件
-const wxInfo = require('./wxInfo')
 const request = require('request')
 const cloud = require('wx-server-sdk')
+const wxInfo = require('./wxInfo')
+
 const intervelTime = 1000 // 1s的时间执行检查文件是否导出完成
 cloud.init()
 
@@ -16,7 +17,7 @@ async function getAccessToken(appid, secret) {
           return
         }
         resolve(JSON.parse(body))
-      }
+      },
     )
   })
 }
@@ -32,13 +33,13 @@ async function exportFile(accessToken, collection, env) {
           env,
           file_path: `${date}.json`,
           file_type: '1',
-          query: `db.collection("${collection}").get()`
-        })
+          query: `db.collection("${collection}").get()`,
+        }),
       },
       (err, res, body) => {
         if (err) reject(err)
         resolve(JSON.parse(body))
-      }
+      },
     )
   })
 }
@@ -52,24 +53,24 @@ async function waitJobFinished(accessToken, jobId, env) {
         {
           body: JSON.stringify({
             env,
-            job_id: jobId
-          })
+            job_id: jobId,
+          }),
         },
         (err, res, body) => {
           if (err) reject(err)
-          const {status, file_url} = JSON.parse(body)
+          const { status, file_url } = JSON.parse(body)
           if (status === 'success') {
             clearInterval(timer)
             resolve(file_url)
           }
-        }
+        },
       )
     }, intervelTime)
   })
 }
 
 // 云函数入口函数
-exports.main = async (event, context) => {
+exports.main = async () => {
   const wxContext = cloud.getWXContext()
   let env = wxContext.ENV === 'local' ? 'release-wifo3' : wxContext.ENV
   // 会有env没有的情况，是真的有！
@@ -80,7 +81,8 @@ exports.main = async (event, context) => {
   try {
     const {
       errmsg,
-      access_token
+      access_token,
+      errcode,
     } = await getAccessToken(wxInfo.appid, wxInfo.secret)
     // 判断access_token 返回情况
     if (errmsg && errcode !== 0) {
@@ -90,7 +92,7 @@ exports.main = async (event, context) => {
     const {
       errmsg: jobErrMsg,
       errcode: jobErrCode,
-      job_id
+      job_id,
     } = await exportFile(access_token, 'DANDAN_NOTE', env)
     if (jobErrCode !== 0) {
       throw new Error(`创建数据库备份任务失败：${jobErrMsg}`)
@@ -99,8 +101,8 @@ exports.main = async (event, context) => {
     const addJobRes = await db.collection('BACKUP').add({
       data: {
         date: new Date(),
-        jobId: job_id
-      }
+        jobId: job_id,
+      },
     })
 
     const fileUrl = await waitJobFinished(access_token, job_id, env)
@@ -108,8 +110,8 @@ exports.main = async (event, context) => {
     // 将文件链接保存到数据库
     await db.collection('BACKUP').doc(addJobRes._id).update({
       data: {
-        fileUrl
-      }
+        fileUrl,
+      },
     })
   } catch (error) {
     throw new Error(`导出数据库异常：${error.message}`);

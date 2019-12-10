@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 // 云函数入口文件
 const cloud = require('wx-server-sdk')
 
@@ -9,22 +10,31 @@ const MAX_LIMIT = 100;
 
 
 // 云函数入口函数
-exports.main = async (event, context) => {
+exports.main = async (event) => {
   const wxContext = cloud.getWXContext();
   cloud.updateConfig({
-    env: wxContext.ENV === 'local' ? 'release-wifo3' : wxContext.ENV
+    env: wxContext.ENV === 'local' ? 'release-wifo3' : wxContext.ENV,
 
   })
   // 初始化数据库
   const db = cloud.database({
-    env: wxContext.ENV === 'local' ? 'release-wifo3' : wxContext.ENV
+    env: wxContext.ENV === 'local' ? 'release-wifo3' : wxContext.ENV,
 
   });
   const _ = db.command;
   // page: 当前页数
   // limit: 当前页面加载的个数
-  let { page, limit, startDate, endDate, categoryId } = event;
+  let {
+    page, limit,
+  } = event
+  const {
+    startDate,
+    endDate,
+    categoryId,
+  } = event
+  // eslint-disable-next-line radix
   page = Number.parseInt(page);
+  // eslint-disable-next-line radix
   limit = Number.parseInt(limit);
   if (!Number.isInteger(page)) {
     page = DEFAULT_PAGE;
@@ -50,7 +60,7 @@ exports.main = async (event, context) => {
   try {
     // 分页偏移量公式: (page - 1) * limit
     // 计算偏移量
-    let offset = (page - 1) * limit;
+    const offset = (page - 1) * limit;
 
     const basicWhere = {
       isDel: false,
@@ -61,6 +71,7 @@ exports.main = async (event, context) => {
 
     // 主页, 基本列表查询
     if (event.mode === 'normal') {
+      //
     } else if (event.mode === 'getAccountListByTime') {
       basicWhere.noteDate = _.gte(new Date(startDate)).and(_.lte(new Date(endDate)))
       shouldAggregate = true
@@ -74,18 +85,19 @@ exports.main = async (event, context) => {
           name: 'category',
           data: {
             mode: 'getCategoriesByParentCID',
-            id: categoryId
-          }
+            id: categoryId,
+          },
         })
 
         if (cResult.result.code !== 1) {
           return {
-            code: -1
+            code: -1,
           }
         }
 
         const subResult = cResult.result.data
 
+        // eslint-disable-next-line no-restricted-syntax
         for (category of subResult.data) {
           sonCIDs.push(category._id)
           categoryInfoMap.set(category._id, category)
@@ -96,21 +108,22 @@ exports.main = async (event, context) => {
     }
 
     // 计算总数
-    const totalCount = await db.collection("DANDAN_NOTE")
+    const totalCount = await db.collection('DANDAN_NOTE')
       .where(basicWhere).count();
 
     // 开始查询
-    const res = await db.collection("DANDAN_NOTE")
+    const res = await db.collection('DANDAN_NOTE')
       .where(basicWhere)
       .skip(offset)
       .limit(limit)
-      .orderBy("createTime", "desc")
+      .orderBy('createTime', 'desc')
       .get();
 
     // 遍历结果, 获得对应的分类ID, 并且用分类ID获取对应的分类信息
     if (categoryInfoMap.size <= 0) {
       const cidList = [];
-      for (let note of res.data) {
+      // eslint-disable-next-line no-restricted-syntax
+      for (const note of res.data) {
         cidList.push(note.categoryId)
       }
 
@@ -118,11 +131,12 @@ exports.main = async (event, context) => {
         name: 'category',
         data: {
           mode: 'getCategoriesByIdBatch',
-          ids: cidList
-        }
+          ids: cidList,
+        },
       })
 
       if (cResult.result.code === 1) {
+        // eslint-disable-next-line no-restricted-syntax
         for (category of cResult.result.data.data) {
           categoryInfoMap.set(category._id, category)
         }
@@ -130,12 +144,15 @@ exports.main = async (event, context) => {
     }
 
     // 补全账单的内容
-    for (let note of res.data) {
+    // eslint-disable-next-line no-restricted-syntax
+    for (const note of res.data) {
       // console.log(categoryInfoMap.get(note.categoryId))
+      // eslint-disable-next-line no-use-before-define
       completeInfo(note, categoryInfoMap.get(note.categoryId))
     }
 
-    let aggregateResult, monthAggregateResult;
+    let aggregateResult; let
+      monthAggregateResult;
 
     if (shouldAggregate) {
       // 获取所选时间内的收入和支出
@@ -143,23 +160,23 @@ exports.main = async (event, context) => {
         name: 'accountAggregate',
         data: {
           mode: 'aggregateAccountByDateRange',
-          startDate: startDate,
-          endDate: endDate,
-          OPENID: wxContext.OPENID
-        }
+          startDate,
+          endDate,
+          OPENID: wxContext.OPENID,
+        },
       })
-      const currentTimePre = doHandleYear() + "-" + doHandleMonth() + "-";
+      // eslint-disable-next-line no-use-before-define
+      const currentTimePre = `${doHandleYear()}-${doHandleMonth()}-`;
       // 获取当月内的收入和支出
       monthAggregateResult = await cloud.callFunction({
         name: 'accountAggregate',
         data: {
           mode: 'aggregateAccountByDateRange',
-          startDate: currentTimePre + "01",
-          endDate: currentTimePre + "31",
-          OPENID: wxContext.OPENID
-        }
+          startDate: `${currentTimePre}01`,
+          endDate: `${currentTimePre}31`,
+          OPENID: wxContext.OPENID,
+        },
       });
-
     }
 
     return {
@@ -167,29 +184,28 @@ exports.main = async (event, context) => {
       data: {
         page: res,
         count: totalCount.total,
-        rangeResult: shouldAggregate && aggregateResult.result.code == 1 ? aggregateResult.result.sumResult : [],
-        monthResult: shouldAggregate && monthAggregateResult.result.code == 1 ? monthAggregateResult.result.sumResult : [] 
+        rangeResult: shouldAggregate && Number(aggregateResult.result.code) === 1 ? aggregateResult.result.sumResult : [],
+        monthResult: shouldAggregate && Number(monthAggregateResult.result.code) === 1 ? monthAggregateResult.result.sumResult : [],
       },
       message: '获取记录成功',
     }
   } catch (e) {
-    console.error(e);
     return {
       code: -1,
       data: {
         page: [],
         count: 0,
       },
-      message: '获取记录失败'
+      message: '获取记录失败',
     }
   }
-
 }
 
 // 补全账单内容
 function completeInfo(note, category) {
   // 转换日期格式
-  note.noteDate = parseTime(note.noteDate, "{y}-{m}-{d}")
+  // eslint-disable-next-line no-use-before-define
+  note.noteDate = parseTime(note.noteDate, '{y}-{m}-{d}')
 
   // 貌似没有记录的话, 就直接被catch掉了
   if (category !== undefined) {
@@ -206,7 +222,8 @@ function parseTime(time, cFormat) {
   if (typeof time === 'object') {
     date = time
   } else {
-    if (('' + time).length === 10) time = parseInt(time) * 1000
+    // eslint-disable-next-line radix
+    if ((`${time}`).length === 10) time = parseInt(time) * 1000
     date = new Date(time)
   }
   const formatObj = {
@@ -216,13 +233,13 @@ function parseTime(time, cFormat) {
     h: date.getHours(),
     i: date.getMinutes(),
     s: date.getSeconds(),
-    a: date.getDay()
+    a: date.getDay(),
   }
   const timeStr = format.replace(/{(y|m|d|h|i|s|a)+}/g, (result, key) => {
     let value = formatObj[key]
     if (key === 'a') return ['一', '二', '三', '四', '五', '六', '日'][value - 1]
     if (result.length > 0 && value < 10) {
-      value = '0' + value
+      value = `0${value}`
     }
     return value || 0
   })
@@ -230,20 +247,19 @@ function parseTime(time, cFormat) {
 }
 
 function doHandleMonth() {
-  var myDate = new Date();
-  var tMonth = myDate.getMonth();
+  const myDate = new Date();
+  const tMonth = myDate.getMonth();
 
-  var m = tMonth + 1;
-  if (m.toString().length == 1) {
-    m = "0" + m;
+  let m = tMonth + 1;
+  if (m.toString().length === 1) {
+    m = `0${m}`;
   }
   return m;
 }
 
 function doHandleYear() {
-  var myDate = new Date();
-  var tYear = myDate.getFullYear();
+  const myDate = new Date();
+  const tYear = myDate.getFullYear();
 
   return tYear;
 }
-

@@ -4,49 +4,51 @@ const cloud = require('wx-server-sdk')
 cloud.init()
 
 // 云函数入口函数
-exports.main = async (event, context) => {
+exports.main = async (event) => {
   const wxContext = cloud.getWXContext();
   cloud.updateConfig({
-    env: wxContext.ENV === 'local' ? 'release-wifo3' : wxContext.ENV
+    env: wxContext.ENV === 'local' ? 'release-wifo3' : wxContext.ENV,
 
   })
   // 初始化数据库
   const db = cloud.database({
-    env: wxContext.ENV === 'local' ? 'release-wifo3' : wxContext.ENV
+    env: wxContext.ENV === 'local' ? 'release-wifo3' : wxContext.ENV,
 
   });
   const { keyWord } = event
   const _ = db.command
   // 获取该用户的分类
-  const categoryList = await db.collection("DANDAN_NOTE_CATEGORY")
-  .where({
-    openId: _.eq(wxContext.OPENID).or(_.eq("SYSTEM")),
-    isDel: false
-  })
-  .get()
+  const categoryList = await db.collection('DANDAN_NOTE_CATEGORY')
+    .where({
+      openId: _.eq(wxContext.OPENID).or(_.eq('SYSTEM')),
+      isDel: false,
+    })
+    .get()
   try {
-    const result = await db.collection("DANDAN_NOTE")
-    .where(_.or([{
+    const result = await db.collection('DANDAN_NOTE')
+      .where(_.or([{
         description: db.RegExp({
-          regexp: '.*' + keyWord,
+          regexp: `.*${keyWord}`,
           options: 'i',
-        })
+        }),
       },
       {
         money: db.RegExp({
           regexp: keyWord,
           options: 'i',
-        })
-      }
-    ]).and({
-      openId: wxContext.OPENID
-    }))
-    .get()
+        }),
+      },
+      ]).and({
+        openId: wxContext.OPENID,
+      }))
+      .get()
     return {
       code: 1,
-      data: result.data.map(bill => {
-        bill.category = categoryList.data.filter(item => item._id === bill.categoryId)[0]
-        bill.noteDate = parseTime(bill.noteDate, "{y}-{m}-{d}")
+      data: result.data.map((bill) => {
+        // eslint-disable-next-line prefer-destructuring
+        bill.category = categoryList.data.filter((item) => item._id === bill.categoryId)[0]
+        // eslint-disable-next-line no-use-before-define
+        bill.noteDate = parseTime(bill.noteDate, '{y}-{m}-{d}')
         return bill
       }),
       message: '操作成功',
@@ -68,7 +70,8 @@ function parseTime(time, cFormat) {
   if (typeof time === 'object') {
     date = time
   } else {
-    if (('' + time).length === 10) time = parseInt(time) * 1000
+    // eslint-disable-next-line radix
+    if ((`${time}`).length === 10) time = parseInt(time) * 1000
     date = new Date(time)
   }
   const formatObj = {
@@ -78,13 +81,13 @@ function parseTime(time, cFormat) {
     h: date.getHours(),
     i: date.getMinutes(),
     s: date.getSeconds(),
-    a: date.getDay()
+    a: date.getDay(),
   }
   const timeStr = format.replace(/{(y|m|d|h|i|s|a)+}/g, (result, key) => {
     let value = formatObj[key]
     if (key === 'a') return ['一', '二', '三', '四', '五', '六', '日'][value - 1]
     if (result.length > 0 && value < 10) {
-      value = '0' + value
+      value = `0${value}`
     }
     return value || 0
   })

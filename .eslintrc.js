@@ -11,7 +11,7 @@ module.exports = {
     SharedArrayBuffer: 'readonly',
     Component: 'readonly',
     getApp: 'writable',
-    roundFun: 'readonly',
+    roundFun: 'writable',
     Page: 'writable',
     wx: 'writable',
     getCurrentPages: 'readonly',
@@ -32,6 +32,7 @@ module.exports = {
     'no-param-reassign': 0,
     'new-cap': 0,
     'func-names': 0,
-    'camelcase': 0
+    'camelcase': 0,
+    'import/no-extraneous-dependencies': 0
   },
 };

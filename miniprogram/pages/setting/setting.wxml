@@ -33,10 +33,10 @@
   </view>
   <view class="part">
     <view class="left">导出账单</view>
-    <view class="right dandan" style="background-color: #6638F0;">
-      <view class="title">目前支持导出所有账单数据</view>
+    <view class="right dandan" style="background-color: #4fd69c;">
+      <view class="title">目前只支持导出所有账单数据</view>
       <view class="desc">
-        <text>点</text>
+        <text>点击导出后稍等会将文件链接进行复制。可以粘贴到浏览器打开下载。文件有效期一天。</text>
         <view wx:if="{{!isExporting}}" class="notify-status" bindtap="onExportFile">点击导出</view>
         <view wx:else class="notify-status">正在导出...</view>
       </view>
@@ -52,11 +52,21 @@
     </view>
   </view>
   <view class="part">
-    <view class="left">更多</view>
-    <view class="right dandan" style="background-color: #FE6303;">
-      <view class="title">暂时还没</view>
+    <view class="left">一杯奶茶？</view>
+    <view class="right dandan" style="background-color: #FFB905;">
+      <view class="title">开源不易，我会尽最大的努力保持单单干净无广告侵扰。</view>
       <view class="desc">
-        <text>暂时还没</text>
+        <text>希望各位喜欢单单的朋友可以多多分享给好友知道❤️❤️，我也没太多心思去推广啦。</text>
+      </view>
+      <view style="text-align: center;margin-top: 20rpx;">
+        <image
+          src="https://6461-dandan-zdm86-1259814516.tcb.qcloud.la/WechatIMG11.jpeg?sign=bdaed572942b8bc2e7b3a61f7183d743&t=1576081688"
+          style="width: 300rpx;height: 264rpx;border-radius: 12rpx;"
+          mode="widthFix"
+          bindtap="showPreview"
+        ></image>
+        <view style="font-size: 20rpx;margin-top: 10rpxx;">点击肚子饿的他保存图片赏一杯奶茶</view>
+        <view style="font-size: 20rpx;">ԅ(¯﹃¯ԅ)流口水</view>
       </view>
     </view>
   </view>

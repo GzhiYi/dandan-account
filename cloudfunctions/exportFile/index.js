@@ -95,8 +95,8 @@ exports.main = async () => {
       const tempInLoop = final[i].data
       for (let j = 0; j < tempInLoop.length; j++) {
         rowData.push([
-          parseTime(tempInLoop[j].createTime, '{y}年{m}月{d}日 {h}:{m}:{s}'),
-          parseTime(tempInLoop[j].noteDate, '{y}年{m}月{d}日'),
+          parseTime(tempInLoop[j].createTime, '{y}/{m}/{d}/ {h}:{m}:{s}'),
+          parseTime(tempInLoop[j].noteDate, '{y}/{m}/{d}/'),
           cateMap[tempInLoop[j].categoryId] ? cateMap[tempInLoop[j].categoryId].categoryName : '杂项',
           tempInLoop[j].flow === 0 ? -tempInLoop[j].money : tempInLoop[j].money,
           tempInLoop[j].description,
@@ -130,7 +130,7 @@ exports.main = async () => {
       const result = excel.execute(conf)
       Buffer.from(result.toString(), 'binary')
       const uplodaRes = await cloud.uploadFile({
-        cloudPath: `download/sheet/${wxContext.OPENID.slice(3, 8)}.xlsx`, // excel文件名称及路径，即云存储中的路径
+        cloudPath: `download/sheet/单单记账-账单(${wxContext.OPENID.slice(3, 8)}).xlsx`, // excel文件名称及路径，即云存储中的路径
         fileContent: Buffer.from(result.toString(), 'binary'),
       })
       // eslint-disable-next-line no-console

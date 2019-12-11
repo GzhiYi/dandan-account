@@ -33,6 +33,7 @@ module.exports = {
     'new-cap': 0,
     'func-names': 0,
     'camelcase': 0,
-    'import/no-extraneous-dependencies': 0
+    'import/no-extraneous-dependencies': 0,
+    'no-plusplus': 0
   },
 };

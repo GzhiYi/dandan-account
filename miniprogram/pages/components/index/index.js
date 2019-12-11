@@ -68,6 +68,9 @@ Component({
     }
     // 获取一下订阅消息状态，如果是可以推送消息的话就进行推送授权收集
     this.getUserSucscribeStatus()
+    // wx.downloadFile({
+    //   url: ''
+    // })
   },
   /**
    * 组件的方法列表

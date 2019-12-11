@@ -27,6 +27,8 @@ exports.main = async (event) => {
               data: {
                 openId: wxContext.OPENID,
                 canSubscribe: true,
+                createTime: db.serverDate(),
+                updateTime: db.serverDate(),
               },
             })
           } else {
@@ -35,6 +37,7 @@ exports.main = async (event) => {
               .update({
                 data: {
                   canSubscribe: true,
+                  updateTime: db.serverDate(),
                 },
               })
           }
@@ -57,6 +60,7 @@ exports.main = async (event) => {
             .update({
               data: {
                 canSubscribe: false,
+                updateTime: db.serverDate(),
               },
             })
           return {

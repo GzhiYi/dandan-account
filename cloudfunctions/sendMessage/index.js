@@ -49,53 +49,53 @@ exports.main = async () => {
   const checkRes = await db.collection('SUBSCRIBE').get()
   const sendList = checkRes.data.filter((item) => item.canSubscribe)
   try {
+    const startTime = new Date(new Date(new Date().toLocaleDateString()).getTime())
+    const endTime = new Date(new Date(new Date().toLocaleDateString()).getTime() + 24 * 60 * 60 * 1000 - 1)
+    const tasks = []
     sendList.forEach(async (user) => {
-      try {
-        const startTime = new Date(new Date(new Date().toLocaleDateString()).getTime())
-        const endTime = new Date(new Date(new Date().toLocaleDateString()).getTime() + 24 * 60 * 60 * 1000 - 1)
-        // 在发送之前查询这个openId在今天是否有进行记账
-        const checkBill = await db.collection('DANDAN_NOTE')
-          .where({
-            openId: user.openId,
-            noteDate: _.gte(new Date(startTime)).and(_.lte(new Date(endTime))),
-          })
-          .get()
-        // eslint-disable-next-line no-console
-        console.log('查出账单数', checkBill)
-        // 如果账单数量为0，则说明今天没记到帐啦。
-        if (checkBill.data.length === 0) {
-          // eslint-disable-next-line no-console
-          console.log(`向${user.openId}发送推送`)
-          await cloud.openapi.subscribeMessage.send({
-            touser: user.openId,
-            page: 'pages/tab/tab',
-            data: {
-              time1: {
-                value: parseTime(new Date(), '{y}年{m}月{d}日'),
-              },
-              phrase2: {
-                value: '记得记账哦',
-              },
-            },
-            templateId: '29PkwuWSDZ5qCe_bjIAYE8UPbw4A7HIXL_ZNmNCD__s',
-          })
-        }
-      } catch (error) {
-        // 如果出现错误，十有八九是因为订阅信息的量消耗完了。
-        // 重置是否推送为false
-        // 出现推送失败也不要重置为false，这不符合逻辑
-        // eslint-disable-next-line no-console
-        console.error('error。十有八九是因为订阅信息的量消耗完了')
-        // const docId = checkRes.data[0]._id
-        // await db.collection('SUBSCRIBE').doc(docId)
-        //   .update({
-        //     data: {
-        //       canSubscribe: false
-        //     }
-        //   })
-      }
+      // 在发送之前查询这个openId在今天是否有进行记账
+      const checkBillPromise = db.collection('DANDAN_NOTE')
+        .where({
+          openId: user.openId,
+          noteDate: _.gte(new Date(startTime)).and(_.lte(new Date(endTime))),
+        })
+        .get()
+      tasks.push(checkBillPromise)
     })
+    const final = await Promise.all(tasks)
+    const sendTasks = []
+    for (let i = 0; i < final.length; i++) {
+      const tempInLoop = final[i].data
+      if (tempInLoop.length === 0) {
+        // 今天没记账
+        // eslint-disable-next-line no-console
+        console.log(`向${sendList[i].openId}发送推送`)
+        // eslint-disable-next-line no-await-in-loop
+        const sendPromise = cloud.openapi.subscribeMessage.send({
+          touser: sendList[i].openId,
+          page: 'pages/tab/tab',
+          data: {
+            time1: {
+              value: parseTime(new Date(), '{y}年{m}月{d}日'),
+            },
+            phrase2: {
+              value: '记得记账哦',
+            },
+          },
+          templateId: '29PkwuWSDZ5qCe_bjIAYE8UPbw4A7HIXL_ZNmNCD__s',
+        })
+        sendTasks.push(sendPromise)
+      }
+    }
+    try {
+      await Promise.all(sendTasks)
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.log('十有八九是订阅用完了', error)
+    }
   } catch (err) {
+    // eslint-disable-next-line no-console
+    console.log('订阅信息发送失败！错误', err)
     return {
       code: 0,
       data: null,

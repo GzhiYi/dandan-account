@@ -27,6 +27,7 @@ Component({
     payType: '支付宝',
     payTypeList: [],
     specialDay: Date.parse(new Date()) < 1577318400000, // before christmas.
+    showAuthDialog: false,
   },
   ready() {
     const now = new Date()
@@ -180,7 +181,7 @@ Component({
       let transSum = 0
       if (sum) {
         // hack，欧元键盘不显示.号所以需要进行替换
-        transSum = sum.replace(',', '.')
+        transSum = Number(sum.toString().replace(',', '.'))
       }
       // eslint-disable-next-line no-restricted-globals
       if (!/^0{1}([.]\d{1,2})?$|^[1-9]\d*([.]{1}[0-9]{1,2})?$/.test(Number(transSum)) || isNaN(Number(transSum))) {
@@ -218,10 +219,11 @@ Component({
             }
           },
           fail() {
-            wx.showToast({
-              title: '由于拒绝订阅，将关闭推送。可到设置打开。',
-              icon: 'none',
-            })
+            setTimeout(() => {
+              self.setData({
+                showAuthDialog: true,
+              })
+            }, 2000)
             self.changeStatus('close')
           },
         })
@@ -355,6 +357,7 @@ Component({
     closeDialog() {
       this.setData({
         showPayTypeDialog: false,
+        showAuthDialog: false,
       })
       this.triggerEvent('hideTab', false)
     },
@@ -383,6 +386,16 @@ Component({
         success() {},
         complete() {
           self.getUserSucscribeStatus()
+        },
+      })
+    },
+    openSetting() {
+      const self = this
+      wx.openSetting({
+        success() {
+          self.setData(({
+            showAuthDialog: false,
+          }))
         },
       })
     },

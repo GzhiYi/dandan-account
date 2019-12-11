@@ -143,3 +143,14 @@
     <view class='list-item-btn' bindtap="closeDialog" style="border-bottom: none;">取消</view>
   </view>
 </dialog>
+<dialog visible="{{showAuthDialog}}" bind:closeDialog="closeDialog">
+  <view slot="content">
+    <view class="pop-indicator"></view>
+    <view class="d-header">
+      订阅信息开启失败
+      <view class="dialog-tip">由于你的设备拒绝了订阅权限，我们无法主动替你开启。请打开设置进行手动开启～</view>
+    </view>
+    <view class='list-item-btn' style="color: #4fd69c;" bindtap="openSetting">打开设置</view>
+    <view class='list-item-btn' bindtap="closeDialog" style="border-bottom: none;">取消</view>
+  </view>
+</dialog>

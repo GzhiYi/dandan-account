@@ -31,6 +31,17 @@
       </view>
     </view>
   </view>
+  <view class="part">
+    <view class="left">导出账单</view>
+    <view class="right dandan" style="background-color: #6638F0;">
+      <view class="title">目前支持导出所有账单数据</view>
+      <view class="desc">
+        <text>点</text>
+        <view wx:if="{{!isExporting}}" class="notify-status" bindtap="onExportFile">点击导出</view>
+        <view wx:else class="notify-status">正在导出...</view>
+      </view>
+    </view>
+  </view>
   <view class="part" bindtap="copyLink">
     <view class="left">源码</view>
     <view class="right dandan" style="background-color: #212529;">

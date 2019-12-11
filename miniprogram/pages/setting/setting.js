@@ -6,6 +6,7 @@ Page({
     status: null,
     isChangeing: false,
     showAuthDialog: false,
+    isExporting: false,
   },
   onLoad() {
     if (wx.requestSubscribeMessage) {
@@ -111,6 +112,36 @@ Page({
     wx.setClipboardData({
       data: 'https://github.com/GzhiYi/dandan-account',
       success() {},
+    })
+  },
+  onExportFile() {
+    const self = this
+    self.setData({
+      isExporting: true,
+    })
+    wx.cloud.callFunction({
+      name: 'exportFile',
+      data: {},
+      success(res) {
+        if (res.result.code === 1) {
+          wx.cloud.getTempFileURL({
+            fileList: [res.result.data.fileID],
+            success: (tempRes) => {
+              // eslint-disable-next-line no-console
+              console.log(tempRes.fileList)
+              wx.setClipboardData({
+                data: tempRes.fileList[0].tempFileURL,
+                success() {},
+              })
+            },
+          })
+        }
+      },
+      complete() {
+        self.setData({
+          isExporting: false,
+        })
+      },
     })
   },
 })

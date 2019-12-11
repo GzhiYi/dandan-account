@@ -38,7 +38,7 @@ function parseTime(time, cFormat) {
   return timeStr
 }
 // 云函数入口函数
-exports.main = async (event) => {
+exports.main = async () => {
   const wxContext = cloud.getWXContext()
   const env = wxContext.ENV === 'local' ? 'release-wifo3' : wxContext.ENV
   cloud.updateConfig({
@@ -135,6 +135,10 @@ exports.main = async (event) => {
       })
       // eslint-disable-next-line no-console
       console.log('uplodaRes', uplodaRes)
+      return {
+        code: 1,
+        data: uplodaRes,
+      }
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error('导出出错', error)
@@ -142,11 +146,5 @@ exports.main = async (event) => {
   } catch (error) {
     // eslint-disable-next-line no-console
     console.error('查询出错', error)
-  }
-  return {
-    event,
-    openid: wxContext.OPENID,
-    appid: wxContext.APPID,
-    unionid: wxContext.UNIONID,
   }
 }

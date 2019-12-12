@@ -48,21 +48,21 @@ exports.main = async () => {
     env,
   })
   const cateMap = {}
+  const _ = db.command;
   try {
     // 查询该用户已有分类
-    const getCategoryRes = await cloud.callFunction({
-      name: 'getCategory',
-      data: {},
-    })
-    if (getCategoryRes.result.code === 1) {
-      const categoryList = getCategoryRes.result.data
-      categoryList.forEach((parent) => {
-        parent.children.forEach((child) => {
-          cateMap[child._id] = child
-        })
+    const getCategoryRes = await db.collection('DANDAN_NOTE_CATEGORY')
+      .where({
+        isDel: false,
+        openId: _.eq(wxContext.OPENID).or(_.eq('SYSTEM')),
+      })
+      .get()
+    if (getCategoryRes.data) {
+      const categoryList = getCategoryRes.data
+      categoryList.forEach((cate) => {
+        cateMap[cate._id] = cate
       })
     }
-    // eslint-disable-next-line no-console
   } catch (error) {
     // eslint-disable-next-line no-console
     console.error('获取分类失败啦', error)

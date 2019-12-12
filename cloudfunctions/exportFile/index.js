@@ -96,7 +96,7 @@ exports.main = async () => {
       for (let j = 0; j < tempInLoop.length; j++) {
         rowData.push([
           parseTime(tempInLoop[j].createTime, '{y}/{m}/{d}/ {h}:{m}:{s}'),
-          parseTime(tempInLoop[j].noteDate, '{y}/{m}/{d}/'),
+          parseTime(tempInLoop[j].noteDate, '{y}/{m}/{d}'),
           cateMap[tempInLoop[j].categoryId] ? cateMap[tempInLoop[j].categoryId].categoryName : '杂项',
           tempInLoop[j].flow === 0 ? -tempInLoop[j].money : tempInLoop[j].money,
           tempInLoop[j].description,

@@ -3,7 +3,7 @@ const request = require('request')
 const cloud = require('wx-server-sdk')
 const wxInfo = require('./wxInfo')
 
-const intervelTime = 1000 // 1s的时间执行检查文件是否导出完成
+const intervelTime = 10000 // 1s的时间执行检查文件是否导出完成
 cloud.init()
 
 // 获取access token
@@ -71,6 +71,8 @@ async function waitJobFinished(accessToken, jobId, env) {
 
 // 云函数入口函数
 exports.main = async () => {
+  // eslint-disable-next-line no-console
+  console.log('进入云函数入口函数！')
   const wxContext = cloud.getWXContext()
   let env = wxContext.ENV === 'local' ? 'release-wifo3' : wxContext.ENV
   // 会有env没有的情况，是真的有！
@@ -84,6 +86,8 @@ exports.main = async () => {
       access_token,
       errcode,
     } = await getAccessToken(wxInfo.appid, wxInfo.secret)
+    // eslint-disable-next-line no-console
+    console.log('getAccessToken返回', errmsg, access_token, errcode)
     // 判断access_token 返回情况
     if (errmsg && errcode !== 0) {
       throw new Error('获取access_token失败或为空。')
@@ -94,6 +98,8 @@ exports.main = async () => {
       errcode: jobErrCode,
       job_id,
     } = await exportFile(access_token, 'DANDAN_NOTE', env)
+    // eslint-disable-next-line no-console
+    console.log('exportFile返回', jobErrMsg, jobErrCode, job_id)
     if (jobErrCode !== 0) {
       throw new Error(`创建数据库备份任务失败：${jobErrMsg}`)
     }
@@ -104,9 +110,12 @@ exports.main = async () => {
         jobId: job_id,
       },
     })
+    // eslint-disable-next-line no-console
+    console.log('备份云函数返回', addJobRes)
 
     const fileUrl = await waitJobFinished(access_token, job_id, env)
-
+    // eslint-disable-next-line no-console
+    console.log('fileUrl', fileUrl)
     // 将文件链接保存到数据库
     await db.collection('BACKUP').doc(addJobRes._id).update({
       data: {

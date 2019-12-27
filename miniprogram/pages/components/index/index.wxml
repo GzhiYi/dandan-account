@@ -1,6 +1,7 @@
-<view class="{{specialDay ? 'banner-special' : 'banner'}}">
+<view class="{{specialDay > 0 && !wordData.word ? 'banner-special banner-img-bg' + specialDay : 'banner'}}">
   <view class="banner-show" wx:if="{{clickPigNum < 5}}">
     <image
+      wx:if="{{wordData.word || specialDay === 0}}"
       src="https://images.vrm.cn/2019/08/29/pig.png"
       style="width: 150rpx;height: 150rpx;"
       bindtap="clickPig"

@@ -12,7 +12,19 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-image: url("https://i.loli.net/2019/12/06/H8xkeipgUqMVPGZ.gif");
+  background-size: cover;
+}
+.banner-img-bg1 {
+  background-image: url("https://wx4.sinaimg.cn/mw690/82f26360gy1gaa4n3pz01g20ia09px6p.gif");
+}
+.banner-img-bg2 {
+  background-image: url("https://wx3.sinaimg.cn/mw690/82f26360gy1gabawajibxg20ia09p7wi.gif");
+}
+.banner-img-bg3 {
+  background-image: url("https://wx4.sinaimg.cn/mw690/82f26360gy1gabaqvv0yog20ia09pqmw.gif");
+}
+.banner-img-bg4 {
+  background-image: url("https://wx1.sinaimg.cn/mw690/82f26360gy1gabb5vsfchg20ia09pwyo.gif");
 }
 .banner-show {
   display: flex;

@@ -26,7 +26,7 @@ Component({
     showPayTypeDialog: false,
     payType: '支付宝',
     payTypeList: [],
-    specialDay: Date.parse(new Date()) < 1577318400000, // before christmas.
+    specialDay: Math.round(Math.random() * 4),
     showAuthDialog: false,
   },
   ready() {

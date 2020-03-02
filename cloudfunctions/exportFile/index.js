@@ -130,7 +130,7 @@ exports.main = async () => {
       const result = excel.execute(conf)
       Buffer.from(result.toString(), 'binary')
       const uplodaRes = await cloud.uploadFile({
-        cloudPath: `download/sheet/单单记账-账单(${wxContext.OPENID.slice(3, 20)}).xlsx`, // excel文件名称及路径，即云存储中的路径
+        cloudPath: `download/sheet/单单记账-账单(${wxContext.OPENID.slice(3, 20)})-${new Date().getTime()}.xlsx`, // excel文件名称及路径，即云存储中的路径
         fileContent: Buffer.from(result.toString(), 'binary'),
       })
       // eslint-disable-next-line no-console

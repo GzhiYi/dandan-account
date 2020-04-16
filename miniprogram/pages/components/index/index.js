@@ -26,7 +26,7 @@ Component({
     showPayTypeDialog: false,
     payType: '支付宝',
     payTypeList: [],
-    specialDay: Math.round(Math.random() * 4),
+    specialDay: false,
     showAuthDialog: false,
   },
   ready() {

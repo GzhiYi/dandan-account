@@ -10,7 +10,7 @@
         style="border: none;"
         plain='true'
         class='nav-icon issue'
-        open-type="feedback"
+        open-type="contact"
       ></button>
     </view>
     <view class='nav-icon-view-back' wx:if="{{showSearch}}">

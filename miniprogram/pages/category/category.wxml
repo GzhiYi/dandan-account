@@ -101,7 +101,7 @@
   <view slot="content">
     <view class="pop-indicator"></view>
     <view class="d-header">
-      设置Banner语句
+      设置Banner信息
     </view>
     <input
       value="{{word}}"
@@ -110,9 +110,33 @@
       placeholder="输入语句"
       class="fill-cate"
     ></input>
-    
-    <view class='list-item-btn' style="color: #4fd69c;" bindtap="confirmUpdateBanner" wx:if="{{!loadingSetting}}">确认</view>
-    <view class='list-item-btn' style="color: #4fd69c;" wx:else>设置中...</view>
+    <picker
+      mode="date"
+      value="{{wordExpired}}"
+      bindchange="bindWordDateChange"
+      class="fill-cate"
+    >
+      <view class="expired" style="margin-right: 0;">{{wordExpired || '选择语句结束日期'}}</view>
+    </picker>
+    <input
+      value="{{bannerurl}}"
+      data-name="bannerurl" 
+      bindinput="bindInput"
+      placeholder="输入背景图链接"
+      class="fill-cate"
+    ></input>
+    <picker
+      mode="date"
+      value="{{urlExpired}}"
+      bindchange="bindUrlDateChange"
+      class="fill-cate"
+    >
+      <view class="expired" style="margin-right: 0;">{{urlExpired || '选择链接结束日期'}}</view>
+    </picker>
+    <view class='list-item-btn' style="color: #4fd69c;" bindtap="confirmUpdateBanner" wx:if="{{!loadingSetting}}">确认语句</view>
+    <view class='list-item-btn' style="color: #4fd69c;" wx:else>设置语句中...</view>
+    <view class='list-item-btn' style="color: #4fd69c;" bindtap="confirmUpdateBannerUrl" wx:if="{{!loadingBannerUrl}}">确认背景图</view>
+    <view class='list-item-btn' style="color: #4fd69c;" wx:else>设置背景图中...</view>
     <view class='list-item-btn' bindtap="closeDialog" style="border-bottom: none;">取消</view>
   </view>
 </dialog>

@@ -1,6 +1,9 @@
+import {
+  parseTime,
+} from '../../util'
+
 let billType = 0
 let shouldUpdateBill = false
-
 Page({
   data: {
     categoryList: [],
@@ -17,6 +20,11 @@ Page({
     loadingSetting: false,
     localCategory: [],
     isEdit: false,
+    wordExpired: null,
+    bannerurl: '',
+    bannerExpired: null,
+    loadingBannerUrl: false,
+    defaultExpire: null,
   },
 
   /**
@@ -31,6 +39,9 @@ Page({
         localCategory: wx.getStorageSync('localCategory').slice(0, 8),
       })
     }
+    this.setData({
+      defaultExpire: parseTime(+new Date(new Date().getTime() + 48 * 60 * 60 * 1000), '{y}-{m}-{d}'),
+    })
   },
   getCategoryList(flow) {
     this.setData({
@@ -193,7 +204,7 @@ Page({
   },
   confirmUpdateBanner() {
     const self = this
-    const { word } = this.data
+    const { word, wordExpired } = this.data
     if (!word) {
       wx.showToast({
         title: '未填写话术',
@@ -209,7 +220,7 @@ Page({
       data: {
         mode: 'update',
         word,
-        expire: +new Date(new Date().getTime() + 24 * 60 * 60 * 1000),
+        expire: wordExpired ? new Date(wordExpired.replace(/-/g, '/')).getTime() : +new Date(new Date().getTime() + 24 * 60 * 60 * 1000),
       },
       success(res) {
         if (res.result.code === 1) {
@@ -242,11 +253,65 @@ Page({
       },
     })
   },
+  confirmUpdateBannerUrl() {
+    const self = this
+    const { bannerurl, bannerExpired } = this.data
+    self.setData({
+      loadingBannerUrl: true,
+    })
+    wx.cloud.callFunction({
+      name: 'word',
+      data: {
+        mode: 'updateBannerUrl',
+        bannerurl,
+        urlExpire: bannerExpired ? new Date(bannerExpired.replace(/-/g, '/')).getTime() : +new Date(new Date().getTime() + 48 * 60 * 60 * 1000),
+      },
+      success(res) {
+        if (res.result.code === 1) {
+          self.closeDialog()
+          self.setData({
+            bannerurl: '',
+          })
+          wx.showToast({
+            title: '设置成功',
+            icon: 'none',
+          })
+          getCurrentPages()[0].onGetNewWord()
+        } else {
+          wx.showToast({
+            title: res.result.message,
+            icon: 'none',
+          })
+        }
+      },
+      fail() {
+        wx.showToast({
+          title: '操作失败',
+          icon: 'none',
+        })
+      },
+      complete() {
+        self.setData({
+          loadingBannerUrl: false,
+        })
+      },
+    })
+  },
   changeEdit() {
     const { isEdit } = this.data
     wx.vibrateShort()
     this.setData({
       isEdit: !isEdit,
+    })
+  },
+  bindWordDateChange(event) {
+    this.setData({
+      wordExpired: event.detail.value,
+    })
+  },
+  bindUrlDateChange(event) {
+    this.setData({
+      bannerExpired: event.detail.value,
     })
   },
 })

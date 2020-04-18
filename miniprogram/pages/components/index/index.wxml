@@ -1,12 +1,22 @@
-<view class="{{specialDay > 0 && !wordData.word ? 'banner-special banner-img-bg' + specialDay : 'banner'}}">
+<image
+    class="banner-bg"
+    wx:if="{{wordData.bannerurl && wordData.show && nowTime <= wordData.urlExpire && !loadingWord}}"
+    src="{{wordData.bannerurl}}"
+  ></image>
+<view wx:else class="banner-bg banner-special"></view>
+<view class="banner">
   <view class="banner-show" wx:if="{{clickPigNum < 5}}">
     <image
-      wx:if="{{wordData.word || specialDay === 0}}"
       src="https://images.vrm.cn/2019/08/29/pig.png"
-      style="width: 150rpx;height: 150rpx;"
+      style="width: 150rpx;height: 150rpx;opacity: {{wordData.bannerurl && wordData.show && nowTime <= wordData.urlExpire && !loadingWord ? '0.8' : '1'}}"
       bindtap="clickPig"
     ></image>
-    <view class='pig-talk' bindtap="closeTalk" data-word="{{wordData}}" wx:if="{{wordData}}">
+    <view
+      class='pig-talk'
+      bindtap="closeTalk"
+      data-word="{{wordData}}"
+      wx:if="{{wordData.word && wordData.show && nowTime <= wordData.expire && !loadingWord}}"
+    >
       <view class='word-tang-left'></view>
       <view class='word-detail'>{{wordData.word}}</view>
     </view>

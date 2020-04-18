@@ -1,18 +1,22 @@
 .banner {
   width: 100%;
   height: 410rpx;
-  background: linear-gradient(40deg,#ff6ec4,#5e72e4);
   display: flex;
   justify-content: center;
   align-items: center;
 }
+.banner-bg {
+  width: 100%;
+  height: 410rpx;
+  position: fixed;
+  z-index: -1;
+}
 .banner-special {
   width: 100%;
   height: 410rpx;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-size: cover;
+  background: linear-gradient(40deg, #ff6ec4, #5e72e4);
+  position: fixed;
+  z-index: -1;
 }
 .banner-img-bg1 {
   background-image: url("https://wx4.sinaimg.cn/mw690/82f26360gy1gaa4n3pz01g20ia09px6p.gif");

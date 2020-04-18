@@ -28,6 +28,8 @@ Component({
     payTypeList: [],
     specialDay: false,
     showAuthDialog: false,
+    nowTime: new Date().getTime(),
+    loadingWord: false,
   },
   ready() {
     const now = new Date()
@@ -79,8 +81,9 @@ Component({
   methods: {
     getWord() {
       const self = this
-      const storeWordData = wx.getStorageSync('word')
-      const storeHideWord = wx.getStorageSync('hideWord')
+      this.setData({
+        loadingWord: true,
+      })
       wx.cloud.callFunction({
         name: 'word',
         data: {
@@ -91,12 +94,10 @@ Component({
           if (response.code === 1) {
             // 本地缓存信息
             const wordData = response.data
-            if (((wordData.word !== storeWordData.word) || new Date() < new Date(wordData.expire)) && wordData.show && storeHideWord.word !== wordData.word) {
-              wx.setStorageSync('word', wordData)
-              self.setData({
-                wordData,
-              })
-            }
+            wx.setStorageSync('word', wordData)
+            self.setData({
+              wordData,
+            })
             // 无论如何都要设置这个
             self.setData({
               showPayType: response.showPayType,
@@ -104,13 +105,20 @@ Component({
             })
           }
         },
+        complete() {
+          self.setData({
+            loadingWord: false,
+          })
+        },
       })
     },
     // 关闭对话通知
     closeTalk() {
       wx.setStorageSync('hideWord', this.data.wordData)
+      const newWordData = this.data.wordData
+      newWordData.word = ''
       this.setData({
-        wordData: null,
+        wordData: newWordData,
       })
       wx.showToast({
         title: '已隐藏提示',

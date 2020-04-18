@@ -1,6 +1,9 @@
+import {
+  parseTime,
+} from '../../util'
+
 let billType = 0
 let shouldUpdateBill = false
-
 Page({
   data: {
     categoryList: [],
@@ -21,6 +24,7 @@ Page({
     bannerurl: '',
     bannerExpired: null,
     loadingBannerUrl: false,
+    defaultExpire: null,
   },
 
   /**
@@ -35,6 +39,9 @@ Page({
         localCategory: wx.getStorageSync('localCategory').slice(0, 8),
       })
     }
+    this.setData({
+      defaultExpire: parseTime(+new Date(new Date().getTime() + 48 * 60 * 60 * 1000), '{y}-{m}-{d}'),
+    })
   },
   getCategoryList(flow) {
     this.setData({

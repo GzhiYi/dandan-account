@@ -8,6 +8,7 @@ Page({
   data: {
     endDate: '',
     money: null,
+    startmoney: null,
     name: '',
     minEndDate: parseTime(new Date().getTime() + (86400000 * 2), '{y}-{m}-{d}'),
   },
@@ -71,12 +72,16 @@ Page({
     })
   },
   checkParams() {
-    const { name, money, endDate } = this.data
+    const {
+      name, startmoney, money, endDate,
+    } = this.data
     let errMsg = ''
     if (!name) {
       errMsg = '输入目标名'
     } else if (!endDate) {
       errMsg = '选择目标的结束日吧'
+    } else if (!startmoney) {
+      errMsg = '要输入目标金额哦'
     } else if (!money) {
       errMsg = '要输入目标金额哦'
     }

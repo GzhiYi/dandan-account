@@ -11,17 +11,23 @@ module.exports.formatDate =  formatDate;
   showIcons="{{['back']}}"
 ></nav>
 <view class="target-set">
-  <view class="title">
+  <view class="title base-padding">
     创建你的存钱目标
   </view>
   <view class="form">
-    <view class="form-item">
+    <view class="form-item base-padding">
       <view class="form-label">目标名</view>
       <view class="form-input">
-        <input type="text" value="{{name}}" bindinput="onInput" data-target="name"></input>
+        <input
+          type="text"
+          value="{{name}}"
+          bindinput="onInput"
+          data-target="name"
+          placeholder="目标要明确哦"
+        ></input>
       </view>
     </view>
-    <view class="form-item">
+    <view class="form-item base-padding">
       <view class="form-label">结束日</view>
       <view class="form-input">
         <picker
@@ -36,12 +42,32 @@ module.exports.formatDate =  formatDate;
         </picker>
       </view>
     </view>
-    <view class="form-item">
-      <view class="form-label">目标金额</view>
-      <view class="form-input">
-        <input type="number" value="{{money}}" bindinput="onInput" data-target="money"></input>
+    <view class="money base-padding">
+      <view class="form-item">
+        <view class="form-label">初始金额</view>
+        <view class="form-input">
+          <input
+            type="number"
+            value="{{startmoney}}"
+            bindinput="onInput"
+            data-target="startmoney"
+            placeholder="你现有的钱数"
+          ></input>
+        </view>
       </view>
+      <view class="form-item">
+        <view class="form-label">目标金额</view>
+        <view class="form-input">
+          <input
+            type="number"
+            value="{{money}}"
+            bindinput="onInput"
+            data-target="money"
+            placeholder="目标要存多少钱"
+          ></input>
+        </view>
+      </view>
+      <view class="create" bindtap="confirm">冲鸭</view>
     </view>
-    <view class="create" bindtap="confirm">冲鸭</view>
   </view>
 </view>

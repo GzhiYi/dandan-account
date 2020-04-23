@@ -81,9 +81,11 @@ Page({
     } else if (!endDate) {
       errMsg = '选择目标的结束日吧'
     } else if (!startmoney) {
-      errMsg = '要输入目标金额哦'
+      errMsg = '要输入初始金额哦'
     } else if (!money) {
       errMsg = '要输入目标金额哦'
+    } else if (money <= startmoney) {
+      errMsg = '初始金额不能大于目标金额'
     }
     if (errMsg) {
       wx.showToast({
@@ -96,15 +98,34 @@ Page({
   },
   confirm() {
     // 验证下数据
-    const { name, money, endDate } = this.data
+    const {
+      name,
+      money,
+      startmoney,
+      endDate,
+    } = this.data
     if (this.checkParams()) {
       // 通过
-      const params = {
-        name,
-        endDate,
-        money: Number(String(money).replace(/\b(0+)/gi, '')),
-      }
-      console.log('params', params)
+      wx.cloud.callFunction({
+        name: 'target',
+        data: {
+          mode: 'add',
+          startMoney: Number(String(startmoney).replace(/\b(0+)/gi, '')),
+          targetMoney: Number(String(money).replace(/\b(0+)/gi, '')),
+          name,
+          endDate,
+        },
+        success(res) {
+          if (res.result.code === 1) {
+            wx.showToast({
+              title: '目标创建成功',
+              icon: 'none',
+            })
+          }
+        },
+        complete() {
+        },
+      })
     }
   },
   /**

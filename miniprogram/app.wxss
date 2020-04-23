@@ -70,3 +70,19 @@ button::after{
 .chart-nav-bg {
   background-color: #7471e0;
 }
+.flex {
+  display: flex;
+}
+.flex-all {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.flex-v {
+  display: flex;
+  justify-content: center;
+}
+.flex-h {
+  display: flex;
+  align-items: center;
+}

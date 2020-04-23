@@ -1,0 +1,31 @@
+page {
+  background-color: #FFE0CE;
+}
+.target-set {
+  padding: 0 43rpx;
+}
+.target-set .title {
+  font-size: 50rpx;
+  font-weight: bold;
+  margin-bottom: 50rpx;
+}
+.form-label {
+  color: #9D9D9F;
+  margin-bottom: 20rpx;
+}
+.form-input {
+  margin-bottom: 20rpx;
+}
+.form-input input {
+  border-bottom: 1rpx solid #9D9D9F;
+  height: 60rpx;
+}
+.create {
+  background-color: #3A478A;
+  color: #fff;
+  padding: 25rpx 18rpx;
+  border-radius: 19rpx;
+  margin: 60rpx 0;
+  text-align: center;
+  font-size: 32rpx;
+}

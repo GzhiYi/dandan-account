@@ -1,0 +1,47 @@
+<wxs module="wxs">
+var formatDate = function(date) {
+  var dateArr = date.split('-')
+  return dateArr[0] + '年' + dateArr[1] + '月' + dateArr[2] + '日'
+};
+
+module.exports.formatDate =  formatDate;
+</wxs>
+<nav
+  class="nav-instance"
+  showIcons="{{['back']}}"
+></nav>
+<view class="target-set">
+  <view class="title">
+    创建你的存钱目标
+  </view>
+  <view class="form">
+    <view class="form-item">
+      <view class="form-label">目标名</view>
+      <view class="form-input">
+        <input type="text" value="{{name}}" bindinput="onInput" data-target="name"></input>
+      </view>
+    </view>
+    <view class="form-item">
+      <view class="form-label">结束日</view>
+      <view class="form-input">
+        <picker
+          mode="date"
+          value="{{endDate}}"
+          bindchange="bindDateChange"
+          start="{{minEndDate}}"
+        >
+          <view class="picker">
+            {{endDate ? wxs.formatDate(endDate) : '选择目标截止时间'}}
+          </view>
+        </picker>
+      </view>
+    </view>
+    <view class="form-item">
+      <view class="form-label">目标金额</view>
+      <view class="form-input">
+        <input type="number" value="{{money}}" bindinput="onInput" data-target="money"></input>
+      </view>
+    </view>
+    <view class="create" bindtap="confirm">冲鸭</view>
+  </view>
+</view>

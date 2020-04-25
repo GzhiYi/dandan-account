@@ -57,5 +57,8 @@
   background-image: url("https://6461-dandan-zdm86-1259814516.tcb.qcloud.la/stats.png?sign=0099917fdb61393a6fd2d8fb5f5baf56&t=1573302662");
 }
 .setting {
-  background-image: url("https://6461-dandan-zdm86-1259814516.tcb.qcloud.la/setting.png?sign=a83fa2798189e29de46aa876cfe33a2e&t=1575944868");
+  background-image: url("https://6461-dandan-zdm86-1259814516.tcb.qcloud.la/icon/gear.png?sign=ac534f78f7f4a7dbe014e090c92b4ada&t=1587830797");
+}
+.target {
+  background-image: url("https://6461-dandan-zdm86-1259814516.tcb.qcloud.la/icon/target.png?sign=c1a3041e9cb303858db6b7c7d50b3949&t=1587830639");
 }

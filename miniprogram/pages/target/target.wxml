@@ -1,3 +1,13 @@
+<wxs module="wxs">
+var formatDate = function(date) {
+  if (date) {
+    return date.slice(0, 10)
+  }
+  return ''
+};
+
+module.exports.formatDate =  formatDate;
+</wxs>
 <nav
   class="nav-instance"
   showIcons="{{['back']}}"
@@ -5,34 +15,84 @@
 <view class="target">
   <view class="target-header">
     <view class="target-name">{{targetInfo.targetData.name}}</view>
-    <view class="menu">...</view>
   </view>
   <view class="target-content flex">
-    <view class="target-item bg-white">
-      <view class="target-item-title">账单总数</view>
-      <view class="target-item-num">{{targetInfo.billList.length}}</view>
+    <view class="flex flex-fall" style="width: 50%;">
+      <view class="target-item bg-white">
+        <view class="target-item-title">记账总数</view>
+        <view class="flex-all" bindtap="clickPig">
+          <image class="cover" src="https://images.vrm.cn/2019/08/29/pig.png" mode="widthFix"></image>
+        </view>
+        <view class="target-item-num">
+          <text style="font-weight: bold;font-size: 56rpx;">{{targetInfo.billList.length}} </text>
+          <text style="font-size: 25rpx;color: #B4B4B6;">笔</text>
+        </view>
+      </view>
+      <view class="target-item bg-pink color-white">
+        <view class="target-item-title">已存钱进度</view>
+        <view class="target-item-num">
+          <canvas
+            canvas-id="miss"
+            id="miss"
+            class="charts"
+            style="width: {{screenWidth * 0.3}}px;margin: 0 auto;height: 120px;"
+          ></canvas>
+        </view>
+      </view>
+      <view class="target-item bg-white">
+        <view class="target-item-title">目标时间</view>
+        <view class="label">
+          <text style="font-weight: bold;font-size: 30rpx;">{{wxs.formatDate(targetInfo.targetData.createTime)}} </text>
+          <text style="font-size: 25rpx;color: #B4B4B6;">开始</text>
+        </view>
+        <view class="label">
+          <text style="font-weight: bold;font-size: 30rpx;">{{wxs.formatDate(targetInfo.targetData.endDate)}} </text>
+          <text style="font-size: 25rpx;color: #B4B4B6;">截止</text>
+        </view>
+      </view>
     </view>
-    <view class="target-item bg-red color-white">
-      <view class="target-item-title">时间进度</view>
-      <view class="target-item-num">{{progress.percentage}}</view>
-    </view>
-    <view class="target-item bg-pink color-white">
-      <view class="target-item-title">错失</view>
-      <view class="target-item-num">123</view>
-    </view>
-    <view class="target-item bg-white">
-      <view class="target-item-title">账单总数</view>
-      <view class="target-item-num">123</view>
+    <view class="flex flex-fall" style="width: 50%;">
+      <view class="target-item bg-red color-white">
+        <view class="target-item-title">时间进度</view>
+        <view class="chart-content">
+          <canvas
+            canvas-id="time-progress"
+            id="time-progress"
+            class="charts"
+            style="width: {{screenWidth * 0.3}}px;margin: 0 auto;height: 120px;"
+          ></canvas>
+        </view>
+        <view class="label">
+          <text style="font-weight: bold;font-size: 56rpx;">{{progress.passDay}} </text>
+          <text style="font-size: 25rpx;color: #fff;">天已过</text>
+        </view>
+      </view>
+      <view class="target-item bg-white">
+        <view class="target-item-title">金额情况</view>
+        <view class="label">
+          <text style="font-weight: bold;font-size: 56rpx;">{{targetInfo.targetData.startMoney}} </text>
+          <text style="font-size: 25rpx;color: #B4B4B6;">初始</text>
+        </view>
+        <view class="label">
+          <text style="font-weight: bold;font-size: 56rpx;color: #4fd69c;">{{targetInfo.targetData.targetMoney}} </text>
+          <text style="font-size: 25rpx;color: #B4B4B6;">目标</text>
+        </view>
+        <view class="label">
+          <text style="font-weight: bold;font-size: 56rpx;">{{nowMoney}} </text>
+          <text style="font-size: 25rpx;color: #B4B4B6;">当前</text>
+        </view>
+      </view>
     </view>
 
+
     <view class="target-item-big bg-purple color-white">
-      <view class="target-item-title">进度</view>
+      <view class="target-item-title">进度图</view>
       <view class="chart-content">
         <canvas
           canvas-id="linechart"
           id="linechart-month"
           class="charts"
-          style="width: {{screenWidth * 0.84}}px;"
+          style="width: {{screenWidth * 0.84}}px;margin: 0 auto;"
         ></canvas>
       </view>
     </view>

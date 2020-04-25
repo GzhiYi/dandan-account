@@ -67,6 +67,7 @@ module.exports.formatDate =  formatDate;
           ></input>
         </view>
       </view>
+      <view class="tip" style="font-size: 25rpx;color: #B4B4B6;">当前版本暂不支持修改已创建的目标，先仔细定个目标～</view>
       <view class="create" bindtap="confirm">冲鸭</view>
     </view>
   </view>

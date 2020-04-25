@@ -44,7 +44,7 @@
       <button
         style="border: none;height: 39rpx;"
         plain='true'
-        class='nav-icon setting'
+        class='nav-icon target'
         bindtap="goTotarget"
       ></button>
     </view>

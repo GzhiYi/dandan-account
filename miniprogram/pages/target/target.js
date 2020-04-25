@@ -11,6 +11,7 @@ Page({
     targetInfo: {},
     progress: {},
     screenWidth: getApp().globalData.screenWidth,
+    nowMoney: 0,
   },
 
   /**
@@ -63,6 +64,7 @@ Page({
   },
   getTargetInfo() {
     const self = this
+    wx.showLoading()
     wx.cloud.callFunction({
       name: 'target',
       data: {
@@ -77,22 +79,32 @@ Page({
             targetInfo,
             progress: {
               percentage: (toFinishDate.length / allDate.length).toFixed(2),
-              passDay: toFinishDate.length,
+              passDay: toFinishDate.length - 1,
               allDay: allDate.length,
             },
           })
-          self.renderChart(targetInfo.targetData, targetInfo.billList, allDate)
+          self.renderLineChart(targetInfo.targetData, targetInfo.billList, allDate)
+          self.renderProgress({
+            percentage: (toFinishDate.length / allDate.length).toFixed(2),
+            subTitle: '已过',
+            id: 'time-progress',
+            bgColor: '#D75C6E',
+          })
         }
+      },
+      complete() {
+        wx.hideLoading()
       },
     })
   },
-  renderChart(targetData, billList, allDate) {
+  renderLineChart(targetData, billList, allDate) {
     const self = this
     // 处理账单，按每天进行保存
     const formatBillList = {}
     const formatAllDate = allDate.map((item) => parseTime(item, '{y}-{m}-{d}'))
     const lastBillDate = parseTime(billList[billList.length - 1].noteDate, '{y}-{m}-{d}')
     const lastBillDateIndex = formatAllDate.indexOf(lastBillDate)
+    let nowMoney = 0
 
     billList.forEach((bill) => {
       formatAllDate.forEach((day, index) => {
@@ -108,6 +120,7 @@ Page({
     })
     const keys = Object.keys(formatBillList)
     const seriesData = []
+    console.log('lastBillDateIndex', lastBillDateIndex)
     for (let i = 0; i < formatAllDate.length; i++) {
       if (i <= lastBillDateIndex) {
         if (i === 0) {
@@ -116,8 +129,20 @@ Page({
           formatBillList[keys[i]] += formatBillList[keys[i - 1]]
         }
         seriesData.push(formatBillList[keys[i]])
+        if (i === lastBillDateIndex) {
+          nowMoney = formatBillList[keys[i]]
+        }
       }
     }
+    self.setData({
+      nowMoney,
+    })
+    self.renderProgress({
+      percentage: (nowMoney / targetData.targetMoney).toFixed(2),
+      id: 'miss',
+      subTitle: '加油✊',
+      bgColor: '#FAACCE',
+    })
     lineChart = new uCharts({
       $this: self,
       canvasId: 'linechart',
@@ -198,6 +223,43 @@ Page({
     // eslint-disable-next-line no-console
     console.log('lineChart', lineChart)
   },
+  renderProgress(data) {
+    console.log('data', data)
+    const self = this
+    // eslint-disable-next-line no-new
+    new uCharts({
+      $this: self,
+      canvasId: data.id,
+      type: 'arcbar',
+      fontSize: 22,
+      dataLabel: true,
+      background: 'rgba(255, 255, 255, 0)',
+      pixelRatio: 1,
+      animation: true,
+      series: [{
+        data: data.percentage,
+        color: '#fff',
+      }],
+      title: {
+        name: `${data.percentage * 100}%`,
+        color: '#fff',
+        fontSize: 25,
+      },
+      subtitle: {
+        name: data.subTitle,
+        color: '#fff',
+        fontSize: 15,
+      },
+      padding: [0, 0, 0, 0],
+      width: getApp().globalData.screenWidth * 0.3,
+      height: 120,
+      extra: {
+        arcbar: {
+          backgroundColor: data.bgColor,
+        },
+      },
+    })
+  },
   getDates(startDate, endDate) {
     const dates = []
     let currentDate = startDate
@@ -214,6 +276,13 @@ Page({
     // 发现少了一天，再推一下
     dates.push(currentDate)
     return dates
+  },
+  clickPig() {
+    wx.vibrateShort()
+    wx.showToast({
+      title: '加油鸭！❤️',
+      icon: 'none',
+    })
   },
   /**
    * 用户点击右上角分享

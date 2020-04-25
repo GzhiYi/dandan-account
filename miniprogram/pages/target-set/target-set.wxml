@@ -10,6 +10,8 @@ module.exports.formatDate =  formatDate;
   class="nav-instance"
   showIcons="{{['back']}}"
 ></nav>
+<view class="circle circle-one"></view>
+<view class="circle circle-two"></view>
 <view class="target-set">
   <view class="title base-padding">
     创建你的存钱目标

@@ -38,3 +38,22 @@ page {
   text-align: center;
   font-size: 32rpx;
 }
+.circle {
+  width: 500rpx;
+  height: 500rpx;
+  border-radius: 50%;
+}
+.circle-one {
+  position: fixed;
+  background-color: #F778AF;
+  right: -0rpx;
+  top: -264rpx;
+  z-index: -1;
+}
+.circle-two {
+  position: fixed;
+  background-color: #3A478A;
+  right: -300rpx;
+  top: -100rpx;
+  z-index: -2;
+}

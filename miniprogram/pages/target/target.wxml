@@ -4,17 +4,17 @@
 ></nav>
 <view class="target">
   <view class="target-header">
-    <view class="target-name">目标名字</view>
+    <view class="target-name">{{targetInfo.targetData.name}}</view>
     <view class="menu">...</view>
   </view>
   <view class="target-content flex">
     <view class="target-item bg-white">
       <view class="target-item-title">账单总数</view>
-      <view class="target-item-num">123</view>
+      <view class="target-item-num">{{targetInfo.billList.length}}</view>
     </view>
     <view class="target-item bg-red color-white">
       <view class="target-item-title">时间进度</view>
-      <view class="target-item-num">123</view>
+      <view class="target-item-num">{{progress.percentage}}</view>
     </view>
     <view class="target-item bg-pink color-white">
       <view class="target-item-title">错失</view>

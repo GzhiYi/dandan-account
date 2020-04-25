@@ -26,6 +26,10 @@ App({
     })
     // 分类应当全局优先获取
     this.getCategory()
+
+    // 获取用户是否有设置目标
+    this.checkHasTarget()
+
     const isOnboarding = wx.getStorageSync('isOnboarding')
     if (!isOnboarding) {
       wx.redirectTo({
@@ -41,6 +45,7 @@ App({
     categoryList: {},
     selectedCategory: '',
     defaultCategoryList: [],
+    myTarget: [],
   },
   // 在app.js处进行分类的获取，以便所有页面方便使用
   getCategory() {
@@ -73,6 +78,20 @@ App({
           if (self.loadCategoryCallBack) {
             self.loadCategoryCallBack(list)
           }
+        }
+      },
+    })
+  },
+  checkHasTarget() {
+    const self = this
+    wx.cloud.callFunction({
+      name: 'target',
+      data: {
+        mode: 'check',
+      },
+      success(res) {
+        if (res.result.code === 1) {
+          self.globalData.myTarget = res.result.data
         }
       },
     })

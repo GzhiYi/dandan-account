@@ -3,11 +3,18 @@ const cloud = require('wx-server-sdk')
 
 cloud.init()
 
-
+function getPureDate(time) {
+  const date = new Date(time)
+  return `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`
+}
 // 云函数入口函数
 exports.main = async (event) => {
-  const wxContext = cloud.getWXContext();
-  // 取参
+  const wxContext = cloud.getWXContext()
+  // 初始化数据库
+  const db = cloud.database({
+    env: wxContext.ENV === 'local' ? 'release-wifo3' : wxContext.ENV,
+  })
+  const _ = db.command
   const {
     id,
     startMoney,
@@ -18,10 +25,6 @@ exports.main = async (event) => {
   cloud.updateConfig({
     env: wxContext.ENV === 'local' ? 'release-wifo3' : wxContext.ENV,
   })
-  // 初始化数据库
-  const db = cloud.database({
-    env: wxContext.ENV === 'local' ? 'release-wifo3' : wxContext.ENV,
-  });
 
 
   try {
@@ -71,23 +74,53 @@ exports.main = async (event) => {
       };
     }
 
-    // if (event.mode === 'updateById') {
-    //   const res = await db.collection('TARGET').doc(id).update({
-    //     data: {
-    //       money: roundFun(money, 2),
-    //       categoryId,
-    //       flow: Number(flow), // 金钱流向
-    //       noteDate: new Date(noteDate),
-    //       description,
-    //       updateTime: db.serverDate(),
-    //     },
-    //   });
-    //   return {
-    //     code: 1,
-    //     data: res,
-    //     message: '操作成功',
-    //   };
-    // }
+    // 获取目标的数据
+    if (event.mode === 'targetInfo') {
+      const MAX_LIMIT = 100
+      const targetBaseInfo = await db.collection('TARGET').where({
+        openId: wxContext.OPENID,
+        isDel: false,
+      }).get()
+      if (targetBaseInfo.data.length) {
+        const targetData = targetBaseInfo.data[0]
+        // 获取开始时间到结束时间的所有账单数
+        const sameParam = {
+          openId: wxContext.OPENID,
+          isDel: false,
+          noteDate: _.gte(new Date(getPureDate(targetData.createTime))).and(_.lte(new Date(getPureDate(targetData.endDate)))),
+        }
+        const countResult = await db.collection('DANDAN_NOTE')
+          .where(sameParam)
+          .count()
+        const {
+          total,
+        } = countResult
+        const batchTimes = Math.ceil(total / 100)
+        const tasks = []
+
+        for (let i = 0; i < batchTimes; i++) {
+          const promise = db.collection('DANDAN_NOTE')
+            .where(sameParam)
+            .skip(i * MAX_LIMIT).limit(MAX_LIMIT)
+            .get()
+          tasks.push(promise)
+        }
+        const billList = await Promise.all(tasks)
+        return {
+          code: 1,
+          data: {
+            targetData,
+            billList: [...billList[0].data],
+          },
+          message: '获取成功',
+        }
+      }
+      return {
+        code: -1,
+        data: '',
+        message: '未设置目标',
+      }
+    }
   } catch (e) {
     return {
       code: -1,
@@ -99,3 +132,4 @@ exports.main = async (event) => {
 
 // eslint-disable-next-line no-restricted-properties
 roundFun = (value, n) => Math.round(value * Math.pow(10, n)) / Math.pow(10, n)
+// eslint-disable-next-line no-undef

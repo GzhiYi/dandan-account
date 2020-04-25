@@ -121,7 +121,16 @@ Page({
               title: '目标创建成功',
               icon: 'none',
             })
+            wx.navigateTo({
+              url: '/pages/target/target',
+            })
           }
+        },
+        fail() {
+          wx.showToast({
+            title: '目标创建失败，再试试？',
+            icon: 'none',
+          })
         },
         complete() {
         },

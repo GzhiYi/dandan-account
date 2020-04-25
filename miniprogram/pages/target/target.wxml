@@ -26,8 +26,15 @@
     </view>
 
     <view class="target-item-big bg-purple color-white">
-      <view class="target-item-title">账单总数</view>
-      <view class="target-item-num">123</view>
+      <view class="target-item-title">进度</view>
+      <view class="chart-content">
+        <canvas
+          canvas-id="linechart"
+          id="linechart-month"
+          class="charts"
+          style="width: {{screenWidth * 0.84}}px;"
+        ></canvas>
+      </view>
     </view>
   </view>
 </view>

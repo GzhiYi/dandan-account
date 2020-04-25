@@ -1,7 +1,8 @@
 <wxs module="wxs">
 var formatDate = function(date) {
   if (date) {
-    return date.slice(0, 10)
+    var string = getDate(date).toLocaleDateString()
+    return string
   }
   return ''
 };
@@ -106,7 +107,7 @@ module.exports.formatDate =  formatDate;
           canvas-id="linechart"
           id="linechart-month"
           class="charts"
-          style="width: {{screenWidth * 0.84}}px;margin: 0 auto;"
+          style="width: {{screenWidth * 0.84}}px;margin: 0 auto;height: 200px;"
         ></canvas>
       </view>
     </view>

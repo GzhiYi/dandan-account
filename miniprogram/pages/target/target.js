@@ -3,10 +3,6 @@ import { parseTime } from '../../util'
 
 let lineChart = null
 Page({
-
-  /**
-   * 页面的初始数据
-   */
   data: {
     targetInfo: {},
     progress: {},
@@ -15,54 +11,8 @@ Page({
     showResult: false,
     showResultType: '',
   },
-
-  /**
-   * 生命周期函数--监听页面加载
-   */
   onLoad() {
     this.getTargetInfo()
-  },
-
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady() {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow() {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide() {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload() {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh() {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom() {
-
   },
   getTargetInfo() {
     const self = this
@@ -80,8 +30,8 @@ Page({
           self.setData({
             targetInfo,
             progress: {
-              percentage: self.handlePercentage((toFinishDate.length / allDate.length).toFixed(2)),
-              passDay: toFinishDate.length - 1,
+              percentage: self.handlePercentage(((allDate.length - toFinishDate.length) / allDate.length).toFixed(2)),
+              passDay: allDate.length - toFinishDate.length,
               allDay: allDate.length,
             },
           })
@@ -94,7 +44,7 @@ Page({
           }
           self.renderLineChart(targetInfo.targetData, targetInfo.billList, allDate)
           self.renderProgress({
-            percentage: self.handlePercentage((toFinishDate.length / allDate.length).toFixed(2)),
+            percentage: self.handlePercentage(((allDate.length - toFinishDate.length) / allDate.length).toFixed(2)),
             subTitle: '已过',
             id: 'time-progress',
             bgColor: '#D75C6E',
@@ -142,6 +92,7 @@ Page({
         }
       }
     }
+    console.log('????', formatBillList)
     self.setData({
       nowMoney,
     })
@@ -171,7 +122,7 @@ Page({
       background: 'rgba(255, 255, 255, 0)',
       pixelRatio: 1,
       categories: keys,
-      padding: [23, 0, 0, 0],
+      padding: [23, 0, 20, 0],
       series: [
         {
           color: '#E9EBF3',
@@ -209,11 +160,12 @@ Page({
           axisLineColor: '#3F4D8D',
           fontColor: '#7D87B5',
           max: targetData.targetMoney,
+          min: 0,
         }],
-        format: (val) => val, // 如不写此方法，Y轴刻度默认保留两位小数
+        splitNumber: 5,
       },
       width: getApp().globalData.screenWidth * 0.8,
-      height: 150,
+      height: 200,
       extra: {
         line: {
           type: 'straight',

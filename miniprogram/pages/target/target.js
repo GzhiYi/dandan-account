@@ -12,6 +12,8 @@ Page({
     progress: {},
     screenWidth: getApp().globalData.screenWidth,
     nowMoney: 0,
+    showResult: false,
+    showResultType: '',
   },
 
   /**
@@ -78,14 +80,21 @@ Page({
           self.setData({
             targetInfo,
             progress: {
-              percentage: (toFinishDate.length / allDate.length).toFixed(2),
+              percentage: self.handlePercentage((toFinishDate.length / allDate.length).toFixed(2)),
               passDay: toFinishDate.length - 1,
               allDay: allDate.length,
             },
           })
+          // 查看这个目标是不是到期了
+          if (new Date(targetInfo.targetData.endDate).getTime() < new Date().getTime()) {
+            self.setData({
+              showResult: true,
+              showResultType: 'expired',
+            })
+          }
           self.renderLineChart(targetInfo.targetData, targetInfo.billList, allDate)
           self.renderProgress({
-            percentage: (toFinishDate.length / allDate.length).toFixed(2),
+            percentage: self.handlePercentage((toFinishDate.length / allDate.length).toFixed(2)),
             subTitle: '已过',
             id: 'time-progress',
             bgColor: '#D75C6E',
@@ -120,7 +129,6 @@ Page({
     })
     const keys = Object.keys(formatBillList)
     const seriesData = []
-    console.log('lastBillDateIndex', lastBillDateIndex)
     for (let i = 0; i < formatAllDate.length; i++) {
       if (i <= lastBillDateIndex) {
         if (i === 0) {
@@ -137,8 +145,14 @@ Page({
     self.setData({
       nowMoney,
     })
+    if (nowMoney >= targetData.targetMoney) {
+      self.setData({
+        showResult: true,
+        showResultType: 'earn',
+      })
+    }
     self.renderProgress({
-      percentage: (nowMoney / targetData.targetMoney).toFixed(2),
+      percentage: self.handlePercentage((nowMoney / targetData.targetMoney).toFixed(2)),
       id: 'miss',
       subTitle: '加油✊',
       bgColor: '#FAACCE',
@@ -223,8 +237,13 @@ Page({
     // eslint-disable-next-line no-console
     console.log('lineChart', lineChart)
   },
+  handlePercentage(percentage) {
+    if (percentage >= 1) {
+      return 1
+    }
+    return percentage
+  },
   renderProgress(data) {
-    console.log('data', data)
     const self = this
     // eslint-disable-next-line no-new
     new uCharts({

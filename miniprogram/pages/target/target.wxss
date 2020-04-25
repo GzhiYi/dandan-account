@@ -27,9 +27,9 @@ page {
 }
 .target-item-big {
   background-color: #fff;
-  width: 91%;
+  width: 88%;
   border-radius: 30rpx;
-  margin-bottom: 2%;
+  margin-bottom: 40rpx;
   padding: 36rpx 26rpx;
   box-sizing: border-box;
 }

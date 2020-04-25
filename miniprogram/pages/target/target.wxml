@@ -16,6 +16,20 @@ module.exports.formatDate =  formatDate;
   <view class="target-header">
     <view class="target-name">{{targetInfo.targetData.name}}</view>
   </view>
+  <view class="target-content flex" wx:if="{{showResult}}">
+    <view class="target-item-big">
+      <view class="chart-content">
+        <view class="flex-v">
+          <image
+            src="https://6461-dandan-zdm86-1259814516.tcb.qcloud.la/icon/award%20(3).png?sign=7e48ef1f656d38324968bb16b09e10fc&t=1587831462"
+            style="width: 200rpx;height: 200rpx;margin-bottom: 20rpx;"
+          ></image>
+        </view>
+        <text style="font-weight: bold;">目标结束啦！无论结果如何，都感谢你一路坚持。你的努力会给你带来最好的运气，继续加油。\n</text>
+        <text style="font-weight: bold;color: #4fd69c;" wx:if="{{showResultType === 'earn'}}">emmm....上面的话太官方了。其实，真的很开心，恭喜你完成了存钱目标。祝福你。</text>
+      </view>
+    </view>
+  </view>
   <view class="target-content flex">
     <view class="flex flex-fall" style="width: 50%;">
       <view class="target-item bg-white">

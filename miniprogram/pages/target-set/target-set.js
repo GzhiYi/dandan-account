@@ -84,7 +84,7 @@ Page({
       errMsg = '要输入初始金额哦'
     } else if (!money) {
       errMsg = '要输入目标金额哦'
-    } else if (money <= startmoney) {
+    } else if (Number(money) <= Number(startmoney)) {
       errMsg = '初始金额不能大于目标金额'
     }
     if (errMsg) {
@@ -121,9 +121,11 @@ Page({
               title: '目标创建成功',
               icon: 'none',
             })
-            wx.navigateTo({
-              url: '/pages/target/target',
-            })
+            setTimeout(() => {
+              wx.navigateTo({
+                url: '/pages/target/target',
+              })
+            }, 1500)
           }
         },
         fail() {

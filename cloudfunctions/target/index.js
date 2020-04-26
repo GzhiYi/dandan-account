@@ -4,8 +4,13 @@ const cloud = require('wx-server-sdk')
 cloud.init()
 
 function getPureDate(time) {
-  const date = new Date(time)
-  return `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`
+  // eslint-disable-next-line no-extend-native
+  Date.prototype.addHours = function (h) {
+    this.setHours(this.getHours() + h);
+    return this;
+  }
+  const date = new Date(time).addHours(8)
+  return date.toLocaleDateString()
 }
 // 云函数入口函数
 exports.main = async (event) => {
@@ -110,7 +115,7 @@ exports.main = async (event) => {
           code: 1,
           data: {
             targetData,
-            billList: [...billList[0].data],
+            billList: billList.length ? [...billList[0].data] : [],
           },
           message: '获取成功',
         }

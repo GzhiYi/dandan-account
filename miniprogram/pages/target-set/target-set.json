@@ -1,0 +1,7 @@
+{
+  "usingComponents": {
+    "nav": "../components/nav/nav",
+    "dialog": "../components/dialog/dialog"
+  },
+  "disableScroll": true
+}

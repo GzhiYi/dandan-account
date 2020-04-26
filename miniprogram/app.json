@@ -1,6 +1,8 @@
 {
   "pages": [
     "pages/tab/tab",
+    "pages/target-set/target-set",
+    "pages/target/target",
     "pages/category/category",
     "pages/search/search",
     "pages/morechart/morechart",

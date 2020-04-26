@@ -55,5 +55,15 @@ Component({
     showBanner() {
       this.triggerEvent('showBanner')
     },
+    goTotarget() {
+      const { myTarget } = getApp().globalData
+      console.log('checkTarget', myTarget)
+      let path = '/pages/target-set/target-set'
+      if (myTarget.length) path = '/pages/target/target'
+      console.log('path', path)
+      wx.navigateTo({
+        url: path,
+      })
+    },
   },
 })

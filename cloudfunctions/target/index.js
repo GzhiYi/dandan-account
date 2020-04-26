@@ -87,7 +87,7 @@ exports.main = async (event) => {
         const sameParam = {
           openId: wxContext.OPENID,
           isDel: false,
-          noteDate: _.gte(new Date(`${getPureDate(targetData.createTime)} 00:00:00`)).and(_.lte(new Date(getPureDate(targetData.endDate)))),
+          noteDate: _.gte(new Date(`${getPureDate(targetData.createTime)} 00:00:00`)).and(_.lte(new Date(`${getPureDate(targetData.endDate)} 23:59:59`))),
         }
         const countResult = await db.collection('DANDAN_NOTE')
           .where(sameParam)

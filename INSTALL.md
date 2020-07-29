@@ -17,7 +17,7 @@
   ```
   git clone https://github.com/GzhiYi/dandan-account.git
   cd dandan-account
-  npm install
+  npm install   # 需要在管理员控制台下面执行
   npm install wx-server-sdk@latest
   cd cloudfunctions
   npm install

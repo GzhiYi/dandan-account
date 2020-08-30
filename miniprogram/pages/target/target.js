@@ -267,6 +267,11 @@ Page({
       showDeleteDialog: true,
     })
   },
+  closeDialog() {
+    this.setData({
+      showDeleteDialog: false,
+    })
+  },
   confirmDelete() {
     const self = this
     wx.cloud.callFunction({

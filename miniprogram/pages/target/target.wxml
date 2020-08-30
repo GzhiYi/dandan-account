@@ -52,7 +52,7 @@ module.exports.toFixNum =  toFixNum;
       </view>
       <view class="target-item bg-pink color-white">
         <view class="target-item-title">已存钱进度</view>
-        <view class="target-item-num">
+        <view class="target-item-num" hidden="{{showDeleteDialog}}">
           <canvas
             canvas-id="miss"
             id="miss"
@@ -76,7 +76,7 @@ module.exports.toFixNum =  toFixNum;
     <view class="flex flex-fall" style="width: 50%;">
       <view class="target-item bg-red color-white">
         <view class="target-item-title">时间进度</view>
-        <view class="chart-content">
+        <view class="chart-content" hidden="{{showDeleteDialog}}">
           <canvas
             canvas-id="time-progress"
             id="time-progress"
@@ -109,7 +109,7 @@ module.exports.toFixNum =  toFixNum;
 
     <view class="target-item-big bg-purple color-white">
       <view class="target-item-title">进度图</view>
-      <view class="chart-content">
+      <view class="chart-content" hidden="{{showDeleteDialog}}">
         <canvas
           canvas-id="linechart"
           id="linechart-month"
@@ -130,6 +130,6 @@ module.exports.toFixNum =  toFixNum;
     <view class="danger-text" style="text-align: center;padding: 40rpx 0;">确定删除该目标吗，删除目标后可以重新创建。</view>
     <view class='list-item-btn' style="color: #4fd69c;" bindtap="confirmDelete" wx:if="{{!loadingDelete}}">删除</view>
     <view class='list-item-btn' style="color: #4fd69c;" wx:else>删除目标中...</view>
-    <view class='list-item-btn' bindtap="closeDialog" style="border-bottom: none;">取消</view>
+    <view class='list-item-btn' bindtap=" " style="border-bottom: none;">取消</view>
   </view>
 </dialog>

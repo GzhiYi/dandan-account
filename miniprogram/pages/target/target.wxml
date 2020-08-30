@@ -22,6 +22,7 @@ module.exports.toFixNum =  toFixNum;
 <view class="target">
   <view class="target-header">
     <view class="target-name">{{targetInfo.targetData.name}}</view>
+    <view style="font-size: 30rpx;color: gray;" bindtap="onShowDialog">删除</view>
   </view>
   <view class="target-content flex" wx:if="{{showResult}}">
     <view class="target-item-big">
@@ -119,3 +120,16 @@ module.exports.toFixNum =  toFixNum;
     </view>
   </view>
 </view>
+
+<dialog visible="{{showDeleteDialog}}"  bind:closeDialog="closeDialog">
+  <view slot="content">
+    <view class="pop-indicator"></view>
+    <view class="d-header">
+      删除目标提示
+    </view>
+    <view class="danger-text" style="text-align: center;padding: 40rpx 0;">确定删除该目标吗，删除目标后可以重新创建。</view>
+    <view class='list-item-btn' style="color: #4fd69c;" bindtap="confirmDelete" wx:if="{{!loadingDelete}}">删除</view>
+    <view class='list-item-btn' style="color: #4fd69c;" wx:else>删除目标中...</view>
+    <view class='list-item-btn' bindtap="closeDialog" style="border-bottom: none;">取消</view>
+  </view>
+</dialog>

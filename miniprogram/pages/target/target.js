@@ -12,6 +12,8 @@ Page({
     nowMoney: 0,
     showResult: false,
     showResultType: '',
+    loadingDelete: false,
+    showDeleteDialog: false,
   },
   onLoad() {
     this.getTargetInfo()
@@ -261,10 +263,30 @@ Page({
       icon: 'none',
     })
   },
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage() {
-
+  onShowDialog() {
+    this.setData({
+      showDeleteDialog: true,
+    })
+  },
+  confirmDelete() {
+    const self = this
+    wx.cloud.callFunction({
+      name: 'target',
+      data: {
+        mode: 'delete',
+      },
+      success() {
+        wx.showToast({
+          title: '删除成功',
+          icon: 'none',
+        })
+        self.setData({
+          showDeleteDialog: false,
+        })
+        setTimeout(() => {
+          wx.navigateBack()
+        }, 1500)
+      },
+    })
   },
 })

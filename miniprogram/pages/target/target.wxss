@@ -5,6 +5,7 @@ page {
   display: flex;
   justify-content: space-between;
   padding: 0 40rpx;
+  align-items: center;
 }
 .target-name {
   font-size: 50rpx;

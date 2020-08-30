@@ -68,3 +68,7 @@ page {
   padding-left: 8px;
   box-sizing: border-box;
 }
+.flex-col {
+  display: flex;
+  flex-direction: column;
+}

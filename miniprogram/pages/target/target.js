@@ -1,6 +1,8 @@
 import uCharts from '../u-charts'
 import { parseTime } from '../../util'
+// import cloneDeep from 'lodash/cloneDeep'
 
+// eslint-disable-next-line no-unused-vars
 let lineChart = null
 Page({
   data: {
@@ -64,35 +66,40 @@ Page({
     const lastBillDate = parseTime(billList[billList.length - 1].noteDate, '{y}-{m}-{d}')
     const lastBillDateIndex = formatAllDate.indexOf(lastBillDate)
     let nowMoney = 0
-
     billList.forEach((bill) => {
       formatAllDate.forEach((day, index) => {
         if (index <= lastBillDateIndex) {
           if (day === parseTime(bill.noteDate, '{y}-{m}-{d}')) {
             if (!formatBillList[day]) formatBillList[day] = 0
-            formatBillList[day] = bill.flow === 0 ? formatBillList[day] -= bill.money : formatBillList[day] += bill.money
-          } else {
-            formatBillList[day] = 0
+            const setMoney = bill.flow === 0 ? formatBillList[day] -= bill.money : formatBillList[day] += bill.money
+            // eslint-disable-next-line no-restricted-globals
+            if (!isNaN(setMoney)) {
+              formatBillList[day] = setMoney
+            }
           }
         }
       })
     })
+    // 移除最后一个
+    // 这里的keys是日期数组
     const keys = Object.keys(formatBillList)
     const seriesData = []
     for (let i = 0; i < formatAllDate.length; i++) {
       if (i <= lastBillDateIndex) {
         if (i === 0) {
+          // 第一天的收支情况
           formatBillList[keys[i]] += targetData.startMoney
-        } else {
+        } else if (i !== 0 && i !== lastBillDateIndex) {
           formatBillList[keys[i]] += formatBillList[keys[i - 1]]
         }
-        seriesData.push(formatBillList[keys[i]])
+        if (formatBillList[keys[i]]) {
+          seriesData.push(formatBillList[keys[i]])
+        }
         if (i === lastBillDateIndex) {
-          nowMoney = formatBillList[keys[i]]
+          nowMoney = formatBillList[lastBillDate]
         }
       }
     }
-    console.log('????', formatBillList)
     self.setData({
       nowMoney,
     })
@@ -187,7 +194,6 @@ Page({
       },
     })
     // eslint-disable-next-line no-console
-    console.log('lineChart', lineChart)
   },
   handlePercentage(percentage) {
     if (percentage >= 1) {

@@ -31,7 +31,6 @@ exports.main = async (event) => {
     env: wxContext.ENV === 'local' ? 'release-wifo3' : wxContext.ENV,
   })
 
-
   try {
     // 增加一条记录
     if (event.mode === 'add') {
@@ -102,7 +101,6 @@ exports.main = async (event) => {
         } = countResult
         const batchTimes = Math.ceil(total / 100)
         const tasks = []
-
         for (let i = 0; i < batchTimes; i++) {
           const promise = db.collection('DANDAN_NOTE')
             .where(sameParam)
@@ -111,11 +109,17 @@ exports.main = async (event) => {
           tasks.push(promise)
         }
         const billList = await Promise.all(tasks)
+        const returnBillList = []
+        billList.forEach((bill) => {
+          bill.data.forEach((inBill) => {
+            returnBillList.push(inBill)
+          })
+        })
         return {
           code: 1,
           data: {
             targetData,
-            billList: billList.length ? [...billList[0].data] : [],
+            billList: returnBillList,
           },
           message: '获取成功',
         }

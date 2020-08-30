@@ -17,7 +17,7 @@ exports.main = async (event) => {
   const wxContext = cloud.getWXContext()
   // 初始化数据库
   const db = cloud.database({
-    env: wxContext.ENV === 'dandan-zdm86' ? 'release-wifo3' : wxContext.ENV,
+    env: wxContext.ENV === 'local' ? 'release-wifo3' : wxContext.ENV,
   })
   const _ = db.command
   const {
@@ -28,7 +28,7 @@ exports.main = async (event) => {
     endDate,
   } = event;
   cloud.updateConfig({
-    env: wxContext.ENV === 'dandan-zdm86' ? 'release-wifo3' : wxContext.ENV,
+    env: wxContext.ENV === 'local' ? 'release-wifo3' : wxContext.ENV,
   })
 
   try {

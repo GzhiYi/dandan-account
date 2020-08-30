@@ -35,17 +35,17 @@
       <button
         style="border: none;height: 39rpx;"
         plain='true'
-        class='nav-icon setting'
-        bindtap="goTo"
-        data-page="setting"
+        class='nav-icon target'
+        bindtap="goTotarget"
       ></button>
     </view>
     <view class='nav-icon-view-back' wx:if="{{showSetting}}">
       <button
         style="border: none;height: 39rpx;"
         plain='true'
-        class='nav-icon target'
-        bindtap="goTotarget"
+        class='nav-icon setting'
+        bindtap="goTo"
+        data-page="setting"
       ></button>
     </view>
   </view>

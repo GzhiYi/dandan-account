@@ -7,7 +7,13 @@ var formatDate = function(date) {
   return ''
 };
 
+var toFixNum = function(num, fixNum) {
+  if (!fixNum)  fixNum = 2
+  return num.toFixed(fixNum)
+}
+
 module.exports.formatDate =  formatDate;
+module.exports.toFixNum =  toFixNum;
 </wxs>
 <nav
   class="nav-instance"
@@ -16,6 +22,7 @@ module.exports.formatDate =  formatDate;
 <view class="target">
   <view class="target-header">
     <view class="target-name">{{targetInfo.targetData.name}}</view>
+    <view style="font-size: 30rpx;color: gray;" bindtap="onShowDialog">删除</view>
   </view>
   <view class="target-content flex" wx:if="{{showResult}}">
     <view class="target-item-big">
@@ -45,7 +52,7 @@ module.exports.formatDate =  formatDate;
       </view>
       <view class="target-item bg-pink color-white">
         <view class="target-item-title">已存钱进度</view>
-        <view class="target-item-num">
+        <view class="target-item-num" hidden="{{showDeleteDialog}}">
           <canvas
             canvas-id="miss"
             id="miss"
@@ -69,7 +76,7 @@ module.exports.formatDate =  formatDate;
     <view class="flex flex-fall" style="width: 50%;">
       <view class="target-item bg-red color-white">
         <view class="target-item-title">时间进度</view>
-        <view class="chart-content">
+        <view class="chart-content" hidden="{{showDeleteDialog}}">
           <canvas
             canvas-id="time-progress"
             id="time-progress"
@@ -84,17 +91,17 @@ module.exports.formatDate =  formatDate;
       </view>
       <view class="target-item bg-white">
         <view class="target-item-title">金额情况</view>
-        <view class="label">
-          <text style="font-weight: bold;font-size: 56rpx;">{{targetInfo.targetData.startMoney}} </text>
-          <text style="font-size: 25rpx;color: #B4B4B6;">初始</text>
+        <view class="label flex-col">
+          <div style="font-size: 25rpx;color: #B4B4B6;">初始</div>
+          <div style="font-weight: bold;font-size: 54rpx;">{{targetInfo.targetData.startMoney}} </div>
         </view>
-        <view class="label">
-          <text style="font-weight: bold;font-size: 56rpx;color: #4fd69c;">{{targetInfo.targetData.targetMoney}} </text>
-          <text style="font-size: 25rpx;color: #B4B4B6;">目标</text>
+        <view class="label flex-col">
+          <div style="font-size: 25rpx;color: #B4B4B6;">目标</div>
+          <div style="font-weight: bold;font-size: 54rpx;color: #4fd69c;">{{targetInfo.targetData.targetMoney}} </div>
         </view>
-        <view class="label">
-          <text style="font-weight: bold;font-size: 56rpx;">{{nowMoney}} </text>
-          <text style="font-size: 25rpx;color: #B4B4B6;">当前</text>
+        <view class="label flex-col">
+          <div style="font-size: 25rpx;color: #B4B4B6;">当前</div>
+          <div style="font-weight: bold;font-size: 54rpx;">{{wxs.toFixNum(nowMoney)}} </div>
         </view>
       </view>
     </view>
@@ -102,7 +109,7 @@ module.exports.formatDate =  formatDate;
 
     <view class="target-item-big bg-purple color-white">
       <view class="target-item-title">进度图</view>
-      <view class="chart-content">
+      <view class="chart-content" hidden="{{showDeleteDialog}}">
         <canvas
           canvas-id="linechart"
           id="linechart-month"
@@ -113,3 +120,16 @@ module.exports.formatDate =  formatDate;
     </view>
   </view>
 </view>
+
+<dialog visible="{{showDeleteDialog}}"  bind:closeDialog="closeDialog">
+  <view slot="content">
+    <view class="pop-indicator"></view>
+    <view class="d-header">
+      删除目标提示
+    </view>
+    <view class="danger-text" style="text-align: center;padding: 40rpx 0;">确定删除该目标吗，删除目标后可以重新创建。</view>
+    <view class='list-item-btn' style="color: #4fd69c;" bindtap="confirmDelete" wx:if="{{!loadingDelete}}">删除</view>
+    <view class='list-item-btn' style="color: #4fd69c;" wx:else>删除目标中...</view>
+    <view class='list-item-btn' bindtap=" " style="border-bottom: none;">取消</view>
+  </view>
+</dialog>

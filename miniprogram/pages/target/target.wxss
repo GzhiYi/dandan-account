@@ -5,6 +5,7 @@ page {
   display: flex;
   justify-content: space-between;
   padding: 0 40rpx;
+  align-items: center;
 }
 .target-name {
   font-size: 50rpx;
@@ -67,4 +68,8 @@ page {
   align-items: flex-start;
   padding-left: 8px;
   box-sizing: border-box;
+}
+.flex-col {
+  display: flex;
+  flex-direction: column;
 }

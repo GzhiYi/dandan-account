@@ -25,6 +25,9 @@ button::after{
 .danger {
   background-color: #f75676;
 }
+.danger-text {
+  color: #f75676;
+}
 .warn {
   background-color: #ffdd57;
 }

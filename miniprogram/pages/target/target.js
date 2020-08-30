@@ -102,6 +102,7 @@ Page({
         }
       }
     }
+    console.log('>>>.', seriesData, keys)
     self.setData({
       nowMoney,
     })
@@ -146,12 +147,10 @@ Page({
         },
       ],
       animation: true,
-      enableScroll: true, // 开启图表拖拽功能
       xAxis: {
         disableGrid: true,
         type: 'grid',
         gridType: 'dash',
-        itemCount: 4,
         scrollShow: false,
         scrollAlign: 'left',
         disabled: true,
@@ -177,7 +176,7 @@ Page({
       height: 200,
       extra: {
         line: {
-          type: 'straight',
+          type: 'curve',
         },
         area: {
           opacity: 0.3,

@@ -14,8 +14,16 @@ exports.main = async (event) => {
     env: wxContext.ENV === 'local' ? 'release-wifo3' : wxContext.ENV,
   });
   const {
-    id, categoryName, categoryIcon, description, flow,
-    type, parentId, isSelectable, ids,
+    id,
+    categoryName,
+    categoryIcon,
+    description,
+    flow,
+    type,
+    parentId,
+    isSelectable,
+    ids,
+    OPENID,
   } = event;
 
   const _ = db.command;
@@ -109,6 +117,7 @@ exports.main = async (event) => {
       };
     }
 
+    // Deprecated: 目录在同一个父分类下数量太多, 官方文档GET默认取一百条, 这是个挺坑的东西
     // 根据父分类ID获取子分类ID
     if (event.mode === 'getCategoriesByParentCID') {
       const res = await db.collection('DANDAN_NOTE_CATEGORY')
@@ -122,6 +131,42 @@ exports.main = async (event) => {
         message: '操作成功',
       };
     }
+
+    // 根据父分类ID获取系统分类
+    if (event.mode === 'getCategoriesByParentCIDAndSystem') {
+      const res = await db.collection('DANDAN_NOTE_CATEGORY')
+        .where({
+          type: 0,
+          parentId: id,
+          isDel: false,
+        }).limit(300).get();
+      return {
+        code: 1,
+        data: res,
+        message: '操作成功',
+      };
+    }
+
+    // 根据父分类ID获取某个用户定义的分类
+    if (event.mode === 'getCategoriesByParentCIDAndOpenId') {
+      const res = await db.collection('DANDAN_NOTE_CATEGORY')
+        .where({
+          openId: (OPENID||wxContext.OPENID),
+          type: 1,
+          parentId: id,
+          isDel: false,
+        }).limit(300).get();
+      return {
+        code: 1,
+        data: res,
+        message: '操作成功',
+      };
+    }
+    return {
+      code: -1,
+      data: [],
+      message: '没有方法匹配',
+    };
   } catch (e) {
     return {
       code: -1,

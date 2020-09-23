@@ -81,10 +81,11 @@ exports.main = async (event) => {
       basicWhere.noteDate = _.gte(new Date(startDate)).and(_.lte(new Date(endDate)))
       if (categoryId !== undefined) {
         const sonCIDs = [];
+        // 先拿系统的分类
         const cResult = await cloud.callFunction({
           name: 'category',
           data: {
-            mode: 'getCategoriesByParentCID',
+            mode: 'getCategoriesByParentCIDAndSystem',
             id: categoryId,
           },
         })
@@ -99,6 +100,30 @@ exports.main = async (event) => {
 
         // eslint-disable-next-line no-restricted-syntax
         for (category of subResult.data) {
+          sonCIDs.push(category._id)
+          categoryInfoMap.set(category._id, category)
+        }
+
+         // 再拿用户的分类
+         const cResult2 = await cloud.callFunction({
+          name: 'category',
+          data: {
+            mode: 'getCategoriesByParentCIDAndOpenId',
+            id: categoryId,
+            OPENID: wxContext.OPENID,
+          },
+        })
+
+        if (cResult2.result.code !== 1) {
+          return {
+            code: -1,
+          }
+        }
+
+        const subResult2 = cResult2.result.data
+
+        // eslint-disable-next-line no-restricted-syntax
+        for (category of subResult2.data) {
           sonCIDs.push(category._id)
           categoryInfoMap.set(category._id, category)
         }

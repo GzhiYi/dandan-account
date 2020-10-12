@@ -39,7 +39,12 @@
     }
 ```
 6. 增加初始化脚本
-
+  * 添加集合(集合名：BACKUP)
+  * 添加集合(集合名：DANDAN_NOTE)
+  * 添加集合(集合名：DANDAN_WORD)
+  * 添加集合(集合名：DANDAN_NOTE_STAT)
+  * 添加集合(集合名：SUBSCRIBE)
+  * 添加集合(集合名：TARGET)
   * 初始化分类数据(记录名：DANDAN_NOTE_CATEGORY)
     云开发->数据库->集合->记录
     这里直接使用导入JSON数据，复制下面数据另存为文件，进行导入

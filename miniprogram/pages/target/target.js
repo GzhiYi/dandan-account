@@ -1,19 +1,25 @@
 import uCharts from '../u-charts'
 import { parseTime } from '../../util'
 // import cloneDeep from 'lodash/cloneDeep'
-
+const { importStore } = getApp()
+const { create, store } = importStore
 // eslint-disable-next-line no-unused-vars
 let lineChart = null
-Page({
+create.Page(store, {
+  use: ['sysInfo'],
   data: {
     targetInfo: {},
     progress: {},
-    screenWidth: getApp().globalData.screenWidth,
     nowMoney: 0,
     showResult: false,
     showResultType: '',
     loadingDelete: false,
     showDeleteDialog: false,
+  },
+  computed: {
+    screenWidth() {
+      return this.sysInfo.screenWidth
+    },
   },
   onLoad() {
     this.getTargetInfo()
@@ -27,6 +33,7 @@ Page({
         mode: 'targetInfo',
       },
       success(res) {
+        console.log('res@@@@', res)
         if (res.result.code === 1) {
           const targetInfo = res.result.data
           const allDate = self.getDates(new Date(targetInfo.targetData.createTime), new Date(targetInfo.targetData.endDate))
@@ -61,6 +68,7 @@ Page({
     })
   },
   renderLineChart(targetData, billList, allDate) {
+    console.log('renderLineChart', store.data)
     const self = this
     // 处理账单，按每天进行保存
     const formatBillList = {}
@@ -102,7 +110,6 @@ Page({
         }
       }
     }
-    console.log('>>>.', seriesData, keys)
     self.setData({
       nowMoney,
     })
@@ -203,6 +210,7 @@ Page({
     return percentage
   },
   renderProgress(data) {
+    console.log('this.store', this.store)
     const self = this
     // eslint-disable-next-line no-new
     new uCharts({

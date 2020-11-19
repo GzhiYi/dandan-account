@@ -1,9 +1,15 @@
-// app.js
+import createStore from './store/omix/create'
+import store from './store/index'
+
 const Flow = {
   pay: 0,
   income: 1,
 }
 App({
+  importStore: {
+    create: createStore,
+    store,
+  },
   onLaunch() {
     if (!wx.cloud) {
       // eslint-disable-next-line no-console
@@ -11,13 +17,14 @@ App({
     } else {
       wx.cloud.init({
         traceUser: true,
-        // env: 'release-wifo3', // 测试环境
-        env: 'dandan-zdm86', // 正式环境
+        env: 'release-wifo3', // 测试环境
+        // env: 'dandan-zdm86', // 正式环境
       })
     }
     // 获取手机信息以配置顶栏
     wx.getSystemInfo({
       success: (res) => {
+        store.data.sysInfo = res
         this.globalData.statusBarHeight = res.statusBarHeight
         this.globalData.navBarHeight = 44 + res.statusBarHeight
         this.globalData.screenWidth = res.screenWidth
@@ -64,6 +71,7 @@ App({
           // 筛选出默认下的分类为：早餐午餐和晚餐
           const defaultCategoryIds = ['food_and_drink_breakfast', 'food_and_drink_lunch', 'food_and_drink_dinner']
           self.globalData.categoryList = categoryList
+          store.data.categoryList = categoryList
           list.forEach((parent) => {
             parent.children.forEach((child) => {
               if (defaultCategoryIds.includes(child._id)) {
@@ -71,6 +79,7 @@ App({
               }
             })
           })
+          store.data.categoryList = defaultCategoryList
           self.globalData.defaultCategoryList = defaultCategoryList
           if (self.loadDefaultCategoryCallBack) {
             self.loadDefaultCategoryCallBack(defaultCategoryList)
@@ -82,6 +91,7 @@ App({
       },
     })
   },
+  // 检查是否已经设置了目标
   checkHasTarget() {
     const self = this
     wx.cloud.callFunction({
@@ -91,6 +101,7 @@ App({
       },
       success(res) {
         if (res.result.code === 1) {
+          store.data.myTarget = res.result.data
           self.globalData.myTarget = res.result.data
         }
       },

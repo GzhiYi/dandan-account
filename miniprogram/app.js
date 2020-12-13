@@ -79,7 +79,8 @@ App({
       },
       success(res) {
         if (res.result.code === 1) {
-          store.data.myTarget = res.result.data
+          // eslint-disable-next-line prefer-destructuring
+          store.data.myTarget = res.result.data[0]
         }
       },
     })

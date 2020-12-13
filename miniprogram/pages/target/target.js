@@ -33,9 +33,10 @@ create.Page(store, {
         mode: 'targetInfo',
       },
       success(res) {
-        console.log('res@@@@', res)
+        console.log('res', res)
         if (res.result.code === 1) {
           const targetInfo = res.result.data
+          console.log('targetInfo', targetInfo)
           const allDate = self.getDates(new Date(targetInfo.targetData.createTime), new Date(targetInfo.targetData.endDate))
           const toFinishDate = self.getDates(new Date(), new Date(targetInfo.targetData.endDate))
           self.setData({
@@ -62,13 +63,18 @@ create.Page(store, {
           })
         }
       },
+      fail() {
+        wx.showToast({
+          title: '获取目标失败，请重试。',
+          icon: 'none',
+        })
+      },
       complete() {
         wx.hideLoading()
       },
     })
   },
   renderLineChart(targetData, billList, allDate) {
-    console.log('renderLineChart', store.data)
     const self = this
     // 处理账单，按每天进行保存
     const formatBillList = {}
@@ -210,7 +216,6 @@ create.Page(store, {
     return percentage
   },
   renderProgress(data) {
-    console.log('this.store', this.store)
     const self = this
     // eslint-disable-next-line no-new
     new uCharts({

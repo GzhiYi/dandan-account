@@ -20,7 +20,8 @@
   <index
     bind:reFetchBillList="onReFetchBillList"
     id="index"
-    selectedCategory="{{selectedCategory}}"
+    selectedCategory="{{$.selectedCategory}}"
+    defaultCategoryList="{{$.defaultCategoryList}}"
     editBill="{{editBill}}"
     bind:hideTab="onHideTab"
   />

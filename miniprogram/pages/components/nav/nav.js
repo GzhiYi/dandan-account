@@ -1,4 +1,6 @@
-Component({
+const { importStore } = getApp()
+const { create, store } = importStore
+create.Component(store, {
   externalClasses: ['my-class', 'my-icon-class'],
   options: {
     multipleSlots: true,
@@ -20,12 +22,9 @@ Component({
     showSetting: false,
   },
   ready() {
-    const {
-      statusBarHeight,
-    } = getApp().globalData
     const { showIcons } = this.data
     this.setData({
-      statusBarHeight,
+      statusBarHeight: store.data.sysInfo.statusBarHeight,
       showBackIcon: showIcons.includes('back'),
       showIssue: showIcons.includes('bug'),
       showBannerSetting: showIcons.includes('banner'),

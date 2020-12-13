@@ -29,7 +29,7 @@
 </view>
 <view class="search-result">
   <view class="place"></view>
-  <scroll-view scroll-y="{{true}}" style="height: {{screenHeight - ((screenHeight + 442.49) / 4.67)}}px;" class="bill-list">
+  <scroll-view scroll-y="{{true}}" style="height: {{$.sysInfo.screenHeight - (($.sysInfo.screenHeight + 442.49) / 4.67)}}px;" class="bill-list">
     <view class="empty-search" wx:if="{{isSearching}}">查询中...</view>
     <view class="empty-search" wx:if="{{billList.length === 0 && !isSearching}}">没有找到账单( ´･･)ﾉ(._.`)</view>
     <view

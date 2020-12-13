@@ -179,7 +179,7 @@ create.Page(store, {
         }],
         splitNumber: 5,
       },
-      width: getApp().globalData.screenWidth * 0.8,
+      width: store.data.sysInfo.screenWidth * 0.8,
       height: 200,
       extra: {
         line: {
@@ -237,7 +237,7 @@ create.Page(store, {
         fontSize: 15,
       },
       padding: [0, 0, 0, 0],
-      width: getApp().globalData.screenWidth * 0.3,
+      width: store.data.sysInfo.screenWidth * 0.3,
       height: 120,
       extra: {
         arcbar: {

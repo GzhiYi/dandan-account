@@ -2,9 +2,11 @@ import {
   parseTime,
 } from '../../util'
 
+const { importStore } = getApp()
+const { store, create } = importStore
 let billType = 0
 let shouldUpdateBill = false
-Page({
+create.Page(store, {
   data: {
     categoryList: [],
     showAddDialog: false,
@@ -44,13 +46,14 @@ Page({
     })
   },
   getCategoryList(flow) {
+    const { categoryList } = store.data
     this.setData({
-      categoryList: getApp().globalData.categoryList[`${flow === '0' ? 'pay' : 'income'}`],
+      categoryList: categoryList[`${flow === '0' ? 'pay' : 'income'}`],
     })
   },
   selectCategory(event) {
     const { category } = event.currentTarget.dataset
-    getApp().globalData.selectedCategory = category
+    store.data.selectedCategory = category
     wx.navigateBack()
   },
   showDialog(event) {
@@ -161,7 +164,7 @@ Page({
             })
             self.closeDialog()
             shouldUpdateBill = true // 删除分类成功的话必须更新账单
-            getApp().globalData.selectedCategory = null
+            store.data.selectedCategory = null
             self.getLatestCategory()
           } else {
             wx.showToast({

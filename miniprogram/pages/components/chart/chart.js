@@ -2,16 +2,19 @@ import { strip, debounce, parseTime } from '../../../util'
 // eslint-disable-next-line import/extensions
 import uCharts from '../../u-charts.js'
 
+const { importStore } = getApp()
+const { create, store } = importStore
 let canvasPie = null
 let firstFetch = true // 用于判断请求是否为第一次，true为本月数据
 let page = 1 // 默认的分页值
 let hasNext = false // 是否有下一页
 const DEFAULT_LIMIT = 40
 
-Component({
+create.Component(store, {
   options: {
     styleIsolation: 'shared',
   },
+  use: ['sysInfo.screenHeight'],
   properties: {
     tab: {
       type: String,
@@ -26,7 +29,6 @@ Component({
     cWidth: 0,
     cHeight: 0,
     activeTab: 'pay',
-    screenHeight: getApp().globalData.screenHeight,
     fixScroll: true,
     activeParentIndex: 0,
     activeParentCategory: null,

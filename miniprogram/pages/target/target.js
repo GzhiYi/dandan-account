@@ -1,19 +1,25 @@
 import uCharts from '../u-charts'
 import { parseTime } from '../../util'
 // import cloneDeep from 'lodash/cloneDeep'
-
+const { importStore } = getApp()
+const { create, store } = importStore
 // eslint-disable-next-line no-unused-vars
 let lineChart = null
-Page({
+create.Page(store, {
+  use: ['sysInfo'],
   data: {
     targetInfo: {},
     progress: {},
-    screenWidth: getApp().globalData.screenWidth,
     nowMoney: 0,
     showResult: false,
     showResultType: '',
     loadingDelete: false,
     showDeleteDialog: false,
+  },
+  computed: {
+    screenWidth() {
+      return this.sysInfo.screenWidth
+    },
   },
   onLoad() {
     this.getTargetInfo()
@@ -27,8 +33,10 @@ Page({
         mode: 'targetInfo',
       },
       success(res) {
+        console.log('res', res)
         if (res.result.code === 1) {
           const targetInfo = res.result.data
+          console.log('targetInfo', targetInfo)
           const allDate = self.getDates(new Date(targetInfo.targetData.createTime), new Date(targetInfo.targetData.endDate))
           const toFinishDate = self.getDates(new Date(), new Date(targetInfo.targetData.endDate))
           self.setData({
@@ -54,6 +62,12 @@ Page({
             bgColor: '#D75C6E',
           })
         }
+      },
+      fail() {
+        wx.showToast({
+          title: '获取目标失败，请重试。',
+          icon: 'none',
+        })
       },
       complete() {
         wx.hideLoading()
@@ -102,7 +116,6 @@ Page({
         }
       }
     }
-    console.log('>>>.', seriesData, keys)
     self.setData({
       nowMoney,
     })
@@ -172,7 +185,7 @@ Page({
         }],
         splitNumber: 5,
       },
-      width: getApp().globalData.screenWidth * 0.8,
+      width: store.data.sysInfo.screenWidth * 0.8,
       height: 200,
       extra: {
         line: {
@@ -229,7 +242,7 @@ Page({
         fontSize: 15,
       },
       padding: [0, 0, 0, 0],
-      width: getApp().globalData.screenWidth * 0.3,
+      width: store.data.sysInfo.screenWidth * 0.3,
       height: 120,
       extra: {
         arcbar: {

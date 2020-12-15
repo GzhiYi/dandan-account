@@ -1,6 +1,6 @@
 <view class="list-page">
   <view class="cal-calendar">
-    <view style="height: {{statusBarHeight * 2}}rpx;background-color: #fff;"></view>
+    <view style="height: {{$.sysInfo.statusBarHeight * 2}}rpx;background-color: #fff;"></view>
     <calendar
       mode="range"
       bind:onRangePick="onRangePick"
@@ -9,7 +9,7 @@
       billResult="{{billResult}}"
     ></calendar>
   </view>
-  <scroll-view scroll-y="{{true}}" style="height: {{screenHeight - ((screenHeight + 742.49) / 4.67)}}px;" class="bill-list">
+  <scroll-view scroll-y="{{true}}" style="height: {{$.sysInfo.screenHeight - (($.sysInfo.screenHeight + 742.49) / 4.67)}}px;" class="bill-list">
     <view
       class="bill-item"
       wx:for="{{billResult.page.data}}"

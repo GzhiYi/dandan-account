@@ -1,11 +1,12 @@
 import { strip } from '../../util'
 
+const { importStore } = getApp()
+const { create, store } = importStore
 let isNotifyReset = false
-Page({
+create.Page(store, {
+  use: ['sysInfo.screenHeight', 'sysInfo.statusBarHeight'],
   data: {
     billList: null,
-    screenHeight: getApp().globalData.screenHeight,
-    statusBarHeight: getApp().globalData.statusBarHeight,
     isSearching: false,
     word: '',
     isFocus: true,

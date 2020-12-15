@@ -1,11 +1,14 @@
 /* eslint-disable prefer-destructuring */
 import { parseTime } from '../../../util'
 
+const { importStore } = getApp()
+const { create, store } = importStore
 let dateRange = null
-Component({
+create.Component(store, {
   options: {
     styleIsolation: 'shared',
   },
+  use: ['sysInfo.screenHeight', 'sysInfo.statusBarHeight'],
   properties: {
     tab: String,
   },
@@ -14,8 +17,6 @@ Component({
     showMenuDialog: false,
     editItem: {},
     showConfirmDelete: false,
-    screenHeight: getApp().globalData.screenHeight,
-    statusBarHeight: getApp().globalData.statusBarHeight,
     today: '',
     billResult: null,
   },

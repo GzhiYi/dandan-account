@@ -1,9 +1,15 @@
-// app.js
+import createStore from './store/omix/create'
+import store from './store/index'
+
 const Flow = {
   pay: 0,
   income: 1,
 }
 App({
+  importStore: {
+    create: createStore,
+    store,
+  },
   onLaunch() {
     if (!wx.cloud) {
       // eslint-disable-next-line no-console
@@ -11,17 +17,14 @@ App({
     } else {
       wx.cloud.init({
         traceUser: true,
-        // env: 'release-wifo3', // 测试环境
-        env: 'dandan-zdm86', // 正式环境
+        env: 'release-wifo3', // 测试环境
+        // env: 'dandan-zdm86', // 正式环境
       })
     }
     // 获取手机信息以配置顶栏
     wx.getSystemInfo({
       success: (res) => {
-        this.globalData.statusBarHeight = res.statusBarHeight
-        this.globalData.navBarHeight = 44 + res.statusBarHeight
-        this.globalData.screenWidth = res.screenWidth
-        this.globalData.screenHeight = res.screenHeight
+        store.data.sysInfo = res
       },
     })
     // 分类应当全局优先获取
@@ -30,6 +33,7 @@ App({
     // 获取用户是否有设置目标
     this.checkHasTarget()
 
+    // 如果开启过小程序，则跳到onBoarding页面
     const isOnboarding = wx.getStorageSync('isOnboarding')
     if (!isOnboarding) {
       wx.redirectTo({
@@ -37,19 +41,8 @@ App({
       })
     }
   },
-  globalData: {
-    statusBarHeight: 0,
-    navBarHeight: 0,
-    screenWidth: 0,
-    screenHeight: 0,
-    categoryList: {},
-    selectedCategory: '',
-    defaultCategoryList: [],
-    myTarget: [],
-  },
   // 在app.js处进行分类的获取，以便所有页面方便使用
   getCategory() {
-    const self = this
     const categoryList = {}
     const defaultCategoryList = []
     wx.cloud.callFunction({
@@ -63,7 +56,8 @@ App({
           categoryList.income = list.filter((item) => item.flow === Flow.income)
           // 筛选出默认下的分类为：早餐午餐和晚餐
           const defaultCategoryIds = ['food_and_drink_breakfast', 'food_and_drink_lunch', 'food_and_drink_dinner']
-          self.globalData.categoryList = categoryList
+
+          store.data.categoryList = categoryList
           list.forEach((parent) => {
             parent.children.forEach((child) => {
               if (defaultCategoryIds.includes(child._id)) {
@@ -71,19 +65,13 @@ App({
               }
             })
           })
-          self.globalData.defaultCategoryList = defaultCategoryList
-          if (self.loadDefaultCategoryCallBack) {
-            self.loadDefaultCategoryCallBack(defaultCategoryList)
-          }
-          if (self.loadCategoryCallBack) {
-            self.loadCategoryCallBack(list)
-          }
+          store.data.defaultCategoryList = defaultCategoryList
         }
       },
     })
   },
+  // 检查是否已经设置了目标
   checkHasTarget() {
-    const self = this
     wx.cloud.callFunction({
       name: 'target',
       data: {
@@ -91,7 +79,8 @@ App({
       },
       success(res) {
         if (res.result.code === 1) {
-          self.globalData.myTarget = res.result.data
+          // eslint-disable-next-line prefer-destructuring
+          store.data.myTarget = res.result.data[0]
         }
       },
     })

@@ -1,16 +1,21 @@
 // pages/components/index/index.js
 import { parseTime } from '../../../util'
 
+const { importStore } = getApp()
+const { create, store } = importStore
+
 let globalDefaultCategory = {}
 let subscribeStatus = false // 是否已接受订阅推送
 let isShowSubscribeTips = false
-Component({
+
+create.Component(store, {
   options: {
     styleIsolation: 'shared',
   },
   properties: {
     selectedCategory: Object,
     editBill: Object,
+    defaultCategoryList: Array,
   },
   data: {
     sum: '',
@@ -31,14 +36,39 @@ Component({
     nowTime: new Date().getTime(),
     loadingWord: false,
   },
+  observers: {
+    // 监控刷新 kol 列表的字段
+    defaultCategoryList() {
+      const globalDefaultCategoryList = store.data.defaultCategoryList
+      if (globalDefaultCategoryList.length > 0) {
+        this.setData({
+          selectedCategory: this.handleDefaultCategory(globalDefaultCategoryList),
+        })
+        store.data.selectedCategory = this.handleDefaultCategory(globalDefaultCategoryList)
+      }
+    },
+  },
+
   ready() {
+    console.log('dddd', this.selectedCategory)
     const now = new Date()
     const date = parseTime(now, '{y}-{m}-{d}')
     this.setData({
       active_date_time: date,
     })
     this.getWord()
-    function handleDefaultCategory(list) {
+
+    // 获取一下订阅消息状态，如果是可以推送消息的话就进行推送授权收集
+    this.getUserSucscribeStatus()
+    // wx.downloadFile({
+    //   url: ''
+    // })
+  },
+  /**
+   * 组件的方法列表
+   */
+  methods: {
+    handleDefaultCategory(list) {
       const hour = new Date().getHours()
       let defaultCategory = {}
       if (hour >= 4 && hour < 10) {
@@ -53,32 +83,7 @@ Component({
       }
       globalDefaultCategory = defaultCategory
       return defaultCategory
-    }
-    const globalDefaultCategoryList = getApp().globalData.defaultCategoryList
-    if (globalDefaultCategoryList.length > 0) {
-      this.setData({
-        selectedCategory: handleDefaultCategory(globalDefaultCategoryList),
-      })
-      getApp().globalData.selectedCategory = handleDefaultCategory(globalDefaultCategoryList)
-    } else {
-      getApp().loadDefaultCategoryCallBack = (list) => {
-        // 根据时间对默认选择对分类进行“推荐”
-        this.setData({
-          selectedCategory: handleDefaultCategory(list),
-        })
-        getApp().globalData.selectedCategory = handleDefaultCategory(list)
-      }
-    }
-    // 获取一下订阅消息状态，如果是可以推送消息的话就进行推送授权收集
-    this.getUserSucscribeStatus()
-    // wx.downloadFile({
-    //   url: ''
-    // })
-  },
-  /**
-   * 组件的方法列表
-   */
-  methods: {
+    },
     getWord() {
       const self = this
       this.setData({
@@ -161,7 +166,7 @@ Component({
         })
       } else {
         // 收入或者支出的tab
-        getApp().globalData.selectedCategory = dataset.value === 0 ? globalDefaultCategory : null
+        store.data.selectedCategory = dataset.value === 0 ? globalDefaultCategory : null
         this.setData({
           selectedCategory: dataset.value === 0 ? globalDefaultCategory : null,
         })
@@ -391,7 +396,7 @@ Component({
           mode: 'post',
           type,
         },
-        success() {},
+        success() { },
         complete() {
           self.getUserSucscribeStatus()
         },

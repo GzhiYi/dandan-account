@@ -9,10 +9,12 @@ const mapFace = {
   puke: '吃土了',
   sad: '土都没得吃了',
 }
-Page({
+const { importStore } = getApp()
+const { create, store } = importStore
+create.Page(store, {
+  use: ['selectedCategory', 'defaultCategoryList'],
   data: {
     active: 'index',
-    selectedCategory: null,
     editBill: {},
     hideTab: false,
     currentMonthData: {},
@@ -20,12 +22,6 @@ Page({
   },
   onLoad() {
     this.calCalendarHeight()
-  },
-  onShow() {
-    const { selectedCategory } = getApp().globalData
-    this.setData({
-      selectedCategory,
-    })
   },
   calCalendarHeight() {
     const query = wx.createSelectorQuery().in(this)

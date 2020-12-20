@@ -7,46 +7,39 @@
     <view class='nav-icon-view-back' bindlongtap='showBanner' wx:if="{{showBannerSetting}}"></view>
     <view class='nav-icon-view-back' wx:if="{{showIssue}}">
       <button
-        style="border: none;"
+        style="border: none;margin: 0;padding: 0;background-size: cover;background-image: url('https://yc-img.ymcdn.cn/2012/d5/b9/hAZBrswyLB0otAQ9XRD2ujesuH28lMyN-f5247618bbf62ba9.png')"
         plain='true'
         class='nav-icon issue'
         open-type="contact"
       ></button>
     </view>
-    <view class='nav-icon-view-back' wx:if="{{showSearch}}">
-      <button
-        style="border: none;height: 39rpx;"
-        plain='true'
-        class='nav-icon more-chart'
-        bindtap="goTo"
-        data-page="morechart"
-      ></button>
+    <view class='nav-icon-view-back' wx:if="{{showSearch}}" bindtap="goTo" data-page="morechart">
+      <image
+        src="../../../images/图表.png"
+        mode="widthFix"
+        class="nav-icon"
+      ></image>
     </view>
-    <view class='nav-icon-view-back' wx:if="{{showSearch}}">
-      <button
-        style="border: none;height: 39rpx;"
-        plain='true'
-        class='nav-icon search'
-        bindtap="goTo"
-        data-page="search"
-      ></button>
+    <view class='nav-icon-view-back' wx:if="{{showSearch}}" bindtap="goTo" data-page="search">
+      <image
+        src="../../../images/搜索.png"
+        mode="widthFix"
+        class="nav-icon"
+      ></image>
     </view>
-    <view class='nav-icon-view-back' wx:if="{{showSetting}}">
-      <button
-        style="border: none;height: 39rpx;"
-        plain='true'
-        class='nav-icon target'
-        bindtap="goTotarget"
-      ></button>
+    <view class='nav-icon-view-back' wx:if="{{showSetting}}" bindtap="goTotarget">
+      <image
+        src="../../../images/目标.png"
+        mode="widthFix"
+        class="nav-icon"
+      ></image>
     </view>
-    <view class='nav-icon-view-back' wx:if="{{showSetting}}">
-      <button
-        style="border: none;height: 39rpx;"
-        plain='true'
-        class='nav-icon setting'
-        bindtap="goTo"
-        data-page="setting"
-      ></button>
+    <view class='nav-icon-view-back' wx:if="{{showSetting}}" bindtap="goTo" data-page="setting">
+      <image
+        src="../../../images/设置.png"
+        mode="widthFix"
+        class="nav-icon"
+      ></image>
     </view>
   </view>
 </view>

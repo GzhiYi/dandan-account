@@ -1,4 +1,6 @@
-/**app.wxss**/
+page {
+  background-color: #7571e015;
+}
 .container {
   display: flex;
   flex-direction: column;
@@ -69,9 +71,6 @@ button::after{
   text-align: center;
   border-bottom: solid 1rpx rgba(0,0,0,.1);
   font-weight: bold;
-}
-.chart-nav-bg {
-  background-color: #7471e0;
 }
 .flex {
   display: flex;

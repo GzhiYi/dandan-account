@@ -1,5 +1,5 @@
 page {
-  background-color: #FFE0CE;
+  background-color: #FFE0CE !important;
 }
 .target-set .title {
   font-size: 50rpx;

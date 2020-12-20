@@ -50,7 +50,6 @@ create.Component(store, {
   },
 
   ready() {
-    console.log('dddd', this.selectedCategory)
     const now = new Date()
     const date = parseTime(now, '{y}-{m}-{d}')
     this.setData({

@@ -1,5 +1,5 @@
 page {
-  background-color: #f8fafb;
+  /* background-color: #f8fafb; */
 }
 .list-page {
   background-color: #f8fafb;

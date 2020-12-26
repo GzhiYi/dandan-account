@@ -12,8 +12,8 @@ page {
 }
 
 .part .left {
-  width: 16%;
-  padding: 48rpx;
+  width: 20%;
+  padding: 48rpx 20rpx;
   font-size: 30rpx;
   font-weight: 700;
 }
@@ -22,6 +22,10 @@ page {
   width: 54%;
   border-radius: 38rpx;
   padding: 48rpx;
+}
+.part-hot {
+  border: 6rpx solid rgb(255, 68, 136);
+  padding: 42rpx;
 }
 
 .dandan {

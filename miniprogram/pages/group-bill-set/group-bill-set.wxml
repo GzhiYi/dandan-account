@@ -1,0 +1,48 @@
+<wxs module="wxs">
+var formatDate = function(date) {
+  var dateArr = date.split('-')
+  return dateArr[0] + '年' + dateArr[1] + '月' + dateArr[2] + '日'
+};
+
+module.exports.formatDate =  formatDate;
+</wxs>
+<nav class="nav-instance" showIcons="{{['back']}}"></nav>
+<view class="circle circle-one"></view>
+<view class="circle circle-two"></view>
+<view class="target-set">
+  <view class="title base-padding">创建记账组</view>
+  <view class="form">
+    <view class="form-item base-padding">
+      <view class="form-label required">组名</view>
+      <view class="form-input">
+        <input type="text" value="{{name}}" bindinput="onInput" data-target="name" placeholder="属于你们组的名字"></input>
+      </view>
+    </view>
+    <view class="form-item base-padding">
+      <view class="form-label required">组账单开始时间</view>
+      <view class="form-input">
+        <picker mode="date" value="{{startDate}}" bindchange="bindDateChange" data-key="startDate">
+          <view class="picker">{{startDate ? wxs.formatDate(startDate) : '在开始时间之后的账单会进行共享'}}</view>
+        </picker>
+      </view>
+    </view>
+    <view class="form-item base-padding">
+      <view class="form-label">组账单结束时间</view>
+      <view class="form-input">
+        <picker mode="date" value="{{endDate}}" bindchange="bindDateChange" data-key="endDate" start="{{minEndDate}}">
+          <view class="picker">{{endDate ? wxs.formatDate(endDate) : '在结束时间之前的账单会进行共享'}}</view>
+        </picker>
+      </view>
+    </view>
+    <view class="money base-padding">
+      <view>
+        <text>提示：\n</text>
+        <text class="tip" style="font-size: 25rpx;color: #B4B4B6;">1. 当前版本只提供单个组账单的创建。\n</text>
+        <text class="tip" style="font-size: 25rpx;color: #B4B4B6;">2. 组成员可以随时退出。\n</text>
+        <text class="tip" style="font-size: 25rpx;color: #B4B4B6;">3. 如果未填写组账单结束日期，则会将组开始时间之后的所有账单（标记未入组内账单除外）进行组内共享。\n</text>
+        <text class="tip" style="font-size: 25rpx;color: #B4B4B6;">4. 因为单单没有记录用户的身份信息，所以需要仔细确定邀请的好友是目标的人噢。\n</text>
+      </view>
+      <view class="create" bindtap="confirm">创建</view>
+    </view>
+  </view>
+</view>

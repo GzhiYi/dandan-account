@@ -12,6 +12,18 @@
     </view>
   </view>
   <view class="part">
+    <view class="left">一起记账？</view>
+    <view class="right dandan part-hot" style="background-color: #365D9A;">
+      <view class="title">现在可以一起记账啦！</view>
+      <view class="desc">
+        <text>
+          通过链接邀请，可以和亲人、好友一起记账。
+        </text>
+        <view class="notify-status" bindtap="goToGroupBill">去设置</view>
+      </view>
+    </view>
+  </view>
+  <view class="part">
     <view class="left">对你啰嗦</view>
     <view class="right dandan" style="background-color: #5CC9F5;">
       <view class="title">需要推送提醒你记账吗？</view>

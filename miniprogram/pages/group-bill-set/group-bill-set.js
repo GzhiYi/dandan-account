@@ -6,15 +6,15 @@ Page({
    * 页面的初始数据
    */
   data: {
+    startDate: '',
     endDate: '',
-    money: null,
-    startmoney: null,
     name: '',
     minEndDate: parseTime(new Date().getTime() + (86400000 * 2), '{y}-{m}-{d}'),
   },
   bindDateChange(event) {
+    const { key } = event.currentTarget.dataset
     this.setData({
-      endDate: event.detail.value,
+      [`${key}`]: event.detail.value,
     })
   },
   onInput(event) {
@@ -23,20 +23,12 @@ Page({
     })
   },
   checkParams() {
-    const {
-      name, startmoney, money, endDate,
-    } = this.data
+    const { name, startDate } = this.data
     let errMsg = ''
     if (!name) {
-      errMsg = '输入目标名'
-    } else if (!endDate) {
-      errMsg = '选择目标的结束日吧'
-    } else if (!startmoney) {
-      errMsg = '要输入初始金额哦'
-    } else if (!money) {
-      errMsg = '要输入目标金额哦'
-    } else if (Number(money) <= Number(startmoney)) {
-      errMsg = '初始金额不能大于目标金额'
+      errMsg = '输入组名'
+    } else if (!startDate) {
+      errMsg = '选择组账单开始时间'
     }
     if (errMsg) {
       wx.showToast({
@@ -51,37 +43,35 @@ Page({
     // 验证下数据
     const {
       name,
-      money,
-      startmoney,
+      startDate,
       endDate,
     } = this.data
     if (this.checkParams()) {
       // 通过
       wx.cloud.callFunction({
-        name: 'target',
+        name: 'groupbill',
         data: {
           mode: 'add',
-          startMoney: Number(String(startmoney).replace(/\b(0+)/gi, '')),
-          targetMoney: Number(String(money).replace(/\b(0+)/gi, '')),
           name,
+          startDate,
           endDate,
         },
         success(res) {
           if (res.result.code === 1) {
             wx.showToast({
-              title: '目标创建成功',
+              title: '账单组创建成功',
               icon: 'none',
             })
             setTimeout(() => {
               wx.navigateTo({
-                url: '/pages/target/target',
+                url: '/pages/group/group',
               })
             }, 1500)
           }
         },
         fail() {
           wx.showToast({
-            title: '目标创建失败，再试试？',
+            title: '账单组创建失败，再试试？',
             icon: 'none',
           })
         },
@@ -89,11 +79,5 @@ Page({
         },
       })
     }
-  },
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage() {
-
   },
 })

@@ -1,0 +1,18 @@
+<nav class="nav-instance" showIcons="{{['back']}}" my-class="nav-style"></nav>
+
+<view class="logo">
+  <image style="width: 200rpx;height: 200px;" src="../../images/{{picName}}.png" mode="widthFix"></image>
+  <text class="group-name">{{groupInfo.name}}</text>
+</view>
+<view class="content">
+  <text style="font-size: 42rpx;font-weight: bold;margin-bottom: 50rpx;">邀请一起记账</text>
+  <view class="user-list">
+    <view class="empty-list">
+      同意邀请的用户会出现在这噢！
+    </view>
+  </view>
+  <view style="display: flex;justify-content: center;position: relative;">
+    <view class="invite">邀请</view>
+    <button open-type="share" class="hide-share"></button>
+  </view>
+</view>

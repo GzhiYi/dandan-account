@@ -1,0 +1,50 @@
+page {
+  background-color: #fff;
+}
+.logo {
+  padding: 80rpx 0;
+  text-align: center;
+  background-color: #7571e015;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 0 0 42rpx 42rpx;
+  margin-bottom: 50rpx;
+}
+.logo image {
+  margin-bottom: 32rpx;
+}
+.nav-style {
+  background-color: #7571e015;
+}
+.group-name {
+  font-size: 50rpx;
+  font-weight: bold;
+}
+.content {
+  padding: 0 24rpx;
+}
+.invite {
+  color: #fff;
+  border-radius: 9999rpx;
+  background-color: #89D02C;
+  padding: 40rpx;
+  width: 64rpx;
+  height: 64rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 10px 20px 0 rgba(33, 35, 41, .12);
+}
+.empty-list {
+  color: #909399;
+  font-size: 28rpx;
+  padding: 140rpx 0;
+  text-align: center;
+}
+.hide-share {
+  position: absolute;
+  width: 200rpx;
+  height: 200rpx;
+  opacity: 0;
+}

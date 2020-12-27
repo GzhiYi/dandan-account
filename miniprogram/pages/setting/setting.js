@@ -153,7 +153,7 @@ Page({
   },
   goToGroupBill() {
     wx.navigateTo({
-      url: '/pages/group-bill/group-bill',
+      url: '/pages/group-bill-set/group-bill-set',
     })
   },
 })

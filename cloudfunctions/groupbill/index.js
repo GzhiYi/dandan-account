@@ -16,6 +16,7 @@ exports.main = async (event) => {
     startDate,
     endDate,
     name,
+    groupId,
   } = event;
   cloud.updateConfig({
     env: wxContext.ENV === 'local' ? 'release-wifo3' : wxContext.ENV,
@@ -43,9 +44,13 @@ exports.main = async (event) => {
     }
     // 获取组信息
     if (event.mode === 'get') {
-      const res = await db.collection('SHARE').where({
+      const query = {
         createdBy: wxContext.OPENID,
-      }).get();
+      }
+      if (groupId) {
+        query._id = groupId
+      }
+      const res = await db.collection('SHARE').where(query).get();
       return {
         code: 1,
         data: res.data instanceof Array ? res.data[0] : null,

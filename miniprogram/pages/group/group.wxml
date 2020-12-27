@@ -3,16 +3,37 @@
 <view class="logo">
   <image style="width: 200rpx;height: 200px;" src="../../images/{{picName}}.png" mode="widthFix"></image>
   <text class="group-name">{{groupInfo.name}}</text>
+  <view class="basic-info">
+    <view class="info-item">开始时间：{{groupInfo.startDate}}</view>
+  </view>
 </view>
-<view class="content">
+<view class="content" wx:if="{{!groupId}}">
   <text style="font-size: 42rpx;font-weight: bold;margin-bottom: 50rpx;">邀请一起记账</text>
+  <view class="user-list">
+    <view class="empty-list">
+      同意邀请的用户会出现在这噢！所有能打开链接的用户均能同意加入组内，建议私发。
+    </view>
+  </view>
+  <view style="display: flex;">
+    <view style="display: flex;justify-content: center;position: relative;">
+      <view class="invite">邀请</view>
+      <button open-type="share" class="hide-share"></button>
+    </view>
+    <view style="display: flex;justify-content: center;position: relative;">
+      <view style="backgroud-color: #7571e015;">开启</view>
+    </view>
+  </view>
+  
+</view>
+<view class="content" wx:if="{{groupId}}">
+  <text style="font-size: 42rpx;font-weight: bold;margin-bottom: 50rpx;">要与Ta一起记账吗？</text>
   <view class="user-list">
     <view class="empty-list">
       同意邀请的用户会出现在这噢！
     </view>
   </view>
   <view style="display: flex;justify-content: center;position: relative;">
-    <view class="invite">邀请</view>
+    <view class="go">立即加入</view>
     <button open-type="share" class="hide-share"></button>
   </view>
 </view>

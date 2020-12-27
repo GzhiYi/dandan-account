@@ -36,6 +36,17 @@ page {
   align-items: center;
   box-shadow: 0 10px 20px 0 rgba(33, 35, 41, .12);
 }
+.go {
+  color: #fff;
+  border-radius: 16rpx;
+  background-color: #89D02C;
+  padding: 10rpx 40rpx;
+  height: 64rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 10px 20px 0 rgba(33, 35, 41, .12);
+}
 .empty-list {
   color: #909399;
   font-size: 28rpx;

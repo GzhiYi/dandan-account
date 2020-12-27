@@ -8,13 +8,20 @@ Page({
     groupInfo: {},
     picName: 'group1',
     timer: null,
+    groupId: null, // 这个groupId用于判断是否链接上带有
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad() {
-    this.getGroup()
+  onLoad(options) {
+    const { groupId } = options
+    if (groupId) {
+      this.setData({
+        groupId: options.groupId,
+      })
+    }
+    this.getGroup(groupId)
     this.scrollBanner()
   },
 
@@ -73,13 +80,20 @@ Page({
       timer: newTimer,
     })
   },
-  getGroup() {
+  getGroup(groupId = null) {
     const self = this
+    const data = {
+      mode: 'get',
+    }
+    if (groupId) {
+      data.groupId = groupId
+    }
+    wx.showLoading({
+      title: '加载中...',
+    })
     wx.cloud.callFunction({
       name: 'groupbill',
-      data: {
-        mode: 'get',
-      },
+      data,
       success(res) {
         if (res.result.code === 1) {
           self.setData({
@@ -87,12 +101,17 @@ Page({
           })
         }
       },
+      complete() {
+        wx.hideLoading()
+      },
     })
   },
   onShareAppMessage() {
+    const { _id } = this.data.groupInfo
+    console.log('log', `/pages/group/group?groupId=${_id}`)
     return {
       title: '来来来，这里可以一起记账！',
-      path: '/pages/tab/tab',
+      path: `/pages/group/group?groupId=${_id}`,
     }
   },
 })

@@ -1,6 +1,8 @@
 import { debounce } from '../../util'
 
-Page({
+const { importStore } = getApp()
+const { create, store } = importStore
+create.Page(store, {
   data: {
     canSubscribe: false,
     status: null,
@@ -152,8 +154,15 @@ Page({
     })
   },
   goToGroupBill() {
-    wx.navigateTo({
-      url: '/pages/group-bill-set/group-bill-set',
-    })
+    const { myGroup } = store.data
+    if (myGroup._id) {
+      wx.navigateTo({
+        url: '/pages/group/group',
+      })
+    } else {
+      wx.navigateTo({
+        url: '/pages/group-bill-set/group-bill-set',
+      })
+    }
   },
 })

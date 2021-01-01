@@ -80,3 +80,6 @@
 .text-default-dim2 {
   color: #909399;
 }
+.flex-wrap {
+  flex-wrap: wrap;
+}

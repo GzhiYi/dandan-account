@@ -11,7 +11,7 @@
         <image class="creator shadow rounded-full mr-2" src="{{fakeUserInfo.avatarUrl}}" mode="widthFix"></image>
         <view class="flex flex-col">
           <text class="text-t26">{{fakeUserInfo.nickName}}</text>
-          <text class="text-t22 text-default-dim2">组记账开始于：{{groupInfo.startDate}}</text>
+          <text class="text-t22 text-default-dim2">共享的账单日期开始于：{{groupInfo.startDate}}</text>
         </view>
       </view>
     </view>
@@ -20,8 +20,17 @@
 <view class="content" wx:if="{{!groupId}}">
   <text style="font-size: 42rpx;font-weight: bold;margin-bottom: 50rpx;">邀请一起记账</text>
   <view class="user-list">
+    <view class="flex flex-wrap" style="padding: 20rpx 0;">
+      <view class="flex flex-col items-center" style="margin: 0 10rpx;" wx:for="{{groupInfo.relateUsers}}" :key="_id">
+        <image class="rounded-full" style="width: 80rpx;height: 80rpx;" src="{{item.avatarUrl}}" mode="widthFix"></image>
+        <text class="text-t24 text-default-dim2 user-name">{{item.nickName}}</text>
+        <view class="text-t24 confirm-btn" wx:if="{{index !== 0 && !item.valid}}" bindtap="onShowConfirmDialog" data-user="{{item}}">确认</view>
+        <view class="text-t24 confirmed-btn" wx:if="{{index !== 0 && item.valid}}">已确认</view>
+        <view class="text-t24 text-default-dim2q" wx:if="{{index === 0}}">自己</view>
+      </view>
+    </view>
     <view class="empty-list">
-      同意邀请的用户会出现在这噢！所有能打开链接的用户均能同意加入组内，建议私发。
+      <text>同意邀请的用户会出现在这噢！所有能打开链接的用户均能同意加入组内，建议私发。接受邀请的用户需要你确认加入才算最终完成。</text>
     </view>
   </view>
   <view class="flex justify-center">
@@ -32,8 +41,8 @@
   </view>
   
 </view>
-<view class="content" wx:if="{{groupId}}">
-  <text style="font-size: 21px;font-weight: bold;margin-bottom: 9px;display: inline-block;">要与Ta一起记账吗？</text>
+<view class="content" wx:if="{{groupId && !isInGroup}}">
+  <text style="font-size: 21px;font-weight: bold;margin-bottom: 9px;display: inline-block;">设置头像和昵称，与Ta一起记账吧～</text>
   <view class="fake-info">
     <view class="relative" bindtap="changeAvatar">
       <image class="dices absolute right-0 top-0" src="../../images/dices.png" mode="widthFix"></image>
@@ -47,7 +56,26 @@
     为了让对方验证你的身份，填写Ta熟悉的名称吧～
   </view>
   <view style="display: flex;justify-content: center;position: relative;">
-    <view class="go">立即加入</view>
-    <button open-type="share" class="hide-share"></button>
+    <view class="go" bindtap="confirmIn">立即加入</view>
   </view>
 </view>
+<view class="content" wx:if="{{isInGroup && groupId}}">
+  <text style="font-size: 21px;font-weight: bold;margin-bottom: 9px;display: inline-block;">你已在该组啦</text>
+  <view class="tip">
+    如果还没看到关联的账单，则等候Ta通过申请即可。
+  </view>
+</view>
+
+<dialog visible="{{showConfirmDialog}}" bind:closeDialog="closeDialog">
+  <view slot="content">
+    <view class="pop-indicator"></view>
+    <view class="d-header">确认加入提示</view>
+    <view class="danger-text" style="text-align: center;padding: 40rpx 0;">
+      同意之后，账单将会进行共享，请注意确认该用户是否为你邀请的用户。
+    </view>
+    <view class='list-item-btn' style="color: #4fd69c;" bindtap="confirmJoin" >
+      确认
+    </view>
+    <view class='list-item-btn' bindtap="closeDialog" style="border-bottom: none;">取消</view>
+  </view>
+</dialog>

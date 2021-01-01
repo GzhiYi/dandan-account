@@ -41,10 +41,23 @@ page {
   align-items: center;
   box-shadow: 0 10px 20px 0 rgba(33, 35, 41, .12);
 }
+.confirm-btn {
+  color: #fff;
+  border-radius: 16rpx;
+  background-color: #89D02C;
+  padding: 2rpx 8rpx;
+  box-shadow: 0 10px 20px 0 rgba(33, 35, 41, .12);
+}
+.confirmed-btn {
+  color: #828282;
+  border-radius: 16rpx;
+  background-color: #ebeef5;
+  padding: 2rpx 8rpx;
+}
 .empty-list {
   color: #909399;
   font-size: 28rpx;
-  padding: 140rpx 0;
+  padding: 80rpx 0;
   text-align: center;
 }
 .hide-share {
@@ -98,4 +111,12 @@ page {
   background-color: #f0f9eb;
   color: #67c23a;
   margin: 20rpx auto 102rpx;
+}
+.user-name {
+  max-width: 106rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: keep-all;
+  white-space: nowrap;
+  margin: 5rpx 0 12rpx;
 }

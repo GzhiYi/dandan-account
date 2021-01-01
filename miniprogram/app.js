@@ -32,6 +32,8 @@ App({
 
     // 获取用户是否有设置目标
     this.checkHasTarget()
+    // 获取用户是否有设置目标
+    this.checkHasGroup()
 
     // 如果开启过小程序，则跳到onBoarding页面
     const isOnboarding = wx.getStorageSync('isOnboarding')
@@ -81,6 +83,21 @@ App({
         if (res.result.code === 1) {
           // eslint-disable-next-line prefer-destructuring
           store.data.myTarget = res.result.data[0]
+        }
+      },
+    })
+  },
+  // 检查是否已经设置了目标
+  checkHasGroup() {
+    wx.cloud.callFunction({
+      name: 'groupbill',
+      data: {
+        mode: 'check',
+      },
+      success(res) {
+        if (res.result.code === 1) {
+          // eslint-disable-next-line prefer-destructuring
+          store.data.myGroup = Array.isArray(res.result.data) && res.result.data.length ? res.result.data[0] : {}
         }
       },
     })

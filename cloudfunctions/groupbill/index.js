@@ -17,6 +17,9 @@ exports.main = async (event) => {
     endDate,
     name,
     groupId,
+    nickName,
+    avatarUrl,
+    fakeUserId,
   } = event;
   cloud.updateConfig({
     env: wxContext.ENV === 'local' ? 'release-wifo3' : wxContext.ENV,
@@ -25,6 +28,15 @@ exports.main = async (event) => {
   try {
     // 增加一条记录
     if (event.mode === 'add') {
+      // 在增加组之前，需要新建一下组的用户信息
+      const gUserRes = await db.collection('SHARE_USERS').add({
+        data: {
+          nickName,
+          avatarUrl,
+          createTime: db.serverDate(),
+          createdBy: wxContext.OPENID,
+        },
+      })
       const res = await db.collection('SHARE').add({
         data: {
           startDate,
@@ -32,6 +44,7 @@ exports.main = async (event) => {
           name,
           createTime: db.serverDate(),
           createdBy: wxContext.OPENID,
+          createdByFakeUser: gUserRes._id,
           isDel: false,
           isStart: false,
         },
@@ -42,13 +55,24 @@ exports.main = async (event) => {
         message: '操作成功',
       };
     }
-    // 获取组信息
-    if (event.mode === 'get') {
+    if (event.mode === 'getFakeUserInfo') {
       const query = {
-        createdBy: wxContext.OPENID,
+        _id: fakeUserId,
       }
+      const res = await db.collection('SHARE_USERS').where(query).get()
+      return {
+        code: 1,
+        data: res.data instanceof Array ? res.data[0] : null,
+        message: '操作成功',
+      };
+    }
+    // 获取组信息
+    if (event.mode === 'getGroupInfo') {
+      const query = {}
       if (groupId) {
         query._id = groupId
+      } else {
+        query.createdBy = wxContext.OPENID
       }
       const res = await db.collection('SHARE').where(query).get();
       return {

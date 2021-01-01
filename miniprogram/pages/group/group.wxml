@@ -1,10 +1,20 @@
 <nav class="nav-instance" showIcons="{{['back']}}" my-class="nav-style"></nav>
 
-<view class="logo">
-  <image style="width: 200rpx;height: 200px;" src="../../images/{{picName}}.png" mode="widthFix"></image>
-  <text class="group-name">{{groupInfo.name}}</text>
+<view class="logo relative">
+  <view class="flex flex-col items-center">
+    <image class="banner-logo" style="width: 200rpx;height: 200px;" src="../../images/{{picName}}.png" mode="widthFix"></image>
+    <text class="group-name">{{groupInfo.name}}</text>
+  </view>
   <view class="basic-info">
-    <view class="info-item">开始时间：{{groupInfo.startDate}}</view>
+    <view class="info-item">
+      <view class="flex items-center" wx:if="{{fakeUserInfo.nickName}}">
+        <image class="creator shadow rounded-full mr-2" src="{{fakeUserInfo.avatarUrl}}" mode="widthFix"></image>
+        <view class="flex flex-col">
+          <text class="text-t26">{{fakeUserInfo.nickName}}</text>
+          <text class="text-t22 text-default-dim2">组记账开始于：{{groupInfo.startDate}}</text>
+        </view>
+      </view>
+    </view>
   </view>
 </view>
 <view class="content" wx:if="{{!groupId}}">
@@ -14,23 +24,27 @@
       同意邀请的用户会出现在这噢！所有能打开链接的用户均能同意加入组内，建议私发。
     </view>
   </view>
-  <view style="display: flex;">
+  <view class="flex justify-center">
     <view style="display: flex;justify-content: center;position: relative;">
       <view class="invite">邀请</view>
       <button open-type="share" class="hide-share"></button>
-    </view>
-    <view style="display: flex;justify-content: center;position: relative;">
-      <view style="backgroud-color: #7571e015;">开启</view>
     </view>
   </view>
   
 </view>
 <view class="content" wx:if="{{groupId}}">
-  <text style="font-size: 42rpx;font-weight: bold;margin-bottom: 50rpx;">要与Ta一起记账吗？</text>
-  <view class="user-list">
-    <view class="empty-list">
-      同意邀请的用户会出现在这噢！
+  <text style="font-size: 21px;font-weight: bold;margin-bottom: 9px;display: inline-block;">要与Ta一起记账吗？</text>
+  <view class="fake-info">
+    <view class="relative" bindtap="changeAvatar">
+      <image class="dices absolute right-0 top-0" src="../../images/dices.png" mode="widthFix"></image>
+      <image class="shadow rounded-full avatar" src="{{randomAvatar}}" mode="widthFix"></image>
     </view>
+    <view class="required">
+      <input qtype="text" placeholder="点击填写昵称"  bindinput="onInput" data-target="nickName" />
+    </view>
+  </view>
+  <view class="tip">
+    为了让对方验证你的身份，填写Ta熟悉的名称吧～
   </view>
   <view style="display: flex;justify-content: center;position: relative;">
     <view class="go">立即加入</view>

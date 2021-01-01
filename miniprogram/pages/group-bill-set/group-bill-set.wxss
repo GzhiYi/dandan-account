@@ -34,7 +34,7 @@ page {
 .money {
   background-color: #fff;
   height: 80vh;
-  border-radius: 60rpx;
+  border-radius: 60rpx 60rpx 0 0;
   padding-top: 60rpx;
 }
 
@@ -69,8 +69,35 @@ page {
   top: -100rpx;
   z-index: -2;
 }
+.required {
+  display: flex;
+}
 .required::before {
   content: '*';
   color: #F778AF;
   margin-right: 4rpx;
+}
+.fake-info {
+  display: flex;
+  flex-direction: column;
+  width: 200rpx;
+  align-items: center;
+  margin: 0 auto;
+}
+.fake-info image {
+  width: 150rpx;
+  height: 150rpx;
+  margin-bottom: 8rpx;
+}
+.fake-info input {
+  font-size: 26qrpx;
+  width: 220rpx;
+  margin: 0 auto;
+  text-align: center;
+  border-bottom: 1rpx solid #9D9D9F;
+  padding: 12rpx 0;
+}
+.fake-info .dices {
+  width: 32rpx;
+  height: 32rpx;
 }

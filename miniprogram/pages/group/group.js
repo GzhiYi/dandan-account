@@ -9,11 +9,10 @@ Page({
     picName: 'group1',
     timer: null,
     groupId: null, // 这个groupId用于判断是否链接上带有
+    fakeUserInfo: {},
+    randomAvatar: `https://api.multiavatar.com/${Math.ceil(Math.random() * 12230590464)}.svg`,
+    nickName: '',
   },
-
-  /**
-   * 生命周期函数--监听页面加载
-   */
   onLoad(options) {
     const { groupId } = options
     if (groupId) {
@@ -24,49 +23,15 @@ Page({
     this.getGroup(groupId)
     this.scrollBanner()
   },
-
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady() {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow() {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide() {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
   onUnload() {
     this.setData({
       timer: null,
     })
   },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh() {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom() {
-
+  changeAvatar() {
+    this.setData({
+      randomAvatar: `https://api.multiavatar.com/${Math.ceil(Math.random() * 12230590464)}.svg`,
+    })
   },
   scrollBanner() {
     const self = this
@@ -83,7 +48,7 @@ Page({
   getGroup(groupId = null) {
     const self = this
     const data = {
-      mode: 'get',
+      mode: 'getGroupInfo',
     }
     if (groupId) {
       data.groupId = groupId
@@ -98,6 +63,21 @@ Page({
         if (res.result.code === 1) {
           self.setData({
             groupInfo: res.result.data,
+          })
+          // 在获取到用户信息之后，再获取组长信息
+          wx.cloud.callFunction({
+            name: 'groupbill',
+            data: {
+              mode: 'getFakeUserInfo',
+              fakeUserId: res.result.data.createdByFakeUser,
+            },
+            success(inRes) {
+              if (inRes.result.code === 1) {
+                self.setData({
+                  fakeUserInfo: inRes.result.data,
+                })
+              }
+            },
           })
         }
       },

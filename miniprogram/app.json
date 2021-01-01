@@ -1,8 +1,8 @@
 {
   "pages": [
-    "pages/group/group",
     "pages/tab/tab",
     "pages/group-bill-set/group-bill-set",
+    "pages/group/group",
     "pages/target-set/target-set",
     "pages/setting/setting",
     "pages/target/target",

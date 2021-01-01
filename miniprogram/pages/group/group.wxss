@@ -2,17 +2,10 @@ page {
   background-color: #fff;
 }
 .logo {
-  padding: 80rpx 0;
-  text-align: center;
+  padding: 80rpx 0 20rpx;
   background-color: #7571e015;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   border-radius: 0 0 42rpx 42rpx;
-  margin-bottom: 50rpx;
-}
-.logo image {
-  margin-bottom: 32rpx;
+  margin-bottom: 20rpx;
 }
 .nav-style {
   background-color: #7571e015;
@@ -20,6 +13,7 @@ page {
 .group-name {
   font-size: 50rpx;
   font-weight: bold;
+  margin-bottom: 24rpx;
 }
 .content {
   padding: 0 24rpx;
@@ -58,4 +52,50 @@ page {
   width: 200rpx;
   height: 200rpx;
   opacity: 0;
+}
+.creator {
+  height: 76rpx;
+  width: 76rpx;
+}
+.info-item {
+  padding-left: 26rpx;
+}
+.fake-info {
+  display: flex;
+  flex-direction: column;
+  width: 200rpx;
+  align-items: center;
+  margin: 0 auto;
+}
+
+.fake-info .avatar {
+  width: 150rpx;
+  height: 150rpx;
+  margin-bottom: 22rpx;
+}
+
+.fake-info .dices {
+  width: 32rpx;
+  height: 32rpx;
+}
+
+.fake-info input {
+  font-size: 26qrpx;
+  width: 220rpx;
+  margin: 0 auto;
+  text-align: center;
+  border-bottom: 1rpx solid #ebeef5;
+  margin-bottom: 8rpx;
+  padding: 12rpx 0;
+}
+.tip {
+  font-size: 26rpx;
+  padding: 24rpx;
+  text-align: center;
+  width: fit-content;
+  margin: 0 auto;
+  border-radius: 19rpx;
+  background-color: #f0f9eb;
+  color: #67c23a;
+  margin: 20rpx auto 102rpx;
 }

@@ -12,6 +12,15 @@ module.exports.formatDate =  formatDate;
 <view class="target-set">
   <view class="title base-padding">创建记账组</view>
   <view class="form">
+    <view class="fake-info">
+      <view class="relative" bindtap="changeAvatar">
+        <image class="dices absolute right-0 top-0" src="../../images/dices.png" mode="widthFix"></image>
+        <image class="shadow rounded-full" src="{{randomAvatar}}" mode="widthFix"></image>
+      </view>
+      <view class="required">
+        <input qtype="text" placeholder="点击填写昵称"  bindinput="onInput" data-target="nickName" />
+      </view>
+    </view>
     <view class="form-item base-padding">
       <view class="form-label required">组名</view>
       <view class="form-input">
@@ -40,7 +49,7 @@ module.exports.formatDate =  formatDate;
         <text class="tip" style="font-size: 25rpx;color: #B4B4B6;">1. 当前版本只提供单个组账单的创建。\n</text>
         <text class="tip" style="font-size: 25rpx;color: #B4B4B6;">2. 组成员可以随时退出。\n</text>
         <text class="tip" style="font-size: 25rpx;color: #B4B4B6;">3. 如果未填写组账单结束日期，则会将组开始时间之后的所有账单（标记未入组内账单除外）进行组内共享。\n</text>
-        <text class="tip" style="font-size: 25rpx;color: #B4B4B6;">4. 因为单单没有记录用户的身份信息，所以需要仔细确定邀请的好友是目标的人噢。\n</text>
+        <text class="tip" style="font-size: 25rpx;color: #B4B4B6;">4. 单单不会主动获取微信授权的用户身份信息，但为了辨别邀请的用户是否为目标用户，需要设置一个用户名和头像（完全自定义）～\n</text>
       </view>
       <view class="create" bindtap="confirm">创建</view>
     </view>

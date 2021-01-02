@@ -30,6 +30,18 @@ page {
   align-items: center;
   box-shadow: 0 10px 20px 0 rgba(33, 35, 41, .12);
 }
+.danger {
+  color: #fff;
+  border-radius: 9999rpx;
+  background-color: #f75676;
+  padding: 40rpx;
+  width: 64rpx;
+  height: 64rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 10px 20px 0 rgba(33, 35, 41, .12);
+}
 .go {
   color: #fff;
   border-radius: 16rpx;

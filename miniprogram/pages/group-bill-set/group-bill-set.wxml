@@ -15,7 +15,7 @@ module.exports.formatDate =  formatDate;
     <view class="fake-info">
       <view class="relative" bindtap="changeAvatar">
         <image class="dices absolute right-0 top-0" src="../../images/dices.png" mode="widthFix"></image>
-        <image class="shadow rounded-full" src="{{randomAvatar}}" mode="widthFix"></image>
+        <image class="shadow rounded-full bg-white" src="{{randomAvatar}}" mode="widthFix"></image>
       </view>
       <view class="required">
         <input qtype="text" placeholder="点击填写昵称"  bindinput="onInput" data-target="nickName" />

@@ -76,10 +76,11 @@ Page({
               icon: 'none',
             })
             setTimeout(() => {
-              wx.navigateTo({
+              wx.redirectTo({
                 url: '/pages/group/group',
               })
             }, 1500)
+            getApp().checkHasGroup()
           }
         },
         fail() {

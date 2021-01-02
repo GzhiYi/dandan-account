@@ -83,3 +83,6 @@
 .flex-wrap {
   flex-wrap: wrap;
 }
+.bg-white {
+  background-color: #fff;
+}

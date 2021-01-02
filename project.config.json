@@ -62,7 +62,13 @@
         {
           "name": "pages/group/group",
           "pathName": "pages/group/group",
-          "query": "groupId=9f2a34705feedc4301259e1c7b56f29a",
+          "query": "groupId=98bb04175fefe0fb00fb02245ef3b0c9",
+          "scene": null
+        },
+        {
+          "name": "没有参数的group",
+          "pathName": "pages/group/group",
+          "query": "",
           "scene": null
         }
       ]

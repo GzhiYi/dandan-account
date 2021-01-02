@@ -2,7 +2,6 @@
 const cloud = require('wx-server-sdk')
 
 cloud.init()
-
 // 云函数入口函数
 exports.main = async (event) => {
   const wxContext = cloud.getWXContext()
@@ -10,6 +9,7 @@ exports.main = async (event) => {
   const db = cloud.database({
     env: wxContext.ENV === 'local' ? 'release-wifo3' : wxContext.ENV,
   })
+  const _ = db.command;
 
   const {
     startDate,
@@ -95,6 +95,7 @@ exports.main = async (event) => {
         ...user,
         ...final[index].data[0],
       }))
+      resData.isMyGroup = resData.createdBy === wxContext.OPENID
       if (resData) {
         matchUser = resData.relateUsers.filter((item) => item.openId === wxContext.OPENID)
         if (matchUser.length) {
@@ -106,7 +107,7 @@ exports.main = async (event) => {
         }
       }
       return {
-        code: resData.relateUsers.includes(wxContext.OPENID),
+        code: 1,
         data: res.data instanceof Array ? resData : null,
         message: '操作成功',
       };
@@ -114,9 +115,10 @@ exports.main = async (event) => {
     // 检查是否已经有创建组了
     if (event.mode === 'check') {
       const res = await db.collection('SHARE').where({
-        createdBy: wxContext.OPENID,
+        'relateUsers.openId': _.in([wxContext.OPENID]),
         isDel: false,
       }).get()
+      res.data[0].isMyGroup = res.data[0].createdBy === wxContext.OPENID
       return {
         code: 1,
         data: res.data,
@@ -125,20 +127,29 @@ exports.main = async (event) => {
     }
     // 确定加入组内
     if (event.mode === 'join') {
-      // TODO 判断是否已加入该组。判断是否为本人加入该组。
-      // 在加入组内之前，需要在组用户上添加一条记录
-      const gUserRes = await db.collection('SHARE_USERS').add({
-        data: {
-          nickName,
-          avatarUrl,
-          createTime: db.serverDate(),
-          createdBy: wxContext.OPENID,
-        },
-      })
+      const userRes = await db.collection('SHARE_USERS').where({
+        createdBy: wxContext.OPENID,
+      }).get()
+      let gUserRes = null
+      if (!userRes.data.length) {
+        // 在加入组内之前，需要在组用户上添加一条记录
+        gUserRes = await db.collection('SHARE_USERS').add({
+          data: {
+            nickName,
+            avatarUrl,
+            createTime: db.serverDate(),
+            createdBy: wxContext.OPENID,
+          },
+        })
+      } else {
+        // eslint-disable-next-line prefer-destructuring
+        gUserRes = userRes.data[0]
+      }
       // 更新该组关联用户的表信息
       // 获取旧的组信息
       const groupInfo = await db.collection('SHARE').where({
         _id: joinGroupId,
+        isDel: false,
       }).get();
       const oldRelateUsers = groupInfo.data[0].relateUsers
       oldRelateUsers.push({
@@ -147,6 +158,31 @@ exports.main = async (event) => {
         valid: false, // 是否已同意申请，由于是创建者，所以默认为true，只有同意了进组才可以关联账单
       })
       const res = await db.collection('SHARE').doc(joinGroupId).update({
+        data: {
+          relateUsers: oldRelateUsers,
+        },
+      })
+      return {
+        code: 1,
+        data: res.data instanceof Array ? res.data[0] : null,
+        message: '操作成功',
+      };
+    }
+    // 组长确认加入成员进入组内
+    if (event.mode === 'confirmAdd') {
+      // 获取旧的组信息
+      const groupInfo = await db.collection('SHARE').where({
+        _id: groupId,
+        isDel: false,
+      }).get();
+      const oldRelateUsers = groupInfo.data[0].relateUsers
+      oldRelateUsers.forEach((user) => {
+        if (user.userId === fakeUserId) {
+          user.valid = true
+        }
+      })
+      // 修改目标用户的valid为true
+      const res = await db.collection('SHARE').doc(groupId).update({
         data: {
           relateUsers: oldRelateUsers,
         },

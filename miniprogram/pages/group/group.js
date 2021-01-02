@@ -1,5 +1,6 @@
-// miniprogram/pages/group/group.js
-Page({
+const { importStore } = getApp()
+const { create, store } = importStore
+create.Page(store, {
 
   /**
    * 页面的初始数据
@@ -15,6 +16,7 @@ Page({
     isInGroup: false, // 是否已经加入了该组
     showConfirmDialog: false,
     confirmTarget: {},
+    loadingAdd: false,
   },
   onLoad(options) {
     const { groupId } = options
@@ -23,7 +25,8 @@ Page({
         groupId: options.groupId,
       })
     }
-    this.getGroup(groupId)
+    const { myGroup } = store.data
+    this.getGroup(groupId || myGroup._id)
     this.scrollBanner()
   },
   onUnload() {
@@ -59,8 +62,35 @@ Page({
       showConfirmDialog: true,
     })
   },
+  // 确认用户加入组内
   confirmJoin() {
-    this.closeDialog()
+    const self = this
+    wx.cloud.callFunction({
+      name: 'groupbill',
+      data: {
+        mode: 'confirmAdd',
+        fakeUserId: self.data.confirmTarget._id,
+        groupId: self.data.groupInfo._id,
+      },
+      success(res) {
+        if (res.result.code === 1) {
+          wx.showToast({
+            title: '已同意',
+            icon: 'none',
+          })
+          self.getGroup(self.data.groupInfo._id)
+        }
+      },
+      fail() {
+        wx.showToast({
+          title: '操作失败，请重试或客服联系',
+          icon: 'none',
+        })
+      },
+      complete() {
+        self.closeDialog()
+      },
+    })
   },
   setGroupInfo(groupInfo) {
     const self = this
@@ -121,6 +151,7 @@ Page({
   },
   onShareAppMessage() {
     const { _id } = this.data.groupInfo
+    console.log('分享的组id', _id)
     return {
       title: '来来来，这里可以一起记账！',
       path: `/pages/group/group?groupId=${_id}`,
@@ -150,6 +181,9 @@ Page({
       })
       return
     }
+    self.setData({
+      loadingAdd: true,
+    })
     wx.cloud.callFunction({
       name: 'groupbill',
       data: {
@@ -159,13 +193,23 @@ Page({
         joinGroupId: _id,
       },
       success(res) {
-        if (res.data.code === 1) {
+        if (res.result.code === 1) {
           wx.showToast({
-            title: '加入该组成功，通过Ta通过审核之后将自动开启一起记账',
+            title: '加入该组成功，在Ta通过审核之后将自动开启一起记账',
             icon: 'none',
           })
-          this.getGroup()
+          self.getGroup(self.data.groupInfo._id)
+        } else {
+          wx.showToast({
+            title: '加入组失败，请重试或联系客服。',
+            icon: 'none',
+          })
         }
+      },
+      complete() {
+        self.setData({
+          loadingAdd: false,
+        })
       },
     })
   },

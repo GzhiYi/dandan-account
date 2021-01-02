@@ -19,6 +19,9 @@ create.Page(store, {
     }
     this.getUserSucscribeStatus()
   },
+  onShow() {
+    getApp().checkHasGroup()
+  },
   changeNotify: debounce(function () {
     const self = this
     const {

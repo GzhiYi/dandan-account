@@ -118,12 +118,46 @@ exports.main = async (event) => {
         'relateUsers.openId': _.in([wxContext.OPENID]),
         isDel: false,
       }).get()
-      res.data[0].isMyGroup = res.data[0].createdBy === wxContext.OPENID
+      if (res.data && res.data[0]) {
+        res.data[0].isMyGroup = res.data[0].createdBy === wxContext.OPENID
+      }
       return {
         code: 1,
         data: res.data,
         message: '操作成功',
       };
+    }
+    if (event.mode === 'delete') {
+      const res = await db.collection('SHARE').doc(groupId).update({
+        data: {
+          isDel: true,
+        },
+      });
+      return {
+        code: 1,
+        data: res.data,
+        message: '操作成功',
+      };
+    }
+    // 离开组，并不是删除组
+    if (event.mode === 'drop') {
+      const groupInfo = await db.collection('SHARE').where({
+        _id: groupId,
+        isDel: false,
+      }).get();
+      const oldRelateUsers = groupInfo.data[0].relateUsers
+      // 找出不是该openId的userlist
+      const newRelateUsers = oldRelateUsers.filter((user) => user.openId !== wxContext.OPENID)
+      const res = await db.collection('SHARE').doc(groupId).update({
+        data: {
+          relateUsers: newRelateUsers,
+        },
+      })
+      return {
+        code: 1,
+        data: res.data instanceof Array ? res.data[0] : null,
+        message: '操作成功',
+      }
     }
     // 确定加入组内
     if (event.mode === 'join') {

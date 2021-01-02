@@ -14,6 +14,7 @@
           <text class="text-t22 text-default-dim2">共享的账单日期开始于：{{groupInfo.startDate}}</text>
         </view>
       </view>
+      <text class="delete-btn" bindtap="onShowDeleteDialog">删除</text>
     </view>
   </view>
 </view>
@@ -43,7 +44,7 @@
 <view class="content" wx:if="{{!groupInfo.isMyGroup}}">
   <view class="flex justify-center">
     <view style="display: flex;justify-content: center;position: relative;">
-      <view class="danger">退出</view>
+      <view class="danger" bindtap="dropGroup">退出</view>
     </view>
   </view>
 </view>
@@ -81,6 +82,32 @@
       同意之后，账单将会进行共享，请注意确认该用户是否为你邀请的用户。
     </view>
     <view class='list-item-btn' style="color: #4fd69c;" bindtap="confirmJoin" >
+      确认
+    </view>
+    <view class='list-item-btn' bindtap="closeDialog" style="border-bottom: none;">取消</view>
+  </view>
+</dialog>
+<dialog visible="{{showLeaveDialog}}" bind:closeDialog="closeDialog">
+  <view slot="content">
+    <view class="pop-indicator"></view>
+    <view class="d-header">离开组提示</view>
+    <view class="danger-text" style="text-align: center;padding: 40rpx 0;">
+      确认离开该组吗？离开组后将可以自行创建组。
+    </view>
+    <view class='list-item-btn' style="color: #4fd69c;" bindtap="confirmDrop" >
+      确认
+    </view>
+    <view class='list-item-btn' bindtap="closeDialog" style="border-bottom: none;">取消</view>
+  </view>
+</dialog>
+<dialog visible="{{showDeleteDialog}}" bind:closeDialog="closeDialog">
+  <view slot="content">
+    <view class="pop-indicator"></view>
+    <view class="d-header">组删除提示</view>
+    <view class="danger-text" style="text-align: center;padding: 40rpx 0;">
+      确认删除该组吗？删除组后将可以自行创建组。
+    </view>
+    <view class='list-item-btn' style="color: #4fd69c;" bindtap="confirmDelete" >
       确认
     </view>
     <view class='list-item-btn' bindtap="closeDialog" style="border-bottom: none;">取消</view>

@@ -15,6 +15,8 @@ create.Page(store, {
     nickName: '',
     isInGroup: false, // 是否已经加入了该组
     showConfirmDialog: false,
+    showLeaveDialog: false,
+    showDeleteDialog: false,
     confirmTarget: {},
     loadingAdd: false,
   },
@@ -54,6 +56,8 @@ create.Page(store, {
   closeDialog() {
     this.setData({
       showConfirmDialog: false,
+      showLeaveDialog: false,
+      showDeleteDialog: false,
     })
   },
   onShowConfirmDialog(data) {
@@ -149,9 +153,63 @@ create.Page(store, {
       },
     })
   },
+  dropGroup() {
+    this.setData({
+      showLeaveDialog: true,
+    })
+  },
+  onShowDeleteDialog() {
+    this.setData({
+      showDeleteDialog: true,
+    })
+  },
+  confirmDelete() {
+    const { _id } = this.data.groupInfo
+    wx.cloud.callFunction({
+      name: 'groupbill',
+      data: {
+        mode: 'delete',
+        groupId: _id,
+      },
+      success(res) {
+        if (res.result.code === 1) {
+          wx.showToast({
+            title: '删除成功',
+            icon: 'none',
+          })
+          getApp().checkHasGroup()
+          setTimeout(() => {
+            wx.navigateBack()
+          }, 1500)
+        }
+      },
+    })
+  },
+  // 离开该组
+  confirmDrop() {
+    const { _id } = this.data.groupInfo
+    wx.cloud.callFunction({
+      name: 'groupbill',
+      data: {
+        mode: 'drop',
+        groupId: _id,
+      },
+      success(res) {
+        if (res.result.code === 1) {
+          wx.showToast({
+            title: '你已离开该组啦，相聚将在未来。',
+            icon: 'none',
+          })
+          getApp().checkHasGroup()
+          setTimeout(() => {
+            wx.navigateBack()
+          }, 1500)
+        }
+      },
+    })
+  },
   onShareAppMessage() {
     const { _id } = this.data.groupInfo
-    console.log('分享的组id', _id)
     return {
       title: '来来来，这里可以一起记账！',
       path: `/pages/group/group?groupId=${_id}`,

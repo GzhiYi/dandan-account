@@ -83,7 +83,10 @@ page {
   width: 76rpx;
 }
 .info-item {
-  padding-left: 26rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 26rpx;
 }
 .fake-info {
   display: flex;
@@ -131,4 +134,8 @@ page {
   word-break: keep-all;
   white-space: nowrap;
   margin: 5rpx 0 12rpx;
+}
+.delete-btn {
+  color: #f75676;
+  font-size: 24rpx;
 }

@@ -3,7 +3,6 @@ const cloud = require('wx-server-sdk')
 
 cloud.init()
 
-
 // 云函数入口函数
 exports.main = async (event) => {
   const wxContext = cloud.getWXContext();
@@ -20,7 +19,6 @@ exports.main = async (event) => {
     env: wxContext.ENV === 'local' ? 'release-wifo3' : wxContext.ENV,
 
   });
-
 
   try {
     // 增加一条记录

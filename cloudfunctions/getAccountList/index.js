@@ -61,10 +61,35 @@ exports.main = async (event) => {
     // 分页偏移量公式: (page - 1) * limit
     // 计算偏移量
     const offset = (page - 1) * limit;
-
     const basicWhere = {
       isDel: false,
       openId: _.eq(wxContext.OPENID),
+    }
+    // 先查询是否有组
+    const groupRes = await db.collection('SHARE').where({
+      'relateUsers.openId': _.in([wxContext.OPENID]),
+      isDel: false,
+    }).get()
+    const groupResData = groupRes.data
+    // 如果有组
+    let groupUsers = []
+    if (groupResData.length) {
+      // 控制只有valid的用户才请求账单数据
+      groupUsers = groupResData[0].relateUsers.filter((user) => user.valid)
+      basicWhere.openId = _.in(groupUsers.map((user) => user.openId))
+      // 补充组用户的信息，从SHARE_USERS表拉取
+      const tasks = []
+      groupUsers.forEach((user) => {
+        const pro = db.collection('SHARE_USERS').where({
+          _id: user.userId,
+        }).get()
+        tasks.push(pro)
+      })
+      const final = await Promise.all(tasks)
+      groupUsers = groupUsers.map((user, index) => ({
+        ...user,
+        ...final[index].data[0],
+      }))
     }
 
     const categoryInfoMap = new Map();
@@ -89,46 +114,42 @@ exports.main = async (event) => {
             id: categoryId,
           },
         })
-
-        if (cResult.result.code !== 1) {
-          return {
-            code: -1,
+        if (cResult.result) {
+          if (cResult.result.code !== 1) {
+            return {
+              code: -1,
+            }
+          }
+          const subResult = cResult.result.data
+          // eslint-disable-next-line no-restricted-syntax
+          for (category of subResult.data) {
+            sonCIDs.push(category._id)
+            categoryInfoMap.set(category._id, category)
+          }
+          // 再拿用户的分类
+          const cResult2 = await cloud.callFunction({
+            name: 'category',
+            data: {
+              mode: 'getCategoriesByParentCIDAndOpenId',
+              id: categoryId,
+              OPENID: wxContext.OPENID,
+            },
+          })
+          if (cResult2.result) {
+            if (cResult2.result.code !== 1) {
+              return {
+                code: -1,
+              }
+            }
+            const subResult2 = cResult2.result.data
+            // eslint-disable-next-line no-restricted-syntax
+            for (category of subResult2.data) {
+              sonCIDs.push(category._id)
+              categoryInfoMap.set(category._id, category)
+            }
+            basicWhere.categoryId = _.in(sonCIDs)
           }
         }
-
-        const subResult = cResult.result.data
-
-        // eslint-disable-next-line no-restricted-syntax
-        for (category of subResult.data) {
-          sonCIDs.push(category._id)
-          categoryInfoMap.set(category._id, category)
-        }
-
-         // 再拿用户的分类
-         const cResult2 = await cloud.callFunction({
-          name: 'category',
-          data: {
-            mode: 'getCategoriesByParentCIDAndOpenId',
-            id: categoryId,
-            OPENID: wxContext.OPENID,
-          },
-        })
-
-        if (cResult2.result.code !== 1) {
-          return {
-            code: -1,
-          }
-        }
-
-        const subResult2 = cResult2.result.data
-
-        // eslint-disable-next-line no-restricted-syntax
-        for (category of subResult2.data) {
-          sonCIDs.push(category._id)
-          categoryInfoMap.set(category._id, category)
-        }
-
-        basicWhere.categoryId = _.in(sonCIDs)
       }
     }
 
@@ -143,12 +164,32 @@ exports.main = async (event) => {
       .limit(limit)
       .orderBy('createTime', 'desc')
       .get();
+    let noteData = []
 
+    // 如果存在组，则需要把账单列表通过时间进行过滤。
+    if (groupResData.length) {
+      const minDate = groupResData[0].startDate
+      const maxDate = groupResData[0].endDate
+      const mapRelateUser = {}
+      groupUsers.forEach((user) => {
+        mapRelateUser[user.openId] = user
+      })
+      // 遍历账单数据，过滤日期，并且把记账的人的relateUser信息带入
+      res.data.forEach((note) => {
+        // 符合条件的账单
+        if ((new Date(note.noteDate).getTime() >= new Date(minDate).getTime() && new Date(note.noteDate).getTime() <= new Date(maxDate).getTime()) || !maxDate) {
+          note.relateUser = mapRelateUser[note.openId]
+          noteData.push(note)
+        }
+      })
+    } else {
+      noteData = res.data
+    }
     // 遍历结果, 获得对应的分类ID, 并且用分类ID获取对应的分类信息
     if (categoryInfoMap.size <= 0) {
       const cidList = [];
       // eslint-disable-next-line no-restricted-syntax
-      for (const note of res.data) {
+      for (const note of noteData) {
         cidList.push(note.categoryId)
       }
 
@@ -170,7 +211,7 @@ exports.main = async (event) => {
 
     // 补全账单的内容
     // eslint-disable-next-line no-restricted-syntax
-    for (const note of res.data) {
+    for (const note of noteData) {
       // console.log(categoryInfoMap.get(note.categoryId))
       // eslint-disable-next-line no-use-before-define
       completeInfo(note, categoryInfoMap.get(note.categoryId))
@@ -221,7 +262,7 @@ exports.main = async (event) => {
         page: [],
         count: 0,
       },
-      message: '获取记录失败',
+      message: `获取记录失败，e：${e}`,
     }
   }
 }

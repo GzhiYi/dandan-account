@@ -15,6 +15,8 @@ exports.main = async (event) => {
     env: wxContext.ENV === 'local' ? 'release-wifo3' : wxContext.ENV,
   })
 
+  const _ = db.command;
+
   const $ = db.command.aggregate;
   const {
     mode, startDate, endDate, OPENID,
@@ -43,11 +45,39 @@ exports.main = async (event) => {
       ]),
     };
 
+    // 先查询是否有组
+    let basicOpenId = [OPENID || wxContext.OPENID]
+    const groupRes = await db.collection('SHARE').where({
+      'relateUsers.openId': _.in([wxContext.OPENID]),
+      isDel: false,
+    }).get()
+    const groupResData = groupRes.data
+    // 如果有组
+    let groupUsers = []
+    if (groupResData.length) {
+      // 控制只有valid的用户才请求账单数据
+      groupUsers = groupResData[0].relateUsers.filter((user) => user.valid)
+      basicOpenId = groupUsers.map((user) => user.openId)
+      // 补充组用户的信息，从SHARE_USERS表拉取
+      const tasks = []
+      groupUsers.forEach((user) => {
+        const pro = db.collection('SHARE_USERS').where({
+          _id: user.userId,
+        }).get()
+        tasks.push(pro)
+      })
+      const final = await Promise.all(tasks)
+      groupUsers = groupUsers.map((user, index) => ({
+        ...user,
+        ...final[index].data[0],
+      }))
+    }
+
     // 按时间聚合, 聚合出支出和收入的数据
     if (mode === 'aggregateAccountByDateRange') {
       const basicMatch = {
         isDel: false,
-        openId: $.eq(OPENID || wxContext.OPENID),
+        openId: _.in(basicOpenId),
         isTarget: true,
       };
 
@@ -71,7 +101,7 @@ exports.main = async (event) => {
     if (mode === 'getPieChartData') {
       const basicMatch = {
         isDel: false,
-        openId: $.eq(OPENID || wxContext.OPENID),
+        openId: _.in(basicOpenId),
         isTarget: true,
       };
 
@@ -151,6 +181,7 @@ exports.main = async (event) => {
       const flowInList = [];
       let sumAllIn = 0;
       let sumAllOut = 0;
+      console.log('detailResult', detailResult)
       // 遍历获取每个流的总金额
       // eslint-disable-next-line no-restricted-syntax
       for (const item of detailResult.list) {

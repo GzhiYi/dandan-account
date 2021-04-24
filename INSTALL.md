@@ -16,11 +16,6 @@
 
   ```
   git clone https://github.com/GzhiYi/dandan-account.git
-  cd dandan-account
-  npm install   # 需要在管理员控制台下面执行
-  npm install wx-server-sdk@latest
-  cd cloudfunctions
-  npm install
   ```
 3. 将dandan-account导入到微信开发者工具中，填写刚注册的AppID,导入即可。如果不使用AppID，直接使用测试号导入，会导致无法使用云开发
 4. 申请云开发权限

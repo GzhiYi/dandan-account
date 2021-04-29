@@ -28,7 +28,7 @@
     <view class="right dandan" style="background-color: #5CC9F5;">
       <view class="title">需要推送提醒你记账吗？</view>
       <view class="desc">
-        <text>如果你今天没记账，我会提示一下你。【注意】要是开启了可别嫌弃我啰嗦。为了更好推送，需要勾选【总是保持允许，不再询问】。如果不保持选择，会在记账成功后弹出申请，挺烦的，建议开启。</text>
+        <text>如果你今天没记账，我会提示一下你。【注意】要是开启了可别嫌弃我啰嗦噢。为了更好推送，需要勾选【总是保持允许，不再询问】。如果不保持选择，会在记账成功后弹出申请，挺烦的，建议开启。</text>
         <view wx:if="{{!isChangeing}}" class="notify-status" bindtap="changeNotify">{{status ? '已开启，点击关闭' : '已关闭，点击开启'}}</view>
         <view wx:else class="notify-status">...</view>
       </view>
@@ -79,6 +79,22 @@
         ></image>
         <view style="font-size: 20rpx;margin-top: 10rpxx;">点击肚子饿的他保存图片赏一杯奶茶</view>
         <view style="font-size: 20rpx;">ԅ(¯﹃¯ԅ)流口水</view>
+      </view>
+    </view>
+  </view>
+  <view>
+    <image class="donate-arrow" src="https://7265-release-wifo3-1259814516.tcb.qcloud.la/thin-arrowheads-pointing-down.png?sign=cc067af49020cdc7912e08f5e4b17667&t=1619705906" mode="widthFix" binderror="" bindload=""></image>
+    <image class="donate-img" src="https://7265-release-wifo3-1259814516.tcb.qcloud.la/thank-you.png?sign=1df3583959ab3b69840f85278941437f&t=1619705710" mode="widthFix" binderror="" bindload=""></image>
+    <view class="text-center">
+      <view style="font-size: 44rpx;font-weight: bold;letter-spacing: 10rpx;margin-bottom: 40rpx;">捐赠墙</view>
+      <view class="lists">
+        <image
+          wx:for="{{donateList}}"
+          src="{{item.url}}"
+          class="list-item"
+          bindtap="showWord"
+          data-item="{{item}}"
+        ></image>
       </view>
     </view>
   </view>

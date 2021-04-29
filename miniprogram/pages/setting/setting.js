@@ -10,6 +10,7 @@ create.Page(store, {
     showAuthDialog: false,
     isExporting: false,
     canExport: false,
+    donateList: [],
   },
   onLoad() {
     if (wx.requestSubscribeMessage) {
@@ -18,6 +19,7 @@ create.Page(store, {
       })
     }
     this.getUserSucscribeStatus()
+    this.getDonateData()
   },
   onShow() {
     getApp().checkHasGroup()
@@ -154,6 +156,26 @@ create.Page(store, {
     wx.previewImage({
       current: 'https://6461-dandan-zdm86-1259814516.tcb.qcloud.la/WechatIMG11.jpeg?sign=bdaed572942b8bc2e7b3a61f7183d743&t=1576081688', // 当前显示图片的http链接
       urls: ['https://6461-dandan-zdm86-1259814516.tcb.qcloud.la/WechatIMG12.jpeg?sign=75331a3836c6eee63305ce5dbed48909&t=1576082500'], // 需要预览的图片http链接列表
+    })
+  },
+  getDonateData() {
+    const self = this
+    wx.cloud.callFunction({
+      name: 'donate',
+      data: {
+        mode: 'get',
+      },
+      success(res) {
+        self.setData({
+          donateList: res.result.data,
+        })
+      },
+    })
+  },
+  showWord(event) {
+    wx.showToast({
+      title: event.currentTarget.dataset.item.word,
+      icon: 'none',
     })
   },
   goToGroupBill() {

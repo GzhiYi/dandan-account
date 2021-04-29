@@ -1,10 +1,10 @@
 {
   "pages": [
+    "pages/setting/setting",
     "pages/tab/tab",
     "pages/group/group",
     "pages/group-bill-set/group-bill-set",
     "pages/target-set/target-set",
-    "pages/setting/setting",
     "pages/target/target",
     "pages/category/category",
     "pages/search/search",

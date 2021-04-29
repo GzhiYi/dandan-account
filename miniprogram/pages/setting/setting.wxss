@@ -1,5 +1,5 @@
 page {
-  background-color: #FFFFFF;
+  background: #fff;
 }
 .setting {
   margin-bottom: 50rpx;
@@ -65,4 +65,36 @@ page {
   text-align: center;
   float: right;
   color: #fff;
+}
+.sub-text {
+  font-size: 22rpx;
+  line-height: 80rpx;
+}
+.donate-img {
+  height: 256rpx;
+  width: 256rpx;
+  margin: 0 auto;
+  display: block;
+  margin-bottom: 100rpx;
+}
+.donate-arrow {
+  width: 32rpx;
+  height: 32rpx;
+  display: block;
+  margin: 200rpx auto;
+}
+.lists {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  padding: 0 15rpx;
+}
+.list-item {
+  width: 120rpx;
+  margin: 10rpx;
+  height: 120rpx;
+  border-radius: 99999rpx;
+  display: block;
+  box-shadow: 1px 6px 4px 0px #e8e8e8;
+  border: 1rpx solid #ebeef5;
 }

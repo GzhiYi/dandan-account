@@ -86,3 +86,6 @@
 .bg-white {
   background-color: #fff;
 }
+.text-center {
+  text-align: center;
+}

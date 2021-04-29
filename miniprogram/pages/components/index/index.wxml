@@ -1,8 +1,10 @@
-<image
-    class="banner-bg"
-    wx:if="{{wordData.bannerurl && wordData.show && nowTime <= wordData.urlExpire && !loadingWord}}"
-    src="{{wordData.bannerurl}}"
-  ></image>
+<view
+  wx:if="{{wordData.bannerurl && wordData.show && nowTime <= wordData.urlExpire && !loadingWord}}"
+  class="banner-bg"
+  style="background-image: url('{{wordData.bannerurl}}');background-size: cover;"
+>
+
+</view>
 <view wx:else class="banner-bg banner-special"></view>
 <view class="banner">
   <view class="banner-show" wx:if="{{clickPigNum < 5}}">
@@ -135,6 +137,7 @@
   <view class="btn-area">
     <button bindtap="submitForm" class="warn" wx:if="{{!loadingCreate}}">{{isEdit ? '编辑' : '确认'}}</button>
     <button class="warn" style="opacity: .5;" wx:else>{{isEdit ? '编辑' : '创建'}}中...</button>
+    <view class="target-toast" wx:if="{{showTargetTip && targetTip}}">{{targetTip}}</view>
   </view>
 </form>
 <!-- 支付方式弹窗 -->

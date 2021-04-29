@@ -165,3 +165,13 @@
 .active-paytype {
   color: #ff6ec4;
 }
+.target-toast {
+  border: 1rpx solid #B4DFBF;
+  background-color: #E8F6EB;
+  padding: 16rpx;
+  border-radius: 24rpx;
+  width: fit-content;
+  font-size: 26rpx;
+  margin: 0 auto;
+  transition: 0.5s ease-in-out;
+}

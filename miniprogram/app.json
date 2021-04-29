@@ -1,7 +1,7 @@
 {
   "pages": [
-    "pages/setting/setting",
     "pages/tab/tab",
+    "pages/setting/setting",
     "pages/group/group",
     "pages/group-bill-set/group-bill-set",
     "pages/target-set/target-set",

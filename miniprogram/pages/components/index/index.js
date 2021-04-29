@@ -35,6 +35,8 @@ create.Component(store, {
     showAuthDialog: false,
     nowTime: new Date().getTime(),
     loadingWord: false,
+    showTargetTip: false,
+    targetTip: '',
   },
   observers: {
     // 监控刷新 kol 列表的字段
@@ -261,6 +263,19 @@ create.Component(store, {
               title: isEdit ? '😬修改成功' : '😉成功新增一笔账单',
               icon: 'none',
             })
+            if (!isEdit && self.data.$.myTarget && !self.data.$.myTarget.showTip) {
+              self.setData({
+                showTargetTip: true,
+                // eslint-disable-next-line no-mixed-operators
+                targetTip: `${active_tab === 1 ? 'ヽ(✿ﾟ▽ﾟ)ノ' : '(ノへ￣、)'}离存钱目标${active_tab === 1 ? '前进' : '后退'}了${(transSum / self.data.$.myTarget.targetMoney * 100).toFixed(4)}%！`,
+              })
+              setTimeout(() => {
+                self.setData({
+                  showTargetTip: false,
+                  targetTip: '',
+                })
+              }, 3000)
+            }
             self.resetStatus()
             self.triggerEvent('reFetchBillList')
             if (active_tab === 0) {

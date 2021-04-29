@@ -8,7 +8,6 @@ const DEFAULT_LIMIT = 10;
 const DEFAULT_PAGE = 1;
 const MAX_LIMIT = 100;
 
-
 // 云函数入口函数
 exports.main = async (event) => {
   const wxContext = cloud.getWXContext();
@@ -65,33 +64,6 @@ exports.main = async (event) => {
       isDel: false,
       openId: _.eq(wxContext.OPENID),
     }
-    // 先查询是否有组
-    const groupRes = await db.collection('SHARE').where({
-      'relateUsers.openId': _.in([wxContext.OPENID]),
-      isDel: false,
-    }).get()
-    const groupResData = groupRes.data
-    // 如果有组
-    let groupUsers = []
-    if (groupResData.length) {
-      // 控制只有valid的用户才请求账单数据
-      groupUsers = groupResData[0].relateUsers.filter((user) => user.valid)
-      basicWhere.openId = _.in(groupUsers.map((user) => user.openId))
-      // 补充组用户的信息，从SHARE_USERS表拉取
-      const tasks = []
-      groupUsers.forEach((user) => {
-        const pro = db.collection('SHARE_USERS').where({
-          _id: user.userId,
-        }).get()
-        tasks.push(pro)
-      })
-      const final = await Promise.all(tasks)
-      groupUsers = groupUsers.map((user, index) => ({
-        ...user,
-        ...final[index].data[0],
-      }))
-    }
-
     const categoryInfoMap = new Map();
 
     // 主页, 基本列表查询
@@ -164,27 +136,8 @@ exports.main = async (event) => {
       .limit(limit)
       .orderBy('createTime', 'desc')
       .get();
-    let noteData = []
 
-    // 如果存在组，则需要把账单列表通过时间进行过滤。
-    if (groupResData.length) {
-      const minDate = groupResData[0].startDate
-      const maxDate = groupResData[0].endDate
-      const mapRelateUser = {}
-      groupUsers.forEach((user) => {
-        mapRelateUser[user.openId] = user
-      })
-      // 遍历账单数据，过滤日期，并且把记账的人的relateUser信息带入
-      res.data.forEach((note) => {
-        // 符合条件的账单
-        if ((new Date(note.noteDate).getTime() >= new Date(minDate).getTime() && new Date(note.noteDate).getTime() <= new Date(maxDate).getTime()) || !maxDate) {
-          note.relateUser = mapRelateUser[note.openId]
-          noteData.push(note)
-        }
-      })
-    } else {
-      noteData = res.data
-    }
+    noteData = res.data
     // 遍历结果, 获得对应的分类ID, 并且用分类ID获取对应的分类信息
     if (categoryInfoMap.size <= 0) {
       const cidList = [];

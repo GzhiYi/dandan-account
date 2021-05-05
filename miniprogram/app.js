@@ -45,31 +45,38 @@ App({
   },
   // 在app.js处进行分类的获取，以便所有页面方便使用
   getCategory() {
-    const categoryList = {}
-    const defaultCategoryList = []
-    wx.cloud.callFunction({
-      name: 'getCategory',
-      data: {},
-      success(res) {
-        if (res.result.code === 1) {
-          const list = res.result.data
-          // 分离出支出和收入的分类列表
-          categoryList.pay = list.filter((item) => item.flow === Flow.pay)
-          categoryList.income = list.filter((item) => item.flow === Flow.income)
-          // 筛选出默认下的分类为：早餐午餐和晚餐
-          const defaultCategoryIds = ['food_and_drink_breakfast', 'food_and_drink_lunch', 'food_and_drink_dinner']
+    // const self = this
+    return new Promise((resolve, reject) => {
+      const categoryList = {}
+      const defaultCategoryList = []
+      wx.cloud.callFunction({
+        name: 'getCategory',
+        data: {},
+        success(res) {
+          if (res.result.code === 1) {
+            const list = res.result.data
+            // 分离出支出和收入的分类列表
+            categoryList.pay = list.filter((item) => item.flow === Flow.pay)
+            categoryList.income = list.filter((item) => item.flow === Flow.income)
+            // 筛选出默认下的分类为：早餐午餐和晚餐
+            const defaultCategoryIds = ['food_and_drink_breakfast', 'food_and_drink_lunch', 'food_and_drink_dinner']
 
-          store.data.categoryList = categoryList
-          list.forEach((parent) => {
-            parent.children.forEach((child) => {
-              if (defaultCategoryIds.includes(child._id)) {
-                defaultCategoryList.push(child)
-              }
+            store.data.categoryList = categoryList
+            list.forEach((parent) => {
+              parent.children.forEach((child) => {
+                if (defaultCategoryIds.includes(child._id)) {
+                  defaultCategoryList.push(child)
+                }
+              })
             })
-          })
-          store.data.defaultCategoryList = defaultCategoryList
-        }
-      },
+            store.data.defaultCategoryList = defaultCategoryList
+            resolve(res)
+          }
+        },
+        fail(error) {
+          reject(error)
+        },
+      })
     })
   },
   // 检查是否已经设置了目标

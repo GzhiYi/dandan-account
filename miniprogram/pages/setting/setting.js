@@ -22,7 +22,7 @@ create.Page(store, {
     this.getDonateData()
   },
   onShow() {
-    getApp().checkHasGroup()
+    // getApp().checkHasGroup()
   },
   changeNotify: debounce(function () {
     const self = this
@@ -173,10 +173,13 @@ create.Page(store, {
     })
   },
   showWord(event) {
-    wx.showToast({
-      title: event.currentTarget.dataset.item.word,
-      icon: 'none',
-    })
+    const { word } = event.currentTarget.dataset.item
+    if (word) {
+      wx.showToast({
+        title: word,
+        icon: 'none',
+      })
+    }
   },
   goToGroupBill() {
     const { myGroup } = store.data

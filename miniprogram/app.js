@@ -33,7 +33,7 @@ App({
     // 获取用户是否有设置目标
     this.checkHasTarget()
     // 获取用户是否有设置目标
-    this.checkHasGroup()
+    // this.checkHasGroup()
 
     // 如果开启过小程序，则跳到onBoarding页面
     const isOnboarding = wx.getStorageSync('isOnboarding')

@@ -37,9 +37,9 @@ create.Component(store, {
     loadingWord: false,
     showTargetTip: false,
     targetTip: '',
+    recentCate: [],
   },
   observers: {
-    // 监控刷新 kol 列表的字段
     defaultCategoryList() {
       const globalDefaultCategoryList = store.data.defaultCategoryList
       if (globalDefaultCategoryList.length > 0) {
@@ -64,11 +64,22 @@ create.Component(store, {
     // wx.downloadFile({
     //   url: ''
     // })
+    // 移除原有的分类缓存
+    if (wx.getStorageSync('localCategory')) {
+      wx.removeStorageSync('localCategory')
+    }
+    this.setRecentCate()
   },
   /**
    * 组件的方法列表
    */
   methods: {
+    setRecentCate() {
+      // 获取缓存的最近分类，用于显示
+      this.setData({
+        recentCate: wx.getStorageSync('localCategory2155').slice(0, 8),
+      })
+    },
     handleDefaultCategory(list) {
       const hour = new Date().getHours()
       let defaultCategory = {}
@@ -280,7 +291,7 @@ create.Component(store, {
             self.triggerEvent('reFetchBillList')
             if (active_tab === 0) {
               // 本地记录用户记账高频分类
-              const m = wx.getStorageSync('localCategory') || []
+              const m = wx.getStorageSync('localCategory2155') || []
               const keys = m.map((item) => item._id)
               // 如果本地已有缓存
               const index = keys.indexOf(selectedCategory._id)
@@ -295,7 +306,7 @@ create.Component(store, {
                 })
               }
               // em.... 经过storage后的数据类型会从数值类型转为字符串类型
-              wx.setStorageSync('localCategory', m.sort((a, b) => Number(b.pickTime) - Number(a.pickTime)))
+              wx.setStorageSync('localCategory2155', m.sort((a, b) => Number(b.pickTime) - Number(a.pickTime)))
             }
 
             self.setData({
@@ -307,9 +318,11 @@ create.Component(store, {
           self.setData({
             loadingCreate: false,
           })
+          self.setRecentCate()
         },
       })
     },
+    doNothing() {},
     // tab.js调用
     dectiveEdit() {
       const { editBill } = this.data
@@ -338,6 +351,11 @@ create.Component(store, {
       this.setData({
         active_date_time: event.detail.value,
         active_date: this.converDate(event.detail.value, false),
+      })
+    },
+    bindCateChange(event) {
+      this.setData({
+        selectedCategory: this.data.recentCate[event.detail.value],
       })
     },
     clickPig() {

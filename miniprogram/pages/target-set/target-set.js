@@ -72,8 +72,9 @@ Page({
               title: '目标创建成功',
               icon: 'none',
             })
+            getApp().checkHasTarget()
             setTimeout(() => {
-              wx.navigateTo({
+              wx.redirectTo({
                 url: '/pages/target/target',
               })
             }, 1500)

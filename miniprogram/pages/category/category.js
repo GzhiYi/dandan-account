@@ -20,7 +20,7 @@ create.Page(store, {
     showBannerDialog: false,
     word: '',
     loadingSetting: false,
-    localCategory: [],
+    localCategory2155: [],
     isEdit: false,
     wordExpired: null,
     bannerurl: '',
@@ -38,7 +38,7 @@ create.Page(store, {
     self.getCategoryList(options.type)
     if (Number(options.type) === 0) {
       self.setData({
-        localCategory: wx.getStorageSync('localCategory').slice(0, 8),
+        localCategory2155: wx.getStorageSync('localCategory2155').slice(0, 8),
       })
     }
     this.setData({

@@ -55,10 +55,9 @@ create.Component(store, {
       this.triggerEvent('showBanner')
     },
     goTotarget() {
-      console.log('store.data', store)
       const { myTarget } = store.data
       let path = '/pages/target-set/target-set'
-      if (myTarget._id) {
+      if (myTarget && myTarget._id) {
         path = '/pages/target/target'
       }
       wx.navigateTo({

@@ -297,6 +297,7 @@ create.Page(store, {
           title: '删除成功',
           icon: 'none',
         })
+        getApp().checkHasTarget()
         self.setData({
           showDeleteDialog: false,
         })

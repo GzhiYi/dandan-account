@@ -23,4 +23,22 @@ exports.main = async (event) => {
       msg: '获取成功',
     }
   }
+  if (event.mode === 'add') {
+    const {
+      name, donateTime, url, word,
+    } = event
+    const res = await db.collection('DONATE').add({
+      data: {
+        donateTime,
+        name,
+        url,
+        word,
+      },
+    })
+    return {
+      data: res.data,
+      code: 1,
+      msg: '新增成功',
+    }
+  }
 }

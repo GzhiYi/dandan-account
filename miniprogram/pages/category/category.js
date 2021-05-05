@@ -27,6 +27,11 @@ create.Page(store, {
     bannerExpired: null,
     loadingBannerUrl: false,
     defaultExpire: null,
+    donateword: '',
+    donatename: '',
+    donateurl: '',
+    donateTime: null,
+    loadingDonate: false,
   },
 
   /**
@@ -210,6 +215,50 @@ create.Page(store, {
       }
     }
   },
+  confirmDonate() {
+    const self = this
+    const {
+      donatename, donateurl, donateword, donateTime,
+    } = this.data
+    self.setData({
+      loadingDonate: true,
+    })
+    wx.cloud.callFunction({
+      name: 'donate',
+      data: {
+        mode: 'add',
+        name: donatename,
+        word: donateword,
+        url: donateurl,
+        donateTime: donateTime ? new Date(donateTime.replace(/-/g, '/')).getTime() : +new Date(new Date().getTime() + 24 * 60 * 60 * 1000),
+      },
+      success(res) {
+        if (res.result.code === 1) {
+          self.closeDialog()
+          self.setData({
+            donatename: '',
+            donateword: '',
+            donateurl: '',
+            donateTime: null,
+          })
+          wx.showToast({
+            title: '设置成功',
+            icon: 'none',
+          })
+        } else {
+          wx.showToast({
+            title: res.result.message,
+            icon: 'none',
+          })
+        }
+      },
+      complete() {
+        self.setData({
+          loadingDonate: false,
+        })
+      },
+    })
+  },
   confirmUpdateBanner() {
     const self = this
     const { word, wordExpired } = this.data
@@ -320,6 +369,11 @@ create.Page(store, {
   bindUrlDateChange(event) {
     this.setData({
       bannerExpired: event.detail.value,
+    })
+  },
+  bindDonateTimeChange(event) {
+    this.setData({
+      donateTime: event.detail.value,
     })
   },
 })

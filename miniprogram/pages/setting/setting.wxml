@@ -87,7 +87,8 @@
     <image class="donate-img" src="https://7265-release-wifo3-1259814516.tcb.qcloud.la/thank-you.png?sign=1df3583959ab3b69840f85278941437f&t=1619705710" mode="widthFix" binderror="" bindload=""></image>
     <view class="text-center">
       <view style="font-size: 44rpx;font-weight: bold;letter-spacing: 10rpx;margin-bottom: 40rpx;">捐赠墙</view>
-      <view style="font-size: 24rpx;margin-bottom: 40rpx;">你的捐赠将会提升单单的使用体验</view>
+      <view style="font-size: 24rpx;margin-bottom: 10rpx;">你的捐赠将会提升单单的使用体验！</view>
+      <view style="font-size: 24rpx;margin-bottom: 40rpx;">捐赠后希望可以到客服联系开发者补充上墙的信息～</view>
       <view class="lists">
         <view
           wx:for="{{donateList}}"

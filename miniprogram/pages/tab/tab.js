@@ -23,6 +23,10 @@ create.Page(store, {
   onLoad() {
     this.calCalendarHeight()
   },
+  onShow() {
+    const index = this.selectComponent('#index')
+    index.setRecentCate()
+  },
   calCalendarHeight() {
     const query = wx.createSelectorQuery().in(this)
     query.select('.cal-calendar').boundingClientRect(() => {

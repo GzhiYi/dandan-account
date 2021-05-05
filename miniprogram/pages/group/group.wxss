@@ -1,0 +1,141 @@
+page {
+  background-color: #fff;
+}
+.logo {
+  padding: 80rpx 0 20rpx;
+  background-color: #7571e015;
+  border-radius: 0 0 42rpx 42rpx;
+  margin-bottom: 20rpx;
+}
+.nav-style {
+  background-color: #7571e015;
+}
+.group-name {
+  font-size: 50rpx;
+  font-weight: bold;
+  margin-bottom: 24rpx;
+}
+.content {
+  padding: 0 24rpx;
+}
+.invite {
+  color: #fff;
+  border-radius: 9999rpx;
+  background-color: #89D02C;
+  padding: 40rpx;
+  width: 64rpx;
+  height: 64rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 10px 20px 0 rgba(33, 35, 41, .12);
+}
+.danger {
+  color: #fff;
+  border-radius: 9999rpx;
+  background-color: #f75676;
+  padding: 40rpx;
+  width: 64rpx;
+  height: 64rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 10px 20px 0 rgba(33, 35, 41, .12);
+}
+.go {
+  color: #fff;
+  border-radius: 16rpx;
+  background-color: #89D02C;
+  padding: 10rpx 40rpx;
+  height: 64rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 10px 20px 0 rgba(33, 35, 41, .12);
+}
+.confirm-btn {
+  color: #fff;
+  border-radius: 16rpx;
+  background-color: #89D02C;
+  padding: 2rpx 8rpx;
+  box-shadow: 0 10px 20px 0 rgba(33, 35, 41, .12);
+}
+.confirmed-btn {
+  color: #828282;
+  border-radius: 16rpx;
+  background-color: #ebeef5;
+  padding: 2rpx 8rpx;
+}
+.empty-list {
+  color: #909399;
+  font-size: 28rpx;
+  padding: 80rpx 0;
+  text-align: center;
+}
+.hide-share {
+  position: absolute;
+  width: 200rpx;
+  height: 200rpx;
+  opacity: 0;
+}
+.creator {
+  height: 76rpx;
+  width: 76rpx;
+}
+.info-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 26rpx;
+}
+.fake-info {
+  display: flex;
+  flex-direction: column;
+  width: 200rpx;
+  align-items: center;
+  margin: 0 auto;
+}
+
+.fake-info .avatar {
+  width: 150rpx;
+  height: 150rpx;
+  margin-bottom: 22rpx;
+}
+
+.fake-info .dices {
+  width: 32rpx;
+  height: 32rpx;
+}
+
+.fake-info input {
+  font-size: 26qrpx;
+  width: 220rpx;
+  margin: 0 auto;
+  text-align: center;
+  border-bottom: 1rpx solid #ebeef5;
+  margin-bottom: 8rpx;
+  padding: 12rpx 0;
+}
+.tip {
+  font-size: 26rpx;
+  padding: 24rpx;
+  text-align: center;
+  width: fit-content;
+  margin: 0 auto;
+  border-radius: 19rpx;
+  background-color: #f0f9eb;
+  color: #67c23a;
+  margin: 20rpx auto 102rpx;
+}
+.user-name {
+  max-width: 106rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: keep-all;
+  white-space: nowrap;
+  margin: 5rpx 0 12rpx;
+}
+.delete-btn {
+  color: #f75676;
+  font-size: 24rpx;
+}

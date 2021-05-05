@@ -4,7 +4,7 @@
   bind:showBanner="onShowBanner"
 ></nav>
 <view class="category">
-  <view wx:if="{{localCategory.length > 0}}" class="item" style="background: #4fd69c;">
+  <view wx:if="{{localCategory2155.length > 0}}" class="item" style="background: #4fd69c;">
     <view class="parent-name">
       常用分类
     </view>
@@ -13,7 +13,7 @@
         bindtap="selectCategory"
         data-category="{{child}}"
         class="child"
-        wx:for="{{localCategory}}"
+        wx:for="{{localCategory2155}}"
         wx:for-item="child"
         wx:key="{{child._id}}"
       >

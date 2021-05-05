@@ -1,8 +1,10 @@
-<image
-    class="banner-bg"
-    wx:if="{{wordData.bannerurl && wordData.show && nowTime <= wordData.urlExpire && !loadingWord}}"
-    src="{{wordData.bannerurl}}"
-  ></image>
+<view
+  wx:if="{{wordData.bannerurl && wordData.show && nowTime <= wordData.urlExpire && !loadingWord}}"
+  class="banner-bg"
+  style="background-image: url('{{wordData.bannerurl}}');background-size: cover;"
+>
+
+</view>
 <view wx:else class="banner-bg banner-special"></view>
 <view class="banner">
   <view class="banner-show" wx:if="{{clickPigNum < 5}}">
@@ -64,7 +66,7 @@
       >0.00</text>
     </view>
   </view>
-  <view class="section" bindtap="goToCategory" style="height: 84rpx;">
+  <view class="section" style="height: 84rpx;" catchtap="goToCategory">
     <view class="label">分类</view>
     <view class="input-field" style="flex-direction: row;">
       <view
@@ -74,8 +76,18 @@
       >
       {{selectedCategory.categoryName}}
       </view>
-
-      <view class="cate" catchTap="goToCategory" style="margin-right: 0;">...</view>
+      <picker
+        mode="selector"
+        range="{{recentCate}}"
+        range-key="categoryName"
+        value="{{active_date_time}}"
+        bindchange="bindCateChange"
+        catchtap="doNothing"
+        wx:if="{{recentCate.length && active_tab === 0}}"
+      >
+        <view class="cate">常用</view>
+      </picker>
+      <view class="cate" catchtap="goToCategory" style="margin-right: 0;">...</view>
     </view>
   </view>
   <view class="section">
@@ -135,6 +147,7 @@
   <view class="btn-area">
     <button bindtap="submitForm" class="warn" wx:if="{{!loadingCreate}}">{{isEdit ? '编辑' : '确认'}}</button>
     <button class="warn" style="opacity: .5;" wx:else>{{isEdit ? '编辑' : '创建'}}中...</button>
+    <view class="target-toast" wx:if="{{showTargetTip && targetTip && $.myTarget}}">{{targetTip}}</view>
   </view>
 </form>
 <!-- 支付方式弹窗 -->

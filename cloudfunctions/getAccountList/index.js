@@ -8,7 +8,6 @@ const DEFAULT_LIMIT = 10;
 const DEFAULT_PAGE = 1;
 const MAX_LIMIT = 100;
 
-
 // 云函数入口函数
 exports.main = async (event) => {
   const wxContext = cloud.getWXContext();
@@ -61,12 +60,10 @@ exports.main = async (event) => {
     // 分页偏移量公式: (page - 1) * limit
     // 计算偏移量
     const offset = (page - 1) * limit;
-
     const basicWhere = {
       isDel: false,
       openId: _.eq(wxContext.OPENID),
     }
-
     const categoryInfoMap = new Map();
 
     // 主页, 基本列表查询
@@ -89,46 +86,42 @@ exports.main = async (event) => {
             id: categoryId,
           },
         })
-
-        if (cResult.result.code !== 1) {
-          return {
-            code: -1,
+        if (cResult.result) {
+          if (cResult.result.code !== 1) {
+            return {
+              code: -1,
+            }
+          }
+          const subResult = cResult.result.data
+          // eslint-disable-next-line no-restricted-syntax
+          for (category of subResult.data) {
+            sonCIDs.push(category._id)
+            categoryInfoMap.set(category._id, category)
+          }
+          // 再拿用户的分类
+          const cResult2 = await cloud.callFunction({
+            name: 'category',
+            data: {
+              mode: 'getCategoriesByParentCIDAndOpenId',
+              id: categoryId,
+              OPENID: wxContext.OPENID,
+            },
+          })
+          if (cResult2.result) {
+            if (cResult2.result.code !== 1) {
+              return {
+                code: -1,
+              }
+            }
+            const subResult2 = cResult2.result.data
+            // eslint-disable-next-line no-restricted-syntax
+            for (category of subResult2.data) {
+              sonCIDs.push(category._id)
+              categoryInfoMap.set(category._id, category)
+            }
+            basicWhere.categoryId = _.in(sonCIDs)
           }
         }
-
-        const subResult = cResult.result.data
-
-        // eslint-disable-next-line no-restricted-syntax
-        for (category of subResult.data) {
-          sonCIDs.push(category._id)
-          categoryInfoMap.set(category._id, category)
-        }
-
-         // 再拿用户的分类
-         const cResult2 = await cloud.callFunction({
-          name: 'category',
-          data: {
-            mode: 'getCategoriesByParentCIDAndOpenId',
-            id: categoryId,
-            OPENID: wxContext.OPENID,
-          },
-        })
-
-        if (cResult2.result.code !== 1) {
-          return {
-            code: -1,
-          }
-        }
-
-        const subResult2 = cResult2.result.data
-
-        // eslint-disable-next-line no-restricted-syntax
-        for (category of subResult2.data) {
-          sonCIDs.push(category._id)
-          categoryInfoMap.set(category._id, category)
-        }
-
-        basicWhere.categoryId = _.in(sonCIDs)
       }
     }
 
@@ -144,11 +137,12 @@ exports.main = async (event) => {
       .orderBy('createTime', 'desc')
       .get();
 
+    noteData = res.data
     // 遍历结果, 获得对应的分类ID, 并且用分类ID获取对应的分类信息
     if (categoryInfoMap.size <= 0) {
       const cidList = [];
       // eslint-disable-next-line no-restricted-syntax
-      for (const note of res.data) {
+      for (const note of noteData) {
         cidList.push(note.categoryId)
       }
 
@@ -170,7 +164,7 @@ exports.main = async (event) => {
 
     // 补全账单的内容
     // eslint-disable-next-line no-restricted-syntax
-    for (const note of res.data) {
+    for (const note of noteData) {
       // console.log(categoryInfoMap.get(note.categoryId))
       // eslint-disable-next-line no-use-before-define
       completeInfo(note, categoryInfoMap.get(note.categoryId))
@@ -221,7 +215,7 @@ exports.main = async (event) => {
         page: [],
         count: 0,
       },
-      message: '获取记录失败',
+      message: `获取记录失败，e：${e}`,
     }
   }
 }

@@ -48,8 +48,13 @@ create.Component(store, {
    */
   observers: {
     tab(tab) {
+      console.log('....', tab)
       this.setData({
         fixScroll: tab === 'chart',
+      }, () => {
+        this.setData({
+          fixScroll: tab === 'chart',
+        })
       })
     },
   },

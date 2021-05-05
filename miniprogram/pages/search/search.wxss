@@ -1,5 +1,5 @@
 page {
-  background-color: #e1dbff;
+  background: linear-gradient(40deg, #f6c3d1, #e8bffe);
 }
 .banner {
   width: 100%;

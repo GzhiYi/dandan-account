@@ -26,7 +26,7 @@ module.exports.handle = handle;
           scroll-with-animation="{{true}}"
         >
           <view
-            class="month {{activeMonth === (item - 1) ? 'active' : ''}}"
+            class="month {{activeMonth === (item - 1) ? 'active-month' : ''}}"
             wx:for="{{months.month}}"
             wx:key="{{item}}"
             bindtap="selectMonth"

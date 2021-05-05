@@ -1,6 +1,8 @@
 import { debounce } from '../../util'
 
-Page({
+const { importStore } = getApp()
+const { create, store } = importStore
+create.Page(store, {
   data: {
     canSubscribe: false,
     status: null,
@@ -8,6 +10,7 @@ Page({
     showAuthDialog: false,
     isExporting: false,
     canExport: false,
+    donateList: [],
   },
   onLoad() {
     if (wx.requestSubscribeMessage) {
@@ -16,6 +19,10 @@ Page({
       })
     }
     this.getUserSucscribeStatus()
+    this.getDonateData()
+  },
+  onShow() {
+    getApp().checkHasGroup()
   },
   changeNotify: debounce(function () {
     const self = this
@@ -112,7 +119,7 @@ Page({
   copyLink() {
     wx.setClipboardData({
       data: 'https://github.com/GzhiYi/dandan-account',
-      success() {},
+      success() { },
     })
   },
   onExportFile: debounce(function () {
@@ -132,7 +139,7 @@ Page({
               console.log(tempRes.fileList)
               wx.setClipboardData({
                 data: tempRes.fileList[0].tempFileURL,
-                success() {},
+                success() { },
               })
             },
           })
@@ -150,5 +157,37 @@ Page({
       current: 'https://6461-dandan-zdm86-1259814516.tcb.qcloud.la/WechatIMG11.jpeg?sign=bdaed572942b8bc2e7b3a61f7183d743&t=1576081688', // 当前显示图片的http链接
       urls: ['https://6461-dandan-zdm86-1259814516.tcb.qcloud.la/WechatIMG12.jpeg?sign=75331a3836c6eee63305ce5dbed48909&t=1576082500'], // 需要预览的图片http链接列表
     })
+  },
+  getDonateData() {
+    const self = this
+    wx.cloud.callFunction({
+      name: 'donate',
+      data: {
+        mode: 'get',
+      },
+      success(res) {
+        self.setData({
+          donateList: res.result.data,
+        })
+      },
+    })
+  },
+  showWord(event) {
+    wx.showToast({
+      title: event.currentTarget.dataset.item.word,
+      icon: 'none',
+    })
+  },
+  goToGroupBill() {
+    const { myGroup } = store.data
+    if (myGroup._id) {
+      wx.navigateTo({
+        url: '/pages/group/group',
+      })
+    } else {
+      wx.navigateTo({
+        url: '/pages/group-bill-set/group-bill-set',
+      })
+    }
   },
 })

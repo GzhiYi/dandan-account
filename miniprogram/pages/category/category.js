@@ -20,7 +20,7 @@ create.Page(store, {
     showBannerDialog: false,
     word: '',
     loadingSetting: false,
-    localCategory: [],
+    localCategory2155: [],
     isEdit: false,
     wordExpired: null,
     bannerurl: '',
@@ -38,7 +38,7 @@ create.Page(store, {
     self.getCategoryList(options.type)
     if (Number(options.type) === 0) {
       self.setData({
-        localCategory: wx.getStorageSync('localCategory').slice(0, 8),
+        localCategory2155: wx.getStorageSync('localCategory2155').slice(0, 8),
       })
     }
     this.setData({
@@ -113,6 +113,7 @@ create.Page(store, {
           self.setData({
             showAddDialog: false,
             addCategoryName: '',
+            isEdit: false,
           })
           self.getLatestCategory()
         }
@@ -126,10 +127,9 @@ create.Page(store, {
   },
   getLatestCategory() {
     const self = this
-    getApp().getCategory()
-    getApp().loadCategoryCallBack = () => {
+    getApp().getCategory().then(() => {
       self.getCategoryList(billType)
-    }
+    })
   },
   bindInput(event) {
     const { value } = event.detail
@@ -180,9 +180,14 @@ create.Page(store, {
           })
         },
         complete() {
+          const { localCategory2155 } = self.data
+          const newList = localCategory2155.filter((item) => item._id !== editItem._id)
           self.setData({
             loadingDelete: false,
+            localCategory2155: newList,
+            isEdit: false,
           })
+          wx.setStorageSync('localCategory2155', newList)
         },
       })
     }

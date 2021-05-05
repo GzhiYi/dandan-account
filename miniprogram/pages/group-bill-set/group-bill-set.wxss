@@ -1,35 +1,43 @@
 page {
   background-color: #FFE0CE !important;
 }
+
 .target-set .title {
   font-size: 50rpx;
   font-weight: bold;
   margin-bottom: 50rpx;
 }
+
 .base-padding {
   padding: 0 43rpx;
 }
+
 .form-label {
   margin-bottom: 20rpx;
 }
+
 .picker {
   color: #9D9D9F;
-  border-bottom: 1px solid #9D9D9F;
+  border-bottom: 1rpx solid #9D9D9F;
   padding-bottom: 5px;
 }
+
 .form-input {
   margin-bottom: 20rpx;
 }
+
 .form-input input {
   border-bottom: 1rpx solid #9D9D9F;
   height: 60rpx;
 }
+
 .money {
   background-color: #fff;
   height: 80vh;
-  border-radius: 60rpx;
+  border-radius: 60rpx 60rpx 0 0;
   padding-top: 60rpx;
 }
+
 .create {
   background-color: #3A478A;
   color: #fff;
@@ -39,11 +47,13 @@ page {
   text-align: center;
   font-size: 32rpx;
 }
+
 .circle {
   width: 500rpx;
   height: 500rpx;
   border-radius: 50%;
 }
+
 .circle-one {
   position: fixed;
   background-color: #F778AF;
@@ -51,6 +61,7 @@ page {
   top: -264rpx;
   z-index: -1;
 }
+
 .circle-two {
   position: fixed;
   background-color: #3A478A;
@@ -58,8 +69,35 @@ page {
   top: -100rpx;
   z-index: -2;
 }
+.required {
+  display: flex;
+}
 .required::before {
   content: '*';
   color: #F778AF;
   margin-right: 4rpx;
+}
+.fake-info {
+  display: flex;
+  flex-direction: column;
+  width: 200rpx;
+  align-items: center;
+  margin: 0 auto;
+}
+.fake-info image {
+  width: 150rpx;
+  height: 150rpx;
+  margin-bottom: 8rpx;
+}
+.fake-info input {
+  font-size: 26qrpx;
+  width: 220rpx;
+  margin: 0 auto;
+  text-align: center;
+  border-bottom: 1rpx solid #9D9D9F;
+  padding: 12rpx 0;
+}
+.fake-info .dices {
+  width: 32rpx;
+  height: 32rpx;
 }

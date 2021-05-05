@@ -1,0 +1,115 @@
+<nav class="nav-instance" showIcons="{{['back']}}" my-class="nav-style"></nav>
+
+<view class="logo relative">
+  <view class="flex flex-col items-center">
+    <image class="banner-logo" style="width: 200rpx;height: 200rpx;" src="../../images/{{picName}}.png" mode="widthFix"></image>
+    <text class="group-name">{{groupInfo.name}}</text>
+  </view>
+  <view class="basic-info">
+    <view class="info-item">
+      <view class="flex items-center" wx:if="{{fakeUserInfo.nickName}}">
+        <image class="creator shadow rounded-full mr-2" src="{{fakeUserInfo.avatarUrl}}" mode="widthFix"></image>
+        <view class="flex flex-col">
+          <text class="text-t26">{{fakeUserInfo.nickName}}</text>
+          <text class="text-t22 text-default-dim2">共享的账单日期开始于：{{groupInfo.startDate}}</text>
+        </view>
+      </view>
+      <text class="delete-btn" bindtap="onShowDeleteDialog">删除</text>
+    </view>
+  </view>
+</view>
+<view class="content" wx:if="{{!groupId}}">
+  <text style="font-size: 42rpx;font-weight: bold;margin-bottom: 50rpx;">{{groupInfo.isMyGroup ? '邀请一起记账' : '组成员'}}</text>
+  <view class="user-list">
+    <view class="flex flex-wrap" style="padding: 20rpx 0;">
+      <view class="flex flex-col items-center" style="margin: 0 10rpx;" wx:for="{{groupInfo.relateUsers}}" :key="_id">
+        <image class="rounded-full" style="width: 80rpx;height: 80rpx;" src="{{item.avatarUrl}}" mode="widthFix"></image>
+        <text class="text-t24 text-default-dim2 user-name">{{item.nickName}}</text>
+        <view class="text-t24 confirm-btn" wx:if="{{index !== 0 && !item.valid}}" bindtap="onShowConfirmDialog" data-user="{{item}}">确认</view>
+        <view class="text-t24 confirmed-btn" wx:if="{{index !== 0 && item.valid}}">已确认</view>
+        <view class="text-t24 text-default-dim2q" wx:if="{{index === 0}}">创建者</view>
+      </view>
+    </view>
+    <view class="empty-list" wx:if="{{groupInfo.isMyGroup}}">
+      <text>同意邀请的用户会出现在这噢！所有能打开链接的用户均能同意加入组内，建议私发。接受邀请的用户需要你确认加入才算最终完成。</text>
+    </view>
+  </view>
+  <view class="flex justify-center" wx:if="{{groupInfo.isMyGroup}}">
+    <view style="display: flex;justify-content: center;position: relative;">
+      <view class="invite">邀请</view>
+      <button open-type="share" class="hide-share"></button>
+    </view>
+  </view>
+</view>
+<view class="content" wx:if="{{!groupInfo.isMyGroup}}">
+  <view class="flex justify-center">
+    <view style="display: flex;justify-content: center;position: relative;">
+      <view class="danger" bindtap="dropGroup">退出</view>
+    </view>
+  </view>
+</view>
+<view class="content" wx:if="{{groupId && !isInGroup}}">
+  <text style="font-size: 21px;font-weight: bold;margin-bottom: 9px;display: inline-block;">设置头像和昵称，与Ta一起记账吧～</text>
+  <view class="fake-info">
+    <view class="relative" bindtap="changeAvatar">
+      <image class="dices absolute right-0 top-0" src="../../images/dices.png" mode="widthFix"></image>
+      <image class="shadow rounded-full avatar bg-white" src="{{randomAvatar}}" mode="widthFix"></image>
+    </view>
+    <view class="required">
+      <input qtype="text" placeholder="点击填写昵称"  bindinput="onInput" data-target="nickName" />
+    </view>
+  </view>
+  <view class="tip">
+    为了让对方验证你的身份，填写Ta熟悉的名称吧～
+  </view>
+  <view style="display: flex;justify-content: center;position: relative;">
+    <view class="go" wx:if="{{loadingAdd}}">加入中...</view>
+    <view class="go" wx:else bindtap="confirmIn">立即加入</view>
+  </view>
+</view>
+<view class="content" wx:if="{{isInGroup && groupId}}">
+  <text style="font-size: 21px;font-weight: bold;margin-bottom: 9px;display: inline-block;">你已在该组啦</text>
+  <view class="tip">
+    如果还没看到关联的账单，则等候Ta通过申请即可。
+  </view>
+</view>
+
+<dialog visible="{{showConfirmDialog}}" bind:closeDialog="closeDialog">
+  <view slot="content">
+    <view class="pop-indicator"></view>
+    <view class="d-header">确认加入提示</view>
+    <view class="danger-text" style="text-align: center;padding: 40rpx 0;">
+      同意之后，账单将会进行共享，请注意确认该用户是否为你邀请的用户。
+    </view>
+    <view class='list-item-btn' style="color: #4fd69c;" bindtap="confirmJoin" >
+      确认
+    </view>
+    <view class='list-item-btn' bindtap="closeDialog" style="border-bottom: none;">取消</view>
+  </view>
+</dialog>
+<dialog visible="{{showLeaveDialog}}" bind:closeDialog="closeDialog">
+  <view slot="content">
+    <view class="pop-indicator"></view>
+    <view class="d-header">离开组提示</view>
+    <view class="danger-text" style="text-align: center;padding: 40rpx 0;">
+      确认离开该组吗？离开组后将可以自行创建组。
+    </view>
+    <view class='list-item-btn' style="color: #4fd69c;" bindtap="confirmDrop" >
+      确认
+    </view>
+    <view class='list-item-btn' bindtap="closeDialog" style="border-bottom: none;">取消</view>
+  </view>
+</dialog>
+<dialog visible="{{showDeleteDialog}}" bind:closeDialog="closeDialog">
+  <view slot="content">
+    <view class="pop-indicator"></view>
+    <view class="d-header">组删除提示</view>
+    <view class="danger-text" style="text-align: center;padding: 40rpx 0;">
+      确认删除该组吗？删除组后将可以自行创建组。
+    </view>
+    <view class='list-item-btn' style="color: #4fd69c;" bindtap="confirmDelete" >
+      确认
+    </view>
+    <view class='list-item-btn' bindtap="closeDialog" style="border-bottom: none;">取消</view>
+  </view>
+</dialog>

@@ -18,7 +18,7 @@ module.exports.formatDate =  formatDate;
   </view>
   <view class="form">
     <view class="form-item base-padding">
-      <view class="form-label">目标名</view>
+      <view class="form-label required">目标名</view>
       <view class="form-input">
         <input
           type="text"
@@ -30,7 +30,7 @@ module.exports.formatDate =  formatDate;
       </view>
     </view>
     <view class="form-item base-padding">
-      <view class="form-label">结束日</view>
+      <view class="form-label required">结束日</view>
       <view class="form-input">
         <picker
           mode="date"
@@ -46,7 +46,7 @@ module.exports.formatDate =  formatDate;
     </view>
     <view class="money base-padding">
       <view class="form-item">
-        <view class="form-label">初始金额</view>
+        <view class="form-label required">初始金额</view>
         <view class="form-input">
           <input
             type="number"
@@ -58,7 +58,7 @@ module.exports.formatDate =  formatDate;
         </view>
       </view>
       <view class="form-item">
-        <view class="form-label">目标金额</view>
+        <view class="form-label required">目标金额</view>
         <view class="form-input">
           <input
             type="number"

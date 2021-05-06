@@ -139,6 +139,38 @@
     </picker>
     <view class='list-item-btn' style="color: #4fd69c;" bindtap="confirmUpdateBannerUrl" wx:if="{{!loadingBannerUrl}}">确认背景图</view>
     <view class='list-item-btn' style="color: #4fd69c;" wx:else>设置背景图中...</view>
+    <input
+      value="{{donateurl}}"
+      data-name="donateurl" 
+      bindinput="bindInput"
+      placeholder="输入捐赠人头像地址"
+      class="fill-cate"
+    ></input>
+    <input
+      value="{{donatename}}"
+      data-name="donatename" 
+      bindinput="bindInput"
+      placeholder="输入捐赠人名字"
+      class="fill-cate"
+    ></input>
+    <input
+      value="{{donateword}}"
+      data-name="donateword" 
+      bindinput="bindInput"
+      placeholder="输入捐赠人留言"
+      class="fill-cate"
+    ></input>
+    <picker
+      mode="date"
+      value="{{donateTime}}"
+      bindchange="bindDonateTimeChange"
+      start="{{defaultExpire}}"
+      class="fill-cate"
+    >
+      <view class="expired" style="margin-right: 0;">{{donateTime || '选择捐赠日期'}}</view>
+    </picker>
+    <view class='list-item-btn' style="color: #4fd69c;" bindtap="confirmDonate" wx:if="{{!loadingDonate}}">确认捐赠信息</view>
+    <view class='list-item-btn' style="color: #4fd69c;" wx:else>设置捐赠信息中...</view>
     <view class='list-item-btn' bindtap="closeDialog" style="border-bottom: none;">取消</view>
   </view>
 </dialog>

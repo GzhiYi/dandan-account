@@ -10,26 +10,29 @@ exports.main = async (event) => {
   const wxContext = cloud.getWXContext()
   cloud.updateConfig({
     env: wxContext.ENV === 'local' ? 'release-wifo3' : wxContext.ENV,
-
   })
   // 初始化数据库
   const db = cloud.database({
     env: wxContext.ENV === 'local' ? 'release-wifo3' : wxContext.ENV,
-
   });
   if (event.mode === 'add') {
     db.collection('USERS').add({
       data: {
-        openid: wxContext.OPENID,
-        appid: wxContext.APPID,
-        unionid: wxContext.UNIONID,
+        openId: wxContext.OPENID,
+        appId: wxContext.APPID,
+        unionId: wxContext.UNIONID,
       },
     })
+    return {
+      code: 1,
+      msg: '注册成功',
+      data: null,
+    }
   }
   return {
     event,
-    openid: wxContext.OPENID,
-    appid: wxContext.APPID,
-    unionid: wxContext.UNIONID,
+    openId: wxContext.OPENID,
+    appId: wxContext.APPID,
+    unionId: wxContext.UNIONID,
   }
 }

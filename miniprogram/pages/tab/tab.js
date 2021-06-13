@@ -22,6 +22,8 @@ create.Page(store, {
   },
   onLoad() {
     this.calCalendarHeight()
+    const isInUser = wx.getStorageSync('isInUser')
+    if (isInUser !== 1) this.registerUser()
   },
   onShow() {
     const index = this.selectComponent('#index')
@@ -122,6 +124,20 @@ create.Page(store, {
         icon: 'none',
       })
     }
+  },
+  registerUser() {
+    // 首次进入tab页面，需要对用户进行注册
+    wx.cloud.callFunction({
+      name: 'user',
+      data: {
+        mode: 'add',
+      },
+      success(res) {
+        if (res.result.code === 1) {
+          wx.setStorageSync('isInUser', 1)
+        }
+      },
+    })
   },
   onShareAppMessage() {
     return {

@@ -102,6 +102,12 @@
           <text style="font-size: 28rpx;color: #606266;">{{item.name}}</text>
         </view>
       </view>
+            <image class="donate-arrow" src="https://7265-release-wifo3-1259814516.tcb.qcloud.la/thin-arrowheads-pointing-down.png?sign=cc067af49020cdc7912e08f5e4b17667&t=1619705906" mode="widthFix" binderror="" bindload=""></image>
+      <view class="me" bindtap="copyWechat">
+        <image class="pig" src="https://images.vrm.cn/2019/08/29/pig.png" style="width: 120rpx;height: 120rpx;" />
+        <view>如果需要合作或加入单单用户群等</view>
+        <view>点击复制添加作者微信：Yi745285458</view>
+      </view>
     </view>
   </view>
   <view class="fill"></view>

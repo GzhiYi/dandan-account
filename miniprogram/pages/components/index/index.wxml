@@ -10,7 +10,7 @@
   <view class="banner-show" wx:if="{{clickPigNum < 5}}">
     <image
       src="https://images.vrm.cn/2019/08/29/pig.png"
-      style="width: 150rpx;height: 150rpx;opacity: {{wordData.bannerurl && wordData.show && nowTime <= wordData.urlExpire && !loadingWord ? '0.8' : '1'}}"
+      style="width: 150rpx;height: 150rpx;opacity: {{wordData.bannerurl && wordData.show && nowTime <= wordData.urlExpire && !loadingWord ? '0.6' : '1'}}"
       bindtap="clickPig"
     ></image>
     <view

@@ -24,7 +24,9 @@
     auto-focus
     focus="{{isFocus}}"
     confirm-type="search"
+    placeholder="输入搜索账单"
     bindconfirm='confirmTap'
+    placeholder-style="color:#e2e2e2;"
   />
 </view>
 <view class="search-result">

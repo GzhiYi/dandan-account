@@ -45,7 +45,15 @@ App({
   },
   // 在app.js处进行分类的获取，以便所有页面方便使用
   getCategory() {
-    // const self = this
+    // 在获取分类数据之前，优先读取本地缓存的数据
+    const storeCategory = wx.getStorageSync('category')
+    const storeDefaultCategory = wx.getStorageSync('defaultCategory')
+    if (storeCategory) {
+      store.data.categoryList = storeCategory
+    }
+    if (storeDefaultCategory) {
+      store.data.defaultCategoryList = storeDefaultCategory
+    }
     return new Promise((resolve, reject) => {
       const categoryList = {}
       const defaultCategoryList = []
@@ -68,6 +76,15 @@ App({
                   defaultCategoryList.push(child)
                 }
               })
+            })
+            // 将分类缓存在本地，优先读取，后续更新
+            wx.setStorage({
+              key: 'category',
+              data: categoryList
+            })
+            wx.setStorage({
+              key: 'defaultCategory',
+              data: defaultCategoryList
             })
             store.data.defaultCategoryList = defaultCategoryList
             resolve(res)

@@ -21,6 +21,7 @@ exports.main = async (event) => {
         openId: wxContext.OPENID,
         appId: wxContext.APPID,
         unionId: wxContext.UNIONID,
+        createTime: new Date(),
       },
     })
     return {

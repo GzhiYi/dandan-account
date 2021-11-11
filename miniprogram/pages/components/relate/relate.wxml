@@ -1,0 +1,35 @@
+  <view class='public-list'>
+    <view class='public-item' style="display: block;height: auto;border-bottom: none;">
+      <view class='public-item-name' style="padding: 20rpx 0;">个人其余作品（欢迎支持）</view>
+      <view class='public-item-right'>
+      </view>
+      <view class="mini-item" style="border-bottom: 1rpx solid #ebeef5;">
+        <image src="../../../images/account.jpeg"></image>
+        <view>
+          <view class="title">一起算账</view>
+          <view class="desc">
+            有群组的AA收款小程序，多人添加，一次结算出结果，再也不怕算错了。
+          </view>
+          <view style="display: flex;justify-content: flex-end;">
+            <navigator target="miniProgram" open-type="navigate" app-id="wx083a90f5ac602053" path="/pages/group/group" extra-data="" version="release">
+              <view class="go">使用</view>
+            </navigator>
+          </view>
+        </view>
+      </view>
+      <view class="mini-item">
+        <image src="../../../images/jielong.jpeg"></image>
+        <view>
+          <view class="title">单单接龙</view>
+          <view class="desc">
+            面向社交活动的一个接龙小程序，不要老是鸽子🕊好不好。
+          </view>
+          <view style="display: flex;justify-content: flex-end;">
+            <navigator target="miniProgram" open-type="navigate" app-id="wxf3515fa60b618cd5" path="/pages/chain/chain" extra-data="" version="release">
+              <view class="go">使用</view>
+            </navigator>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>

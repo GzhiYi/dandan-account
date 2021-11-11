@@ -1,5 +1,5 @@
 page {
-  background: #fff;
+  background-color: #F2F2F2;
 }
 .setting {
   margin-bottom: 50rpx;

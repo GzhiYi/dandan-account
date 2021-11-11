@@ -1,0 +1,71 @@
+.public-list {
+  background-color: #ffffff;
+  width:92%;
+  margin:0 auto 20rpx;
+  border-radius:20rpx;
+}
+.public-header {
+  padding:30rpx 20rpx;
+  font-size:39rpx;
+  display: flex;
+  align-items: center;
+}
+.public-icon {
+  margin-right: 18rpx;
+  width:32rpx;
+  height:32rpx;
+}
+.public-item {
+  padding:20rpx 20rpx;
+  display:flex;
+  justify-content: space-between;
+  align-items:center;
+  height:60rpx;
+}
+.public-item-bottom {
+  border-bottom: none !important;
+}
+.public-item-right {
+  display:flex;
+  align-items:center;
+}
+.public-item-name {
+  font-size: 34rpx;
+  color: #313131;
+  max-width: 400rpx;
+  font-weight: bold;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.mini-item {
+  display: flex;
+  padding: 20rpx 0;
+  margin: 20rpxx 0;
+}
+.mini-item image {
+  width: 100rpx;
+  height: 100rpx;
+  min-width: 100rpx;
+  border-radius: 9999rpx;
+  margin-right: 20rpx;
+}
+.mini-item .title {
+  font-size: 38rpx;
+  font-weight: bold;
+  margin-bottom: 20rpx;
+}
+.mini-item .desc {
+  font-size: 26rpx;
+  color: #606266;
+}
+.mini-item .go {
+  width: fit-content;
+  padding: 10rpx 40rpx;
+  border: 1rpx solid #2454FF;
+  border-radius: 30rpx;
+  background-color: #2454FF;
+  color: #fff;
+  font-size: 24rpx;
+  margin: 20rpx 0;
+}

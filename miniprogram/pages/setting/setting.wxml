@@ -82,6 +82,7 @@
       </view>
     </view>
   </view>
+  <relate></relate>
   <view>
     <image class="donate-arrow" src="https://7265-release-wifo3-1259814516.tcb.qcloud.la/thin-arrowheads-pointing-down.png?sign=cc067af49020cdc7912e08f5e4b17667&t=1619705906" mode="widthFix" binderror="" bindload=""></image>
     <image class="donate-img" src="https://7265-release-wifo3-1259814516.tcb.qcloud.la/thank-you.png?sign=1df3583959ab3b69840f85278941437f&t=1619705710" mode="widthFix" binderror="" bindload=""></image>

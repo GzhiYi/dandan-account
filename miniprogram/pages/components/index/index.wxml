@@ -1,7 +1,7 @@
 <view
   wx:if="{{wordData.bannerurl && wordData.show && nowTime <= wordData.urlExpire && !loadingWord}}"
   class="banner-bg"
-  style="background-image: url('{{wordData.bannerurl}}');background-size: cover;"
+  style="background-image: url('{{wordData.bannerurl}}');background-size: cover;background-position: 50%;"
 >
 
 </view>

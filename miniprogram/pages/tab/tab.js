@@ -141,9 +141,9 @@ create.Page(store, {
   },
   onShareAppMessage() {
     return {
-      title: '可能是东半球最单纯的记账小程序🌚',
+      title: 'o(*￣▽￣*)ブ来试一下这个记账小程序',
       path: '/pages/tab/tab',
-      imageUrl: 'https://images.vrm.cn/2019/08/29/pig.png',
+      imageUrl: '../../images/dandan-cover.png',
     }
   },
 })

@@ -10,12 +10,12 @@ let isShowSubscribeTips = false
 
 create.Component(store, {
   options: {
-    styleIsolation: 'shared',
+    styleIsolation: 'shared'
   },
   properties: {
     selectedCategory: Object,
     editBill: Object,
-    defaultCategoryList: Array,
+    defaultCategoryList: Array
   },
   data: {
     sum: '',
@@ -37,25 +37,25 @@ create.Component(store, {
     loadingWord: false,
     showTargetTip: false,
     targetTip: '',
-    recentCate: [],
+    recentCate: []
   },
   observers: {
     defaultCategoryList() {
       const globalDefaultCategoryList = store.data.defaultCategoryList
       if (globalDefaultCategoryList.length > 0) {
         this.setData({
-          selectedCategory: this.handleDefaultCategory(globalDefaultCategoryList),
+          selectedCategory: this.handleDefaultCategory(globalDefaultCategoryList)
         })
         store.data.selectedCategory = this.handleDefaultCategory(globalDefaultCategoryList)
       }
-    },
+    }
   },
 
   ready() {
     const now = new Date()
     const date = parseTime(now, '{y}-{m}-{d}')
     this.setData({
-      active_date_time: date,
+      active_date_time: date
     })
     this.getWord()
 
@@ -77,7 +77,7 @@ create.Component(store, {
     setRecentCate() {
       // 获取缓存的最近分类，用于显示
       this.setData({
-        recentCate: wx.getStorageSync('localCategory2155').slice(0, 8),
+        recentCate: wx.getStorageSync('localCategory2155').slice(0, 8)
       })
     },
     handleDefaultCategory(list) {
@@ -99,12 +99,12 @@ create.Component(store, {
     getWord() {
       const self = this
       this.setData({
-        loadingWord: true,
+        loadingWord: true
       })
       wx.cloud.callFunction({
         name: 'word',
         data: {
-          mode: 'get',
+          mode: 'get'
         },
         success(res) {
           const response = res.result
@@ -113,20 +113,20 @@ create.Component(store, {
             const wordData = response.data
             wx.setStorageSync('word', wordData)
             self.setData({
-              wordData,
+              wordData
             })
             // 无论如何都要设置这个
             self.setData({
               showPayType: response.showPayType,
-              payTypeList: response.payTypeList,
+              payTypeList: response.payTypeList
             })
           }
         },
         complete() {
           self.setData({
-            loadingWord: false,
+            loadingWord: false
           })
-        },
+        }
       })
     },
     // 关闭对话通知
@@ -135,17 +135,17 @@ create.Component(store, {
       const newWordData = this.data.wordData
       newWordData.word = ''
       this.setData({
-        wordData: newWordData,
+        wordData: newWordData
       })
       wx.showToast({
         title: '已隐藏提示',
-        icon: 'none',
+        icon: 'none'
       })
     },
     bindInput(event) {
       const { value } = event.detail
       this.setData({
-        [`${event.currentTarget.dataset.name}`]: value,
+        [`${event.currentTarget.dataset.name}`]: value
       })
     },
     converDate(date, isDate = true) {
@@ -156,13 +156,13 @@ create.Component(store, {
         dayMap = {
           今天: parseTime(new Date(), '{y}-{m}-{d}'),
           昨天: parseTime(yesterday, '{y}-{m}-{d}'),
-          前天: parseTime(yeyesterday, '{y}-{m}-{d}'),
+          前天: parseTime(yeyesterday, '{y}-{m}-{d}')
         }
       } else {
         dayMap = {
           [`${parseTime(new Date(), '{y}-{m}-{d}')}`]: '今天',
           [`${parseTime(yesterday, '{y}-{m}-{d}')}`]: '昨天',
-          [`${parseTime(yeyesterday, '{y}-{m}-{d}')}`]: '前天',
+          [`${parseTime(yeyesterday, '{y}-{m}-{d}')}`]: '前天'
         }
       }
       return dayMap[date] || ''
@@ -170,23 +170,23 @@ create.Component(store, {
     changeTab(event) {
       const { dataset } = event.currentTarget
       this.setData({
-        [`active_${dataset.key}`]: dataset.value,
+        [`active_${dataset.key}`]: dataset.value
       })
       if (/date/.test(dataset.key)) {
         this.setData({
-          active_date_time: this.converDate(dataset.value),
+          active_date_time: this.converDate(dataset.value)
         })
       } else {
         // 收入或者支出的tab
         store.data.selectedCategory = dataset.value === 0 ? globalDefaultCategory : null
         this.setData({
-          selectedCategory: dataset.value === 0 ? globalDefaultCategory : null,
+          selectedCategory: dataset.value === 0 ? globalDefaultCategory : null
         })
       }
     },
     goToCategory() {
       wx.navigateTo({
-        url: `/pages/category/category?type=${this.data.active_tab}`,
+        url: `/pages/category/category?type=${this.data.active_tab}`
       })
     },
     submitForm() {
@@ -201,7 +201,7 @@ create.Component(store, {
         editBill,
         // 某轩的需求
         showPayType,
-        payType,
+        payType
       } = this.data
       let transSum = 0
       if (sum) {
@@ -212,21 +212,21 @@ create.Component(store, {
       if (!/^0{1}([.]\d{1,2})?$|^[1-9]\d*([.]{1}[0-9]{1,2})?$/.test(Number(transSum)) || isNaN(Number(transSum))) {
         wx.showToast({
           title: '金额输入不正确，最多两位小数',
-          icon: 'none',
+          icon: 'none'
         })
         return false
       }
       if (Number(transSum) === 0) {
         wx.showToast({
           title: '金额不能为0呀！',
-          icon: 'none',
+          icon: 'none'
         })
         return false
       }
       if (!selectedCategory) {
         wx.showToast({
           title: '未选择分类！',
-          icon: 'none',
+          icon: 'none'
         })
         return false
       }
@@ -246,15 +246,15 @@ create.Component(store, {
           fail() {
             setTimeout(() => {
               self.setData({
-                showAuthDialog: true,
+                showAuthDialog: true
               })
             }, 2000)
             self.changeStatus('close')
-          },
+          }
         })
       }
       self.setData({
-        loadingCreate: true,
+        loadingCreate: true
       })
       wx.cloud.callFunction({
         name: 'account',
@@ -266,24 +266,24 @@ create.Component(store, {
           // 有备注的话就显示支付方式，没有的话不显示。
           description: note ? (showPayType && payType ? `${payType}-${note}` : note) : note,
           flow: active_tab,
-          id: isEdit ? editBill._id : '',
+          id: isEdit ? editBill._id : ''
         },
         success(res) {
           if (res.result.code === 1) {
             wx.showToast({
               title: isEdit ? '😬修改成功' : '😉成功新增一笔账单',
-              icon: 'none',
+              icon: 'none'
             })
             if (!isEdit && self.data.$.myTarget && !self.data.$.myTarget.showTip) {
               self.setData({
                 showTargetTip: true,
                 // eslint-disable-next-line no-mixed-operators
-                targetTip: `${active_tab === 1 ? 'ヽ(✿ﾟ▽ﾟ)ノ' : '(ノへ￣、)'}离存钱目标${active_tab === 1 ? '前进' : '后退'}了${(transSum / self.data.$.myTarget.targetMoney * 100).toFixed(4)}%！`,
+                targetTip: `${active_tab === 1 ? 'ヽ(✿ﾟ▽ﾟ)ノ' : '(ノへ￣、)'}离存钱目标${active_tab === 1 ? '前进' : '后退'}了${(transSum / self.data.$.myTarget.targetMoney * 100).toFixed(4)}%！`
               })
               setTimeout(() => {
                 self.setData({
                   showTargetTip: false,
-                  targetTip: '',
+                  targetTip: ''
                 })
               }, 3000)
             }
@@ -302,7 +302,7 @@ create.Component(store, {
                 // 如果没有
                 m.push({
                   ...selectedCategory,
-                  pickTime: 1,
+                  pickTime: 1
                 })
               }
               // em.... 经过storage后的数据类型会从数值类型转为字符串类型
@@ -310,19 +310,18 @@ create.Component(store, {
             }
 
             self.setData({
-              selectedCategory: globalDefaultCategory,
+              selectedCategory: globalDefaultCategory
             })
           }
         },
         complete() {
           self.setData({
-            loadingCreate: false,
+            loadingCreate: false
           })
           self.setRecentCate()
-        },
+        }
       })
     },
-    doNothing() {},
     // tab.js调用
     dectiveEdit() {
       const { editBill } = this.data
@@ -333,7 +332,7 @@ create.Component(store, {
         selectedCategory: editBill.category,
         active_date: this.converDate(editBill.noteDate, false),
         active_date_time: editBill.noteDate,
-        isEdit: true,
+        isEdit: true
       })
     },
     resetStatus() {
@@ -344,18 +343,18 @@ create.Component(store, {
         active_date: '今天',
         loadingCreate: false,
         selectedCategory: globalDefaultCategory,
-        isEdit: false,
+        isEdit: false
       })
     },
     bindDateChange(event) {
       this.setData({
         active_date_time: event.detail.value,
-        active_date: this.converDate(event.detail.value, false),
+        active_date: this.converDate(event.detail.value, false)
       })
     },
     bindCateChange(event) {
       this.setData({
-        selectedCategory: this.data.recentCate[event.detail.value],
+        selectedCategory: this.data.recentCate[event.detail.value]
       })
     },
     clickPig() {
@@ -368,41 +367,41 @@ create.Component(store, {
         const temp = ['！', '！！', '！！！', '！！！！', '！！！！！']
         wx.showToast({
           title: `你再点我${temp[clickPigNum - 1]}`,
-          icon: 'none',
+          icon: 'none'
         })
       }
       if (clickPigNum === 5) {
         setTimeout(() => {
           self.setData({
-            clickPigNum: 0,
+            clickPigNum: 0
           })
           wx.showToast({
             title: '我又出现了 - -',
-            icon: 'none',
+            icon: 'none'
           })
         }, 5000)
       }
       self.setData({
-        clickPigNum,
+        clickPigNum
       })
     },
     selectType(event) {
       this.setData({
         payType: event.target.dataset.paytype,
-        showPayTypeDialog: false,
+        showPayTypeDialog: false
       })
       this.triggerEvent('hideTab', false)
     },
     onShowPayTypeDialog() {
       this.setData({
-        showPayTypeDialog: true,
+        showPayTypeDialog: true
       })
       this.triggerEvent('hideTab', true)
     },
     closeDialog() {
       this.setData({
         showPayTypeDialog: false,
-        showAuthDialog: false,
+        showAuthDialog: false
       })
       this.triggerEvent('hideTab', false)
     },
@@ -411,13 +410,13 @@ create.Component(store, {
       wx.cloud.callFunction({
         name: 'checkSubscribe',
         data: {
-          mode: 'get',
+          mode: 'get'
         },
         success(res) {
           if (res.result.code === 1) {
             subscribeStatus = res.result.data
           }
-        },
+        }
       })
     },
     changeStatus(type) {
@@ -426,12 +425,12 @@ create.Component(store, {
         name: 'checkSubscribe',
         data: {
           mode: 'post',
-          type,
+          type
         },
         success() { },
         complete() {
           self.getUserSucscribeStatus()
-        },
+        }
       })
     },
     openSetting() {
@@ -439,10 +438,10 @@ create.Component(store, {
       wx.openSetting({
         success() {
           self.setData(({
-            showAuthDialog: false,
+            showAuthDialog: false
           }))
-        },
+        }
       })
-    },
-  },
+    }
+  }
 })

@@ -23,7 +23,7 @@ module.exports = {
   },
   rules: {
     'no-console': 1,
-    'semi': 0,
+    'semi': ["error", "never"],
     'import/no-unresolved': 0,
     'consistent-return': 0,
     'no-underscore-dangle': 0,
@@ -34,6 +34,8 @@ module.exports = {
     'func-names': 0,
     'camelcase': 0,
     'import/no-extraneous-dependencies': 0,
-    'no-plusplus': 0
+    'no-plusplus': 0,
+    'comma-dangle': ["error", "never"],
+    eqeqeq: 0
   },
 };

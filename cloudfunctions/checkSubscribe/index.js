@@ -8,14 +8,14 @@ exports.main = async (event) => {
   const wxContext = cloud.getWXContext()
   const env = wxContext.ENV === 'local' ? 'release-wifo3' : wxContext.ENV
   cloud.updateConfig({
-    env,
+    env
   })
   const db = cloud.database({ env })
   try {
     // 先查询库中有没保留这个openId的记录
     const checkRes = await db.collection('SUBSCRIBE')
       .where({
-        openId: wxContext.OPENID,
+        openId: wxContext.OPENID
       })
       .get()
     if (event.mode === 'post') {
@@ -28,8 +28,8 @@ exports.main = async (event) => {
                 openId: wxContext.OPENID,
                 canSubscribe: true,
                 createTime: db.serverDate(),
-                updateTime: db.serverDate(),
-              },
+                updateTime: db.serverDate()
+              }
             })
           } else {
             const docId = checkRes.data[0]._id
@@ -37,18 +37,18 @@ exports.main = async (event) => {
               .update({
                 data: {
                   canSubscribe: true,
-                  updateTime: db.serverDate(),
-                },
+                  updateTime: db.serverDate()
+                }
               })
           }
           return {
             code: 1,
-            msg: '开启成功',
+            msg: '开启成功'
           }
         } catch (error) {
           return {
             code: 0,
-            msg: '开启失败',
+            msg: '开启失败'
           }
         }
       }
@@ -60,17 +60,17 @@ exports.main = async (event) => {
             .update({
               data: {
                 canSubscribe: false,
-                updateTime: db.serverDate(),
-              },
+                updateTime: db.serverDate()
+              }
             })
           return {
             code: 1,
-            msg: '关闭成功',
+            msg: '关闭成功'
           }
         } catch (error) {
           return {
             code: 0,
-            msg: '关闭失败',
+            msg: '关闭失败'
           }
         }
       }
@@ -78,13 +78,13 @@ exports.main = async (event) => {
     if (event.mode === 'get') {
       return {
         code: 1,
-        data: checkRes.data.length === 1 ? checkRes.data[0].canSubscribe : false,
+        data: checkRes.data.length === 1 ? checkRes.data[0].canSubscribe : false
       }
     }
   } catch (error) {
     return {
       code: 0,
-      data: JSON.stringify(error),
+      data: JSON.stringify(error)
     }
   }
 }

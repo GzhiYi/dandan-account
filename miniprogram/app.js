@@ -3,12 +3,12 @@ import store from './store/index'
 
 const Flow = {
   pay: 0,
-  income: 1,
+  income: 1
 }
 App({
   importStore: {
     create: createStore,
-    store,
+    store
   },
   onLaunch() {
     if (!wx.cloud) {
@@ -17,15 +17,15 @@ App({
     } else {
       wx.cloud.init({
         traceUser: true,
-        // env: 'release-wifo3', // 测试环境
-        env: 'dandan-zdm86', // 正式环境
+        env: 'release-wifo3' // 测试环境
+        // env: 'dandan-zdm86' // 正式环境
       })
     }
     // 获取手机信息以配置顶栏
     wx.getSystemInfo({
       success: (res) => {
         store.data.sysInfo = res
-      },
+      }
     })
     // 分类应当全局优先获取
     this.getCategory()
@@ -39,7 +39,7 @@ App({
     const isOnboarding = wx.getStorageSync('isOnboarding')
     if (!isOnboarding) {
       wx.redirectTo({
-        url: '/pages/onboarding/onboarding',
+        url: '/pages/onboarding/onboarding'
       })
     }
   },
@@ -92,7 +92,7 @@ App({
         },
         fail(error) {
           reject(error)
-        },
+        }
       })
     })
   },
@@ -101,14 +101,14 @@ App({
     wx.cloud.callFunction({
       name: 'target',
       data: {
-        mode: 'check',
+        mode: 'check'
       },
       success(res) {
         if (res.result.code === 1) {
           // eslint-disable-next-line prefer-destructuring
           store.data.myTarget = res.result.data[0]
         }
-      },
+      }
     })
   },
   // 检查是否已经设置了目标
@@ -116,20 +116,20 @@ App({
     wx.cloud.callFunction({
       name: 'groupbill',
       data: {
-        mode: 'check',
+        mode: 'check'
       },
       success(res) {
         if (res.result.code === 1) {
           // eslint-disable-next-line prefer-destructuring
           store.data.myGroup = Array.isArray(res.result.data) && res.result.data.length ? res.result.data[0] : {}
         }
-      },
+      }
     })
   },
   showError(title = '请求失败，请稍后再试😢') {
     wx.showToast({
       title,
-      icon: 'none',
+      icon: 'none'
     })
-  },
+  }
 })

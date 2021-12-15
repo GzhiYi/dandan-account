@@ -10,12 +10,12 @@ create.Page(store, {
     showAuthDialog: false,
     isExporting: false,
     canExport: false,
-    donateList: [],
+    donateList: []
   },
   onLoad() {
     if (wx.requestSubscribeMessage) {
       this.setData({
-        canSubscribe: true,
+        canSubscribe: true
       })
     }
     this.getUserSucscribeStatus()
@@ -27,11 +27,11 @@ create.Page(store, {
   changeNotify: debounce(function () {
     const self = this
     const {
-      status,
+      status
     } = this.data
     if (this.data.canSubscribe) {
       self.setData({
-        isChangeing: true,
+        isChangeing: true
       })
       if (!status) {
         wx.requestSubscribeMessage({
@@ -44,10 +44,10 @@ create.Page(store, {
           },
           fail() {
             self.setData({
-              showAuthDialog: true,
+              showAuthDialog: true
             })
             self.changeStatus('close')
-          },
+          }
         })
       } else {
         self.changeStatus('close')
@@ -55,7 +55,7 @@ create.Page(store, {
     } else {
       wx.showToast({
         title: '你的微信版本过低不能订阅哦～',
-        icon: 'none',
+        icon: 'none'
       })
     }
   }, 600, true),
@@ -65,14 +65,14 @@ create.Page(store, {
       name: 'checkSubscribe',
       data: {
         mode: 'post',
-        type,
+        type
       },
       success(res) {
         if (res.result.code === 1) {
           setTimeout(() => {
             wx.showToast({
               title: type === 'open' ? '开启订阅成功' : '关闭订阅成功',
-              icon: 'none',
+              icon: 'none'
             })
           }, 1000)
         }
@@ -80,9 +80,9 @@ create.Page(store, {
       complete() {
         self.getUserSucscribeStatus()
         self.setData({
-          isChangeing: false,
+          isChangeing: false
         })
-      },
+      }
     })
   },
   getUserSucscribeStatus() {
@@ -90,15 +90,15 @@ create.Page(store, {
     wx.cloud.callFunction({
       name: 'checkSubscribe',
       data: {
-        mode: 'get',
+        mode: 'get'
       },
       success(res) {
         if (res.result.code === 1) {
           self.setData({
-            status: res.result.data,
+            status: res.result.data
           })
         }
-      },
+      }
     })
   },
   openSetting() {
@@ -106,32 +106,32 @@ create.Page(store, {
     wx.openSetting({
       success() {
         self.setData(({
-          showAuthDialog: false,
+          showAuthDialog: false
         }))
-      },
+      }
     })
   },
   closeDialog() {
     this.setData({
-      showAuthDialog: false,
+      showAuthDialog: false
     })
   },
   copyLink() {
     wx.setClipboardData({
       data: 'https://github.com/GzhiYi/dandan-account',
-      success() { },
+      success() { }
     })
   },
   copyWechat() {
     wx.setClipboardData({
       data: 'Yi745285458',
-      success() { },
+      success() { }
     })
   },
   onExportFile: debounce(function () {
     const self = this
     self.setData({
-      isExporting: true,
+      isExporting: true
     })
     wx.cloud.callFunction({
       name: 'exportFile',
@@ -145,23 +145,23 @@ create.Page(store, {
               console.log(tempRes.fileList)
               wx.setClipboardData({
                 data: tempRes.fileList[0].tempFileURL,
-                success() { },
+                success() { }
               })
-            },
+            }
           })
         }
       },
       complete() {
         self.setData({
-          isExporting: false,
+          isExporting: false
         })
-      },
+      }
     })
   }, 1000, true),
   showPreview() {
     wx.previewImage({
       current: 'https://6461-dandan-zdm86-1259814516.tcb.qcloud.la/WechatIMG11.jpeg?sign=bdaed572942b8bc2e7b3a61f7183d743&t=1576081688', // 当前显示图片的http链接
-      urls: ['https://6461-dandan-zdm86-1259814516.tcb.qcloud.la/donate/IMG_2451.JPG?sign=6c60168b3e63c375cd2619a5599c9a97&t=1623579505'], // 需要预览的图片http链接列表
+      urls: ['https://6461-dandan-zdm86-1259814516.tcb.qcloud.la/donate/IMG_2451.JPG?sign=6c60168b3e63c375cd2619a5599c9a97&t=1623579505'] // 需要预览的图片http链接列表
     })
   },
   getDonateData() {
@@ -169,13 +169,13 @@ create.Page(store, {
     wx.cloud.callFunction({
       name: 'donate',
       data: {
-        mode: 'get',
+        mode: 'get'
       },
       success(res) {
         self.setData({
-          donateList: res.result.data,
+          donateList: res.result.data
         })
-      },
+      }
     })
   },
   showWord(event) {
@@ -183,7 +183,7 @@ create.Page(store, {
     if (word) {
       wx.showToast({
         title: word,
-        icon: 'none',
+        icon: 'none'
       })
     }
   },
@@ -191,12 +191,12 @@ create.Page(store, {
     const { myGroup } = store.data
     if (myGroup._id) {
       wx.navigateTo({
-        url: '/pages/group/group',
+        url: '/pages/group/group'
       })
     } else {
       wx.navigateTo({
-        url: '/pages/group-bill-set/group-bill-set',
+        url: '/pages/group-bill-set/group-bill-set'
       })
     }
-  },
+  }
 })

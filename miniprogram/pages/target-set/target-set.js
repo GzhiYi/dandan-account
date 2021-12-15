@@ -10,21 +10,21 @@ Page({
     money: null,
     startmoney: null,
     name: '',
-    minEndDate: parseTime(new Date().getTime() + (86400000 * 2), '{y}-{m}-{d}'),
+    minEndDate: parseTime(new Date().getTime() + (86400000 * 2), '{y}-{m}-{d}')
   },
   bindDateChange(event) {
     this.setData({
-      endDate: event.detail.value,
+      endDate: event.detail.value
     })
   },
   onInput(event) {
     this.setData({
-      [`${event.target.dataset.target}`]: event.detail.value,
+      [`${event.target.dataset.target}`]: event.detail.value
     })
   },
   checkParams() {
     const {
-      name, startmoney, money, endDate,
+      name, startmoney, money, endDate
     } = this.data
     let errMsg = ''
     if (!name) {
@@ -41,7 +41,7 @@ Page({
     if (errMsg) {
       wx.showToast({
         title: errMsg,
-        icon: 'none',
+        icon: 'none'
       })
       return false
     }
@@ -53,7 +53,7 @@ Page({
       name,
       money,
       startmoney,
-      endDate,
+      endDate
     } = this.data
     if (this.checkParams()) {
       // 通过
@@ -64,18 +64,18 @@ Page({
           startMoney: Number(String(startmoney).replace(/\b(0+)/gi, '')),
           targetMoney: Number(String(money).replace(/\b(0+)/gi, '')),
           name,
-          endDate,
+          endDate
         },
         success(res) {
           if (res.result.code === 1) {
             wx.showToast({
               title: '目标创建成功',
-              icon: 'none',
+              icon: 'none'
             })
             getApp().checkHasTarget()
             setTimeout(() => {
               wx.redirectTo({
-                url: '/pages/target/target',
+                url: '/pages/target/target'
               })
             }, 1500)
           }
@@ -83,11 +83,11 @@ Page({
         fail() {
           wx.showToast({
             title: '目标创建失败，再试试？',
-            icon: 'none',
+            icon: 'none'
           })
         },
         complete() {
-        },
+        }
       })
     }
   },
@@ -96,5 +96,5 @@ Page({
    */
   onShareAppMessage() {
 
-  },
+  }
 })

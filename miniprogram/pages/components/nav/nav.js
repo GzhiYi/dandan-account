@@ -3,23 +3,23 @@ const { create, store } = importStore
 create.Component(store, {
   externalClasses: ['my-class', 'my-icon-class'],
   options: {
-    multipleSlots: true,
+    multipleSlots: true
   },
   properties: {
     bgColor: {
       type: String,
-      value: 'rgba(0,0,0,0)',
+      value: 'rgba(0,0,0,0)'
     },
     showIcons: {
-      type: Array,
-    },
+      type: Array
+    }
   },
   data: {
     showBackIcon: false,
     showIssue: false,
     showSearch: false,
     showBannerSetting: false,
-    showSetting: false,
+    showSetting: false
   },
   ready() {
     const { showIcons } = this.data
@@ -29,7 +29,7 @@ create.Component(store, {
       showIssue: showIcons.includes('bug'),
       showBannerSetting: showIcons.includes('banner'),
       showSearch: showIcons.includes('search'),
-      showSetting: showIcons.includes('setting'),
+      showSetting: showIcons.includes('setting')
     })
   },
   attached() {
@@ -40,15 +40,15 @@ create.Component(store, {
         delta: 1,
         fail() {
           wx.redirectTo({
-            url: '/pages/tab/tab',
+            url: '/pages/tab/tab'
           })
-        },
+        }
       })
     },
     goTo(event) {
       const { page } = event.currentTarget.dataset
       wx.navigateTo({
-        url: `/pages/${page}/${page}`,
+        url: `/pages/${page}/${page}`
       })
     },
     showBanner() {
@@ -61,8 +61,8 @@ create.Component(store, {
         path = '/pages/target/target'
       }
       wx.navigateTo({
-        url: path,
+        url: path
       })
-    },
-  },
+    }
+  }
 })

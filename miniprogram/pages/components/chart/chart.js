@@ -12,18 +12,18 @@ const DEFAULT_LIMIT = 40
 
 create.Component(store, {
   options: {
-    styleIsolation: 'shared',
+    styleIsolation: 'shared'
   },
   use: ['sysInfo.screenHeight'],
   properties: {
     tab: {
-      type: String,
-    },
+      type: String
+    }
   },
   data: {
     year: new Date().getFullYear().toString(), // 不转为字符串IOS将从1年开始
     months: {
-      month: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+      month: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
     },
     activeMonth: new Date().getMonth(),
     cWidth: 0,
@@ -41,7 +41,7 @@ create.Component(store, {
     pieChartData: null,
     categoryList: [],
     loadingBills: -1,
-    total: 0,
+    total: 0
   },
   /**
    * hack。修复scroll-x在hidden下不显示的问题。该问题存在于ios。
@@ -50,19 +50,19 @@ create.Component(store, {
     tab(tab) {
       console.log('....', tab)
       this.setData({
-        fixScroll: tab === 'chart',
+        fixScroll: tab === 'chart'
       }, () => {
         this.setData({
-          fixScroll: tab === 'chart',
+          fixScroll: tab === 'chart'
         })
       })
-    },
+    }
   },
   ready() {
     this.setData({
       cWidth: wx.getSystemInfoSync().screenWidth - 30,
       // eslint-disable-next-line no-mixed-operators
-      cHeight: 500 / 750 * wx.getSystemInfoSync().screenWidth - 50,
+      cHeight: 500 / 750 * wx.getSystemInfoSync().screenWidth - 50
     })
     this.getPieChartData()
   },
@@ -85,7 +85,7 @@ create.Component(store, {
       this.setData({
         year: event.detail.value,
         billList: [],
-        selectParentCategory: {},
+        selectParentCategory: {}
       }, () => {
         self.getPieChartData()
       })
@@ -103,7 +103,7 @@ create.Component(store, {
       this.setData({
         activeMonth: month - 1,
         billList: [],
-        selectParentCategory: {},
+        selectParentCategory: {}
       }, () => {
         self.getPieChartData()
       })
@@ -114,14 +114,14 @@ create.Component(store, {
         year,
         activeMonth,
         activeTab,
-        activeParentCategory,
+        activeParentCategory
       } = this.data
       const self = this
       const firstAndLastArray = self.getFirstAndLastDayByMonth(year, activeMonth + 1)
       // isNewBill，是否为增加账单后重新获取数据
       if (isNewBill) {
         self.setData({
-          billList: [],
+          billList: []
         })
         self.fetchBillList(activeParentCategory)
       }
@@ -130,7 +130,7 @@ create.Component(store, {
         data: {
           mode: 'getPieChartData',
           startDate: firstAndLastArray[0],
-          endDate: firstAndLastArray[1],
+          endDate: firstAndLastArray[1]
         },
         success(res) {
           const { result } = res
@@ -138,7 +138,7 @@ create.Component(store, {
             const { dataList } = result.detailResult[activeTab === 'pay' ? 'flowOut' : 'flowIn']
             self.setData({
               pieChartData: result.detailResult,
-              categoryList: dataList,
+              categoryList: dataList
             })
 
             if (dataList.length > 0) {
@@ -153,7 +153,7 @@ create.Component(store, {
             getApp().showError()
             // 请求失败还是要把数据重置，避免误导
             self.setData({
-              pieChartData: null,
+              pieChartData: null
             })
           }
         },
@@ -161,17 +161,17 @@ create.Component(store, {
           getApp().showError(JSON.stringify(error))
           // 请求失败还是要把数据重置，避免误导
           self.setData({
-            pieChartData: null,
+            pieChartData: null
           })
         },
         complete() {
           wx.hideLoading()
-        },
+        }
       })
     },
     reFetch: debounce(function () {
       this.setData({
-        billList: [],
+        billList: []
       })
     }, 300, true),
     resetRequestParam() {
@@ -179,7 +179,7 @@ create.Component(store, {
       page = 1
       hasNext = false
       this.setData({
-        activeParentCategory: null,
+        activeParentCategory: null
       })
     },
     touchPie: debounce(function (e) {
@@ -193,12 +193,12 @@ create.Component(store, {
           self.setData({
             activeParentCategory: item,
             billList: [],
-            activeParentIndex: item.index,
+            activeParentIndex: item.index
           })
           self.fetchBillList(item)
           wx.vibrateShort()
           return `${item.name} / ${+parseFloat(item.data.toPrecision(12))} / ${strip(item._proportion_.toFixed(2) * 100)}%`
-        },
+        }
       })
     }, 300, true),
     // 获取该分类下的账单列表，支持分页。
@@ -207,11 +207,11 @@ create.Component(store, {
       const self = this
       const {
         year,
-        activeMonth,
+        activeMonth
       } = self.data
       const firstAndLastArray = self.getFirstAndLastDayByMonth(year, activeMonth + 1)
       self.setData({
-        loadingBills: true,
+        loadingBills: true
       })
       wx.cloud.callFunction({
         name: 'getAccountList',
@@ -221,7 +221,7 @@ create.Component(store, {
           startDate: firstAndLastArray[0],
           endDate: firstAndLastArray[1],
           limit: DEFAULT_LIMIT,
-          page,
+          page
         },
         success(res) {
           const { result } = res
@@ -235,7 +235,7 @@ create.Component(store, {
             tempBillList = [...tempBillList, ...result.data.page.data]
             self.setData({
               billList: tempBillList,
-              total: result.data.count,
+              total: result.data.count
             })
           }
         },
@@ -244,28 +244,28 @@ create.Component(store, {
         },
         complete() {
           self.setData({
-            loadingBills: false,
+            loadingBills: false
           })
           wx.hideLoading()
-        },
+        }
       })
     },
     onScrollBottom() {
       if (hasNext) {
         this.fetchBillList(this.data.activeParentCategory)
         wx.showLoading({
-          title: '加载中...',
+          title: '加载中...'
         })
       }
     },
     changeTab(e) {
       const self = this
       const {
-        tab,
+        tab
       } = e.currentTarget.dataset
       const {
         pieChartData,
-        activeTab,
+        activeTab
       } = self.data
       if (tab === activeTab) return false
       wx.vibrateShort({})
@@ -274,7 +274,7 @@ create.Component(store, {
         activeParentIndex: 0,
         activeParentCategory: null,
         billList: [],
-        categoryList: pieChartData[tab === 'pay' ? 'flowOut' : 'flowIn'].dataList || [],
+        categoryList: pieChartData[tab === 'pay' ? 'flowOut' : 'flowIn'].dataList || []
       }, () => {
         self.fillPie()
       })
@@ -305,13 +305,13 @@ create.Component(store, {
         dataLabel: true,
         extra: {
           pie: {
-            labelWidth: 15,
-          },
+            labelWidth: 15
+          }
         },
         legend: {
-          show: false,
-        },
-      });
+          show: false
+        }
+      })
     },
     deletePro(obj, arr) {
       arr.forEach((item) => {
@@ -321,7 +321,7 @@ create.Component(store, {
     onShowDialog(event) {
       if (event.currentTarget.dataset.type === 'parent') {
         this.setData({
-          showParentDialog: true,
+          showParentDialog: true
         })
       }
       this.triggerEvent('hideTab', true)
@@ -335,7 +335,7 @@ create.Component(store, {
         activeParentIndex: index,
         showParentDialog: false,
         activeParentCategory: category,
-        billList: [],
+        billList: []
       })
       this.triggerEvent('hideTab', false)
       // 获取账单
@@ -346,7 +346,7 @@ create.Component(store, {
       const { bill } = event.currentTarget.dataset
       self.setData({
         editItem: bill,
-        showMenuDialog: true,
+        showMenuDialog: true
       })
       self.triggerEvent('hideTab', true)
     },
@@ -354,7 +354,7 @@ create.Component(store, {
       this.setData({
         showMenuDialog: false,
         showConfirmDelete: false,
-        showParentDialog: false,
+        showParentDialog: false
       })
       this.triggerEvent('hideTab', false)
     },
@@ -362,7 +362,7 @@ create.Component(store, {
       const self = this
       const { editItem } = self.data
       self.setData({
-        showMenuDialog: false,
+        showMenuDialog: false
       })
       this.triggerEvent('hideTab', false)
       self.triggerEvent('editBill', editItem)
@@ -372,7 +372,7 @@ create.Component(store, {
       const { editItem } = self.data
       if (!self.data.showConfirmDelete) {
         self.setData({
-          showConfirmDelete: !self.data.showConfirmDelete,
+          showConfirmDelete: !self.data.showConfirmDelete
         })
         wx.vibrateShort()
       } else {
@@ -382,27 +382,27 @@ create.Component(store, {
           name: 'account',
           data: {
             mode: 'deleteById',
-            id: editItem._id,
+            id: editItem._id
           },
           success(res) {
             if (res.result.code === 1) {
               wx.showToast({
                 title: '删除成功',
-                icon: 'none',
+                icon: 'none'
               })
               self.setData({
-                editItem: {},
+                editItem: {}
               })
               self.triggerEvent('reFetchBillList')
             } else {
               wx.showToast({
                 title: '删除失败，请重试',
-                icon: 'none',
+                icon: 'none'
               })
             }
-          },
+          }
         })
       }
-    },
-  },
+    }
+  }
 })

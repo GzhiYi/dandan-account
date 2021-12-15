@@ -5,28 +5,28 @@ cloud.init()
 
 // 云函数入口函数
 exports.main = async (event) => {
-  const wxContext = cloud.getWXContext();
+  const wxContext = cloud.getWXContext()
   cloud.updateConfig({
-    env: wxContext.ENV === 'local' ? 'release-wifo3' : wxContext.ENV,
+    env: wxContext.ENV === 'local' ? 'release-wifo3' : wxContext.ENV
 
   })
   // 初始化数据库
   const db = cloud.database({
-    env: wxContext.ENV === 'local' ? 'release-wifo3' : wxContext.ENV,
+    env: wxContext.ENV === 'local' ? 'release-wifo3' : wxContext.ENV
 
-  });
-  const _ = db.command;
-  const { flow } = event;
+  })
+  const _ = db.command
+  const { flow } = event
   try {
     // 先获取系统的分类, 或者某个用户创建的分类
     const query = {
       isDel: false,
       openId: _.eq(wxContext.OPENID).or(_.eq('SYSTEM')),
-      flow: Number(flow),
+      flow: Number(flow)
     }
     if (!flow) delete query.flow
     const res = await db.collection('DANDAN_NOTE_CATEGORY')
-      .where(query).get();
+      .where(query).get()
     const response = []
     res.data.forEach((item) => {
       if (!item.parentId) {
@@ -46,13 +46,13 @@ exports.main = async (event) => {
     return {
       code: 1,
       data: response,
-      message: '获取分类成功',
+      message: '获取分类成功'
     }
   } catch (e) {
     return {
       code: -1,
       data: [],
-      message: '获取失败',
+      message: '获取失败'
     }
   }
 }

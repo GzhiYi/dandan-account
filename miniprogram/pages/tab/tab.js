@@ -7,7 +7,7 @@ const mapFace = {
   smile: '小存不亏嘻嘻',
   grinning: 'emmm....',
   puke: '吃土了',
-  sad: '土都没得吃了',
+  sad: '土都没得吃了'
 }
 const { importStore } = getApp()
 const { create, store } = importStore
@@ -18,7 +18,7 @@ create.Page(store, {
     editBill: {},
     hideTab: false,
     currentMonthData: {},
-    activeRightIcon: 'tongue',
+    activeRightIcon: 'tongue'
   },
   onLoad() {
     this.calCalendarHeight()
@@ -38,13 +38,13 @@ create.Page(store, {
     const { active } = event.currentTarget.dataset
     this.setData({
       active,
-      scale: active,
+      scale: active
     })
     wx.vibrateShort()
     const self = this
     setTimeout(() => {
       self.setData({
-        scale: null,
+        scale: null
       })
     }, 200)
   },
@@ -58,19 +58,19 @@ create.Page(store, {
   onEditBill(event) {
     this.setData({
       editBill: event.detail,
-      active: 'index',
+      active: 'index'
     })
     const index = this.selectComponent('#index')
     index.dectiveEdit()
   },
   onSwitchTab(data) {
     this.setData({
-      active: data.detail,
+      active: data.detail
     })
   },
   onHideTab(event) {
     this.setData({
-      hideTab: event.detail,
+      hideTab: event.detail
     })
   },
   onGetNewWord() {
@@ -99,7 +99,7 @@ create.Page(store, {
     }
     this.setData({
       currentMonthData,
-      activeRightIcon: icon,
+      activeRightIcon: icon
     })
   },
   showIconName(event) {
@@ -109,19 +109,19 @@ create.Page(store, {
     if (active === 'chart') {
       wx.showToast({
         title: mapFace[this.data.activeRightIcon],
-        icon: 'none',
+        icon: 'none'
       })
     }
     if (active === 'index') {
       wx.showToast({
         title: '( •̀ᄇ• ́)ﻭ✧来记笔账 ❤️',
-        icon: 'none',
+        icon: 'none'
       })
     }
     if (active === 'list') {
       wx.showToast({
         title: '要养成理财记账习惯哦',
-        icon: 'none',
+        icon: 'none'
       })
     }
   },
@@ -130,20 +130,20 @@ create.Page(store, {
     wx.cloud.callFunction({
       name: 'user',
       data: {
-        mode: 'add',
+        mode: 'add'
       },
       success(res) {
         if (res.result.code === 1) {
           wx.setStorageSync('isInUser', 1)
         }
-      },
+      }
     })
   },
   onShareAppMessage() {
     return {
       title: 'o(*￣▽￣*)ブ来试一下这个记账小程序',
       path: '/pages/tab/tab',
-      imageUrl: '../../images/dandan-cover.png',
+      imageUrl: '../../images/dandan-cover.png'
     }
-  },
+  }
 })

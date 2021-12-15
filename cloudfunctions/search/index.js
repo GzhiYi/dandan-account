@@ -5,23 +5,23 @@ cloud.init()
 
 // 云函数入口函数
 exports.main = async (event) => {
-  const wxContext = cloud.getWXContext();
+  const wxContext = cloud.getWXContext()
   cloud.updateConfig({
-    env: wxContext.ENV === 'local' ? 'release-wifo3' : wxContext.ENV,
+    env: wxContext.ENV === 'local' ? 'release-wifo3' : wxContext.ENV
 
   })
   // 初始化数据库
   const db = cloud.database({
-    env: wxContext.ENV === 'local' ? 'release-wifo3' : wxContext.ENV,
+    env: wxContext.ENV === 'local' ? 'release-wifo3' : wxContext.ENV
 
-  });
+  })
   const { keyWord } = event
   const _ = db.command
   // 获取该用户的分类
   const categoryList = await db.collection('DANDAN_NOTE_CATEGORY')
     .where({
       openId: _.eq(wxContext.OPENID).or(_.eq('SYSTEM')),
-      isDel: false,
+      isDel: false
     })
     .get()
   try {
@@ -29,17 +29,17 @@ exports.main = async (event) => {
       .where(_.or([{
         description: db.RegExp({
           regexp: `.*${keyWord}`,
-          options: 'i',
-        }),
+          options: 'i'
+        })
       },
       {
         money: db.RegExp({
           regexp: keyWord,
-          options: 'i',
-        }),
-      },
+          options: 'i'
+        })
+      }
       ]).and({
-        openId: wxContext.OPENID,
+        openId: wxContext.OPENID
       }))
       .get()
     return {
@@ -51,13 +51,13 @@ exports.main = async (event) => {
         bill.noteDate = parseTime(bill.noteDate, '{y}-{m}-{d}')
         return bill
       }),
-      message: '操作成功',
+      message: '操作成功'
     }
   } catch (error) {
     return {
       code: -1,
       data: error,
-      message: '操作失败',
+      message: '操作失败'
     }
   }
 }
@@ -81,7 +81,7 @@ function parseTime(time, cFormat) {
     h: date.getHours(),
     i: date.getMinutes(),
     s: date.getSeconds(),
-    a: date.getDay(),
+    a: date.getDay()
   }
   const timeStr = format.replace(/{(y|m|d|h|i|s|a)+}/g, (result, key) => {
     let value = formatObj[key]

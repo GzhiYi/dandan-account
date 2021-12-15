@@ -11,7 +11,7 @@ create.Page(store, {
     word: '',
     isFocus: true,
     keyword: '',
-    isSearched: false,
+    isSearched: false
   },
   confirmTap() {
     const { keyword } = this.data
@@ -21,12 +21,12 @@ create.Page(store, {
     // 查询操作
     self.setData({
       isSearching: true,
-      billList: [],
+      billList: []
     })
     wx.cloud.callFunction({
       name: 'search',
       data: {
-        keyWord: keyword,
+        keyWord: keyword
       },
       success(res) {
         if (res.result.code === 1) {
@@ -40,7 +40,7 @@ create.Page(store, {
           self.setData({
             billList,
             isSearched: true,
-            word: `关键字 ${keyword} 搜索结果：收入共：${strip(income)}，支出共：${strip(pay)}`,
+            word: `关键字 ${keyword} 搜索结果：收入共：${strip(income)}，支出共：${strip(pay)}`
           })
         }
       },
@@ -49,9 +49,9 @@ create.Page(store, {
       },
       complete() {
         self.setData({
-          isSearching: false,
+          isSearching: false
         })
-      },
+      }
     })
   },
   onInputChange(event) {
@@ -61,19 +61,19 @@ create.Page(store, {
     if (value && word !== '点猪重置输入哦～' && !isNotifyReset) {
       this.setData({
         word: '点猪重置输入哦～',
-        isSearched: false,
+        isSearched: false
       })
       isNotifyReset = true
     }
     this.setData({
-      keyword: value,
+      keyword: value
     })
   },
   resetSearch() {
     this.setData({
       keyword: '',
       word: '',
-      isFocus: true,
+      isFocus: true
     })
-  },
+  }
 })

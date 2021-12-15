@@ -9,7 +9,7 @@ Page({
     cHeight: 0,
     date: parseTime(new Date(), '{y}-{m}'),
     year: parseTime(new Date(), '{y}'),
-    month: parseTime(new Date(), '{m}'),
+    month: parseTime(new Date(), '{m}')
   },
   onLoad() {
     this.fillChart()
@@ -21,13 +21,13 @@ Page({
   getMonthData() {
     const self = this
     const {
-      date,
+      date
     } = this.data
     wx.cloud.callFunction({
       name: 'getAccountChart',
       data: {
         mode: 'getAccountChartByMonth',
-        date,
+        date
       },
       success(res) {
         const { categories, series } = res.result.data
@@ -52,7 +52,7 @@ Page({
               gridType: 'dash',
               itemCount: 4,
               scrollShow: true,
-              scrollAlign: 'left',
+              scrollAlign: 'left'
               // scrollBackgroundColor:'#F7F7FF',//可不填写，配合enableScroll图表拖拽功能使用，X轴滚动条背景颜色,默认为 #EFEBEF
               // scrollColor:'#DEE7F7',//可不填写，配合enableScroll图表拖拽功能使用，X轴滚动条颜色,默认为 #A6A6A6
             },
@@ -62,30 +62,30 @@ Page({
               splitNumber: 8,
               min: 10,
               max: 180,
-              format: (val) => val, // 如不写此方法，Y轴刻度默认保留两位小数
+              format: (val) => val // 如不写此方法，Y轴刻度默认保留两位小数
             },
             width: 385,
             height: 250,
             extra: {
               line: {
-                type: 'curve',
-              },
-            },
+                type: 'curve'
+              }
+            }
           })
         }
-      },
+      }
     })
   },
   getYearData() {
     const self = this
     const {
-      date,
+      date
     } = this.data
     wx.cloud.callFunction({
       name: 'getAccountChart',
       data: {
         mode: 'getAccountChartByYear',
-        date: date.split('-')[0],
+        date: date.split('-')[0]
       },
       success(res) {
         const { categories, series } = res.result.data
@@ -110,7 +110,7 @@ Page({
               gridType: 'dash',
               itemCount: 4,
               scrollShow: true,
-              scrollAlign: 'left',
+              scrollAlign: 'left'
               // scrollBackgroundColor:'#F7F7FF',//可不填写，配合enableScroll图表拖拽功能使用，X轴滚动条背景颜色,默认为 #EFEBEF
               // scrollColor:'#DEE7F7',//可不填写，配合enableScroll图表拖拽功能使用，X轴滚动条颜色,默认为 #A6A6A6
             },
@@ -120,49 +120,49 @@ Page({
               splitNumber: 8,
               min: 10,
               max: 180,
-              format: (val) => val, // 如不写此方法，Y轴刻度默认保留两位小数
+              format: (val) => val // 如不写此方法，Y轴刻度默认保留两位小数
             },
             width: 385,
             height: 250,
             extra: {
               line: {
-                type: 'curve',
-              },
-            },
+                type: 'curve'
+              }
+            }
           })
         }
-      },
+      }
     })
   },
   touchLineA(e) {
-    lineChartA.scrollStart(e);
+    lineChartA.scrollStart(e)
   },
   moveLineA(e) {
-    lineChartA.scroll(e);
+    lineChartA.scroll(e)
   },
   touchEndLineA(e) {
-    lineChartA.scrollEnd(e);
+    lineChartA.scrollEnd(e)
     // 下面是toolTip事件，如果滚动后不需要显示，可不填写
     lineChartA.showToolTip(e, {
       format(item, category) {
         return `${category} ${item.name}:${item.data}`
-      },
-    });
+      }
+    })
   },
   touchLineB(e) {
-    lineChartB.scrollStart(e);
+    lineChartB.scrollStart(e)
   },
   moveLineB(e) {
-    lineChartB.scroll(e);
+    lineChartB.scroll(e)
   },
   touchEndLineB(e) {
-    lineChartB.scrollEnd(e);
+    lineChartB.scrollEnd(e)
     // 下面是toolTip事件，如果滚动后不需要显示，可不填写
     lineChartB.showToolTip(e, {
       format(item, category) {
         return `${category} ${item.name}:${item.data}`
-      },
-    });
+      }
+    })
   },
   bindDateChange(event) {
     const oldMonth = this.data.month
@@ -172,7 +172,7 @@ Page({
     this.setData({
       date: event.detail.value,
       month: newMonth,
-      year: newYear,
+      year: newYear
     })
 
     if (oldMonth !== newMonth) {
@@ -181,5 +181,5 @@ Page({
     if (oldYear !== newYear) {
       this.getYearData()
     }
-  },
+  }
 })

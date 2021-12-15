@@ -22,7 +22,7 @@ module.exports = {
     sourceType: 'module',
   },
   rules: {
-    'no-console': 1,
+    'no-console': 0,
     'semi': ["error", "never"],
     'import/no-unresolved': 0,
     'consistent-return': 0,

@@ -14,12 +14,12 @@ create.Page(store, {
     showResult: false,
     showResultType: '',
     loadingDelete: false,
-    showDeleteDialog: false,
+    showDeleteDialog: false
   },
   computed: {
     screenWidth() {
       return this.sysInfo.screenWidth
-    },
+    }
   },
   onLoad() {
     this.getTargetInfo()
@@ -30,7 +30,7 @@ create.Page(store, {
     wx.cloud.callFunction({
       name: 'target',
       data: {
-        mode: 'targetInfo',
+        mode: 'targetInfo'
       },
       success(res) {
         console.log('res', res)
@@ -44,14 +44,14 @@ create.Page(store, {
             progress: {
               percentage: self.handlePercentage(((allDate.length - toFinishDate.length) / allDate.length).toFixed(2)),
               passDay: allDate.length - toFinishDate.length,
-              allDay: allDate.length,
-            },
+              allDay: allDate.length
+            }
           })
           // 查看这个目标是不是到期了
           if (new Date(targetInfo.targetData.endDate).getTime() < new Date().getTime()) {
             self.setData({
               showResult: true,
-              showResultType: 'expired',
+              showResultType: 'expired'
             })
           }
           self.renderLineChart(targetInfo.targetData, targetInfo.billList, allDate)
@@ -59,19 +59,19 @@ create.Page(store, {
             percentage: self.handlePercentage(((allDate.length - toFinishDate.length) / allDate.length).toFixed(2)),
             subTitle: '已过',
             id: 'time-progress',
-            bgColor: '#D75C6E',
+            bgColor: '#D75C6E'
           })
         }
       },
       fail() {
         wx.showToast({
           title: '获取目标失败，请重试。',
-          icon: 'none',
+          icon: 'none'
         })
       },
       complete() {
         wx.hideLoading()
-      },
+      }
     })
   },
   renderLineChart(targetData, billList, allDate) {
@@ -117,19 +117,19 @@ create.Page(store, {
       }
     }
     self.setData({
-      nowMoney,
+      nowMoney
     })
     if (nowMoney >= targetData.targetMoney) {
       self.setData({
         showResult: true,
-        showResultType: 'earn',
+        showResultType: 'earn'
       })
     }
     self.renderProgress({
       percentage: self.handlePercentage((nowMoney / targetData.targetMoney).toFixed(2)),
       id: 'miss',
       subTitle: '加油✊',
-      bgColor: '#FAACCE',
+      bgColor: '#FAACCE'
     })
     lineChart = new uCharts({
       $this: self,
@@ -137,7 +137,7 @@ create.Page(store, {
       type: 'area',
       fontSize: 11,
       legend: {
-        show: false,
+        show: false
       },
       dataLabel: false,
       dataPointShape: false,
@@ -156,8 +156,8 @@ create.Page(store, {
           pointShape: 'circle',
           show: true,
           type: 'line',
-          addPoint: true,
-        },
+          addPoint: true
+        }
       ],
       animation: true,
       xAxis: {
@@ -168,7 +168,7 @@ create.Page(store, {
         scrollAlign: 'left',
         disabled: true,
         gridColor: '#3F4D8D',
-        axisLineColor: '#3F4D8D',
+        axisLineColor: '#3F4D8D'
         // scrollBackgroundColor:'#F7F7FF',//可不填写，配合enableScroll图表拖拽功能使用，X轴滚动条背景颜色,默认为 #EFEBEF
         // scrollColor:'#DEE7F7',//可不填写，配合enableScroll图表拖拽功能使用，X轴滚动条颜色,默认为 #A6A6A6
       },
@@ -181,31 +181,31 @@ create.Page(store, {
           axisLineColor: '#3F4D8D',
           fontColor: '#7D87B5',
           max: targetData.targetMoney,
-          min: 0,
+          min: 0
         }],
-        splitNumber: 5,
+        splitNumber: 5
       },
       width: store.data.sysInfo.screenWidth * 0.8,
       height: 200,
       extra: {
         line: {
-          type: 'curve',
+          type: 'curve'
         },
         area: {
           opacity: 0.3,
           gradient: true,
-          addLine: true,
+          addLine: true
         },
         markLine: {
           data: [{
             value: targetData.targetMoney,
             color: '#4fd69c',
             lineColor: '#4fd69c',
-            dashLength: 1,
+            dashLength: 1
           }],
-          type: 'dash',
-        },
-      },
+          type: 'dash'
+        }
+      }
     })
     // eslint-disable-next-line no-console
   },
@@ -229,26 +229,26 @@ create.Page(store, {
       animation: true,
       series: [{
         data: data.percentage,
-        color: '#fff',
+        color: '#fff'
       }],
       title: {
         name: `${data.percentage * 100}%`,
         color: '#fff',
-        fontSize: 25,
+        fontSize: 25
       },
       subtitle: {
         name: data.subTitle,
         color: '#fff',
-        fontSize: 15,
+        fontSize: 15
       },
       padding: [0, 0, 0, 0],
       width: store.data.sysInfo.screenWidth * 0.3,
       height: 120,
       extra: {
         arcbar: {
-          backgroundColor: data.bgColor,
-        },
-      },
+          backgroundColor: data.bgColor
+        }
+      }
     })
   },
   getDates(startDate, endDate) {
@@ -272,17 +272,17 @@ create.Page(store, {
     wx.vibrateShort()
     wx.showToast({
       title: '加油鸭！❤️',
-      icon: 'none',
+      icon: 'none'
     })
   },
   onShowDialog() {
     this.setData({
-      showDeleteDialog: true,
+      showDeleteDialog: true
     })
   },
   closeDialog() {
     this.setData({
-      showDeleteDialog: false,
+      showDeleteDialog: false
     })
   },
   confirmDelete() {
@@ -290,21 +290,21 @@ create.Page(store, {
     wx.cloud.callFunction({
       name: 'target',
       data: {
-        mode: 'delete',
+        mode: 'delete'
       },
       success() {
         wx.showToast({
           title: '删除成功',
-          icon: 'none',
+          icon: 'none'
         })
         getApp().checkHasTarget()
         self.setData({
-          showDeleteDialog: false,
+          showDeleteDialog: false
         })
         setTimeout(() => {
           wx.navigateBack()
         }, 1500)
-      },
+      }
     })
-  },
+  }
 })

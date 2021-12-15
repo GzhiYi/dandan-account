@@ -6,11 +6,11 @@ const { create, store } = importStore
 let dateRange = null
 create.Component(store, {
   options: {
-    styleIsolation: 'shared',
+    styleIsolation: 'shared'
   },
   use: ['sysInfo.screenHeight', 'sysInfo.statusBarHeight'],
   properties: {
-    tab: String,
+    tab: String
   },
   data: {
     billList: null,
@@ -18,14 +18,14 @@ create.Component(store, {
     editItem: {},
     showConfirmDelete: false,
     today: '',
-    billResult: null,
+    billResult: null
   },
   ready() {
     const self = this
     const now = new Date()
     self.getBillList(parseTime(now, '{y}-{m}-{d}'), parseTime(now, '{y}-{m}-{d}'), 'index')
     self.setData({
-      today: parseTime(now, '{y}-{m}-{d}'),
+      today: parseTime(now, '{y}-{m}-{d}')
     })
   },
   methods: {
@@ -33,7 +33,7 @@ create.Component(store, {
       const self = this
       if (fetchFrom !== 'index') {
         wx.showLoading({
-          title: '加载中...',
+          title: '加载中...'
         })
       }
       const data = {
@@ -41,7 +41,7 @@ create.Component(store, {
         page,
         limit: 100,
         startDate,
-        endDate,
+        endDate
       }
       if (dateRange) {
         data.startDate = dateRange[0]
@@ -56,7 +56,7 @@ create.Component(store, {
             const response = res.result.data
             const billResult = {
               monthResult: {},
-              rangeResult: {},
+              rangeResult: {}
             }
             response.monthResult.forEach((item) => {
               billResult.monthResult[item._id === 1 ? 'income' : 'pay'] = item
@@ -70,22 +70,22 @@ create.Component(store, {
             self.setData({
               billResult: {
                 ...response,
-                ...billResult,
-              },
+                ...billResult
+              }
             })
           } else {
             wx.showToast({
               title: '获取账单失败，稍后再试',
-              icon: 'none',
+              icon: 'none'
             })
             self.setData({
-              billResult: null,
+              billResult: null
             })
           }
         },
         complete() {
           wx.hideLoading()
-        },
+        }
       })
     },
     switchTab() {
@@ -96,14 +96,14 @@ create.Component(store, {
       const { bill } = event.currentTarget.dataset
       self.setData({
         editItem: bill,
-        showMenuDialog: true,
+        showMenuDialog: true
       })
       self.triggerEvent('hideTab', true)
     },
     closeDialog() {
       this.setData({
         showMenuDialog: false,
-        showConfirmDelete: false,
+        showConfirmDelete: false
       })
       this.triggerEvent('hideTab', false)
     },
@@ -111,7 +111,7 @@ create.Component(store, {
       const self = this
       const { editItem } = self.data
       self.setData({
-        showMenuDialog: false,
+        showMenuDialog: false
       })
       this.triggerEvent('hideTab', false)
       self.triggerEvent('editBill', editItem)
@@ -121,7 +121,7 @@ create.Component(store, {
       const { editItem } = self.data
       if (!self.data.showConfirmDelete) {
         self.setData({
-          showConfirmDelete: !self.data.showConfirmDelete,
+          showConfirmDelete: !self.data.showConfirmDelete
         })
         wx.vibrateShort()
       } else {
@@ -131,25 +131,25 @@ create.Component(store, {
           name: 'account',
           data: {
             mode: 'deleteById',
-            id: editItem._id,
+            id: editItem._id
           },
           success(res) {
             if (res.result.code === 1) {
               wx.showToast({
                 title: '删除成功',
-                icon: 'none',
+                icon: 'none'
               })
               self.setData({
-                editItem: {},
+                editItem: {}
               })
               self.triggerEvent('reFetchBillList')
             } else {
               wx.showToast({
                 title: '删除失败，请重试',
-                icon: 'none',
+                icon: 'none'
               })
             }
-          },
+          }
         })
       }
     },
@@ -165,6 +165,6 @@ create.Component(store, {
         dateRange = null
         self.getBillList(parseTime(now, '{y}-{m}-{d}'), parseTime(now, '{y}-{m}-{d}'), 'list')
       }
-    },
-  },
+    }
+  }
 })

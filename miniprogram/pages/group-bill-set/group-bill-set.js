@@ -11,22 +11,22 @@ Page({
     name: '',
     minEndDate: parseTime(new Date().getTime() + (86400000 * 2), '{y}-{m}-{d}'),
     randomAvatar: `https://api.multiavatar.com/${Math.ceil(Math.random() * 12230590464)}.svg`,
-    nickName: '',
+    nickName: ''
   },
   changeAvatar() {
     this.setData({
-      randomAvatar: `https://api.multiavatar.com/${Math.ceil(Math.random() * 12230590464)}.svg`,
+      randomAvatar: `https://api.multiavatar.com/${Math.ceil(Math.random() * 12230590464)}.svg`
     })
   },
   bindDateChange(event) {
     const { key } = event.currentTarget.dataset
     this.setData({
-      [`${key}`]: event.detail.value,
+      [`${key}`]: event.detail.value
     })
   },
   onInput(event) {
     this.setData({
-      [`${event.target.dataset.target}`]: event.detail.value,
+      [`${event.target.dataset.target}`]: event.detail.value
     })
   },
   checkParams() {
@@ -42,7 +42,7 @@ Page({
     if (errMsg) {
       wx.showToast({
         title: errMsg,
-        icon: 'none',
+        icon: 'none'
       })
       return false
     }
@@ -55,7 +55,7 @@ Page({
       nickName,
       startDate,
       endDate,
-      randomAvatar,
+      randomAvatar
     } = this.data
     if (this.checkParams()) {
       // 通过
@@ -67,17 +67,17 @@ Page({
           startDate,
           endDate,
           nickName,
-          avatarUrl: randomAvatar,
+          avatarUrl: randomAvatar
         },
         success(res) {
           if (res.result.code === 1) {
             wx.showToast({
               title: '账单组创建成功',
-              icon: 'none',
+              icon: 'none'
             })
             setTimeout(() => {
               wx.redirectTo({
-                url: '/pages/group/group',
+                url: '/pages/group/group'
               })
             }, 1500)
             getApp().checkHasGroup()
@@ -86,12 +86,12 @@ Page({
         fail() {
           wx.showToast({
             title: '账单组创建失败，再试试？',
-            icon: 'none',
+            icon: 'none'
           })
         },
         complete() {
-        },
+        }
       })
     }
-  },
+  }
 })

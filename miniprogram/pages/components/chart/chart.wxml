@@ -97,7 +97,7 @@ module.exports.handle = handle;
         style="{{item._id === editItem._id && showMenuDialog ? 'border: 4rpx solid #f75676; padding: 16rpx 26rpx;' : ''}}"
       >
         <view class="type-date">
-          <view class="type">{{item.category.categoryName}}</view>
+          <view class="type">{{item.categoryName}}</view>
           <view class="description" wx:if="{{item.description}}">{{item.description}}</view>
         </view>
         <view class="money-date">

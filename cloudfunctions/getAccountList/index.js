@@ -1,6 +1,7 @@
 /* eslint-disable no-undef */
 // 云函数入口文件
 const cloud = require('wx-server-sdk')
+const dayjs = require('dayjs')
 
 cloud.init()
 
@@ -75,6 +76,7 @@ exports.main = async (event) => {
           note.categoryName = category.categoryName
         }
       })
+      note.noteDate = dayjs(note.noteDate).format('YYYY-MM-DD')
     })
     console.log('查看返回账单', noteRes, totalCountRes)
     return {

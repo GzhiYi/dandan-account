@@ -1,9 +1,11 @@
 lockfileVersion: 5.3
 
 specifiers:
+  dayjs: ^1.10.7
   wx-server-sdk: latest
 
 dependencies:
+  dayjs: 1.10.7
   wx-server-sdk: 2.5.3
 
 packages:
@@ -239,6 +241,10 @@ packages:
     engines: {node: '>=0.10'}
     dependencies:
       assert-plus: 1.0.0
+    dev: false
+
+  /dayjs/1.10.7:
+    resolution: {integrity: sha512-P6twpd70BcPK34K26uJ1KT3wlhpuOAPoMwJzpsIWUxHZ7wpmbdZL/hQqBDfz7hGurYSa5PhzdhDHtt319hL3ig==}
     dev: false
 
   /debug/4.3.3:

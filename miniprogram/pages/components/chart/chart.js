@@ -216,7 +216,6 @@ create.Component(store, {
       wx.cloud.callFunction({
         name: 'getAccountList',
         data: {
-          mode: 'getAccountListByParentCID',
           categoryId: item.categoryId,
           startDate: firstAndLastArray[0],
           endDate: firstAndLastArray[1],
@@ -232,7 +231,7 @@ create.Component(store, {
               page += 1
             }
             let tempBillList = self.data.billList
-            tempBillList = [...tempBillList, ...result.data.page.data]
+            tempBillList = [...tempBillList, ...result.data.page]
             self.setData({
               billList: tempBillList,
               total: result.data.count

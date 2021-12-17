@@ -16,7 +16,7 @@ module.exports.handle = handle;
         fields="year"
         bindchange="bindYearChange"
       >
-        <view class="pick-year">{{year}}年 ▾</view>
+        <view class="pick-year" style="white-space: nowrap;">{{year}}年 ▾</view>
       </picker>
       <view class="hide-scroll" wx:if="{{fixScroll}}">
         <scroll-view
@@ -39,6 +39,10 @@ module.exports.handle = handle;
     </view>
   </view>
   <view class="pie">
+    {{pieShow}}
+    <view class="container" wx:if="{{pieShow}}">
+      <f2 class="f2-chart" onInit="{{initChart}}" />
+    </view>
     <view class="summary">
       <view class="summary-item {{activeTab === 'pay' ? 'pay' : ''}}" bindtap="changeTab" data-tab="pay">
         月支出

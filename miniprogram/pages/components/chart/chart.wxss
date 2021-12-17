@@ -154,3 +154,7 @@ page {
 .chart-sum {
   white-space: nowrap;
 }
+.f2-chart {
+  width: 100%;
+  height: 500rpx;
+}

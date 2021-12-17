@@ -15,7 +15,9 @@ create.Page(store, {
   data: {
     active: 'index',
     hideTab: false,
-    activeRightIcon: ''
+    activeRightIcon: '',
+    pieShow: false,
+    initChart: null
   },
   computed: {
     activeRightIcon() {

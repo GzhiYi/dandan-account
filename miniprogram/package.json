@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@antv/wx-f2": "2.1.1",
     "dayjs": "^1.10.7"
   }
 }

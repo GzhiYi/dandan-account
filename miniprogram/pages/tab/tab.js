@@ -15,7 +15,7 @@ create.Page(store, {
   data: {
     active: 'index',
     hideTab: false,
-    activeRightIcon: 'tongue'
+    activeRightIcon: ''
   },
   computed: {
     activeRightIcon() {

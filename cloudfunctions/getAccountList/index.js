@@ -68,21 +68,15 @@ exports.main = async (event) => {
       .limit(limit)
       .orderBy('noteDate', 'desc')
       .get()
-    // 将分类补回到账单中
-    noteRes.data.forEach((note) => {
-      // 将分类补回到账单中
-      matchCategoryList.forEach((category) => {
-        if (note.categoryId === category._id) {
-          note.categoryName = category.categoryName
-        }
-      })
+    const noteList = noteRes.data
+    noteList.forEach((note) => {
       note.noteDate = dayjs(note.noteDate).format('YYYY-MM-DD')
     })
-    console.log('查看返回账单', noteRes, totalCountRes)
+    console.log('查看返回账单', noteList, totalCountRes)
     return {
       code: 1,
       data: {
-        page: noteRes.data,
+        page: noteList,
         count: totalCountRes.total,
         rangeResult: [],
         monthResult: []

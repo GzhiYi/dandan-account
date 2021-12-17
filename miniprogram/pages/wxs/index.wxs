@@ -1,0 +1,7 @@
+var fmtNum = function(number) {
+  if (typeof number === 'number') return number.toLocaleString()
+  return number
+}
+module.exports = {
+  fmtNum: fmtNum
+}

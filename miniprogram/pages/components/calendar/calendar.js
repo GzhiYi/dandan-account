@@ -2,16 +2,13 @@ const DAY_NUM = 42
 const WEEK_DAY_NUM = 7
 const DATE_CHECK = /^(\d{4})-(\d{2})-(\d{2})$/
 const TWOMONTH_TIMESTAMP = 5184000000
-
-Component({
+const { importStore } = getApp()
+const { create, store } = importStore
+create.Component(store, {
   properties: {
     defaultSelectDate: {
       type: String,
       value: ''
-    },
-    billResult: {
-      type: Object,
-      value: {}
     },
     mode: {
       type: String,
@@ -20,6 +17,14 @@ Component({
     showToday: {
       type: Boolean,
       value: true
+    }
+  },
+  use: ['currentMonthData', 'pickDateListSumResult'],
+  computed: {
+    currentMonthStatus() {
+      const { flowOut, flowIn } = this.currentMonthData
+      if (flowOut && flowIn) return [flowOut.allSum, flowIn.allSum]
+      return [0, 0]
     }
   },
   data: {
@@ -38,6 +43,7 @@ Component({
         defaultSelectDate: ''
       })
     }
+    console.log('日历就按察', this.store.data.currentMonthData)
     this.setData({
       selectedDate: this.data.defaultSelectDate || this.parseTime(now, '{y}-{m}-{d}'),
       today: this.parseTime(now, '{y}-{m}-{d}')

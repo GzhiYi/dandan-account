@@ -1,6 +1,5 @@
 /* eslint-disable prefer-destructuring */
-import { parseTime } from '../../../util'
-
+import dayjs from 'dayjs'
 const { importStore } = getApp()
 const { create, store } = importStore
 let dateRange = null
@@ -8,7 +7,7 @@ create.Component(store, {
   options: {
     styleIsolation: 'shared'
   },
-  use: ['sysInfo.screenHeight', 'sysInfo.statusBarHeight'],
+  use: ['sysInfo.screenHeight', 'sysInfo.statusBarHeight', 'currentMonthData', 'mapCategoryName'],
   properties: {
     tab: String
   },
@@ -21,11 +20,10 @@ create.Component(store, {
     billResult: null
   },
   ready() {
-    const self = this
-    const now = new Date()
-    self.getBillList(parseTime(now, '{y}-{m}-{d}'), parseTime(now, '{y}-{m}-{d}'), 'index')
-    self.setData({
-      today: parseTime(now, '{y}-{m}-{d}')
+    const now = dayjs().format('YYYY-MM-DD')
+    this.getBillList(now, now, 'index')
+    this.setData({
+      today: now
     })
   },
   methods: {
@@ -37,7 +35,6 @@ create.Component(store, {
         })
       }
       const data = {
-        mode: 'getAccountListByTime',
         page,
         limit: 100,
         startDate,
@@ -51,28 +48,26 @@ create.Component(store, {
         name: 'getAccountList',
         data,
         success(res) {
+          console.log('查看账单', res)
           if (res.result && res.result.code === 1) {
-            // 新聚合接口，带分页
             const response = res.result.data
-            const billResult = {
-              monthResult: {},
-              rangeResult: {}
-            }
-            response.monthResult.forEach((item) => {
-              billResult.monthResult[item._id === 1 ? 'income' : 'pay'] = item
-            })
-            response.rangeResult.forEach((item) => {
-              billResult.rangeResult[item._id === 1 ? 'income' : 'pay'] = item
-            })
-            delete response.monthResult
-            delete response.rangeResult
-
             self.setData({
-              billResult: {
-                ...response,
-                ...billResult
-              }
+              billResult: response.page
             })
+            // 存在dateRange则表明选择了区间，需要将结果传到日历组件
+            if (dateRange) {
+              const flowOutList = response.page.filter(item => item.flow == 0)
+              const flowInList = response.page.filter(item => item.flow == 1)
+              let outMonty = 0
+              let inMoney = 0
+              flowOutList.forEach(item => {
+                outMonty += item.money
+              })
+              flowInList.forEach(item => {
+                inMoney += item.money
+              })
+              store.data.pickDateListSumResult = [outMonty, inMoney]
+            }
           } else {
             wx.showToast({
               title: '获取账单失败，稍后再试',
@@ -163,7 +158,7 @@ create.Component(store, {
       const { mode } = event.detail
       if (mode === 'reset') {
         dateRange = null
-        self.getBillList(parseTime(now, '{y}-{m}-{d}'), parseTime(now, '{y}-{m}-{d}'), 'list')
+        self.getBillList(this.data.today, this.data.today, 'list')
       }
     }
   }

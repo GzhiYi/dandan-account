@@ -1,6 +1,5 @@
 // pages/components/index/index.js
-import { parseTime } from '../../../util'
-
+import dayjs from 'dayjs'
 const { importStore } = getApp()
 const { create, store } = importStore
 
@@ -17,6 +16,7 @@ create.Component(store, {
     editBill: Object,
     defaultCategoryList: Array
   },
+  use: ['mapCategoryName', 'editBill'],
   data: {
     sum: '',
     note: '',
@@ -52,8 +52,7 @@ create.Component(store, {
   },
 
   ready() {
-    const now = new Date()
-    const date = parseTime(now, '{y}-{m}-{d}')
+    const date = dayjs().format('YYYY-MM-DD')
     this.setData({
       active_date_time: date
     })
@@ -149,20 +148,21 @@ create.Component(store, {
       })
     },
     converDate(date, isDate = true) {
-      const yesterday = new Date().setDate(new Date().getDate() - 1)
-      const yeyesterday = new Date().setDate(new Date().getDate() - 2)
+      const today = dayjs().format('YYYY-MM-DD')
+      const sub1Day = dayjs().subtract(1, 'day').format('YYYY-MM-DD')
+      const sub2Day = dayjs().subtract(2, 'day').format('YYYY-MM-DD')
       let dayMap = {}
       if (isDate) {
         dayMap = {
-          今天: parseTime(new Date(), '{y}-{m}-{d}'),
-          昨天: parseTime(yesterday, '{y}-{m}-{d}'),
-          前天: parseTime(yeyesterday, '{y}-{m}-{d}')
+          今天: today,
+          昨天: sub1Day,
+          前天: sub2Day
         }
       } else {
         dayMap = {
-          [`${parseTime(new Date(), '{y}-{m}-{d}')}`]: '今天',
-          [`${parseTime(yesterday, '{y}-{m}-{d}')}`]: '昨天',
-          [`${parseTime(yeyesterday, '{y}-{m}-{d}')}`]: '前天'
+          [`${today}`]: '今天',
+          [`${sub1Day}`]: '昨天',
+          [`${sub2Day}`]: '前天'
         }
       }
       return dayMap[date] || ''
@@ -324,12 +324,15 @@ create.Component(store, {
     },
     // tab.js调用
     dectiveEdit() {
-      const { editBill } = this.data
+      const { editBill, plainCategoryList } = this.store.data
+      console.log('检查', editBill)
+      const matchCategory = plainCategoryList.find(item => item._id === editBill.categoryId)
+      console.log('matchCategory', matchCategory)
       this.setData({
         sum: editBill.money,
         note: editBill.description,
         active_tab: editBill.flow,
-        selectedCategory: editBill.category,
+        selectedCategory: matchCategory,
         active_date: this.converDate(editBill.noteDate, false),
         active_date_time: editBill.noteDate,
         isEdit: true
@@ -345,6 +348,7 @@ create.Component(store, {
         selectedCategory: globalDefaultCategory,
         isEdit: false
       })
+      store.data.editBill = {}
     },
     bindDateChange(event) {
       this.setData({

@@ -1,4 +1,5 @@
-import { strip, debounce, parseTime } from '../../../util'
+import { strip, debounce } from '../../../util'
+import dayjs from 'dayjs'
 // eslint-disable-next-line import/extensions
 import uCharts from '../../u-charts.js'
 
@@ -14,7 +15,7 @@ create.Component(store, {
   options: {
     styleIsolation: 'shared'
   },
-  use: ['sysInfo.screenHeight'],
+  use: ['sysInfo.screenHeight', 'mapCategoryName'],
   properties: {
     tab: {
       type: String
@@ -76,7 +77,7 @@ create.Component(store, {
       const firstDay = d.setDate(1)
       d.setMonth(d.getMonth() + 1)
       const lastDay = d.setDate(d.getDate() - 1)
-      const result = [parseTime(firstDay, '{y}-{m}-{d}'), parseTime(lastDay, '{y}-{m}-{d}')]
+      const result = [dayjs(firstDay, 'YYYY-MM-DD'), dayjs(lastDay).format('YYYY-MM-DD')]
       return result
     },
     // 左上角年份变化
@@ -125,6 +126,7 @@ create.Component(store, {
         })
         self.fetchBillList(activeParentCategory)
       }
+      store.data.loadingRightIcon = true
       wx.cloud.callFunction({
         name: 'accountAggregate',
         data: {
@@ -145,7 +147,7 @@ create.Component(store, {
               self.fillPie(result.detailResult)
             }
             if (firstFetch) {
-              self.triggerEvent('currentMonthData', JSON.parse(JSON.stringify(result.detailResult)))
+              store.data.currentMonthData = result.detailResult
               // 将第一次获取改为false
               firstFetch = false
             }
@@ -166,6 +168,7 @@ create.Component(store, {
         },
         complete() {
           wx.hideLoading()
+          store.data.loadingRightIcon = false
         }
       })
     },
@@ -364,7 +367,8 @@ create.Component(store, {
         showMenuDialog: false
       })
       this.triggerEvent('hideTab', false)
-      self.triggerEvent('editBill', editItem)
+      store.data.editBill = editItem
+      self.triggerEvent('editBill')
     },
     deleteBill() {
       const self = this

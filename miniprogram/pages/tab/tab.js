@@ -1,5 +1,4 @@
-import { parseTime } from '../../util'
-
+import dayjs from 'dayjs'
 const mapFace = {
   greed: '我还能存！',
   kiss: '继续继续',
@@ -12,13 +11,35 @@ const mapFace = {
 const { importStore } = getApp()
 const { create, store } = importStore
 create.Page(store, {
-  use: ['selectedCategory', 'defaultCategoryList'],
+  use: ['selectedCategory', 'defaultCategoryList', 'currentMonthData', 'loadingRightIcon', 'editBill'],
   data: {
     active: 'index',
-    editBill: {},
     hideTab: false,
-    currentMonthData: {},
     activeRightIcon: 'tongue'
+  },
+  computed: {
+    activeRightIcon() {
+      const currentMonthData = this.currentMonthData
+      if (!('flowIn' in currentMonthData) || !('flowOut' in currentMonthData)) return
+      const netAssets = (currentMonthData.flowIn.allSum - currentMonthData.flowOut.allSum) || 0
+      let icon = 'tongue'
+      if (netAssets > 5000) {
+        icon = 'greed'
+      } else if (netAssets >= 4000 && netAssets < 5000) {
+        icon = 'cool'
+      } else if (netAssets >= 3000 && netAssets < 4000) {
+        icon = 'kiss'
+      } else if (netAssets >= 0 && netAssets < 3000) {
+        icon = 'smile'
+      } else if (netAssets >= -1000 && netAssets < 0) {
+        icon = 'grinning'
+      } else if (netAssets >= -3000 && netAssets < -1000) {
+        icon = 'puke'
+      } else {
+        icon = 'sad'
+      }
+      return icon
+    }
   },
   onLoad() {
     this.calCalendarHeight()
@@ -49,15 +70,16 @@ create.Page(store, {
     }, 200)
   },
   onReFetchBillList() {
+    const now = dayjs().format('YYYY-MM-DD')
+    
     const list = this.selectComponent('#list')
+    list.getBillList(now, now, 'index')
+
     const chart = this.selectComponent('#chart')
-    const now = new Date()
-    list.getBillList(parseTime(now, '{y}-{m}-{d}'), parseTime(now, '{y}-{m}-{d}'), 'index')
     chart.getPieChartData(true)
   },
-  onEditBill(event) {
+  onEditBill() {
     this.setData({
-      editBill: event.detail,
       active: 'index'
     })
     const index = this.selectComponent('#index')

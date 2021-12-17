@@ -5,6 +5,7 @@ var handle = function(num) {
 
 module.exports.handle = handle;
 </wxs>
+<wxs src="../../wxs/index.wxs" module="fmt" />
 <view class="chart">
   <view class="selector-view">
     <view class="month-selector">
@@ -41,11 +42,11 @@ module.exports.handle = handle;
     <view class="summary">
       <view class="summary-item {{activeTab === 'pay' ? 'pay' : ''}}" bindtap="changeTab" data-tab="pay">
         月支出
-        <view>{{numHandler.handle(pieChartData.flowOut.allSum || 0)}}</view>
+        <view>{{fmt.fmtNum(numHandler.handle(pieChartData.flowOut.allSum || 0))}}</view>
       </view>
       <view class="summary-item {{activeTab === 'income' ? 'income' : ''}}" bindtap="changeTab" data-tab="income">
         月收入
-        <view>{{numHandler.handle(pieChartData.flowIn.allSum || 0)}}</view>
+        <view>{{fmt.fmtNum(numHandler.handle(pieChartData.flowIn.allSum || 0))}}</view>
       </view>
     </view>
     <view hidden="{{showParentDialog || showMenuDialog ? true : false}}">
@@ -82,7 +83,7 @@ module.exports.handle = handle;
         月余：<text
           class="chart-sum-text"
           style="color: {{(pieChartData.flowIn.allSum - pieChartData.flowOut.allSum) >= 0 ? '#4fd69c' : '#f75676'}}"
-        >{{(pieChartData.flowIn.allSum - pieChartData.flowOut.allSum) >= 0 ? '+' : ''}}{{numHandler.handle(pieChartData.flowIn.allSum - pieChartData.flowOut.allSum)}}</text>
+        >{{(pieChartData.flowIn.allSum - pieChartData.flowOut.allSum) >= 0 ? '+' : ''}}{{fmt.fmtNum(numHandler.handle(pieChartData.flowIn.allSum - pieChartData.flowOut.allSum))}}</text>
       </view>
     </view>
   </view>
@@ -97,13 +98,13 @@ module.exports.handle = handle;
         style="{{item._id === editItem._id && showMenuDialog ? 'border: 4rpx solid #f75676; padding: 16rpx 26rpx;' : ''}}"
       >
         <view class="type-date">
-          <view class="type">{{item.categoryName}}</view>
+          <view class="type">{{$.mapCategoryName[item.categoryId]}}</view>
           <view class="description" wx:if="{{item.description}}">{{item.description}}</view>
         </view>
         <view class="money-date">
           <view>
             <view class="money" style="color: {{ item.flow === 1 ? '#4fd69c;' : '#f75676;'}}">
-              {{item.flow === 0 ? '-' : '+'}}{{item.money}}
+              {{item.flow === 0 ? '-' : '+'}}{{fmt.fmtNum(item.money)}}
             </view>
             <view class="date">{{item.noteDate}}</view>
           </view>

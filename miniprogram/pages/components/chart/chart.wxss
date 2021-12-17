@@ -151,3 +151,6 @@ page {
   padding: 2rpx 14rpx;
   border-radius: 9rpx;
 }
+.chart-sum {
+  white-space: nowrap;
+}

@@ -72,6 +72,8 @@
     <cover-image
       style="{{scale === 'chart' ? 'transform: scale(.8, .8);' : ''}}"
       class="icon"
+      wx:if="{{!$.loadingRightIcon && activeRightIcon}}"
       src="../../images/{{activeRightIcon}}.png"
     ></cover-image>
+    <view wx:else>...</view>
   </cover-view>

@@ -39,10 +39,6 @@ module.exports.handle = handle;
     </view>
   </view>
   <view class="pie">
-    {{pieShow}}
-    <view class="container" wx:if="{{pieShow}}">
-      <f2 class="f2-chart" onInit="{{initChart}}" />
-    </view>
     <view class="summary">
       <view class="summary-item {{activeTab === 'pay' ? 'pay' : ''}}" bindtap="changeTab" data-tab="pay">
         月支出
@@ -53,15 +49,16 @@ module.exports.handle = handle;
         <view>{{fmt.fmtNum(numHandler.handle(pieChartData.flowIn.allSum || 0))}}</view>
       </view>
     </view>
+    <slot></slot>
     <view hidden="{{showParentDialog || showMenuDialog ? true : false}}">
-      <canvas
+      <!-- <canvas
         canvas-id="pie"
         id="pie"
         wx:if="{{pieChartData && pieChartData[activeTab === 'pay' ? 'flowOut' : 'flowIn'].dataList.length !== 0}}"
         class="charts"
         style="width: {{cWidth}}px;"
         bind:touchstart="touchPie"
-      ></canvas>
+      ></canvas> -->
     </view>
     <view class="charts hide-pie-tip" hidden="{{!showParentDialog? true : false}}">
       |д･)害怕躲起来

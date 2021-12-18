@@ -26,14 +26,18 @@
     bind:hideTab="onHideTab"
   />
 </view>
-<view hidden="{{active !== 'chart'}}">
+<view style="{{active !== 'chart' ? 'opacity: 0;margin-top: -9999rpx;' : ''}}">
   <chart
     id="chart"
     tab="{{active}}"
     bind:hideTab="onHideTab"
     bind:reFetchBillList="onReFetchBillList"
     bind:editBill="onEditBill"
-  />
+  >
+    <view class="container">
+      <f2 class="f2-chart" onInit="{{initChart}}" />
+    </view>
+  </chart>
 </view>
 <cover-view
     class="tab-item-top left {{active === 'list' ? 'active-bottom-tab' : ''}}"

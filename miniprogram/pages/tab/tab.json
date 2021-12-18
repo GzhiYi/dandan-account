@@ -4,6 +4,7 @@
     "list": "../components/list/list",
     "index": "../components/index/index",
     "chart": "../components/chart/chart",
-    "nav": "../components/nav/nav"
+    "nav": "../components/nav/nav",
+    "f2": "@antv/wx-f2"
   }
 }

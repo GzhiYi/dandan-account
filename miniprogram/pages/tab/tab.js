@@ -18,7 +18,8 @@ create.Page(store, {
     hideTab: false,
     activeRightIcon: '',
     pieShow: false,
-    initChart: null
+    initChart: null,
+    isRenderPie: false
   },
   computed: {
     activeRightIcon() {
@@ -50,18 +51,24 @@ create.Page(store, {
     if (isInUser !== 1) this.registerUser()
   },
   renderChart(event) {
-    console.log('render chart', event)
     const list = event.detail
+    const newChartData = list.map((item) => ({
+      name: item.categoryName,
+      id: item.categoryId,
+      y: item.allSum,
+      const: 'const'
+    }))
+    if (this.data.initChart) {
+      const wxF2 = this.selectComponent('#f2-pie')
+      wxF2.chart.changeData(newChartData)
+      return
+    }
+    const self = this
     this.setData({
       initChart(F2, config) {
-        console.log('F2', F2)
         config.self = this
         const chart = new F2.Chart(config)
-        const data = list.map((item) => ({
-          name: item.categoryName,
-          y: item.allSum,
-          const: 'const'
-        }))
+        const data = newChartData
         chart.source(data)
         chart.coord('polar', {
           transposed: true,
@@ -72,6 +79,7 @@ create.Page(store, {
         chart.tooltip(false)
         chart.pieLabel({
           sidePadding: 40,
+          activeShape: true,
           label1: function label1(d, color) {
             return {
               text: d.name,
@@ -84,11 +92,28 @@ create.Page(store, {
               fill: '#808080',
               fontWeight: 'bold'
             }
+          },
+          onClick: function onClick(ev) {
+            console.log(ev, ev.data)
+            const chartPage = self.selectComponent('#chart')
+            if (ev.data && ev.data.id) {
+              wx.vibrateShort()
+              chartPage.setPageData({
+                billList: [],
+                pickCategoryId: ev.data.id
+              })
+              chartPage.fetchBillList({
+                categoryId: ev.data.id
+              })
+            }
           }
         })
 
         chart.interval().position('const*y').color('name', ['#1890FF', '#13C2C2', '#2FC25B', '#FACC14', '#F04864']).adjust('stack')
         chart.render()
+        self.setData({
+          isRenderPie: true
+        })
         // 注意：需要把chart return 出来
         return chart
       }

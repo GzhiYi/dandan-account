@@ -36,7 +36,7 @@
     bind:renderChart="renderChart"
   >
     <view class="container" wx:if="{{pieShow}}">
-      <f2 class="f2-chart" onInit="{{initChart}}" />
+      <f2 id="f2-pie" class="f2-chart" onInit="{{initChart}}" />
     </view>
   </chart>
 </view>

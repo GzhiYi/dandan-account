@@ -60,12 +60,12 @@ module.exports.handle = handle;
         bind:touchstart="touchPie"
       ></canvas> -->
     </view>
-    <view class="charts hide-pie-tip" hidden="{{!showParentDialog? true : false}}">
+    <!-- <view class="charts hide-pie-tip" hidden="{{!showParentDialog? true : false}}">
       |д･)害怕躲起来
     </view>
     <view class="charts hide-pie-tip" hidden="{{!showMenuDialog? true : false}}">
       |д･)害怕躲起来
-    </view>
+    </view> -->
 
     <view class="empty-chart" wx:if="{{!pieChartData || pieChartData[activeTab === 'pay' ? 'flowOut' : 'flowIn'].dataList.length === 0}}">
         没有账单数据( ´･･)ﾉ(._.`)
@@ -78,7 +78,7 @@ module.exports.handle = handle;
         wx:if="{{pieChartData}}"
       >
         <image src="../../../images/right-chevron.png" class="chevron"></image>
-        {{activeParentCategory ? '已选：' : '请选择分类'}}{{activeParentCategory.categoryName}}{{activeParentCategory ? (" "+  total +"笔") : ''}}
+        {{pickCategoryId ? '已选：' : '选择分类'}}{{$.mapCategoryName[pickCategoryId]}}{{pickCategoryId ? (" "+  total +" 笔") : ''}}
       </view>
       <view class="chart-sum" wx:if="{{pieChartData}}">
         月余：<text
@@ -137,7 +137,7 @@ module.exports.handle = handle;
         data-category="{{item}}"
         data-index="{{index}}"
       >
-        <text class="category-list-style" style="background: {{activeParentIndex === index ? 'rgb(255, 248, 198);' : ''}}">{{item.categoryName}}</text>
+        <text class="category-list-style" style="background: {{pickCategoryId === item.categoryId ? 'rgb(255, 248, 198);' : ''}}">{{item.categoryName}}</text>
       </view>
     </scroll-view>
   </view>

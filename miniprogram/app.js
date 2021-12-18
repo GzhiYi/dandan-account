@@ -66,10 +66,10 @@ App({
           if (res.result.code === 1) {
             const list = res.result.data
             console.log('categoryList', list)
-            list.forEach(item => {
-              if (list._id) mapCategoryName[list._id] = item.categoryName
+            list.forEach((item) => {
+              if (item._id) mapCategoryName[item._id] = item.categoryName
               if (item.children && item.children.length) {
-                item.children.forEach(inItem => {
+                item.children.forEach((inItem) => {
                   if (inItem._id) mapCategoryName[inItem._id] = inItem.categoryName
                 })
               }

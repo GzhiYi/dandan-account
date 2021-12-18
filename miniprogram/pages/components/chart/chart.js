@@ -29,8 +29,7 @@ create.Component(store, {
     cHeight: 0,
     activeTab: 'pay',
     fixScroll: true,
-    activeParentIndex: 0,
-    activeParentCategory: null,
+    pickCategoryId: '', // 选择的品类id
     showParentDialog: false,
     showMenuDialog: false,
     editItem: {},
@@ -135,6 +134,7 @@ create.Component(store, {
           const { result } = res
           if (result && result.code === 1) {
             const { dataList } = result.detailResult[activeTab === 'pay' ? 'flowOut' : 'flowIn']
+            console.log('dataList', dataList)
             self.setData({
               pieChartData: result.detailResult,
               categoryList: dataList
@@ -179,8 +179,11 @@ create.Component(store, {
       page = 1
       hasNext = false
       this.setData({
-        activeParentCategory: null
+        pickCategoryId: ''
       })
+    },
+    setPageData(data) {
+      this.setData(data)
     },
     touchPie: debounce(function (e) {
       const self = this
@@ -232,6 +235,7 @@ create.Component(store, {
             }
             let tempBillList = self.data.billList
             tempBillList = [...tempBillList, ...result.data.page]
+            console.log('tempBillList', tempBillList)
             self.setData({
               billList: tempBillList,
               total: result.data.count
@@ -270,7 +274,7 @@ create.Component(store, {
       wx.vibrateShort({})
       self.setData({
         activeTab: tab,
-        activeParentIndex: 0,
+        pickCategoryId: '',
         activeParentCategory: null,
         billList: [],
         categoryList: pieChartData[tab === 'pay' ? 'flowOut' : 'flowIn'].dataList || []
@@ -304,14 +308,13 @@ create.Component(store, {
       this.triggerEvent('hideTab', true)
     },
     selectParentCategory(event) {
-      const { category, index } = event.currentTarget.dataset
+      const { category } = event.currentTarget.dataset
       wx.vibrateShort()
       // 重置请求参数值
       this.resetRequestParam()
       this.setData({
-        activeParentIndex: index,
+        pickCategoryId: category.categoryId,
         showParentDialog: false,
-        activeParentCategory: category,
         billList: []
       })
       this.triggerEvent('hideTab', false)

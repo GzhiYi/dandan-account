@@ -1,38 +1,32 @@
 <nav
-  style="{{active === 'index' || active === 'list' ? 'display: none;' : ''}}"
+  style="{{$.activeTab === 'index' || $.activeTab === 'list' ? 'display: none;' : ''}}"
   class="nav-instance"
   my-class="chart-nav-bg"
   showIcons="{{['bug', 'search', 'setting']}}"
 ></nav>
-<view hidden="{{active !== 'list'}}">
+<view hidden="{{$.activeTab !== 'list'}}">
   <list
     id="list"
     class="list"
-    bind:switchTab="onSwitchTab"
     bind:reFetchBillList="onReFetchBillList"
     bind:editBill="onEditBill"
-    bind:hideTab="onHideTab"
-    tab="{{active}}"
-    currentMonthData="{{currentMonthData}}"
   />
 </view>
-<view hidden="{{active !== 'index'}}">
+<view hidden="{{$.activeTab !== 'index'}}">
   <index
     bind:reFetchBillList="onReFetchBillList"
     id="index"
     selectedCategory="{{$.selectedCategory}}"
     defaultCategoryList="{{$.defaultCategoryList}}"
-    editBill="{{editBill}}"
-    bind:hideTab="onHideTab"
   />
 </view>
-<view style="{{active !== 'chart' ? 'opacity: 0;margin-top: -9999rpx;' : ''}}">
+<view style="{{$.activeTab !== 'chart' ? 'opacity: 0;margin-top: -9999rpx;' : ''}}">
   <chart
     id="chart"
-    tab="{{active}}"
+    tab="{{$.activeTab}}"
     bind:hideTab="onHideTab"
     bind:reFetchBillList="onReFetchBillList"
-    bind:editBill="onEditBill"
+    bind:onEditBill="onEditBill"
     bind:renderChart="renderChart"
   >
     <view class="container" wx:if="{{pieShow}}">
@@ -41,11 +35,11 @@
   </chart>
 </view>
 <cover-view
-    class="tab-item-top left {{active === 'list' ? 'active-bottom-tab' : ''}}"
+    class="tab-item-top left {{$.activeTab === 'list' ? 'active-bottom-tab' : ''}}"
     bindtap="goTo"
     bindlongtap="showIconName"
     data-active="list"
-    hidden="{{hideTab}}"
+    hidden="{{!$.showTabbar}}"
   >
     <cover-image
       style="{{scale === 'list' ? 'transform: scale(.8, .8)' : ''}}"
@@ -54,11 +48,11 @@
     ></cover-image>
   </cover-view>
   <cover-view
-    class="tab-item-top middle {{active === 'index' ? 'active-bottom-tab' : ''}}"
+    class="tab-item-top middle {{$.activeTab === 'index' ? 'active-bottom-tab' : ''}}"
     bindtap="goTo"
     bindlongtap="showIconName"
     data-active="index"
-    hidden="{{hideTab}}"
+    hidden="{{!$.showTabbar}}"
   >
     <cover-image
       style="{{scale === 'index' ? 'transform: scale(.8, .8)' : ''}}"
@@ -67,11 +61,11 @@
     ></cover-image>
   </cover-view>
   <cover-view
-    class="tab-item-top right {{active === 'chart' ? 'active-bottom-tab' : ''}}"
+    class="tab-item-top right {{$.activeTab === 'chart' ? 'active-bottom-tab' : ''}}"
     bindtap="goTo"
     bindlongtap="showIconName"
     data-active="chart"
-    hidden="{{hideTab}}"
+    hidden="{{!$.showTabbar}}"
   >
     <cover-image
       style="{{scale === 'chart' ? 'transform: scale(.8, .8);' : ''}}"

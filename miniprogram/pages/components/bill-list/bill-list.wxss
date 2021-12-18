@@ -1,0 +1,70 @@
+.bill-list {
+  margin-top: 22rpx;
+  -webkit-overflow-scrolling: touch;
+}
+.empty-chart {
+  height: 400rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 28rpx;
+  color: grey;
+}
+.list-page {
+  /* background-color: #f8fafb; */
+  height: 100%;
+}
+.bill-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 20rpx 30rpx;
+  padding: 20rpx 30rpx;
+  background-color: #fff;
+  border-radius: 14rpx;
+}
+.fake-bill-item {
+  height: 100rpx;
+}
+.date {
+  color: #ccc;
+  font-size: 25rpx;
+  text-align: right;
+  min-width: 140rpx;
+}
+.type {
+  background: #5e72e4;
+  color: #fff;
+  border-radius: 7rpx;
+  font-size: 22rpx;
+  padding: 5rpx 10rpx;
+  width: fit-content;
+  margin-top: 3rpx;
+}
+.money {
+  font-size: 42rpx;
+  text-align: right;
+}
+.description {
+  font-size: 27rpx;
+  margin: 13rpx 0 0;
+}
+.note-tips {
+  height: 400rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 28rpx;
+  color: grey;
+}
+.money-date {
+  display: flex;
+  align-items: center;
+}
+.pop-indicator {
+  background-color: #E9EBEE;
+  height: 10rpx;
+  width: 68rpx;
+  margin: 3rpx auto;
+  border-radius: 19rpx;
+}

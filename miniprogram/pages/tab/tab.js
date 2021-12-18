@@ -12,10 +12,16 @@ const mapFace = {
 const { importStore } = getApp()
 const { create, store } = importStore
 create.Page(store, {
-  use: ['selectedCategory', 'defaultCategoryList', 'currentMonthData', 'loadingRightIcon', 'editBill'],
+  use: [
+    'selectedCategory',
+    'defaultCategoryList',
+    'currentMonthData',
+    'loadingRightIcon',
+    'editBill',
+    'showTabbar',
+    'activeTab'
+  ],
   data: {
-    active: 'index',
-    hideTab: false,
     activeRightIcon: '',
     pieShow: false,
     initChart: null,
@@ -135,9 +141,9 @@ create.Page(store, {
   goTo(event) {
     const { active } = event.currentTarget.dataset
     this.setData({
-      active,
       scale: active
     })
+    store.data.activeTab = active
     wx.vibrateShort()
     const self = this
     setTimeout(() => {
@@ -156,21 +162,9 @@ create.Page(store, {
     chart.getPieChartData(true)
   },
   onEditBill() {
-    this.setData({
-      active: 'index'
-    })
     const index = this.selectComponent('#index')
     index.dectiveEdit()
-  },
-  onSwitchTab(data) {
-    this.setData({
-      active: data.detail
-    })
-  },
-  onHideTab(event) {
-    this.setData({
-      hideTab: event.detail
-    })
+    store.data.activeTab = 'index'
   },
   onGetNewWord() {
     const index = this.selectComponent('#index')

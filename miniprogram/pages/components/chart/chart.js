@@ -1,9 +1,8 @@
 import dayjs from 'dayjs'
-import { strip, debounce } from '../../../util'
+import { debounce } from '../../../util'
 
 const { importStore } = getApp()
 const { create, store } = importStore
-const canvasPie = null
 let firstFetch = true // 用于判断请求是否为第一次，true为本月数据
 let page = 1 // 默认的分页值
 let hasNext = false // 是否有下一页
@@ -110,8 +109,7 @@ create.Component(store, {
       const {
         year,
         activeMonth,
-        activeTab,
-        activeParentCategory
+        activeTab
       } = this.data
       const self = this
       const firstAndLastArray = self.getFirstAndLastDayByMonth(year, activeMonth + 1)
@@ -120,7 +118,7 @@ create.Component(store, {
         self.setData({
           billList: []
         })
-        self.fetchBillList(activeParentCategory)
+        self.fetchBillList()
       }
       store.data.loadingRightIcon = true
       wx.cloud.callFunction({
@@ -185,41 +183,22 @@ create.Component(store, {
     setPageData(data) {
       this.setData(data)
     },
-    touchPie: debounce(function (e) {
-      const self = this
-      // 重置请求参数值
-      self.resetRequestParam()
-      // hack，解决relative定位后canvas无法正常点击的问题
-      e.currentTarget.offsetTop += 110
-      canvasPie.showToolTip(e, {
-        format(item) {
-          self.setData({
-            activeParentCategory: item,
-            billList: [],
-            activeParentIndex: item.index
-          })
-          self.fetchBillList(item)
-          wx.vibrateShort()
-          return `${item.name} / ${+parseFloat(item.data.toPrecision(12))} / ${strip(item._proportion_.toFixed(2) * 100)}%`
-        }
-      })
-    }, 300, true),
     // 获取该分类下的账单列表，支持分页。
-    fetchBillList(item) {
-      if (!item) return
+    fetchBillList() {
       const self = this
       const {
         year,
-        activeMonth
+        activeMonth,
+        pickCategoryId
       } = self.data
       const firstAndLastArray = self.getFirstAndLastDayByMonth(year, activeMonth + 1)
       self.setData({
-        loadingBills: true
+        loadingBills: 1
       })
       wx.cloud.callFunction({
         name: 'getAccountList',
         data: {
-          categoryId: item.categoryId,
+          categoryId: pickCategoryId,
           startDate: firstAndLastArray[0],
           endDate: firstAndLastArray[1],
           limit: DEFAULT_LIMIT,
@@ -247,7 +226,7 @@ create.Component(store, {
         },
         complete() {
           self.setData({
-            loadingBills: false
+            loadingBills: 0
           })
           wx.hideLoading()
         }
@@ -255,7 +234,7 @@ create.Component(store, {
     },
     onScrollBottom() {
       if (hasNext) {
-        this.fetchBillList(this.data.activeParentCategory)
+        this.fetchBillList()
         wx.showLoading({
           title: '加载中...'
         })
@@ -275,8 +254,8 @@ create.Component(store, {
       self.setData({
         activeTab: tab,
         pickCategoryId: '',
-        activeParentCategory: null,
         billList: [],
+        loadingBills: -1,
         categoryList: pieChartData[tab === 'pay' ? 'flowOut' : 'flowIn'].dataList || []
       }, () => {
         self.fillPie()
@@ -305,7 +284,7 @@ create.Component(store, {
           showParentDialog: true
         })
       }
-      this.triggerEvent('hideTab', true)
+      store.data.showTabbar = false
     },
     selectParentCategory(event) {
       const { category } = event.currentTarget.dataset
@@ -317,18 +296,9 @@ create.Component(store, {
         showParentDialog: false,
         billList: []
       })
-      this.triggerEvent('hideTab', false)
+      store.data.showTabbar = false
       // 获取账单
-      this.fetchBillList(category)
-    },
-    showMenu(event) {
-      const self = this
-      const { bill } = event.currentTarget.dataset
-      self.setData({
-        editItem: bill,
-        showMenuDialog: true
-      })
-      self.triggerEvent('hideTab', true)
+      this.fetchBillList()
     },
     closeDialog() {
       this.setData({
@@ -336,54 +306,13 @@ create.Component(store, {
         showConfirmDelete: false,
         showParentDialog: false
       })
-      this.triggerEvent('hideTab', false)
+      store.data.showTabbar = true
     },
-    editBill() {
-      const self = this
-      const { editItem } = self.data
-      self.setData({
-        showMenuDialog: false
-      })
-      this.triggerEvent('hideTab', false)
-      store.data.editBill = editItem
-      self.triggerEvent('editBill')
+    onEditBill() {
+      this.triggerEvent('onEditBill')
     },
-    deleteBill() {
-      const self = this
-      const { editItem } = self.data
-      if (!self.data.showConfirmDelete) {
-        self.setData({
-          showConfirmDelete: !self.data.showConfirmDelete
-        })
-        wx.vibrateShort()
-      } else {
-        self.closeDialog()
-        wx.vibrateShort()
-        wx.cloud.callFunction({
-          name: 'account',
-          data: {
-            mode: 'deleteById',
-            id: editItem._id
-          },
-          success(res) {
-            if (res.result.code === 1) {
-              wx.showToast({
-                title: '删除成功',
-                icon: 'none'
-              })
-              self.setData({
-                editItem: {}
-              })
-              self.triggerEvent('reFetchBillList')
-            } else {
-              wx.showToast({
-                title: '删除失败，请重试',
-                icon: 'none'
-              })
-            }
-          }
-        })
-      }
+    reFetchBillList() {
+      this.triggerEvent('reFetchBillList')
     }
   }
 })

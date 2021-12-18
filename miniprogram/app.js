@@ -145,5 +145,9 @@ App({
       title,
       icon: 'none'
     })
+  },
+  enterEditMode(ctx) {
+    const index = ctx.selectComponent('#index')
+    index.dectiveEdit()
   }
 })

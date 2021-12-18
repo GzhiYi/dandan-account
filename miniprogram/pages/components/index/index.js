@@ -1,5 +1,6 @@
 // pages/components/index/index.js
 import dayjs from 'dayjs'
+
 const { importStore } = getApp()
 const { create, store } = importStore
 
@@ -13,10 +14,9 @@ create.Component(store, {
   },
   properties: {
     selectedCategory: Object,
-    editBill: Object,
     defaultCategoryList: Array
   },
-  use: ['mapCategoryName', 'editBill'],
+  use: ['mapCategoryName', 'editBill', 'isEdit'],
   data: {
     sum: '',
     note: '',
@@ -24,7 +24,6 @@ create.Component(store, {
     active_date: '今天',
     active_date_time: '',
     loadingCreate: false,
-    isEdit: false,
     clickPigNum: 0,
     wordData: null,
     showPayType: false,
@@ -197,12 +196,11 @@ create.Component(store, {
         active_date_time,
         active_tab,
         selectedCategory,
-        isEdit,
-        editBill,
         // 某轩的需求
         showPayType,
         payType
       } = this.data
+      const { isEdit, editBill } = this.store.data
       let transSum = 0
       if (sum) {
         // hack，欧元键盘不显示.号所以需要进行替换
@@ -326,7 +324,7 @@ create.Component(store, {
     dectiveEdit() {
       const { editBill, plainCategoryList } = this.store.data
       console.log('检查', editBill)
-      const matchCategory = plainCategoryList.find(item => item._id === editBill.categoryId)
+      const matchCategory = plainCategoryList.find((item) => item._id === editBill.categoryId)
       console.log('matchCategory', matchCategory)
       this.setData({
         sum: editBill.money,
@@ -334,8 +332,7 @@ create.Component(store, {
         active_tab: editBill.flow,
         selectedCategory: matchCategory,
         active_date: this.converDate(editBill.noteDate, false),
-        active_date_time: editBill.noteDate,
-        isEdit: true
+        active_date_time: editBill.noteDate
       })
     },
     resetStatus() {
@@ -345,10 +342,10 @@ create.Component(store, {
         active_tab: 0,
         active_date: '今天',
         loadingCreate: false,
-        selectedCategory: globalDefaultCategory,
-        isEdit: false
+        selectedCategory: globalDefaultCategory
       })
       store.data.editBill = {}
+      store.data.isEdit = false
     },
     bindDateChange(event) {
       this.setData({

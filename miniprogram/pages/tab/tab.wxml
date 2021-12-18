@@ -33,8 +33,9 @@
     bind:hideTab="onHideTab"
     bind:reFetchBillList="onReFetchBillList"
     bind:editBill="onEditBill"
+    bind:renderChart="renderChart"
   >
-    <view class="container">
+    <view class="container" wx:if="{{pieShow}}">
       <f2 class="f2-chart" onInit="{{initChart}}" />
     </view>
   </chart>

@@ -48,35 +48,20 @@ create.Page(store, {
     this.calCalendarHeight()
     const isInUser = wx.getStorageSync('isInUser')
     if (isInUser !== 1) this.registerUser()
-    this.renderChart()
   },
-  renderChart() {
+  renderChart(event) {
+    console.log('render chart', event)
+    const list = event.detail
     this.setData({
       initChart(F2, config) {
         console.log('F2', F2)
         config.self = this
         const chart = new F2.Chart(config)
-        const data = [{
-          name: '其他消费',
-          y: 6371664,
+        const data = list.map((item) => ({
+          name: item.categoryName,
+          y: item.allSum,
           const: 'const'
-        }, {
-          name: '生活用品',
-          y: 7216301,
-          const: 'const'
-        }, {
-          name: '通讯物流',
-          y: 1500621,
-          const: 'const'
-        }, {
-          name: '交通出行',
-          y: 586622,
-          const: 'const'
-        }, {
-          name: '饮食',
-          y: 900000,
-          const: 'const'
-        }]
+        }))
         chart.source(data)
         chart.coord('polar', {
           transposed: true,
@@ -135,10 +120,6 @@ create.Page(store, {
         scale: null
       })
     }, 200)
-    if (active === 'chart') {
-      console.log('重新渲染', active)
-      this.renderChart()
-    }
   },
   onReFetchBillList() {
     const now = dayjs().format('YYYY-MM-DD')

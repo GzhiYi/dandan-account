@@ -33,7 +33,6 @@
     bind:hideTab="onHideTab"
     bind:reFetchBillList="onReFetchBillList"
     bind:editBill="onEditBill"
-    bind:currentMonthData="onSyncCurrentMonthData"
   />
 </view>
 <cover-view

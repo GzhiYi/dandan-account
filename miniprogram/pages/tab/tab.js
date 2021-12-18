@@ -1,4 +1,5 @@
 import dayjs from 'dayjs'
+
 const mapFace = {
   greed: '我还能存！',
   kiss: '继续继续',
@@ -21,7 +22,7 @@ create.Page(store, {
   },
   computed: {
     activeRightIcon() {
-      const currentMonthData = this.currentMonthData
+      const { currentMonthData } = this
       if (!('flowIn' in currentMonthData) || !('flowOut' in currentMonthData)) return
       const netAssets = (currentMonthData.flowIn.allSum - currentMonthData.flowOut.allSum) || 0
       let icon = 'tongue'
@@ -73,7 +74,7 @@ create.Page(store, {
   },
   onReFetchBillList() {
     const now = dayjs().format('YYYY-MM-DD')
-    
+
     const list = this.selectComponent('#list')
     list.getBillList(now, now, 'index')
 
@@ -100,31 +101,6 @@ create.Page(store, {
   onGetNewWord() {
     const index = this.selectComponent('#index')
     index.getWord()
-  },
-  onSyncCurrentMonthData(event) {
-    const currentMonthData = event.detail
-    if (!('flowIn' in currentMonthData) || !('flowOut' in currentMonthData)) return
-    const netAssets = (currentMonthData.flowIn.allSum - currentMonthData.flowOut.allSum) || 0
-    let icon = 'tongue'
-    if (netAssets > 5000) {
-      icon = 'greed'
-    } else if (netAssets >= 4000 && netAssets < 5000) {
-      icon = 'cool'
-    } else if (netAssets >= 3000 && netAssets < 4000) {
-      icon = 'kiss'
-    } else if (netAssets >= 0 && netAssets < 3000) {
-      icon = 'smile'
-    } else if (netAssets >= -1000 && netAssets < 0) {
-      icon = 'grinning'
-    } else if (netAssets >= -3000 && netAssets < -1000) {
-      icon = 'puke'
-    } else {
-      icon = 'sad'
-    }
-    this.setData({
-      currentMonthData,
-      activeRightIcon: icon
-    })
   },
   showIconName(event) {
     const { active } = event.currentTarget.dataset

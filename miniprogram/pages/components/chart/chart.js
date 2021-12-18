@@ -1,5 +1,5 @@
-import { strip, debounce } from '../../../util'
 import dayjs from 'dayjs'
+import { strip, debounce } from '../../../util'
 // eslint-disable-next-line import/extensions
 import uCharts from '../../u-charts.js'
 
@@ -138,10 +138,10 @@ create.Component(store, {
         },
         success(res) {
           self.setData({
-            initChart: function (F2, config) {
+            initChart(F2, config) {
               console.log('F2', F2)
               config.self = self
-              const chart = new F2.Chart(config);
+              const chart = new F2.Chart(config)
               const data = [{
                 name: '其他消费',
                 y: 6371664,
@@ -162,36 +162,36 @@ create.Component(store, {
                 name: '饮食',
                 y: 900000,
                 const: 'const'
-              }];
-              chart.source(data);
+              }]
+              chart.source(data)
               chart.coord('polar', {
                 transposed: true,
                 radius: 0.75
-              });
-              chart.legend(false);
-              chart.axis(false);
+              })
+              chart.legend(false)
+              chart.axis(false)
               chart.tooltip(false)
               chart.pieLabel({
                 sidePadding: 40,
-                label1: function label1(data, color) {
+                label1: function label1(d, color) {
                   return {
-                    text: data.name,
+                    text: debounce.name,
                     fill: color
-                  };
+                  }
                 },
-                label2: function label2(data) {
+                label2: function label2(d) {
                   return {
-                    text: '￥' + String(Math.floor(data.y * 100) / 100).replace(/\B(?=(\d{3})+(?!\d))/g, ','),
+                    text: `￥${String(Math.floor(d.y * 100) / 100).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`,
                     fill: '#808080',
                     fontWeight: 'bold'
-                  };
+                  }
                 }
-              });
-            
-              chart.interval().position('const*y').color('name', ['#1890FF', '#13C2C2', '#2FC25B', '#FACC14', '#F04864']).adjust('stack');
-              chart.render();
+              })
+
+              chart.interval().position('const*y').color('name', ['#1890FF', '#13C2C2', '#2FC25B', '#FACC14', '#F04864']).adjust('stack')
+              chart.render()
               // 注意：需要把chart return 出来
-              return chart;
+              return chart
             }
           }, () => {
             self.setData({

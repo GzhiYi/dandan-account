@@ -14,7 +14,7 @@
     <view
       class="bill-item"
       wx:for="{{billResult}}"
-      wx:key="{{item._id}}"
+      wx:key="_id"
       bindtap="showMenu"
       data-bill="{{item}}"
       style="{{item._id === editItem._id && showMenuDialog ? 'border: 4rpx solid #f75676; padding: 16rpx 26rpx;' : ''}}"

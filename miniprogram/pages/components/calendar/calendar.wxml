@@ -57,7 +57,7 @@ module.exports.numParse = numParse
     <view
       class="day {{item.position}} {{item.week === 6 || item.week === 7 ? 'weeken' : ''}} {{selectedDate === item.date ? 'selected-date' : ''}} {{today === item.date && showToday ? 'today' : ''}} {{item.inRange ? 'inrange' : ''}} {{rangeStyle.handle(item, dateRange)}}"
       wx:for="{{allDays}}"
-      wx:key="{{item}}"
+      wx:key="item"
       bindtap="onPickDay"
       data-day="{{item}}"
     >

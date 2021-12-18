@@ -110,7 +110,7 @@
 .btn-area {
   text-align: center;
 }
-.btn-area button {
+.warn {
   border: 1px solid transparent;
   border-radius: 9rpx;
   font-size: 28rpx;

@@ -29,7 +29,7 @@ module.exports.handle = handle;
           <view
             class="month {{activeMonth === (item - 1) ? 'active-month' : ''}}"
             wx:for="{{months.month}}"
-            wx:key="{{item}}"
+            wx:key="item"
             bindtap="selectMonth"
             data-month="{{item}}"
             id="active{{item}}"
@@ -96,7 +96,7 @@ module.exports.handle = handle;
       <view
         class="bill-item"
         wx:for="{{billList}}"
-        wx:key="{{item._id}}"
+        wx:key="_id"
         bindtap="showMenu"
         data-bill="{{item}}"
         style="{{item._id === editItem._id && showMenuDialog ? 'border: 4rpx solid #f75676; padding: 16rpx 26rpx;' : ''}}"
@@ -132,7 +132,7 @@ module.exports.handle = handle;
     <scroll-view class="dialog-bills" scroll-y="true">
       <view
         wx:for="{{categoryList}}"
-        wx:key="{{item.categoryId}}"
+        wx:key="categoryId"
         class="list-item-btn"
         bindtap="closeDialog"
         style="{{index === categoryList.length - 1 ? 'border-bottom: none;position: relative;' : 'position: relative;'}}"

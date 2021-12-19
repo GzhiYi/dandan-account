@@ -16,6 +16,10 @@ create.Component(store, {
     showLoading: {
       type: Boolean,
       value: false
+    },
+    fixHeight: {
+      type: Number,
+      value: 390
     }
   },
   use: ['sysInfo.screenHeight', 'mapCategoryName'],

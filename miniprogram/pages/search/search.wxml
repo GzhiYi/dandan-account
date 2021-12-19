@@ -37,5 +37,6 @@
     bind:onEdit="onEditBill"
     bind:reFetchBillList="onReFetchBillList"
     showLoading="{{false}}"
+    fixHeight="{{150}}"
   ></bill-list>
 </view>

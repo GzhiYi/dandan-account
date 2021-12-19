@@ -76,6 +76,7 @@ module.exports.handle = handle;
     billList="{{billList}}"
     bind:reFetchBillList="reFetchBillList"
     showLoading="{{true}}"
+    fixHeight="{{440}}"
   ></bill-list>
 </view>
 <!-- 父类选择弹窗 -->

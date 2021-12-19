@@ -14,5 +14,6 @@
     billList="{{billResult}}"
     bind:reFetchBillList="reFetchBillList"
     showLoading="{{false}}"
+    fixHeight="{{260}}"
   ></bill-list>
 </view>

@@ -2,7 +2,7 @@
 <view class="bill-list">
   <scroll-view
     scroll-y="{{true}}"
-    style="height: {{(($.sysInfo.screenHeight - 390) / .7)}}rpx;"
+    style="height: {{(($.sysInfo.screenHeight - fixHeight) / .7)}}rpx;"
     bindscrolltolower="onScrollBottom"
     class="bill-list"
   >

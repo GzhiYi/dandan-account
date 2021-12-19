@@ -74,8 +74,8 @@ module.exports.handle = handle;
   <bill-list
     loading="{{loadingBills}}"
     billList="{{billList}}"
-    bind:onEdit="onEditBill"
     bind:reFetchBillList="reFetchBillList"
+    showLoading="{{true}}"
   ></bill-list>
 </view>
 <!-- 父类选择弹窗 -->

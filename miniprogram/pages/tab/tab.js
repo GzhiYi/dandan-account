@@ -19,7 +19,8 @@ create.Page(store, {
     'loadingRightIcon',
     'editBill',
     'showTabbar',
-    'activeTab'
+    'activeTab',
+    'isEdit'
   ],
   data: {
     activeRightIcon: '',
@@ -58,6 +59,13 @@ create.Page(store, {
   },
   renderChart(event) {
     const list = event.detail
+    if (!list || !list.length) {
+      this.setData({
+        pieShow: false,
+        initChart: null
+      })
+      return
+    }
     const newChartData = list.map((item) => ({
       name: item.categoryName,
       id: item.categoryId,
@@ -94,13 +102,12 @@ create.Page(store, {
           },
           label2: function label2(d) {
             return {
-              text: `￥${String(Math.floor(d.y * 100) / 100).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`,
+              text: `${String(Math.floor(d.y * 100) / 100).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`,
               fill: '#808080',
               fontWeight: 'bold'
             }
           },
           onClick: function onClick(ev) {
-            console.log(ev, ev.data)
             const chartPage = self.selectComponent('#chart')
             if (ev.data && ev.data.id) {
               wx.vibrateShort()
@@ -132,6 +139,11 @@ create.Page(store, {
   onShow() {
     const index = this.selectComponent('#index')
     index.setRecentCate()
+    const { shouldFetchList, isEdit } = store.data
+    if (shouldFetchList) {
+      this.onReFetchBillList()
+      store.data.shouldFetchList = false
+    }
   },
   calCalendarHeight() {
     const query = wx.createSelectorQuery().in(this)
@@ -160,11 +172,6 @@ create.Page(store, {
 
     const chart = this.selectComponent('#chart')
     chart.getPieChartData(true)
-  },
-  onEditBill() {
-    const index = this.selectComponent('#index')
-    index.dectiveEdit()
-    store.data.activeTab = 'index'
   },
   onGetNewWord() {
     const index = this.selectComponent('#index')

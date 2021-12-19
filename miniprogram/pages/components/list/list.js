@@ -160,6 +160,9 @@ create.Component(store, {
         dateRange = null
         self.getBillList(this.data.today, this.data.today, 'list')
       }
+    },
+    reFetchBillList(event) {
+      this.triggerEvent('reFetchBillList')
     }
   }
 })

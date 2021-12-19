@@ -31,27 +31,11 @@
 </view>
 <view class="search-result">
   <view class="place"></view>
-  <scroll-view scroll-y="{{true}}" style="height: {{$.sysInfo.screenHeight - (($.sysInfo.screenHeight + 442.49) / 4.67)}}px;" class="bill-list">
-    <view class="empty-search" wx:if="{{isSearching}}">查询中...</view>
-    <view class="empty-search" wx:if="{{billList.length === 0 && !isSearching}}">没有找到账单( ´･･)ﾉ(._.`)</view>
-    <view
-      class="bill-item"
-      wx:for="{{billList}}"
-      wx:key="{{item._id}}"
-    >
-      <view class="type-date">
-        <view class="type">{{item.category.categoryName}}</view>
-        <view class="description" wx:if="{{item.description}}">{{item.description}}</view>
-      </view>
-      <view class="money-date">
-        <view>
-          <view class="money" style="color: {{ item.flow === 1 ? '#4fd69c;' : '#f75676;'}}">
-            {{item.flow === 0 ? '-' : '+'}}{{item.money}}
-          </view>
-          <view class="date">{{item.noteDate}}</view>
-        </view>
-      </view>
-    </view>
-  </scroll-view>
-  
+  <view class="empty-search" wx:if="{{isSearching}}">查询中...</view>
+  <bill-list
+    billList="{{billList}}"
+    bind:onEdit="onEditBill"
+    bind:reFetchBillList="onReFetchBillList"
+    showLoading="{{false}}"
+  ></bill-list>
 </view>

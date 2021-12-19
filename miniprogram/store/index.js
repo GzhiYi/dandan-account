@@ -14,7 +14,8 @@ export default {
     editBill: {},
     showTabbar: true,
     activeTab: 'index',
-    isEdit: false // 是否正在编辑账单
+    isEdit: false, // 是否正在编辑账单
+    shouldFetchList: false
   },
   // 无脑全部更新，组件或页面不需要声明 use
   // updateAll: true,

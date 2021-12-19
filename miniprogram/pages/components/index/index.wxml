@@ -41,7 +41,7 @@
 </view>
 <form>
   <view
-    wx:if="{{$.isEdit}}"
+    wx:if="{{isEdit}}"
     class="edit-tip"
     bindtap="resetStatus"
   >编辑账单，点此处取消</view>
@@ -145,8 +145,8 @@
     </view>
   </view>
   <view class="btn-area">
-    <button bindtap="submitForm" class="warn" wx:if="{{!loadingCreate}}">{{$.isEdit ? '编辑' : '确认'}}</button>
-    <button class="warn" style="opacity: .5;" wx:else>{{$.isEdit ? '编辑' : '创建'}}中...</button>
+    <button bindtap="submitForm" class="warn" wx:if="{{!loadingCreate}}">{{isEdit ? '编辑' : '确认'}}</button>
+    <button class="warn" style="opacity: .5;" wx:else>{{isEdit ? '编辑' : '创建'}}中...</button>
     <view class="target-toast" wx:if="{{showTargetTip && targetTip && $.myTarget}}">{{targetTip}}</view>
   </view>
 </form>

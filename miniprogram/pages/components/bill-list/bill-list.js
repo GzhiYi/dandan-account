@@ -1,3 +1,4 @@
+const dayjs = require('dayjs')
 const { importStore } = getApp()
 const { create, store } = importStore
 create.Component(store, {
@@ -11,6 +12,10 @@ create.Component(store, {
     },
     loading: {
       type: Number
+    },
+    showLoading: {
+      type: Boolean,
+      value: false
     }
   },
   use: ['sysInfo.screenHeight', 'mapCategoryName'],
@@ -20,7 +25,27 @@ create.Component(store, {
   data: {
     showMenuDialog: false,
     showConfirmDelete: false,
-    editItem: {}
+    editItem: {},
+    fmtBillList: []
+  },
+  observers: {
+    billList(list) {
+      console.log('检查列表', list)
+      if (list && list.length) {
+        this.setData({
+          fmtBillList: list.map(item => {
+            return {
+              ...item,
+              noteDate: dayjs(item.noteDate).format('YYYY-MM-DD')
+            }
+          })
+        })
+      } else {
+        this.setData({
+          fmtBillList: []
+        })
+      }
+    }
   },
 
   /**
@@ -53,11 +78,19 @@ create.Component(store, {
       self.setData({
         showMenuDialog: false
       })
+      store.data.isEdit = false
       store.data.showTabbar = true
       store.data.editBill = editItem
       store.data.activeTab = 'index'
       store.data.isEdit = true
-      this.triggerEvent('onEdit')
+      const page =  getCurrentPages()[ getCurrentPages().length -1]
+      console.log('查看page', editItem)
+      if (page.route === 'pages/tab/tab') {
+        // this.triggerEvent('onEdit')
+      } else {
+        wx.navigateBack()
+      }
+      console.log('getCurrentPages()', getCurrentPages())
     },
     deleteBill() {
       const self = this
@@ -86,7 +119,7 @@ create.Component(store, {
                 editItem: {},
                 showConfirmDelete: false
               })
-              self.triggerEvent('reFetchBillList')
+              self.triggerEvent('reFetchBillList', true)
             } else {
               wx.showToast({
                 title: '删除失败，请重试',

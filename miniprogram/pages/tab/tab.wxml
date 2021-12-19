@@ -9,13 +9,13 @@
     id="list"
     class="list"
     bind:reFetchBillList="onReFetchBillList"
-    bind:editBill="onEditBill"
   />
 </view>
 <view hidden="{{$.activeTab !== 'index'}}">
   <index
     bind:reFetchBillList="onReFetchBillList"
     id="index"
+    isEdit="{{$.isEdit}}"
     selectedCategory="{{$.selectedCategory}}"
     defaultCategoryList="{{$.defaultCategoryList}}"
   />
@@ -26,7 +26,6 @@
     tab="{{$.activeTab}}"
     bind:hideTab="onHideTab"
     bind:reFetchBillList="onReFetchBillList"
-    bind:onEditBill="onEditBill"
     bind:renderChart="renderChart"
   >
     <view class="container" wx:if="{{pieShow}}">

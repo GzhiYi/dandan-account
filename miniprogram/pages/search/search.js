@@ -75,5 +75,9 @@ create.Page(store, {
       word: '',
       isFocus: true
     })
-  }
+  },
+  onReFetchBillList() {
+    store.data.shouldFetchList = true
+    this.confirmTap()
+  },
 })

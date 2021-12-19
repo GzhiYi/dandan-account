@@ -3,7 +3,6 @@ import { debounce } from '../../../util'
 
 const { importStore } = getApp()
 const { create, store } = importStore
-let firstFetch = true // 用于判断请求是否为第一次，true为本月数据
 let page = 1 // 默认的分页值
 let hasNext = false // 是否有下一页
 const DEFAULT_LIMIT = 40
@@ -37,7 +36,7 @@ create.Component(store, {
     billResult: null,
     pieChartData: null,
     categoryList: [],
-    loadingBills: -1,
+    loadingBills: 0,
     total: 0
   },
   /**
@@ -72,7 +71,7 @@ create.Component(store, {
       const firstDay = d.setDate(1)
       d.setMonth(d.getMonth() + 1)
       const lastDay = d.setDate(d.getDate() - 1)
-      const result = [dayjs(firstDay, 'YYYY-MM-DD'), dayjs(lastDay).format('YYYY-MM-DD')]
+      const result = [dayjs(firstDay).format('YYYY-MM-DD'), dayjs(lastDay).format('YYYY-MM-DD')]
       return result
     },
     // 左上角年份变化
@@ -113,6 +112,8 @@ create.Component(store, {
       } = this.data
       const self = this
       const firstAndLastArray = self.getFirstAndLastDayByMonth(year, activeMonth + 1)
+      const thisMonth = new Date().getMonth() + 1
+      const isGetCurrentMonthData = thisMonth === (activeMonth + 1)
       // isNewBill，是否为增加账单后重新获取数据
       if (isNewBill) {
         self.setData({
@@ -120,7 +121,7 @@ create.Component(store, {
         })
         self.fetchBillList()
       }
-      store.data.loadingRightIcon = true
+      if (isGetCurrentMonthData)  store.data.loadingRightIcon = true
       wx.cloud.callFunction({
         name: 'accountAggregate',
         data: {
@@ -137,14 +138,14 @@ create.Component(store, {
               pieChartData: result.detailResult,
               categoryList: dataList
             })
-
-            if (dataList.length > 0) {
-              self.fillPie(result.detailResult)
+            if (!dataList.length) {
+              self.setData({
+                loadingBills: 0
+              })
             }
-            if (firstFetch) {
+            self.fillPie(result.detailResult)
+            if (isGetCurrentMonthData) {
               store.data.currentMonthData = result.detailResult
-              // 将第一次获取改为false
-              firstFetch = false
             }
           } else {
             getApp().showError()
@@ -255,7 +256,7 @@ create.Component(store, {
         activeTab: tab,
         pickCategoryId: '',
         billList: [],
-        loadingBills: -1,
+        loadingBills: 0,
         categoryList: pieChartData[tab === 'pay' ? 'flowOut' : 'flowIn'].dataList || []
       }, () => {
         self.fillPie()
@@ -263,7 +264,6 @@ create.Component(store, {
     },
     fillPie() {
       const { pieChartData } = this.data
-      if (!pieChartData) return
       const { activeTab } = this.data
       const fillPieData = pieChartData[activeTab === 'pay' ? 'flowOut' : 'flowIn'].dataList.map((bill, index) => {
         bill.data = bill.allSum
@@ -311,7 +311,7 @@ create.Component(store, {
     onEditBill() {
       this.triggerEvent('onEditBill')
     },
-    reFetchBillList() {
+    reFetchBillList(event) {
       this.triggerEvent('reFetchBillList')
     }
   }

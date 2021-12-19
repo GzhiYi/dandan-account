@@ -14,9 +14,10 @@ create.Component(store, {
   },
   properties: {
     selectedCategory: Object,
-    defaultCategoryList: Array
+    defaultCategoryList: Array,
+    isEdit: Boolean
   },
-  use: ['mapCategoryName', 'editBill', 'isEdit'],
+  use: ['mapCategoryName', 'editBill'],
   data: {
     sum: '',
     note: '',
@@ -47,9 +48,11 @@ create.Component(store, {
         })
         store.data.selectedCategory = this.handleDefaultCategory(globalDefaultCategoryList)
       }
+    },
+    isEdit(bool) {
+      if (bool) this.dectiveEdit()
     }
   },
-
   ready() {
     const date = dayjs().format('YYYY-MM-DD')
     this.setData({

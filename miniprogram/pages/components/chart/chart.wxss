@@ -68,7 +68,7 @@
 }
 .summary-item {
   font-size: 27rpx;
-  margin: 20rpx;
+  margin: 20rpx 20px 0;
   border-radius: 40rpx;
   padding: 20rpx;
   color: #000;

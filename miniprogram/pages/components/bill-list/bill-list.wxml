@@ -8,7 +8,7 @@
   >
     <view
       class="bill-item"
-      wx:for="{{billList}}"
+      wx:for="{{fmtBillList}}"
       wx:key="_id"
       bindtap="showMenu"
       data-bill="{{item}}"
@@ -27,8 +27,8 @@
       </view>
     </view>
     <view class="fake-bill-item"></view>
-    <view class="empty-chart" wx:if="{{billList.length === 0}}">
-      {{ loading === -1 ? '选择分类以查看账单' :  loading === 1 ? '加载账单中...' : '' }}
+    <view class="empty-chart" wx:if="{{fmtBillList.length === 0 && showLoading}}">
+      {{['选择分类以查看账单', '加载账单中...', '所选时间没有账单数据(⊙o⊙)！'][loading]}}
     </view>
   </scroll-view>
 </view>

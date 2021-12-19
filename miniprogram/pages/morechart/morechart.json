@@ -1,7 +1,8 @@
 {
   "usingComponents": {
     "nav": "../components/nav/nav",
-    "dialog": "../components/dialog/dialog"
+    "dialog": "../components/dialog/dialog",
+    "f2": "@antv/wx-f2"
   },
   "disableScroll": true
 }

@@ -24,6 +24,9 @@
     bind:touchmove="moveLineA"
     bind:touchend="touchEndLineA"
   ></canvas>
+  <view class="container" wx:if="{{monthChartShow}}">
+    <f2 id="month-line" class="f2-chart" onInit="{{initMonthChart}}" />
+  </view>
   <view class="desc">
     {{month}}月记账折线图
   </view>

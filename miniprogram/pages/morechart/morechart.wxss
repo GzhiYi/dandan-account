@@ -31,3 +31,7 @@ page {
   font-size: 25rpx;
   color: grey;
 }
+.f2-chart {
+  width: 100%;
+  height: 500rpx;
+}

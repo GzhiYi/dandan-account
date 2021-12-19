@@ -1,6 +1,7 @@
 import uCharts from '../u-charts'
 import { parseTime } from '../../util'
-
+import tempData from './temp'
+console.log('tempData', tempData)
 let lineChartA = null
 let lineChartB = null
 Page({
@@ -9,7 +10,9 @@ Page({
     cHeight: 0,
     date: parseTime(new Date(), '{y}-{m}'),
     year: parseTime(new Date(), '{y}'),
-    month: parseTime(new Date(), '{m}')
+    month: parseTime(new Date(), '{m}'),
+    monthChartShow: false,
+    initMonthChart: null
   },
   onLoad() {
     this.fillChart()
@@ -31,6 +34,7 @@ Page({
       },
       success(res) {
         const { categories, series } = res.result.data
+        console.log('牛蛙牛蛙', categories, series)
         if (res.result.code === 1) {
           lineChartA = new uCharts({
             $this: self,
@@ -73,7 +77,68 @@ Page({
             }
           })
         }
+        self.renderMonthChart()
       }
+    })
+  },
+  renderMonthChart() {
+    this.setData({
+      initMonthChart(F2, config) {
+        config.self = this
+        const chart = new F2.Chart(config)
+        chart.source(tempData)
+        chart.scale('date', {
+          type: 'timeCat',
+          tickCount: 3
+        });
+        chart.scale('value', {
+          tickCount: 5
+        });
+        chart.axis('date', {
+          label: function label(text, index, total) {
+            // 只显示每一年的第一天
+            const textCfg = {};
+            if (index === 0) {
+              textCfg.textAlign = 'left';
+            } else if (index === total - 1) {
+              textCfg.textAlign = 'right';
+            }
+            return textCfg;
+          }
+        });
+        chart.tooltip({
+          custom: true, // 自定义 tooltip 内容框
+          onChange: function onChange(obj) {
+            const legend = chart.get('legendController').legends.top[0];
+            const tooltipItems = obj.items;
+            const legendItems = legend.items;
+            const map = {};
+            legendItems.forEach(function(item) {
+              map[item.name] = JSON.parse(JSON.stringify(item));
+            });
+            tooltipItems.forEach(function(item) {
+              const name = item.name;
+              const value = item.value;
+              if (map[name]) {
+                map[name].value = value;
+              }
+            });
+            legend.setItems(Object.values(map));
+          },
+          onHide: function onHide() {
+            const legend = chart.get('legendController').legends.top[0];
+            legend.setItems(chart.getLegendItems().country);
+          }
+        });
+        chart.line().position('date*value').color('type');
+        chart.render();
+        // 注意：需要把chart return 出来
+        return chart
+      }
+    }, () => {
+      this.setData({
+        monthChartShow: true
+      })
     })
   },
   getYearData() {

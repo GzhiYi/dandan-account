@@ -15,10 +15,9 @@ function getPureDate(time) {
 // 云函数入口函数
 exports.main = async (event) => {
   const wxContext = cloud.getWXContext()
+  const env = wxContext.ENV === 'local' ? 'release-wifo3' : wxContext.ENV
   // 初始化数据库
-  const db = cloud.database({
-    env: wxContext.ENV === 'local' ? 'release-wifo3' : wxContext.ENV
-  })
+  const db = cloud.database({ env })
   const _ = db.command
   const {
     id,
@@ -27,9 +26,7 @@ exports.main = async (event) => {
     name,
     endDate
   } = event
-  cloud.updateConfig({
-    env: wxContext.ENV === 'local' ? 'release-wifo3' : wxContext.ENV
-  })
+  cloud.updateConfig({ env })
 
   try {
     // 增加一条记录
@@ -131,10 +128,8 @@ exports.main = async (event) => {
       }
     }
     if (event.mode === 'delete') {
-      const res = await db.collection('TARGET')
-        .where({
-          openId: wxContext.OPENID
-        })
+      console.log('删除id', event.id)
+      const res = await db.collection('TARGET').doc(event.id)
         .update({
           data: {
             isDel: true

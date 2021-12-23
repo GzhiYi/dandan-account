@@ -1,7 +1,7 @@
 {
   "pages": [
-    "pages/tab/tab",
     "pages/target/target",
+    "pages/tab/tab",
     "pages/morechart/morechart",
     "pages/setting/setting",
     "pages/group/group",

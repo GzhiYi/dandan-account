@@ -178,7 +178,7 @@ create.Page(store, {
           date: dayjs(createTime).format('YYYY-MM-DD'),
           value: startMoney
         }]
-        let lastValue = 0
+        let lastValue = startMoney
         billList.forEach(bill => {
           const billValue = bill.flow === 0 ? -bill.money : bill.money
           const noteDate = dayjs(bill.noteDate).format('YYYY-MM-DD')
@@ -194,7 +194,6 @@ create.Page(store, {
             lastValue = lastValue + billValue
           }
         })
-        console.log('lineData', lineData)
         chart.source(lineData)
         chart.tooltip({
           showCrosshairs: true,
@@ -341,7 +340,8 @@ create.Page(store, {
     wx.cloud.callFunction({
       name: 'target',
       data: {
-        mode: 'delete'
+        mode: 'delete',
+        id: self.data.targetInfo.targetData._id
       },
       success() {
         wx.showToast({

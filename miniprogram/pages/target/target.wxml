@@ -22,7 +22,7 @@ module.exports.toFixNum =  toFixNum;
 <view class="target">
   <view class="target-header">
     <view class="target-name">{{targetInfo.targetData.name}}</view>
-    <view style="font-size: 30rpx;color: gray;" bindtap="onShowDialog">删除</view>
+    <view class="dan-icon dan-icon-delete" bindtap="onShowDialog" style="font-size: 46rpx;"></view>
   </view>
   <view class="target-content flex" wx:if="{{showResult}}">
     <view class="target-item-big">
@@ -52,13 +52,12 @@ module.exports.toFixNum =  toFixNum;
       </view>
       <view class="target-item bg-pink color-white">
         <view class="target-item-title">已存钱进度</view>
-        <view class="target-item-num" hidden="{{showDeleteDialog}}">
-          <canvas
-            canvas-id="miss"
-            id="miss"
-            class="charts"
-            style="width: {{screenWidth * 0.3}}px;margin: 0 auto;height: 120px;"
-          ></canvas>
+        <view class="target-item-num">
+          <view style="height: 240rpx;">
+            <view class="container" wx:if="{{moneyProgressShow}}">
+              <f2 class="f2-chart" onInit="{{initMoneyProgress}}" />
+            </view>
+          </view>
         </view>
       </view>
       <view class="target-item bg-white">
@@ -76,13 +75,12 @@ module.exports.toFixNum =  toFixNum;
     <view class="flex flex-fall" style="width: 50%;">
       <view class="target-item bg-red color-white">
         <view class="target-item-title">时间进度</view>
-        <view class="chart-content" hidden="{{showDeleteDialog}}">
-          <canvas
-            canvas-id="time-progress"
-            id="time-progress"
-            class="charts"
-            style="width: {{screenWidth * 0.3}}px;margin: 0 auto;height: 120px;"
-          ></canvas>
+        <view class="chart-content">
+          <view style="height: 240rpx;">
+            <view class="container" wx:if="{{timeProgressShow}}">
+              <f2 class="f2-chart" onInit="{{initTimeProgress}}" />
+            </view>
+          </view>
         </view>
         <view class="label">
           <text style="font-weight: bold;font-size: 56rpx;">{{progress.passDay}} </text>
@@ -109,13 +107,12 @@ module.exports.toFixNum =  toFixNum;
 
     <view class="target-item-big bg-purple color-white">
       <view class="target-item-title">进度图</view>
-      <view class="chart-content" hidden="{{showDeleteDialog}}">
-        <canvas
-          canvas-id="linechart"
-          id="linechart-month"
-          class="charts"
-          style="width: {{screenWidth * 0.84}}px;margin: 0 auto;height: 200px;"
-        ></canvas>
+      <view class="chart-content">
+        <view style="height: 400rpx;">
+          <view class="container" wx:if="{{lineChartShow}}">
+            <f2 class="f2-chart2" onInit="{{initLineChart}}" />
+          </view>
+        </view>
       </view>
     </view>
   </view>

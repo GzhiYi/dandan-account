@@ -73,3 +73,11 @@ page {
   display: flex;
   flex-direction: column;
 }
+.f2-chart {
+  width: 100%;
+  height: 240rpx;
+}
+.f2-chart2 {
+  width: 100%;
+  height: 400rpx;
+}

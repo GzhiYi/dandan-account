@@ -1,10 +1,47 @@
 import uCharts from '../u-charts'
-import { parseTime } from '../../util'
+import { parseTime, strip } from '../../util'
+import dayjs from 'dayjs'
 // import cloneDeep from 'lodash/cloneDeep'
 const { importStore } = getApp()
 const { create, store } = importStore
 // eslint-disable-next-line no-unused-vars
 let lineChart = null
+const baseProgressConfig = (chart, target, text) => {
+  chart.axis(false);
+  chart.tooltip(false);
+  chart.coord('polar', {
+    transposed: true,
+    innerRadius: 0.8,
+    radius: 1
+  });
+  chart.guide().arc({
+    start: [ 0, 0 ],
+    end: [ 1, 99.98 ],
+    top: false,
+    style: {
+      lineWidth: 12,
+      stroke: 'rgba(255,255,255, 0.3)'
+    }
+  });
+  chart.guide().text({
+    position: [ '50%', '50%' ],
+    content: text,
+    style: {
+      fill: '#fff',
+      fontSize: 16
+    }
+  });
+  chart.interval()
+    .position('x*y')
+    .color([ '#fff'])
+    .size(12)
+    .animate({
+      appear: {
+        duration: 1200,
+        easing: 'cubicIn'
+      }
+    });
+}
 create.Page(store, {
   use: ['sysInfo'],
   data: {
@@ -14,7 +51,13 @@ create.Page(store, {
     showResult: false,
     showResultType: '',
     loadingDelete: false,
-    showDeleteDialog: false
+    showDeleteDialog: false,
+    timeProgressShow: false,
+    initTimeProgress: null,
+    moneyProgressShow: false,
+    initMoneyProgress: null,
+    initLineChart: null,
+    lineChartShow: false
   },
   computed: {
     screenWidth() {
@@ -33,10 +76,8 @@ create.Page(store, {
         mode: 'targetInfo'
       },
       success(res) {
-        console.log('res', res)
         if (res.result.code === 1) {
           const targetInfo = res.result.data
-          console.log('targetInfo', targetInfo)
           const allDate = self.getDates(new Date(targetInfo.targetData.createTime), new Date(targetInfo.targetData.endDate))
           const toFinishDate = self.getDates(new Date(), new Date(targetInfo.targetData.endDate))
           self.setData({
@@ -131,6 +172,80 @@ create.Page(store, {
       subTitle: '加油✊',
       bgColor: '#FAACCE'
     })
+    const { startMoney, createTime, targetMoney } = self.data.targetInfo.targetData
+    this.setData({
+      initLineChart(F2, config) {
+        config.self = this
+        const chart = new F2.Chart(config)
+        const lineData = [{
+          date: dayjs(createTime).format('YYYY-MM-DD'),
+          value: startMoney
+        }]
+        let lastValue = 0
+        billList.forEach(bill => {
+          const billValue = bill.flow === 0 ? -bill.money : bill.money
+          const noteDate = dayjs(bill.noteDate).format('YYYY-MM-DD')
+          const matchLineData = lineData.findIndex(l => l.date === noteDate)
+          if (matchLineData !== -1) {
+            lineData[matchLineData].value =  strip(lineData[matchLineData].value + billValue)
+            lastValue = lineData[matchLineData].value
+          } else {
+            lineData.push({
+              date: noteDate,
+              value: strip(lastValue + billValue)
+            })
+            lastValue = lastValue + billValue
+          }
+        })
+        console.log('lineData', lineData)
+        chart.source(lineData)
+        chart.tooltip({
+          showCrosshairs: true,
+          showTitle: true,
+          offsetY: 20
+        });
+        chart.line().position('date*value').shape('smooth');
+        chart.axis('date', {
+          label: (text) => {
+            return {
+              text: ''
+            }
+          }
+        })
+        chart.axis('value', {
+          position: 'left',
+          label: {
+            fill: '#CFFFFE',
+            fillOpacity: 0.5,
+            fontSize: 9,
+            fontWeight: 300
+          },
+          grid: {
+            stroke: '#3F4D8D'
+          }
+        });
+        chart.area().position('date*value').style({
+          fill: 'l(-90) 0.03:rgba(216,216,216,0.10) 1:#6E6CD8',
+          fillOpacity: 1
+        });
+        chart.guide().line({
+          start: [ 'min', targetMoney ],
+          end: [ 'max', targetMoney ],
+          style: {
+            stroke: '#4fd69c',
+            lineWidth: 1,
+            lineCap: 'round'
+          }
+        });
+        chart.render();
+        // 注意：需要把chart return 出来
+        return chart
+      }
+    }, () => {
+      this.setData({
+        lineChartShow: true
+      })
+    })
     lineChart = new uCharts({
       $this: self,
       canvasId: 'linechart',
@@ -216,6 +331,56 @@ create.Page(store, {
     return percentage
   },
   renderProgress(data) {
+    if (data.id === 'time-progress') {
+      this.setData({
+        initTimeProgress(F2, config) {
+          const chart = new F2.Chart(config);
+          const pieData = [{
+            x: '1',
+            y: strip(data.percentage * 100)
+          }];
+          chart.source(pieData, {
+            y: {
+              max: 100,
+              min: 0
+            }
+          });
+          baseProgressConfig(chart, 'time', `${strip(data.percentage * 100)}%\n${data.subTitle}`)
+          chart.render();
+          // 注意：需要把chart return 出来
+          return chart
+        }
+      }, () => {
+        this.setData({
+          timeProgressShow: true
+        })
+      })
+    }
+    if (data.id === 'miss') {
+      this.setData({
+        initMoneyProgress(F2, config) {
+          const chart = new F2.Chart(config);
+          const pieData = [{
+            x: '1',
+            y: data.percentage * 100
+          }];
+          chart.source(pieData, {
+            y: {
+              max: 100,
+              min: 0
+            }
+          });
+          baseProgressConfig(chart, 'money', `${data.percentage * 100}%\n${data.subTitle}`)
+          chart.render();
+          // 注意：需要把chart return 出来
+          return chart
+        }
+      }, () => {
+        this.setData({
+          moneyProgressShow: true
+        })
+      })
+    }
     const self = this
     // eslint-disable-next-line no-new
     new uCharts({

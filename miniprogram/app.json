@@ -1,12 +1,12 @@
 {
   "pages": [
-    "pages/morechart/morechart",
+    "pages/target/target",
     "pages/tab/tab",
+    "pages/morechart/morechart",
     "pages/setting/setting",
     "pages/group/group",
     "pages/group-bill-set/group-bill-set",
     "pages/target-set/target-set",
-    "pages/target/target",
     "pages/category/category",
     "pages/search/search",
     "pages/onboarding/onboarding"

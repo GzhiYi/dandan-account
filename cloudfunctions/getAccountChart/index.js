@@ -1,6 +1,7 @@
 /* eslint-disable no-plusplus */
 /* eslint-disable no-use-before-define */
 // 云函数入口文件
+const dayjs = require('dayjs')
 const cloud = require('wx-server-sdk')
 
 cloud.init()
@@ -99,6 +100,7 @@ const AccountChartService = function (mode, date) {
         const resList = res.list
 
         const lastDay = new Date(new Date(o.date).getFullYear(), new Date(o.date).getMonth() + 1, 0).getDate()
+        console.log('lastDay', lastDay, o.date)
         const resListSize = resList.length
         const xAxisData = [] // x轴数据
         const incomeData = [] // 收入数据
@@ -106,11 +108,12 @@ const AccountChartService = function (mode, date) {
         const netIncomeData = [] // 净收入数据
         // eslint-disable-next-line no-plusplus
         for (let i = 0, y = 0; i < lastDay; i++) {
-          const day = i + 1
-          xAxisData.push(`${day}日`)
+          const day = i < 9 ? `0${i + 1}` : i + 1
+          const tempDay = i + 1
+          xAxisData.push(`${o.date}-${day}`)
           // 该日期存有账单数据
           // eslint-disable-next-line radix
-          if (y < resListSize && parseInt(resList[y].noteDate) === day) {
+          if (y < resListSize && parseInt(resList[y].noteDate) === tempDay) {
             incomeData.push(strip(resList[y].income))
             expensesData.push(strip(resList[y].expenses))
             netIncomeData.push(strip(resList[y].netIncome))
@@ -198,11 +201,12 @@ const AccountChartService = function (mode, date) {
         const expensesData = [] // 支出数据
         const netIncomeData = [] // 净收入数据
         for (let i = 0, y = 0; i < monthCount; i++) {
-          const month = i + 1
-          xAxisData.push(`${month}月`)
+          const month = i < 9 ? `0${i + 1}` : i + 1
+          const tempMonth = i + 1
+          xAxisData.push(`${o.date}-${month}-01`)
           // 该日期存有账单数据
           // eslint-disable-next-line radix
-          if (y < resListSize && parseInt(resList[y].noteMonth) === month) {
+          if (y < resListSize && parseInt(resList[y].noteMonth) === tempMonth) {
             incomeData.push(strip(resList[y].income))
             expensesData.push(strip(resList[y].expenses))
             netIncomeData.push(strip(resList[y].netIncome))

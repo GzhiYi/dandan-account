@@ -1,5 +1,6 @@
 {
   "pages": [
+    "pages/morechart/morechart",
     "pages/tab/tab",
     "pages/setting/setting",
     "pages/group/group",
@@ -8,7 +9,6 @@
     "pages/target/target",
     "pages/category/category",
     "pages/search/search",
-    "pages/morechart/morechart",
     "pages/onboarding/onboarding"
   ],
   "window": {

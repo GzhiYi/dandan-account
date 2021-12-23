@@ -11,7 +11,7 @@ page {
   text-align: center;
   font-size: 28rpx;
   color: #777;
-  margin-bottom: 60rpx;
+  margin: 40rpx 0 60rpx;
 }
 .pick-date {
   text-align: center;

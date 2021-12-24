@@ -130,9 +130,11 @@ exports.main = async (event) => {
     const updateData = addData[0]
     delete updateData.createTime
     try {
-      await db.collection('STAT').doc(oldRes.data[0]._id).update({
-        data: updateData
-      })
+      if (oldRes.data.length) {
+        await db.collection('STAT').doc(oldRes.data[0]._id).update({
+          data: updateData
+        })
+      }
     } catch (error) {
       notify('更新统计数据失败', error.toString.slice(0, 100))
     }

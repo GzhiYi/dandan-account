@@ -1,7 +1,3 @@
-page {
-  overflow-x: hidden;
-  width: 100%;
-}
 .month-selector {
   display: flex;
   flex-wrap: nowrap;
@@ -72,7 +68,7 @@ page {
 }
 .summary-item {
   font-size: 27rpx;
-  margin: 20rpx;
+  margin: 20rpx 20px 0;
   border-radius: 40rpx;
   padding: 20rpx;
   color: #000;
@@ -150,4 +146,7 @@ page {
 .category-list-style {
   padding: 2rpx 14rpx;
   border-radius: 9rpx;
+}
+.chart-sum {
+  white-space: nowrap;
 }

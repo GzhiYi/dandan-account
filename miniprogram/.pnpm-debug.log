@@ -1,0 +1,14 @@
+{
+  "0 debug pnpm:scope": {
+    "selected": 1
+  },
+  "1 error pnpm": {
+    "code": "ERR_PNPM_REGISTRIES_MISMATCH",
+    "err": {
+      "name": "pnpm",
+      "message": "This modules directory was created using the following registries configuration: {\"default\":\"https://registry.npmjs.org/\"}. The current configuration is {\"default\":\"https://registry.npm.taobao.org/\"}. To recreate the modules directory using the new settings, run \"pnpm install\".",
+      "code": "ERR_PNPM_REGISTRIES_MISMATCH",
+      "stack": "pnpm: This modules directory was created using the following registries configuration: {\"default\":\"https://registry.npmjs.org/\"}. The current configuration is {\"default\":\"https://registry.npm.taobao.org/\"}. To recreate the modules directory using the new settings, run \"pnpm install\".\n    at validateModules (C:\\Users\\74528\\AppData\\Roaming\\npm\\node_modules\\pnpm\\dist\\pnpm.cjs:91599:15)\n    at async getContext (C:\\Users\\74528\\AppData\\Roaming\\npm\\node_modules\\pnpm\\dist\\pnpm.cjs:91471:28)\n    at async mutateModules (C:\\Users\\74528\\AppData\\Roaming\\npm\\node_modules\\pnpm\\dist\\pnpm.cjs:116264:19)\n    at async handler (C:\\Users\\74528\\AppData\\Roaming\\npm\\node_modules\\pnpm\\dist\\pnpm.cjs:118510:35)\n    at async C:\\Users\\74528\\AppData\\Roaming\\npm\\node_modules\\pnpm\\dist\\pnpm.cjs:183649:21\n    at async run (C:\\Users\\74528\\AppData\\Roaming\\npm\\node_modules\\pnpm\\dist\\pnpm.cjs:183623:34)\n    at async runPnpm (C:\\Users\\74528\\AppData\\Roaming\\npm\\node_modules\\pnpm\\dist\\pnpm.cjs:183835:5)\n    at async C:\\Users\\74528\\AppData\\Roaming\\npm\\node_modules\\pnpm\\dist\\pnpm.cjs:183827:7"
+    }
+  }
+}

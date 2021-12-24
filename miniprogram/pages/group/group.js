@@ -18,13 +18,13 @@ create.Page(store, {
     showLeaveDialog: false,
     showDeleteDialog: false,
     confirmTarget: {},
-    loadingAdd: false,
+    loadingAdd: false
   },
   onLoad(options) {
     const { groupId } = options
     if (groupId) {
       this.setData({
-        groupId: options.groupId,
+        groupId: options.groupId
       })
     }
     const { myGroup } = store.data
@@ -33,12 +33,12 @@ create.Page(store, {
   },
   onUnload() {
     this.setData({
-      timer: null,
+      timer: null
     })
   },
   changeAvatar() {
     this.setData({
-      randomAvatar: `https://api.multiavatar.com/${Math.ceil(Math.random() * 12230590464)}.svg`,
+      randomAvatar: `https://api.multiavatar.com/${Math.ceil(Math.random() * 12230590464)}.svg`
     })
   },
   scrollBanner() {
@@ -46,24 +46,24 @@ create.Page(store, {
     const newTimer = setInterval(() => {
       const { picName } = this.data
       self.setData({
-        picName: picName === 'group1' ? 'group2' : 'group1',
+        picName: picName === 'group1' ? 'group2' : 'group1'
       })
     }, 5000)
     self.setData({
-      timer: newTimer,
+      timer: newTimer
     })
   },
   closeDialog() {
     this.setData({
       showConfirmDialog: false,
       showLeaveDialog: false,
-      showDeleteDialog: false,
+      showDeleteDialog: false
     })
   },
   onShowConfirmDialog(data) {
     this.setData({
       confirmTarget: data.currentTarget.dataset.user,
-      showConfirmDialog: true,
+      showConfirmDialog: true
     })
   },
   // 确认用户加入组内
@@ -74,13 +74,13 @@ create.Page(store, {
       data: {
         mode: 'confirmAdd',
         fakeUserId: self.data.confirmTarget._id,
-        groupId: self.data.groupInfo._id,
+        groupId: self.data.groupInfo._id
       },
       success(res) {
         if (res.result.code === 1) {
           wx.showToast({
             title: '已同意',
-            icon: 'none',
+            icon: 'none'
           })
           self.getGroup(self.data.groupInfo._id)
         }
@@ -88,45 +88,45 @@ create.Page(store, {
       fail() {
         wx.showToast({
           title: '操作失败，请重试或客服联系',
-          icon: 'none',
+          icon: 'none'
         })
       },
       complete() {
         self.closeDialog()
-      },
+      }
     })
   },
   setGroupInfo(groupInfo) {
     const self = this
     self.setData({
-      groupInfo,
+      groupInfo
     })
     // 在获取到用户信息之后，再获取组长信息
     wx.cloud.callFunction({
       name: 'groupbill',
       data: {
         mode: 'getFakeUserInfo',
-        fakeUserId: groupInfo.createdByFakeUser,
+        fakeUserId: groupInfo.createdByFakeUser
       },
       success(inRes) {
         if (inRes.result.code === 1) {
           self.setData({
-            fakeUserInfo: inRes.result.data,
+            fakeUserInfo: inRes.result.data
           })
         }
-      },
+      }
     })
   },
   getGroup(groupId = null) {
     const self = this
     const data = {
-      mode: 'getGroupInfo',
+      mode: 'getGroupInfo'
     }
     if (groupId) {
       data.groupId = groupId
     }
     wx.showLoading({
-      title: '加载中...',
+      title: '加载中...'
     })
     wx.cloud.callFunction({
       name: 'groupbill',
@@ -138,10 +138,10 @@ create.Page(store, {
           if (self.data.groupId) {
             wx.showToast({
               title: '你已经在该组啦～',
-              icon: 'none',
+              icon: 'none'
             })
             self.setData({
-              isInGroup: true,
+              isInGroup: true
             })
           } else {
             self.setGroupInfo(res.result.data)
@@ -150,17 +150,17 @@ create.Page(store, {
       },
       complete() {
         wx.hideLoading()
-      },
+      }
     })
   },
   dropGroup() {
     this.setData({
-      showLeaveDialog: true,
+      showLeaveDialog: true
     })
   },
   onShowDeleteDialog() {
     this.setData({
-      showDeleteDialog: true,
+      showDeleteDialog: true
     })
   },
   confirmDelete() {
@@ -169,20 +169,20 @@ create.Page(store, {
       name: 'groupbill',
       data: {
         mode: 'delete',
-        groupId: _id,
+        groupId: _id
       },
       success(res) {
         if (res.result.code === 1) {
           wx.showToast({
             title: '删除成功',
-            icon: 'none',
+            icon: 'none'
           })
           getApp().checkHasGroup()
           setTimeout(() => {
             wx.navigateBack()
           }, 1500)
         }
-      },
+      }
     })
   },
   // 离开该组
@@ -192,32 +192,32 @@ create.Page(store, {
       name: 'groupbill',
       data: {
         mode: 'drop',
-        groupId: _id,
+        groupId: _id
       },
       success(res) {
         if (res.result.code === 1) {
           wx.showToast({
             title: '你已离开该组啦，相聚将在未来。',
-            icon: 'none',
+            icon: 'none'
           })
           getApp().checkHasGroup()
           setTimeout(() => {
             wx.navigateBack()
           }, 1500)
         }
-      },
+      }
     })
   },
   onShareAppMessage() {
     const { _id } = this.data.groupInfo
     return {
       title: '来来来，这里可以一起记账！',
-      path: `/pages/group/group?groupId=${_id}`,
+      path: `/pages/group/group?groupId=${_id}`
     }
   },
   onInput(event) {
     this.setData({
-      [`${event.target.dataset.target}`]: event.detail.value,
+      [`${event.target.dataset.target}`]: event.detail.value
     })
   },
   // 确定加入组内
@@ -228,19 +228,19 @@ create.Page(store, {
     if (!nickName) {
       wx.showToast({
         title: '需要填写昵称哦😯',
-        icon: 'none',
+        icon: 'none'
       })
       return
     }
     if (!_id) {
       wx.showToast({
         title: '未能正确获取组信息，请重新邀请加入',
-        icon: 'none',
+        icon: 'none'
       })
       return
     }
     self.setData({
-      loadingAdd: true,
+      loadingAdd: true
     })
     wx.cloud.callFunction({
       name: 'groupbill',
@@ -248,27 +248,27 @@ create.Page(store, {
         mode: 'join',
         avatarUrl: randomAvatar,
         nickName,
-        joinGroupId: _id,
+        joinGroupId: _id
       },
       success(res) {
         if (res.result.code === 1) {
           wx.showToast({
             title: '加入该组成功，在Ta通过审核之后将自动开启一起记账',
-            icon: 'none',
+            icon: 'none'
           })
           self.getGroup(self.data.groupInfo._id)
         } else {
           wx.showToast({
             title: '加入组失败，请重试或联系客服。',
-            icon: 'none',
+            icon: 'none'
           })
         }
       },
       complete() {
         self.setData({
-          loadingAdd: false,
+          loadingAdd: false
         })
-      },
+      }
     })
-  },
+  }
 })

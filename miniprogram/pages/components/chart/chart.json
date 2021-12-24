@@ -1,6 +1,8 @@
 {
   "component": true,
   "usingComponents": {
-    "dialog": "../dialog/dialog"
+    "dialog": "../dialog/dialog",
+    "f2": "@antv/wx-f2",
+    "bill-list": "../bill-list/bill-list"
   }
 }

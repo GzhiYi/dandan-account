@@ -8,19 +8,19 @@ exports.main = async (event) => {
   const wxContext = cloud.getWXContext()
 
   cloud.updateConfig({
-    env: wxContext.ENV === 'local' ? 'release-wifo3' : wxContext.ENV,
+    env: wxContext.ENV === 'local' ? 'release-wifo3' : wxContext.ENV
   })
   // 初始化数据库
   const db = cloud.database({
-    env: wxContext.ENV === 'local' ? 'release-wifo3' : wxContext.ENV,
+    env: wxContext.ENV === 'local' ? 'release-wifo3' : wxContext.ENV
   })
 
-  const _ = db.command;
+  const _ = db.command
 
-  const $ = db.command.aggregate;
+  const $ = db.command.aggregate
   const {
-    mode, startDate, endDate, OPENID,
-  } = event;
+    mode, startDate, endDate, OPENID
+  } = event
 
   try {
     // 要显示的字段
@@ -35,15 +35,15 @@ exports.main = async (event) => {
         $.gte([$.dateToString({
           date: '$noteDate',
           format: '%Y-%m-%d',
-          timezone: 'Asia/Shanghai',
+          timezone: 'Asia/Shanghai'
         }), startDate]),
         $.lte([$.dateToString({
           date: '$noteDate',
           format: '%Y-%m-%d',
-          timezone: 'Asia/Shanghai',
-        }), endDate]),
-      ]),
-    };
+          timezone: 'Asia/Shanghai'
+        }), endDate])
+      ])
+    }
 
     // 先查询是否有组
     const basicOpenId = [OPENID || wxContext.OPENID]
@@ -53,8 +53,8 @@ exports.main = async (event) => {
       const basicMatch = {
         isDel: false,
         openId: _.in(basicOpenId),
-        isTarget: true,
-      };
+        isTarget: true
+      }
 
       const sumResult = await db.collection('DANDAN_NOTE')
         .aggregate()
@@ -63,12 +63,12 @@ exports.main = async (event) => {
         .group({
           _id: '$flow',
           allSum: $.sum('$money'),
-          count: $.sum(1),
+          count: $.sum(1)
         })
-        .end();
+        .end()
       return {
         code: 1,
-        sumResult: sumResult.list.sort((a, b) => a._id - b._id),
+        sumResult: sumResult.list.sort((a, b) => a._id - b._id)
       }
     }
 
@@ -77,8 +77,8 @@ exports.main = async (event) => {
       const basicMatch = {
         isDel: false,
         openId: _.in(basicOpenId),
-        isTarget: true,
-      };
+        isTarget: true
+      }
 
       const detailResult = await db.collection('DANDAN_NOTE')
         .aggregate()
@@ -87,58 +87,58 @@ exports.main = async (event) => {
         .group({
           _id: {
             categoryId: '$categoryId',
-            flow: '$flow',
+            flow: '$flow'
           },
           allSum: $.sum('$money'),
-          count: $.sum(1),
+          count: $.sum(1)
         })
         .replaceRoot({
-          newRoot: $.mergeObjects(['$_id', '$$ROOT']),
+          newRoot: $.mergeObjects(['$_id', '$$ROOT'])
         })
         .project({
-          _id: 0,
+          _id: 0
         })
         // 查子目录的信息, 以此获取父目录的ID
         .lookup({
           from: 'DANDAN_NOTE_CATEGORY',
           localField: 'categoryId',
           foreignField: '_id',
-          as: 'categoryInfo',
+          as: 'categoryInfo'
         })
         .replaceRoot({
-          newRoot: $.mergeObjects([$.arrayElemAt(['$categoryInfo', 0]), '$$ROOT']),
+          newRoot: $.mergeObjects([$.arrayElemAt(['$categoryInfo', 0]), '$$ROOT'])
         })
         .project({
           allSum: 1,
           count: 1,
           flow: 1,
           _id: 0,
-          fatherCategoryId: '$parentId',
+          fatherCategoryId: '$parentId'
         })
         // 已经得到parentId, 可以再次进行聚合
         .group({
           _id: {
             categoryId: '$fatherCategoryId',
-            flow: '$flow',
+            flow: '$flow'
           },
           allSum: $.sum('$allSum'),
-          count: $.sum('$count'),
+          count: $.sum('$count')
         })
         .replaceRoot({
-          newRoot: $.mergeObjects(['$_id', '$$ROOT']),
+          newRoot: $.mergeObjects(['$_id', '$$ROOT'])
         })
         .project({
-          _id: 0,
+          _id: 0
         })
         // 用父目录ID查询父目录信息
         .lookup({
           from: 'DANDAN_NOTE_CATEGORY',
           localField: 'categoryId',
           foreignField: '_id',
-          as: 'fatherCategoryInfo',
+          as: 'fatherCategoryInfo'
         })
         .replaceRoot({
-          newRoot: $.mergeObjects([$.arrayElemAt(['$fatherCategoryInfo', 0]), '$$ROOT']),
+          newRoot: $.mergeObjects([$.arrayElemAt(['$fatherCategoryInfo', 0]), '$$ROOT'])
         })
         .project({
           _id: 0,
@@ -146,17 +146,16 @@ exports.main = async (event) => {
           count: 1,
           flow: 1,
           categoryId: 1,
-          categoryName: 1,
+          categoryName: 1
         })
-        .end();
+        .end()
 
       const returnObj = {}
 
-      const flowOutList = [];
-      const flowInList = [];
-      let sumAllIn = 0;
-      let sumAllOut = 0;
-      console.log('detailResult', detailResult)
+      const flowOutList = []
+      const flowInList = []
+      let sumAllIn = 0
+      let sumAllOut = 0
       // 遍历获取每个流的总金额
       // eslint-disable-next-line no-restricted-syntax
       for (const item of detailResult.list) {
@@ -172,31 +171,31 @@ exports.main = async (event) => {
       }
       returnObj.flowIn = {
         allSum: sumAllIn,
-        dataList: flowInList,
+        dataList: flowInList
       }
       returnObj.flowOut = {
         allSum: sumAllOut,
-        dataList: flowOutList,
+        dataList: flowOutList
       }
 
       return {
         code: 1,
-        detailResult: returnObj,
+        detailResult: returnObj
       }
     }
   } catch (e) {
     return {
-      code: 0,
+      code: 0
     }
   }
 }
 
 function keepTwoDecimal(num) {
-  let result = parseFloat(num);
+  let result = parseFloat(num)
   // eslint-disable-next-line no-restricted-globals
   if (isNaN(result)) {
-    return false;
+    return false
   }
-  result = Math.round(num * 100) / 100;
-  return result;
+  result = Math.round(num * 100) / 100
+  return result
 }

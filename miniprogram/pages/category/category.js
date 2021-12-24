@@ -1,5 +1,5 @@
 import {
-  parseTime,
+  parseTime
 } from '../../util'
 
 const { importStore } = getApp()
@@ -31,7 +31,7 @@ create.Page(store, {
     donatename: '',
     donateurl: '',
     donateTime: null,
-    loadingDonate: false,
+    loadingDonate: false
   },
 
   /**
@@ -43,17 +43,17 @@ create.Page(store, {
     self.getCategoryList(options.type)
     if (Number(options.type) === 0) {
       self.setData({
-        localCategory2155: wx.getStorageSync('localCategory2155').slice(0, 8),
+        localCategory2155: wx.getStorageSync('localCategory2155').slice(0, 8)
       })
     }
     this.setData({
-      defaultExpire: parseTime(+new Date(new Date().getTime() + 48 * 60 * 60 * 1000), '{y}-{m}-{d}'),
+      defaultExpire: parseTime(+new Date(new Date().getTime() + 48 * 60 * 60 * 1000), '{y}-{m}-{d}')
     })
   },
   getCategoryList(flow) {
     const { categoryList } = store.data
     this.setData({
-      categoryList: categoryList[`${flow === '0' ? 'pay' : 'income'}`],
+      categoryList: categoryList[`${flow === '0' ? 'pay' : 'income'}`]
     })
   },
   selectCategory(event) {
@@ -65,7 +65,7 @@ create.Page(store, {
     const { target } = event.currentTarget.dataset
     this.setData({
       addCategory: target,
-      showAddDialog: true,
+      showAddDialog: true
     })
   },
   showMenu(event) {
@@ -73,7 +73,7 @@ create.Page(store, {
     const { category } = event.currentTarget.dataset
     self.setData({
       editItem: category,
-      showMenuDialog: true,
+      showMenuDialog: true
     })
   },
   closeDialog() {
@@ -81,7 +81,7 @@ create.Page(store, {
       showAddDialog: false,
       showMenuDialog: false,
       showConfirmDelete: false,
-      showBannerDialog: false,
+      showBannerDialog: false
     })
   },
   confirmAddCategory() {
@@ -90,12 +90,12 @@ create.Page(store, {
     if (!addCategoryName) {
       wx.showToast({
         title: '未填写子分类名呀！',
-        icon: 'none',
+        icon: 'none'
       })
       return false
     }
     self.setData({
-      loadingAdd: true,
+      loadingAdd: true
     })
     wx.cloud.callFunction({
       name: 'category',
@@ -107,27 +107,27 @@ create.Page(store, {
         flow: addCategory.flow,
         type: 1,
         parentId: addCategory._id,
-        isSelectable: true,
+        isSelectable: true
       },
       success(res) {
         if (res.result.code === 1) {
           wx.showToast({
             title: '添加成功',
-            icon: 'none',
+            icon: 'none'
           })
           self.setData({
             showAddDialog: false,
             addCategoryName: '',
-            isEdit: false,
+            isEdit: false
           })
           self.getLatestCategory()
         }
       },
       complete() {
         self.setData({
-          loadingAdd: false,
+          loadingAdd: false
         })
-      },
+      }
     })
   },
   getLatestCategory() {
@@ -139,7 +139,7 @@ create.Page(store, {
   bindInput(event) {
     const { value } = event.detail
     this.setData({
-      [`${event.currentTarget.dataset.name}`]: value,
+      [`${event.currentTarget.dataset.name}`]: value
     })
   },
   deleteCategory() {
@@ -148,24 +148,24 @@ create.Page(store, {
     wx.vibrateShort()
     if (!self.data.showConfirmDelete) {
       self.setData({
-        showConfirmDelete: !self.data.showConfirmDelete,
+        showConfirmDelete: !self.data.showConfirmDelete
       })
     } else {
       self.setData({
-        loadingDelete: true,
+        loadingDelete: true
       })
       wx.cloud.callFunction({
         name: 'category',
         data: {
           mode: 'deleteByIdAndFlow',
           id: editItem._id,
-          flow: editItem.flow,
+          flow: editItem.flow
         },
         success(res) {
           if (res.result.code === 1) {
             wx.showToast({
               title: '删除成功',
-              icon: 'none',
+              icon: 'none'
             })
             self.closeDialog()
             shouldUpdateBill = true // 删除分类成功的话必须更新账单
@@ -174,14 +174,14 @@ create.Page(store, {
           } else {
             wx.showToast({
               title: '删除失败，再试试？',
-              icon: 'none',
+              icon: 'none'
             })
           }
         },
         fail() {
           wx.showToast({
             title: '删除失败，再试试？',
-            icon: 'none',
+            icon: 'none'
           })
         },
         complete() {
@@ -190,17 +190,17 @@ create.Page(store, {
           self.setData({
             loadingDelete: false,
             localCategory2155: newList,
-            isEdit: false,
+            isEdit: false
           })
           wx.setStorageSync('localCategory2155', newList)
-        },
+        }
       })
     }
   },
   onShowBanner() {
     const self = this
     self.setData({
-      showBannerDialog: true,
+      showBannerDialog: true
     })
   },
   onUnload() {
@@ -210,7 +210,7 @@ create.Page(store, {
       } catch (err) {
         wx.showToast({
           title: '更新账单失败，可能要重启小程序哦。',
-          icon: 'none',
+          icon: 'none'
         })
       }
     }
@@ -218,10 +218,10 @@ create.Page(store, {
   confirmDonate() {
     const self = this
     const {
-      donatename, donateurl, donateword, donateTime,
+      donatename, donateurl, donateword, donateTime
     } = this.data
     self.setData({
-      loadingDonate: true,
+      loadingDonate: true
     })
     wx.cloud.callFunction({
       name: 'donate',
@@ -230,7 +230,7 @@ create.Page(store, {
         name: donatename,
         word: donateword,
         url: donateurl,
-        donateTime: donateTime ? new Date(donateTime.replace(/-/g, '/')).getTime() : +new Date(new Date().getTime() + 24 * 60 * 60 * 1000),
+        donateTime: donateTime ? new Date(donateTime.replace(/-/g, '/')).getTime() : +new Date(new Date().getTime() + 24 * 60 * 60 * 1000)
       },
       success(res) {
         if (res.result.code === 1) {
@@ -239,24 +239,24 @@ create.Page(store, {
             donatename: '',
             donateword: '',
             donateurl: '',
-            donateTime: null,
+            donateTime: null
           })
           wx.showToast({
             title: '设置成功',
-            icon: 'none',
+            icon: 'none'
           })
         } else {
           wx.showToast({
             title: res.result.message,
-            icon: 'none',
+            icon: 'none'
           })
         }
       },
       complete() {
         self.setData({
-          loadingDonate: false,
+          loadingDonate: false
         })
-      },
+      }
     })
   },
   confirmUpdateBanner() {
@@ -265,115 +265,115 @@ create.Page(store, {
     if (!word) {
       wx.showToast({
         title: '未填写话术',
-        icon: 'none',
+        icon: 'none'
       })
       return
     }
     self.setData({
-      loadingSetting: true,
+      loadingSetting: true
     })
     wx.cloud.callFunction({
       name: 'word',
       data: {
         mode: 'update',
         word,
-        expire: wordExpired ? new Date(wordExpired.replace(/-/g, '/')).getTime() : +new Date(new Date().getTime() + 24 * 60 * 60 * 1000),
+        expire: wordExpired ? new Date(wordExpired.replace(/-/g, '/')).getTime() : +new Date(new Date().getTime() + 24 * 60 * 60 * 1000)
       },
       success(res) {
         if (res.result.code === 1) {
           self.closeDialog()
           self.setData({
-            word: '',
+            word: ''
           })
           wx.showToast({
             title: '设置成功',
-            icon: 'none',
+            icon: 'none'
           })
           getCurrentPages()[0].onGetNewWord()
         } else {
           wx.showToast({
             title: res.result.message,
-            icon: 'none',
+            icon: 'none'
           })
         }
       },
       fail() {
         wx.showToast({
           title: '操作失败',
-          icon: 'none',
+          icon: 'none'
         })
       },
       complete() {
         self.setData({
-          loadingSetting: false,
+          loadingSetting: false
         })
-      },
+      }
     })
   },
   confirmUpdateBannerUrl() {
     const self = this
     const { bannerurl, bannerExpired } = this.data
     self.setData({
-      loadingBannerUrl: true,
+      loadingBannerUrl: true
     })
     wx.cloud.callFunction({
       name: 'word',
       data: {
         mode: 'updateBannerUrl',
         bannerurl,
-        urlExpire: bannerExpired ? new Date(bannerExpired.replace(/-/g, '/')).getTime() : +new Date(new Date().getTime() + 48 * 60 * 60 * 1000),
+        urlExpire: bannerExpired ? new Date(bannerExpired.replace(/-/g, '/')).getTime() : +new Date(new Date().getTime() + 48 * 60 * 60 * 1000)
       },
       success(res) {
         if (res.result.code === 1) {
           self.closeDialog()
           self.setData({
-            bannerurl: '',
+            bannerurl: ''
           })
           wx.showToast({
             title: '设置成功',
-            icon: 'none',
+            icon: 'none'
           })
           getCurrentPages()[0].onGetNewWord()
         } else {
           wx.showToast({
             title: res.result.message,
-            icon: 'none',
+            icon: 'none'
           })
         }
       },
       fail() {
         wx.showToast({
           title: '操作失败',
-          icon: 'none',
+          icon: 'none'
         })
       },
       complete() {
         self.setData({
-          loadingBannerUrl: false,
+          loadingBannerUrl: false
         })
-      },
+      }
     })
   },
   changeEdit() {
     const { isEdit } = this.data
     wx.vibrateShort()
     this.setData({
-      isEdit: !isEdit,
+      isEdit: !isEdit
     })
   },
   bindWordDateChange(event) {
     this.setData({
-      wordExpired: event.detail.value,
+      wordExpired: event.detail.value
     })
   },
   bindUrlDateChange(event) {
     this.setData({
-      bannerExpired: event.detail.value,
+      bannerExpired: event.detail.value
     })
   },
   bindDonateTimeChange(event) {
     this.setData({
-      donateTime: event.detail.value,
+      donateTime: event.detail.value
     })
-  },
+  }
 })

@@ -1,7 +1,0 @@
-{
-  "triggers": [{
-    "name": "dbTrigger",
-    "type": "timer",
-    "config": "0 0 3 * * * *"
-  }]
-}

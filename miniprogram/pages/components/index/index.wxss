@@ -110,7 +110,7 @@
 .btn-area {
   text-align: center;
 }
-.btn-area button {
+.warn {
   border: 1px solid transparent;
   border-radius: 9rpx;
   font-size: 28rpx;
@@ -118,7 +118,7 @@
   display: inline-block;
   position: relative;
   font-weight: 600;
-  letter-spacing: 14rpx;
+  letter-spacing: 5rpx;
   text-decoration: none;
   line-height: normal;
   width: 90%;

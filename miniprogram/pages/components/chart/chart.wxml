@@ -5,6 +5,7 @@ var handle = function(num) {
 
 module.exports.handle = handle;
 </wxs>
+<wxs src="../../wxs/index.wxs" module="fmt" />
 <view class="chart">
   <view class="selector-view">
     <view class="month-selector">
@@ -15,7 +16,7 @@ module.exports.handle = handle;
         fields="year"
         bindchange="bindYearChange"
       >
-        <view class="pick-year">{{year}}年 ▾</view>
+        <view class="pick-year" style="white-space: nowrap;">{{year}}年 ▾</view>
       </picker>
       <view class="hide-scroll" wx:if="{{fixScroll}}">
         <scroll-view
@@ -28,7 +29,7 @@ module.exports.handle = handle;
           <view
             class="month {{activeMonth === (item - 1) ? 'active-month' : ''}}"
             wx:for="{{months.month}}"
-            wx:key="{{item}}"
+            wx:key="item"
             bindtap="selectMonth"
             data-month="{{item}}"
             id="active{{item}}"
@@ -41,30 +42,14 @@ module.exports.handle = handle;
     <view class="summary">
       <view class="summary-item {{activeTab === 'pay' ? 'pay' : ''}}" bindtap="changeTab" data-tab="pay">
         月支出
-        <view>{{numHandler.handle(pieChartData.flowOut.allSum || 0)}}</view>
+        <view>{{fmt.fmtNum(numHandler.handle(pieChartData.flowOut.allSum || 0))}}</view>
       </view>
       <view class="summary-item {{activeTab === 'income' ? 'income' : ''}}" bindtap="changeTab" data-tab="income">
         月收入
-        <view>{{numHandler.handle(pieChartData.flowIn.allSum || 0)}}</view>
+        <view>{{fmt.fmtNum(numHandler.handle(pieChartData.flowIn.allSum || 0))}}</view>
       </view>
     </view>
-    <view hidden="{{showParentDialog || showMenuDialog ? true : false}}">
-      <canvas
-        canvas-id="pie"
-        id="pie"
-        wx:if="{{pieChartData && pieChartData[activeTab === 'pay' ? 'flowOut' : 'flowIn'].dataList.length !== 0}}"
-        class="charts"
-        style="width: {{cWidth}}px;"
-        bind:touchstart="touchPie"
-      ></canvas>
-    </view>
-    <view class="charts hide-pie-tip" hidden="{{!showParentDialog? true : false}}">
-      |д･)害怕躲起来
-    </view>
-    <view class="charts hide-pie-tip" hidden="{{!showMenuDialog? true : false}}">
-      |д･)害怕躲起来
-    </view>
-
+    <slot></slot>
     <view class="empty-chart" wx:if="{{!pieChartData || pieChartData[activeTab === 'pay' ? 'flowOut' : 'flowIn'].dataList.length === 0}}">
         没有账单数据( ´･･)ﾉ(._.`)
     </view>
@@ -76,45 +61,23 @@ module.exports.handle = handle;
         wx:if="{{pieChartData}}"
       >
         <image src="../../../images/right-chevron.png" class="chevron"></image>
-        {{activeParentCategory ? '已选：' : '请选择分类'}}{{activeParentCategory.categoryName}}{{activeParentCategory ? (" "+  total +"笔") : ''}}
+        {{pickCategoryId ? '已选：' : '选择分类'}}{{$.mapCategoryName[pickCategoryId]}}{{pickCategoryId ? (" "+  total +" 笔") : ''}}
       </view>
       <view class="chart-sum" wx:if="{{pieChartData}}">
         月余：<text
           class="chart-sum-text"
           style="color: {{(pieChartData.flowIn.allSum - pieChartData.flowOut.allSum) >= 0 ? '#4fd69c' : '#f75676'}}"
-        >{{(pieChartData.flowIn.allSum - pieChartData.flowOut.allSum) >= 0 ? '+' : ''}}{{numHandler.handle(pieChartData.flowIn.allSum - pieChartData.flowOut.allSum)}}</text>
+        >{{(pieChartData.flowIn.allSum - pieChartData.flowOut.allSum) >= 0 ? '+' : ''}}{{fmt.fmtNum(numHandler.handle(pieChartData.flowIn.allSum - pieChartData.flowOut.allSum))}}</text>
       </view>
     </view>
   </view>
-  <view class="bill-list">
-    <scroll-view scroll-y="{{true}}" style="height: {{(($.sysInfo.screenHeight - 390) / .7)}}rpx;" bindscrolltolower="onScrollBottom" class="bill-list">
-      <view
-        class="bill-item"
-        wx:for="{{billList}}"
-        wx:key="{{item._id}}"
-        bindtap="showMenu"
-        data-bill="{{item}}"
-        style="{{item._id === editItem._id && showMenuDialog ? 'border: 4rpx solid #f75676; padding: 16rpx 26rpx;' : ''}}"
-      >
-        <view class="type-date">
-          <view class="type">{{item.category.categoryName}}</view>
-          <view class="description" wx:if="{{item.description}}">{{item.description}}</view>
-        </view>
-        <view class="money-date">
-          <view>
-            <view class="money" style="color: {{ item.flow === 1 ? '#4fd69c;' : '#f75676;'}}">
-              {{item.flow === 0 ? '-' : '+'}}{{item.money}}
-            </view>
-            <view class="date">{{item.noteDate}}</view>
-          </view>
-        </view>
-      </view>
-      <view class="fake-bill-item"></view>
-      <view class="empty-chart" wx:if="{{billList.length === 0}}">
-        {{ loadingBills === -1 ? '选择分类以查看账单' : loadingBills ? '加载账单中...' : '' }}
-      </view>
-    </scroll-view>
-  </view>
+  <bill-list
+    loading="{{loadingBills}}"
+    billList="{{billList}}"
+    bind:reFetchBillList="reFetchBillList"
+    showLoading="{{true}}"
+    fixHeight="{{440}}"
+  ></bill-list>
 </view>
 <!-- 父类选择弹窗 -->
 <dialog visible="{{showParentDialog}}" bind:closeDialog="closeDialog">
@@ -127,7 +90,7 @@ module.exports.handle = handle;
     <scroll-view class="dialog-bills" scroll-y="true">
       <view
         wx:for="{{categoryList}}"
-        wx:key="{{item.categoryId}}"
+        wx:key="categoryId"
         class="list-item-btn"
         bindtap="closeDialog"
         style="{{index === categoryList.length - 1 ? 'border-bottom: none;position: relative;' : 'position: relative;'}}"
@@ -135,24 +98,8 @@ module.exports.handle = handle;
         data-category="{{item}}"
         data-index="{{index}}"
       >
-        <text class="category-list-style" style="background: {{activeParentIndex === index ? 'rgb(255, 248, 198);' : ''}}">{{item.categoryName}}</text>
+        <text class="category-list-style" style="background: {{pickCategoryId === item.categoryId ? 'rgb(255, 248, 198);' : ''}}">{{item.categoryName}}</text>
       </view>
     </scroll-view>
-  </view>
-</dialog>
-<!-- 编辑弹窗 -->
-<dialog visible="{{showMenuDialog}}" bind:closeDialog="closeDialog">
-  <view slot="content">
-    <view class="pop-indicator"></view>
-    <view class="d-header">
-    {{editItem.category.categoryName}}
-    <view class="dialog-tip">金额：{{editItem.flow === 0 ? '-' : '+'}}{{editItem.money}}，记账日期：{{editItem.noteDate}}</view>
-    <view class="dialog-tip" wx:if="{{editItem.description}}">备注：{{editItem.description}}</view>
-    </view>
-    <view class='list-item-btn' style="color: #4fd69c;" bindtap="editBill">编辑</view>
-    <view class='list-item-btn' style="color: #f75676;" bindtap="deleteBill">
-    {{showConfirmDelete ? '再次点击确认删除' : '删除'}}
-    </view>
-    <view class='list-item-btn' bindtap="closeDialog" style="border-bottom: none;">取消</view>
   </view>
 </dialog>

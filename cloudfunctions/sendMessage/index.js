@@ -23,7 +23,7 @@ function parseTime(time, cFormat) {
     h: date.getHours(),
     i: date.getMinutes(),
     s: date.getSeconds(),
-    a: date.getDay(),
+    a: date.getDay()
   }
   const timeStr = format.replace(/{(y|m|d|h|i|s|a)+}/g, (result, key) => {
     let value = formatObj[key]
@@ -41,7 +41,7 @@ exports.main = async () => {
   const wxContext = cloud.getWXContext()
   const env = wxContext.ENV === 'local' ? 'release-wifo3' : wxContext.ENV
   cloud.updateConfig({
-    env,
+    env
   })
   const db = cloud.database({ env })
   const _ = db.command
@@ -57,7 +57,7 @@ exports.main = async () => {
       const checkBillPromise = db.collection('DANDAN_NOTE')
         .where({
           openId: user.openId,
-          noteDate: _.gte(new Date(startTime)).and(_.lte(new Date(endTime))),
+          noteDate: _.gte(new Date(startTime)).and(_.lte(new Date(endTime)))
         })
         .get()
       tasks.push(checkBillPromise)
@@ -76,13 +76,13 @@ exports.main = async () => {
           page: 'pages/tab/tab',
           data: {
             time1: {
-              value: parseTime(new Date(), '{y}年{m}月{d}日'),
+              value: parseTime(new Date(), '{y}年{m}月{d}日')
             },
             phrase2: {
-              value: '记得记账哦',
-            },
+              value: '记得记账哦'
+            }
           },
-          templateId: '29PkwuWSDZ5qCe_bjIAYE8UPbw4A7HIXL_ZNmNCD__s',
+          templateId: '29PkwuWSDZ5qCe_bjIAYE8UPbw4A7HIXL_ZNmNCD__s'
         })
         sendTasks.push(sendPromise)
       }
@@ -99,7 +99,7 @@ exports.main = async () => {
     return {
       code: 0,
       data: null,
-      message: '订阅信息发送失败！',
+      message: '订阅信息发送失败！'
     }
   }
 }

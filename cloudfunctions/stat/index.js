@@ -16,11 +16,11 @@ const MAX_LIMIT = 100
 exports.main = async () => {
   const wxContext = cloud.getWXContext()
   cloud.updateConfig({
-    env: wxContext.ENV === 'local' ? 'release-wifo3' : wxContext.ENV,
+    env: wxContext.ENV === 'local' ? 'release-wifo3' : wxContext.ENV
   })
   // 初始化数据库
   const db = cloud.database({
-    env: wxContext.ENV === 'local' ? 'release-wifo3' : wxContext.ENV,
+    env: wxContext.ENV === 'local' ? 'release-wifo3' : wxContext.ENV
   })
   const _ = db.command
   const queryAll = async (collectName, queryParams) => {
@@ -30,14 +30,14 @@ exports.main = async () => {
     const tasks = []
     for (let i = 0; i < batchTimes; i++) {
       const promise = db.collection(collectName).where({
-        ...queryParams,
+        ...queryParams
       }).skip(i * MAX_LIMIT).limit(MAX_LIMIT)
         .get()
       tasks.push(promise)
     }
     return (await Promise.all(tasks)).reduce((acc, cur) => ({
       data: acc.data.concat(cur.data),
-      errMsg: acc.errMsg,
+      errMsg: acc.errMsg
     }))
   }
   const calNote = (noteList) => {
@@ -46,7 +46,7 @@ exports.main = async () => {
         pay: 0,
         income: 0,
         netIncome: 0,
-        noteLength: 0,
+        noteLength: 0
       }
     }
     let pay = 0
@@ -63,7 +63,7 @@ exports.main = async () => {
       pay,
       income,
       netIncome: income - pay,
-      noteTime: noteList.length,
+      noteTime: noteList.length
     }
   }
   const userData = await queryAll('USERS')
@@ -76,11 +76,11 @@ exports.main = async () => {
       const noteData = await queryAll('DANDAN_NOTE', {
         openId: userList[i].openId,
         noteDate: _.gt(new Date(startDate)).and(_.lte(endDate)),
-        isDel: false,
+        isDel: false
       })
       if (noteData.data && noteData.data.length) {
         const {
-          pay, income, netIncome, noteTime,
+          pay, income, netIncome, noteTime
         } = calNote(noteData.data)
         // eslint-disable-next-line no-await-in-loop
         await db.collection('STAT').add({
@@ -90,8 +90,8 @@ exports.main = async () => {
             income,
             netIncome,
             noteTime,
-            openId: wxContext.OPENID,
-          },
+            openId: wxContext.OPENID
+          }
         })
       }
     }
@@ -99,6 +99,6 @@ exports.main = async () => {
   return {
     code: 1,
     msg: '写入STAT成功',
-    data: null,
+    data: null
   }
 }

@@ -48,3 +48,7 @@ tab-item-left {
 .active-bottom-tab {
   border: 10rpx solid rgba(255, 142, 142, 0.8);
 }
+.f2-chart {
+  width: 100%;
+  height: 500rpx;
+}

@@ -15,28 +15,19 @@
   </picker>
 </view>
 <view class="more-chart">
-  <canvas
-    canvas-id="linechart-month"
-    id="linechart-month"
-    class="charts"
-    style="width: {{400}}px;"
-    bind:touchstart="touchLineA"
-    bind:touchmove="moveLineA"
-    bind:touchend="touchEndLineA"
-  ></canvas>
+  <view style="height: 500rpx;">
+    <view class="container" wx:if="{{monthChartShow}}">
+      <f2 class="f2-chart" onInit="{{initMonthChart}}" />
+    </view>
+  </view>
   <view class="desc">
     {{month}}月记账折线图
   </view>
-
-  <canvas
-    canvas-id="linechart-year"
-    id="linechart-year"
-    class="charts"
-    style="width: {{400}}px;"
-    bind:touchstart="touchLineB"
-    bind:touchmove="moveLineB"
-    bind:touchend="touchEndLineB"
-  ></canvas>
+  <view  style="height: 500rpx;">
+    <view class="container" wx:if="{{yearChartShow}}">
+      <f2 class="f2-chart" onInit="{{initYearChart}}" />
+    </view>
+  </view>
   <view class="desc">
     {{year}}年记账折线图
   </view>

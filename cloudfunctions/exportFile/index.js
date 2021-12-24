@@ -25,7 +25,7 @@ function parseTime(time, cFormat) {
     h: date.getHours(),
     i: date.getMinutes(),
     s: date.getSeconds(),
-    a: date.getDay(),
+    a: date.getDay()
   }
   const timeStr = format.replace(/{(y|m|d|h|i|s|a)+}/g, (result, key) => {
     let value = formatObj[key]
@@ -42,19 +42,19 @@ exports.main = async () => {
   const wxContext = cloud.getWXContext()
   const env = wxContext.ENV === 'local' ? 'release-wifo3' : wxContext.ENV
   cloud.updateConfig({
-    env,
+    env
   })
   const db = cloud.database({
-    env,
+    env
   })
   const cateMap = {}
-  const _ = db.command;
+  const _ = db.command
   try {
     // 查询该用户已有分类
     const getCategoryRes = await db.collection('DANDAN_NOTE_CATEGORY')
       .where({
         isDel: false,
-        openId: _.eq(wxContext.OPENID).or(_.eq('SYSTEM')),
+        openId: _.eq(wxContext.OPENID).or(_.eq('SYSTEM'))
       })
       .get()
     if (getCategoryRes.data) {
@@ -72,7 +72,7 @@ exports.main = async () => {
     const countResult = await db.collection('DANDAN_NOTE')
       .where({
         openId: wxContext.OPENID,
-        isDel: false,
+        isDel: false
       })
       .count()
     const { total } = countResult
@@ -83,7 +83,7 @@ exports.main = async () => {
       const promise = db.collection('DANDAN_NOTE')
         .where({
           openId: wxContext.OPENID,
-          isDel: false,
+          isDel: false
         })
         .skip(i * MAX_LIMIT).limit(MAX_LIMIT)
         .get()
@@ -99,7 +99,7 @@ exports.main = async () => {
           parseTime(tempInLoop[j].noteDate, '{y}/{m}/{d}'),
           cateMap[tempInLoop[j].categoryId] ? cateMap[tempInLoop[j].categoryId].categoryName : '杂项',
           tempInLoop[j].flow === 0 ? -tempInLoop[j].money : tempInLoop[j].money,
-          tempInLoop[j].description,
+          tempInLoop[j].description
         ])
       }
     }
@@ -111,19 +111,19 @@ exports.main = async () => {
       // 设置表格列格式等
       conf.cols = [{
         caption: '创建时间',
-        type: 'string',
+        type: 'string'
       }, {
         caption: '消费日期',
-        type: 'string',
+        type: 'string'
       }, {
         caption: '分类',
-        type: 'string',
+        type: 'string'
       }, {
         caption: '金额',
-        type: 'number',
+        type: 'number'
       }, {
         caption: '备注',
-        type: 'string',
+        type: 'string'
       }]
       // 设置表格内容
       conf.rows = rowData
@@ -131,13 +131,13 @@ exports.main = async () => {
       Buffer.from(result.toString(), 'binary')
       const uplodaRes = await cloud.uploadFile({
         cloudPath: `download/sheet/单单记账-账单(${wxContext.OPENID.slice(3, 20)})-${new Date().getTime()}.xlsx`, // excel文件名称及路径，即云存储中的路径
-        fileContent: Buffer.from(result.toString(), 'binary'),
+        fileContent: Buffer.from(result.toString(), 'binary')
       })
       // eslint-disable-next-line no-console
       console.log('uplodaRes', uplodaRes)
       return {
         code: 1,
-        data: uplodaRes,
+        data: uplodaRes
       }
     } catch (error) {
       // eslint-disable-next-line no-console

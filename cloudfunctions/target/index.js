@@ -6,8 +6,8 @@ cloud.init()
 function getPureDate(time) {
   // eslint-disable-next-line no-extend-native
   Date.prototype.addHours = function (h) {
-    this.setHours(this.getHours() + h);
-    return this;
+    this.setHours(this.getHours() + h)
+    return this
   }
   const date = new Date(time).addHours(8)
   return date.toLocaleDateString()
@@ -15,21 +15,18 @@ function getPureDate(time) {
 // 云函数入口函数
 exports.main = async (event) => {
   const wxContext = cloud.getWXContext()
+  const env = wxContext.ENV === 'local' ? 'release-wifo3' : wxContext.ENV
   // 初始化数据库
-  const db = cloud.database({
-    env: wxContext.ENV === 'local' ? 'release-wifo3' : wxContext.ENV,
-  })
+  const db = cloud.database({ env })
   const _ = db.command
   const {
     id,
     startMoney,
     targetMoney,
     name,
-    endDate,
-  } = event;
-  cloud.updateConfig({
-    env: wxContext.ENV === 'local' ? 'release-wifo3' : wxContext.ENV,
-  })
+    endDate
+  } = event
+  cloud.updateConfig({ env })
 
   try {
     // 增加一条记录
@@ -43,39 +40,39 @@ exports.main = async (event) => {
           createTime: db.serverDate(),
           updateTime: db.serverDate(),
           openId: wxContext.OPENID,
-          isDel: false,
-        },
-      });
+          isDel: false
+        }
+      })
       return {
         code: 1,
         data: res,
-        message: '操作成功',
-      };
+        message: '操作成功'
+      }
     }
 
     if (event.mode === 'deleteById') {
       const res = await db.collection('TARGET').doc(id).update({
         data: {
-          isDel: true,
-        },
-      });
+          isDel: true
+        }
+      })
       return {
         code: 1,
         data: res,
-        message: '操作成功',
-      };
+        message: '操作成功'
+      }
     }
     // 检查是否已有未删除的目标
     if (event.mode === 'check') {
       const res = await db.collection('TARGET').where({
         openId: wxContext.OPENID,
-        isDel: false,
+        isDel: false
       }).get()
       return {
         code: 1,
         data: res.data,
-        message: '操作成功',
-      };
+        message: '操作成功'
+      }
     }
 
     // 获取目标的数据
@@ -83,7 +80,7 @@ exports.main = async (event) => {
       const MAX_LIMIT = 100
       const targetBaseInfo = await db.collection('TARGET').where({
         openId: wxContext.OPENID,
-        isDel: false,
+        isDel: false
       }).get()
       if (targetBaseInfo.data.length) {
         const targetData = targetBaseInfo.data[0]
@@ -91,13 +88,13 @@ exports.main = async (event) => {
         const sameParam = {
           openId: wxContext.OPENID,
           isDel: false,
-          noteDate: _.gte(new Date(`${getPureDate(targetData.createTime)} 00:00:00`)).and(_.lte(new Date(`${getPureDate(targetData.endDate)} 23:59:59`))),
+          noteDate: _.gte(new Date(`${getPureDate(targetData.createTime)} 00:00:00`)).and(_.lte(new Date(`${getPureDate(targetData.endDate)} 23:59:59`)))
         }
         const countResult = await db.collection('DANDAN_NOTE')
           .where(sameParam)
           .count()
         const {
-          total,
+          total
         } = countResult
         const batchTimes = Math.ceil(total / 100)
         const tasks = []
@@ -119,38 +116,36 @@ exports.main = async (event) => {
           code: 1,
           data: {
             targetData,
-            billList: returnBillList,
+            billList: returnBillList
           },
-          message: '获取成功',
+          message: '获取成功'
         }
       }
       return {
         code: -1,
         data: '',
-        message: '未设置目标',
+        message: '未设置目标'
       }
     }
     if (event.mode === 'delete') {
-      const res = await db.collection('TARGET')
-        .where({
-          openId: wxContext.OPENID,
-        })
+      console.log('删除id', event.id)
+      const res = await db.collection('TARGET').doc(event.id)
         .update({
           data: {
-            isDel: true,
-          },
-        });
+            isDel: true
+          }
+        })
       return {
         code: 1,
         data: res,
-        message: '操作成功',
-      };
+        message: '操作成功'
+      }
     }
   } catch (e) {
     return {
       code: -1,
       data: '',
-      message: '操作失败',
+      message: '操作失败'
     }
   }
 }

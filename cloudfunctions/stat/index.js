@@ -9,11 +9,19 @@
  */
 const cloud = require('wx-server-sdk')
 const dayjs = require('dayjs')
+const request = require('request')
 
 cloud.init()
 const MAX_LIMIT = 100
 function strip(num, precision = 12) {
   return +parseFloat(num.toPrecision(precision))
+}
+function notify(title, content) {
+  // eslint-disable-next-line global-require
+  const { bark } = require('./token')
+  if (bark) {
+    request(`https://api.day.app/${bark}/${encodeURI(title)}/${encodeURI(content)}`)
+  }
 }
 // 云函数入口函数
 exports.main = async (event) => {
@@ -112,14 +120,22 @@ exports.main = async (event) => {
     // 更新该条记录
     const updateData = addData[0]
     delete updateData.createTime
-    await db.collection('STAT').doc(oldRes.data[0]._id).update({
-      data: updateData
-    })
+    try {
+      await db.collection('STAT').doc(oldRes.data[0]._id).update({
+        data: updateData
+      })
+    } catch (error) {
+      notify('更新统计数据失败', error.toString.slice(0, 100))
+    }
   } else {
     // 插入今日统计数据
-    await db.collection('STAT').add({
-      data: addData
-    })
+    try {
+      await db.collection('STAT').add({
+        data: addData
+      })
+    } catch (error) {
+      notify('写入统计数据失败', error.toString.slice(0, 100))
+    }
   }
   return {
     code: 1,

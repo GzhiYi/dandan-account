@@ -96,7 +96,7 @@ exports.main = async (event) => {
       netAsset = income - pay
       addData.push({
         openId: oneOpenId,
-        noteDate,
+        noteDate: new Date(noteDate),
         pay: strip(pay),
         income: strip(income),
         netAsset: strip(netAsset),

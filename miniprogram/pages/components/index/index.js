@@ -326,9 +326,7 @@ create.Component(store, {
     // tab.js调用
     dectiveEdit() {
       const { editBill, plainCategoryList } = this.store.data
-      console.log('检查', editBill)
       const matchCategory = plainCategoryList.find((item) => item._id === editBill.categoryId)
-      console.log('matchCategory', matchCategory)
       this.setData({
         sum: editBill.money,
         note: editBill.description,

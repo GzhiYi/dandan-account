@@ -1,5 +1,6 @@
 // 云函数入口文件
 const cloud = require('wx-server-sdk')
+const dayjs = require('dayjs')
 
 cloud.init()
 
@@ -41,13 +42,32 @@ exports.main = async (event) => {
         message: '操作成功'
       }
     }
-
+    let oldNote = null
+    if (event.mode === 'deleteById' || event.mode === 'updateById') {
+      const noteRes = await db.collection('DANDAN_NOTE').doc(id).get()
+      // eslint-disable-next-line prefer-destructuring
+      oldNote = noteRes.data[0]
+    }
+    const updateStat = async (nd) => {
+      try {
+        await cloud.callFunction({
+          name: 'stat',
+          data: {
+            openId: wxContext.OPENID,
+            noteDate: dayjs(nd).format('YYYY-MM-DD')
+          }
+        })
+      } catch (error) {
+        console.log(error)
+      }
+    }
     if (event.mode === 'deleteById') {
       const res = await db.collection('DANDAN_NOTE').doc(id).update({
         data: {
           isDel: true
         }
       })
+      await updateStat(oldNote.noteDate)
       return {
         code: 1,
         data: res,
@@ -66,6 +86,10 @@ exports.main = async (event) => {
           updateTime: db.serverDate()
         }
       })
+      // 更新旧的统计数据
+      await updateStat(oldNote.noteDate)
+      // 更新最新的统计数据
+      await updateStat(noteDate)
       return {
         code: 1,
         data: res,

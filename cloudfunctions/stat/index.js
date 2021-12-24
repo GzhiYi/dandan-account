@@ -103,7 +103,8 @@ exports.main = async (event) => {
         payCount,
         incomeCount,
         createTime: new Date(), // 写入时间
-        updateTime: new Date() // 更新时间
+        updateTime: new Date(), // 更新时间
+        type: 'day'
       })
     }
     return addData

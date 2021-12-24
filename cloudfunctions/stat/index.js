@@ -36,14 +36,14 @@ exports.main = async (event) => {
   const { openId } = event
   // 定时任务不具有参数
   if (!noteDate) {
-    noteDate = dayjs().format('YYYY-MM-DD')
+    noteDate = dayjs().subtract(1, 'day').format('YYYY-MM-DD')
   }
   // 传入日期的开始和结束时间
   // 由于是定时任务，所以需要减少一天
-  const todayStr = openId ? dayjs(noteDate).format('YYYY-MM-DD') : dayjs(noteDate).subtract(1, 'day').format('YYYY-MM-DD')
-  const startTime = `${todayStr} 00:00:00`
-  const endTime = `${todayStr} 23:59:59`
-  const isToday = dayjs().format('YYYY-MM-DD') === todayStr
+  const statDate = openId ? dayjs(noteDate).format('YYYY-MM-DD') : noteDate
+  const startTime = `${statDate} 00:00:00`
+  const endTime = `${statDate} 23:59:59`
+  const isToday = dayjs().format('YYYY-MM-DD') === statDate
   // 如果是更新某个人的统计数据，并且日期等于今天，则不更新
   if (openId && isToday) {
     return {
@@ -123,7 +123,7 @@ exports.main = async (event) => {
   if (openId) {
     const oldRes = await db.collection('STAT').where({
       openId,
-      noteDate: _.eq(todayStr)
+      noteDate: _.eq(statDate)
     }).get()
     // 更新该条记录
     const updateData = addData[0]

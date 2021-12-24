@@ -1,5 +1,6 @@
 /* eslint-disable prefer-destructuring */
 import dayjs from 'dayjs'
+
 const { importStore } = getApp()
 const { create, store } = importStore
 let dateRange = null
@@ -48,26 +49,22 @@ create.Component(store, {
         name: 'getAccountList',
         data,
         success(res) {
-          console.log('查看账单', res)
           if (res.result && res.result.code === 1) {
             const response = res.result.data
             self.setData({
               billResult: response.page
             })
-            // 存在dateRange则表明选择了区间，需要将结果传到日历组件
-            if (dateRange) {
-              const flowOutList = response.page.filter(item => item.flow == 0)
-              const flowInList = response.page.filter(item => item.flow == 1)
-              let outMonty = 0
-              let inMoney = 0
-              flowOutList.forEach(item => {
-                outMonty += item.money
-              })
-              flowInList.forEach(item => {
-                inMoney += item.money
-              })
-              store.data.pickDateListSumResult = [outMonty, inMoney]
-            }
+            const flowOutList = response.page.filter((item) => item.flow == 0)
+            const flowInList = response.page.filter((item) => item.flow == 1)
+            let outMonty = 0
+            let inMoney = 0
+            flowOutList.forEach((item) => {
+              outMonty += item.money
+            })
+            flowInList.forEach((item) => {
+              inMoney += item.money
+            })
+            store.data.pickDateListSumResult = [outMonty, inMoney]
           } else {
             wx.showToast({
               title: '获取账单失败，稍后再试',
@@ -153,7 +150,6 @@ create.Component(store, {
       this.getBillList(event.detail[0], event.detail[1], 'list')
     },
     onControl(event) {
-      const now = new Date()
       const self = this
       const { mode } = event.detail
       if (mode === 'reset') {
@@ -161,7 +157,7 @@ create.Component(store, {
         self.getBillList(this.data.today, this.data.today, 'list')
       }
     },
-    reFetchBillList(event) {
+    reFetchBillList() {
       this.triggerEvent('reFetchBillList')
     }
   }

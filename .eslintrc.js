@@ -36,6 +36,7 @@ module.exports = {
     'import/no-extraneous-dependencies': 0,
     'no-plusplus': 0,
     'comma-dangle': ["error", "never"],
-    eqeqeq: 0
+    eqeqeq: 0,
+    'linebreak-style': ["error", "windows"]
   },
 };

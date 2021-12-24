@@ -1,29 +1,30 @@
 const dayjs = require('dayjs')
+
 const baseConfig = (chart, type = 'month') => {
   chart.scale('date', {
     type: 'timeCat',
     tickCount: 10
-  });
+  })
   chart.scale('value', {
     tickCount: 5
-  });
+  })
   chart.tooltip({
     showCrosshairs: true,
     showTitle: type == 'month',
     offsetY: 20
-  });
+  })
   chart.legend({
     position: 'bottom'
   })
-  chart.line().position('date*value').shape('smooth').color('type', function(val) {
+  chart.line().position('date*value').shape('smooth').color('type', (val) => {
     if (val === '收入') {
-      return '#4fd69c';
-    } else if (val === '支出') {
-      return '#f75676';
-    } else if (val === '净收入') {
-      return '#ffdd57';
+      return '#4fd69c'
+    } if (val === '支出') {
+      return '#f75676'
+    } if (val === '净收入') {
+      return '#ffdd57'
     }
-  });
+  })
 }
 Page({
   data: {
@@ -60,12 +61,12 @@ Page({
         const { categories, series } = res.result.data
         if (res.result.code === 1 && categories) {
           const data = []
-          categories.forEach((date, index) => {
-            series.forEach(line => {
+          categories.forEach((inDate, index) => {
+            series.forEach((line) => {
               data.push({
-                "date": date,
-                "type": line.name,
-                "value": line.data[index]
+                date: inDate,
+                type: line.name,
+                value: line.data[index]
               })
             })
           })
@@ -85,13 +86,11 @@ Page({
         chart.source(data)
         baseConfig(chart)
         chart.axis('date', {
-          label: (text) => {
-            return {
-              text: text.slice(8) + '日'
-            }
-          }
+          label: (text) => ({
+            text: `${text.slice(8)}日`
+          })
         })
-        chart.render();
+        chart.render()
         // 注意：需要把chart return 出来
         return chart
       }
@@ -117,12 +116,12 @@ Page({
         const { categories, series } = res.result.data
         if (res.result.code === 1 && categories) {
           const data = []
-          categories.forEach((date, index) => {
-            series.forEach(line => {
+          categories.forEach((inDate, index) => {
+            series.forEach((line) => {
               data.push({
-                "date": date,
-                "type": line.name,
-                "value": line.data[index]
+                date: inDate,
+                type: line.name,
+                value: line.data[index]
               })
             })
           })
@@ -139,13 +138,11 @@ Page({
         chart.source(data)
         baseConfig(chart, 'year')
         chart.axis('date', {
-          label: (text) => {
-            return {
-              text: text.slice(5, 7) + '月'
-            }
-          }
+          label: (text) => ({
+            text: `${text.slice(5, 7)}月`
+          })
         })
-        chart.render();
+        chart.render()
         // 注意：需要把chart return 出来
         return chart
       }
@@ -158,8 +155,8 @@ Page({
   bindDateChange(event) {
     const oldMonth = this.data.month
     const oldYear = this.data.year
-    const newMonth = dayjs(event.detail.value).format("MM")
-    const newYear = dayjs(event.detail.value).format("YYYY")
+    const newMonth = dayjs(event.detail.value).format('MM')
+    const newYear = dayjs(event.detail.value).format('YYYY')
     this.setData({
       date: event.detail.value,
       month: newMonth,

@@ -84,7 +84,9 @@ exports.main = async (event) => {
         income: strip(income),
         netAsset: strip(netAsset),
         payCount,
-        incomeCount
+        incomeCount,
+        createTime: new Date(), // 写入时间
+        updateTime: new Date() // 更新时间
       })
     }
     return addData
@@ -108,8 +110,10 @@ exports.main = async (event) => {
       noteDate: _.eq(todayStr)
     }).get()
     // 更新该条记录
+    const updateData = addData[0]
+    delete updateData.createTime
     await db.collection('STAT').doc(oldRes.data[0]._id).update({
-      data: addData[0]
+      data: updateData
     })
   } else {
     // 插入今日统计数据

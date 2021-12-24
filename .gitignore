@@ -1,4 +1,4 @@
 node_modules/
 cloudfunctions/backup/wxInfo.js
 cloudfunctions/**/package-lock.json
-cloudfunctions/stat/token.js
+cloudfunctions/**/token.js

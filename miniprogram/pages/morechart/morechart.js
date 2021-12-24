@@ -167,9 +167,17 @@ Page({
     })
 
     if (oldMonth !== newMonth) {
+      this.setData({
+        monthChartShow: false
+      })
       this.getMonthData()
     }
     if (oldYear !== newYear) {
+      this.setData({
+        monthChartShow: false,
+        yearChartShow: false
+      })
+      this.getMonthData()
       this.getYearData()
     }
   }

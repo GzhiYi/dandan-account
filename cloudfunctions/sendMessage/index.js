@@ -3,7 +3,13 @@ const cloud = require('wx-server-sdk')
 const dayjs = require('dayjs')
 
 cloud.init()
-
+function notify(title, content) {
+  // eslint-disable-next-line global-require
+  const { bark } = require('./token')
+  if (bark) {
+    request(`https://api.day.app/${bark}/${encodeURI(title)}/${encodeURI(content)}`)
+  }
+}
 // 云函数入口函数
 exports.main = async () => {
   const wxContext = cloud.getWXContext()
@@ -28,10 +34,12 @@ exports.main = async () => {
       const checkAccountTodayRes = await db.collection('DANDAN_NOTE')
         .where({
           openId: _.in(sendList.map((user) => user.openId)),
+          isDel: false,
           noteDate: _.gte(new Date(startTime)).and(_.lte(new Date(endTime)))
         })
         .get()
-      const canSendList = Array.from(new Set(checkAccountTodayRes.data.map((item) => item.openId)))
+      const hasNoteOpenIdList = Array.from(new Set(checkAccountTodayRes.data.map((item) => item.openId)))
+      const canSendList = sendList.filter(u => !hasNoteOpenIdList.includes(u.openId)).map(item => item.openId)
       const sendTask = []
       canSendList.forEach((item) => {
         const reqTask = cloud.openapi.subscribeMessage.send({
@@ -49,7 +57,20 @@ exports.main = async () => {
         })
         sendTask.push(reqTask)
       })
-      await Promise.all(sendTask)
+      const limit = 30
+      if (sendTask.length > limit) {
+        const divide = sendTask.length / limit
+        for(let i = 0; i < divide; i++) {
+          await Promise.all(sendTask.slice(i * limit, (i + 1) * limit))
+        }
+        notify(
+          '模板发送提醒',
+          `
+            发送时间：${dayjs().format('YYYY-MM-DD HH:mm:ss')}，
+            分批次数：${Math.floor(divide)}，
+            发送人数: ${sendTask.length}
+          `)
+      }
     }
   } catch (err) {
     // eslint-disable-next-line no-console

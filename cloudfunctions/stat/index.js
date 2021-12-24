@@ -143,6 +143,7 @@ exports.main = async (event) => {
       await db.collection('STAT').add({
         data: addData
       })
+      notify('写入统计数据成功', `写入${statDate}统计数据共${addData.length}条`)
     } catch (error) {
       notify('写入统计数据失败', error.toString.slice(0, 100))
     }

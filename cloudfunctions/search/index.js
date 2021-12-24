@@ -1,13 +1,12 @@
 // 云函数入口文件
 const cloud = require('wx-server-sdk')
-const dayjs = require('dayjs')
 
 cloud.init()
 
 // 云函数入口函数
 exports.main = async (event) => {
   const wxContext = cloud.getWXContext()
-  const env =  wxContext.ENV === 'local' ? 'release-wifo3' : wxContext.ENV
+  const env = wxContext.ENV === 'local' ? 'release-wifo3' : wxContext.ENV
   cloud.updateConfig({ env })
   // 初始化数据库
   const db = cloud.database({ env })

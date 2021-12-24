@@ -32,20 +32,18 @@ exports.main = async (event) => {
   const db = cloud.database({ env })
   const _ = db.command
   // 有openId则表示只更新某个人的统计记录
-  const { openId, noteDate } = event
+  let { noteDate } = event
+  const { openId } = event
+  // 定时任务不具有参数
+  if (!noteDate) {
+    noteDate = dayjs().format('YYYY-MM-DD')
+  }
   // 传入日期的开始和结束时间
   // 由于是定时任务，所以需要减少一天
   const todayStr = openId ? dayjs(noteDate).format('YYYY-MM-DD') : dayjs(noteDate).subtract(1, 'day').format('YYYY-MM-DD')
   const startTime = `${todayStr} 00:00:00`
   const endTime = `${todayStr} 23:59:59`
   const isToday = dayjs().format('YYYY-MM-DD') === todayStr
-  if (!noteDate) {
-    return {
-      code: 0,
-      msg: '未传入日期',
-      data: null
-    }
-  }
   // 如果是更新某个人的统计数据，并且日期等于今天，则不更新
   if (openId && isToday) {
     return {

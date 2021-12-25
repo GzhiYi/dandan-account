@@ -121,7 +121,7 @@ create.Component(store, {
         })
         self.fetchBillList()
       }
-      if (isGetCurrentMonthData)  store.data.loadingRightIcon = true
+      if (isGetCurrentMonthData) store.data.loadingRightIcon = true
       wx.cloud.callFunction({
         name: 'accountAggregate',
         data: {
@@ -193,6 +193,7 @@ create.Component(store, {
         pickCategoryId
       } = self.data
       const firstAndLastArray = self.getFirstAndLastDayByMonth(year, activeMonth + 1)
+      if (self.data.loadingBills === 1) return false
       self.setData({
         loadingBills: 1
       })
@@ -296,7 +297,7 @@ create.Component(store, {
         showParentDialog: false,
         billList: []
       })
-      store.data.showTabbar = false
+      store.data.showTabbar = true
       // 获取账单
       this.fetchBillList()
     },
@@ -311,7 +312,7 @@ create.Component(store, {
     onEditBill() {
       this.triggerEvent('onEditBill')
     },
-    reFetchBillList(event) {
+    reFetchBillList() {
       this.triggerEvent('reFetchBillList')
     }
   }

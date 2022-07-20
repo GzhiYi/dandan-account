@@ -4,7 +4,11 @@
   bind:showBanner="onShowBanner"
 ></nav>
 <view class="category">
-  <view wx:if="{{localCategory2155.length > 0}}" class="item" style="background: #4fd69c;">
+  <view
+    wx:if="{{localCategory2155.length > 0}}"
+    class="item"
+    style="background: #4fd69c;"
+  >
     <view class="parent-name">
       常用分类
     </view>
@@ -30,10 +34,19 @@
       </view>
     </view>
   </view>
-  <view class="item" wx:for="{{categoryList}}" wx:key="{{item._id}}">
+  <view
+    class="item"
+    wx:for="{{categoryList}}"
+    wx:key="{{item._id}}"
+  >
     <view class="parent-name">
       {{item.categoryName}}
-      <text wx:if="{{isEdit}}" class="add-icon" bindtap="showDialog" data-target="{{item}}">+</text>
+      <text
+        wx:if="{{isEdit}}"
+        class="add-icon"
+        bindtap="showDialog"
+        data-target="{{item}}"
+      >+</text>
     </view>
     <view class="child-category">
       <view
